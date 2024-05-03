@@ -1,0 +1,493 @@
+[
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "message",
+				"type": "string"
+			}
+		],
+		"name": "ErrorOccurred",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "collectionsByCooperative",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "availableQuantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "batchNo",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dateCollected",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "agentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "qualityId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "submissionStatus",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "collectionsByCooperativeProduct",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "availableQuantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "batchNo",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dateCollected",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "agentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "qualityId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "submissionStatus",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "collectionsByProduct",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "availableQuantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "batchNo",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dateCollected",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "agentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "qualityId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "submissionStatus",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "cooperative",
+				"type": "uint256"
+			}
+		],
+		"name": "getCollectionsByCooperative",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "availableQuantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "batchNo",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dateCollected",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "farmerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "agentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "qualityId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "submissionStatus",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct CollectionContract.Collection[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "cooperative",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "farmerId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCollectionsByCooperativeProduct",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "availableQuantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "batchNo",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dateCollected",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "farmerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "agentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "qualityId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "submissionStatus",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct CollectionContract.Collection[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "cooperative",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			}
+		],
+		"name": "getCollectionsByProduct",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "productId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "availableQuantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "batchNo",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dateCollected",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "farmerId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "agentId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "qualityId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "submissionStatus",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct CollectionContract.Collection[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "cooperative",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "productId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "availableQuantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "batchNo",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dateCollected",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "farmerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "agentId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "qualityId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "submissionStatus",
+				"type": "uint256"
+			}
+		],
+		"name": "saveCollectionBlock",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]

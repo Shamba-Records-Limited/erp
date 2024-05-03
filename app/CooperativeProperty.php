@@ -1,0 +1,46 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Webpatser\Uuid\Uuid;
+
+class CooperativeProperty extends Model
+{
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+    protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'cooperative_id',
+        'property',
+        'deprecation_rate_pa',
+        'type',
+        'documents',
+        'value',
+        'selling_price',
+        'buying_price',
+        'status'
+    ];
+
+
+    public function getRouteKeyName(): string
+    {
+        return 'id';
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->id = (string) Uuid::generate(4);
+        });
+    }
+
+    public function cooperative(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Cooperative::class);
+    }
+}
