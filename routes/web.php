@@ -81,7 +81,9 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post('/cooperative/setup', 'CooperativeController@add_company')->name('cooperative.setup');
     Route::get('/cooperative/setup/update/{id}', 'CooperativeController@view_edit_company')->name('cooperative.setup.view-update');
     Route::patch('/cooperative/setup/update', 'CooperativeController@edit_company')->name('cooperative.setup.update');
-    Route::get('/cooperative/setup/archive/{id}', 'CooperativeController@archive_company')->name('cooperative.setup.archive');
+    Route::get('/cooperative/setup/delete/{id}', 'CooperativeController@delete_company')->name('cooperative.setup.delete');
+    Route::get('/cooperative/setup/deactivate/{id}', 'CooperativeController@deactivate_company')->name('cooperative.setup.deactivate');
+    Route::get('/cooperative/setup/activate/{id}', 'CooperativeController@activate_company')->name('cooperative.setup.activate');
 
     Route::get('/cooperative/payroll-config', 'CooperativeController@payroll_config')->name('cooperative.payroll-config');
     Route::post('/cooperative/payroll-config', 'CooperativeController@add_payroll_config')->name('cooperative.payroll-config.add');

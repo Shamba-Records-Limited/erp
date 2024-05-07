@@ -232,10 +232,48 @@ class CooperativeController extends Controller
         return CooperativeController::index();
     }
 
-    public function archive_company()
+    public function delete_company(Request $request)
     {
-        toastr()->success('Cooperative Archived Successfully');
-        return redirect()->route('cooperative');
+        try {
+            $cooperative = Cooperative::find($request->id);
+            $cooperative->delete();
+            toastr()->success('Cooperative Deleted Successfully');
+            return redirect()->route('cooperative');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back();
+        }
+    }
+
+    public function deactivate_company(Request $request) {
+        try {
+            $cooperative = Cooperative::find($request->id);
+            $cooperative->deactivated_at = now();
+            $cooperative->save();
+
+            toastr()->success('Cooperative Deactivated Successfully');
+            return redirect()->route('cooperative');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back();
+        }
+    }
+
+    public function activate_company(Request $request) {
+        try {
+            $cooperative = Cooperative::find($request->id);
+            $cooperative->deactivated_at = null;
+            $cooperative->save();
+
+            toastr()->success('Cooperative Activated Successfully');
+            return redirect()->route('cooperative');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back();
+        }
     }
 
     public static function create_financial_period($cooperative_id, $type): void

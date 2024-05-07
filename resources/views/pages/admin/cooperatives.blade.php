@@ -223,10 +223,15 @@
                                 </td>
                                 <td>{{$cop->location }}</td>
                                 <td>{{$cop->address }}</td>
-                                <td>{{$cop->currency }}</td>
+                                <td>{{$cop->currency }} {{ $cop->deactivated_at}}</td>
                                 <td>
+                                    @if (is_null($cop->deactivated_at))
+                                    <a href="{{ route('cooperative.setup.deactivate', $cop->id) }}" class="btn btn-info">Deactivate</a>
+                                    @else
+                                    <a href="{{ route('cooperative.setup.activate', $cop->id) }}" class="btn btn-success">Activate</a>
+                                    @endif
                                     <a href="{{ route('cooperative.setup.view-update', $cop->id) }}" class="btn btn-warning">Edit</a>
-                                    <a href="{{ route('cooperative.setup.archive', $cop->id) }}" class="btn btn-danger">Archive</a>
+                                    <button class="btn btn-danger" onclick="deleteCoop('{{$cop->id}}')">Delete</a>
                                 </td>
                             </tr>
                             @endforeach
@@ -289,13 +294,13 @@
 
 @push('custom-scripts')
 <script>
-    function archiveCoop(id) {
-        shouldArchive =  confirm("Are you sure you want to archive this cooperative?")
-        if (!shouldArchive){
+    function deleteCoop(id) {
+        shouldDelete =  confirm("Are you sure you want to delete this cooperative?")
+        if (!shouldDelete){
             return
         }
 
-        window.location = "/admin/cooperative/setup/archive/"+id
+        window.location = "/admin/cooperative/setup/delete/"+id
     }
 </script>
 @endpush

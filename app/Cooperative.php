@@ -26,7 +26,8 @@ class Cooperative extends Model
         'contact_details',
         'logo',
         'currency',
-        'owner_id'
+        'owner_id',
+        'deactivated_at'
     ];
 
 
