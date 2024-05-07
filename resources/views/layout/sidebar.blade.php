@@ -6,7 +6,7 @@
                     @php $user = Auth::user(); @endphp
                     <div class="profile-image">
                         
-                            <img src="{{ url('assets/images/avatar.png') }}" alt="profile image">
+                            <img src="{{ url('assets/images/avatar.jpg') }}" alt="profile image">
                         
                     </div>
                     <div class="text-wrapper">
@@ -1430,7 +1430,7 @@
             </li>
         @endif
 
-        @if(env('APP_ENV') == 'local' || env('APP_ENV') == 'development')
+        @if(env('APP_ENV') == 'localx' || env('APP_ENV') == 'development')
             <li class="nav-item {!!  active_class(['basic-ui/*']) !!} ">
                 <a class="nav-link" data-toggle="collapse" href="#basic-ui"
                    aria-expanded="{!!  is_active_route(['basic-ui/*'])  !!}"

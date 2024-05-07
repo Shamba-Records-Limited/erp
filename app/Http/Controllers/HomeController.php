@@ -72,8 +72,7 @@ class HomeController extends Controller
         //count farmers
         $farmers_count = (array)DB::select("SELECT COUNT(*) as farmers_count FROM farmers
                                     JOIN users ON users.id = farmers.user_id
-                                 WHERE  users.cooperative_id='$cooperative'
-                                 GROUP BY users.cooperative_id")[0]->farmers_count;
+                                 WHERE  users.cooperative_id='$cooperative'")[0]->farmers_count;
 
         //count cooperatives
         $cooperative_employees = DB::select("SELECT COUNT(*) employees_count FROM coop_employees JOIN users

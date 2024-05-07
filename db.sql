@@ -19,8 +19,9 @@ TABLE IF EXISTS `audit_trails`; /*!40101 SET @saved_cs_client = @@character_set_
   CONSTRAINT `audit_trails_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE 
 CASCADE,
   CONSTRAINT `audit_trails_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
-`audit_trails` -- LOCK TABLES `audit_trails` WRITE; /*!40000 ALTER TABLE `audit_trails` DISABLE KEYS */; INSERT INTO `audit_trails` VALUES 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
+`audit_trails` -- LOCK TABLES `audit_trails` WRITE; /*!40000 ALTER TABLE `audit_trails` DISABLE KEYS */;
+INSERT INTO `audit_trails` VALUES 
 ('00146c5f-cba5-45fb-a704-8bd3bc30f1cf','ae0c23e3-985b-4f06-931a-94a813c67404','created Overall and Gumboots vet 
 item','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-02-05 14:46:44','2022-02-05 
 14:46:44',NULL),('029b21c9-57f8-41b6-8a1b-9f5c3f286f20','ae0c23e3-985b-4f06-931a-94a813c67404','Created 
@@ -405,7 +406,7 @@ KEYS */; UNLOCK TABLES; -- -- Table structure for table `bank_branches` -- DROP 
   KEY `bank_branches_bank_id_foreign` (`bank_id`),
   CONSTRAINT `bank_branches_bank_id_foreign` FOREIGN KEY (`bank_id`) REFERENCES `banks` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `bank_branches_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE 
-CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping 
+CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping 
 data for table `bank_branches` -- LOCK TABLES `bank_branches` WRITE; /*!40000 ALTER TABLE `bank_branches` DISABLE KEYS */; INSERT INTO `bank_branches` 
 VALUES ('1ed06bd5-b8e1-4fab-9c30-077fdb7ab4e1','MERU','M-001','MERU 
 TOWN','5dae83b2-e858-4d55-922b-5295b8e9f81f','f16bcbb3-5f82-4eee-9354-39c0d5f994cd','2021-07-24 10:51:21','2021-07-24 
@@ -436,7 +437,7 @@ DROP TABLE IF EXISTS `banks`; /*!40101 SET @saved_cs_client = @@character_set_cl
   PRIMARY KEY (`id`),
   KEY `banks_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `banks_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `banks` -- LOCK TABLES `banks` WRITE; /*!40000 ALTER TABLE `banks` DISABLE KEYS */; INSERT INTO `banks` VALUES 
 ('59d809d4-808b-4eb8-81c4-f84ce3aff1e9','COOPERATIVE BANK','254781002001','COOPKEN','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 
 10:46:24','2021-07-24 
@@ -457,7 +458,7 @@ ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `breeds` -- DROP 
   PRIMARY KEY (`id`),
   KEY `breeds_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `breeds_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `breeds` -- LOCK TABLES `breeds` 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `breeds` -- LOCK TABLES `breeds` 
 WRITE; /*!40000 ALTER TABLE `breeds` DISABLE KEYS */; INSERT INTO `breeds` VALUES 
 ('258ea13a-2508-4aba-99c1-99596d7547bc','freshian','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-02-04 16:54:37','2022-02-04 
 16:54:37',NULL),('2ab01eb0-1358-48e2-8c99-9c612ebede55','Freshian','4995bc45-7b46-473c-8658-76d78011ae0c','2021-07-23 01:13:56','2021-07-23 
@@ -476,7 +477,7 @@ WRITE; /*!40000 ALTER TABLE `breeds` DISABLE KEYS */; INSERT INTO `breeds` VALUE
   PRIMARY KEY (`id`),
   KEY `categories_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `categories_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `categories` -- LOCK TABLES `categories` WRITE; /*!40000 ALTER TABLE `categories` DISABLE KEYS */; INSERT INTO `categories` VALUES 
 ('131de6de-1708-43f5-98a0-6f6dbea42cea','CASH CROPS','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 10:47:39','2021-07-24 
 10:47:39',NULL),('2dd259d8-220a-4f85-b15b-365f1c63be43','Cotton','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-27 15:29:58','2021-12-27 
@@ -514,7 +515,7 @@ EXISTS `collections`; /*!40101 SET @saved_cs_client = @@character_set_client */;
   CONSTRAINT `collections_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `collections_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `collections_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `collections` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `collections` -- 
 LOCK TABLES `collections` WRITE; /*!40000 ALTER TABLE `collections` DISABLE KEYS */; INSERT INTO `collections` VALUES 
 ('47447704-27c5-4244-9683-d790af900562','ae87e19d-a5a1-4927-9cd3-720beecf19ce','7e3ad0c9-b573-4d2b-b7c4-259df964398d','2000','1','2021-01-01',NULL,'5dae83b2-e858-4d55-922b-5295b8e9f81f','Kiambu 
 Route','2021-12-13 16:43:31','2021-12-13 
@@ -545,7 +546,7 @@ Table structure for table `coop_branch_departments` -- DROP TABLE IF EXISTS `coo
   PRIMARY KEY (`id`),
   KEY `coop_branch_departments_branch_id_foreign` (`branch_id`),
   CONSTRAINT `coop_branch_departments_branch_id_foreign` FOREIGN KEY (`branch_id`) REFERENCES `coop_branches` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `coop_branch_departments` -- LOCK TABLES `coop_branch_departments` WRITE; /*!40000 ALTER TABLE `coop_branch_departments` DISABLE KEYS */; INSERT INTO 
 `coop_branch_departments` VALUES ('114d7485-934d-4963-9b1a-fcc598e3eb6d','PRODUCTION','Production 
 01','1','b3abe66f-b049-4be2-9448-0a3f95801c96','2022-01-06 16:00:43','2022-01-06 
@@ -568,7 +569,7 @@ Outreach','Kisii-01','01','83b13245-7138-461f-b832-e5b4f2256a1b','2022-02-12 16:
   PRIMARY KEY (`id`),
   KEY `coop_branches_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `coop_branches_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `coop_branches` -- LOCK TABLES `coop_branches` WRITE; /*!40000 ALTER TABLE `coop_branches` DISABLE KEYS */; INSERT INTO `coop_branches` VALUES 
 ('6647f171-5f34-4b61-bc10-66896648739d','NAIROBI','NBO1','5dae83b2-e858-4d55-922b-5295b8e9f81f','UPPER HILL','2021-11-20 12:41:40','2021-11-20 
 12:41:40',NULL),('83b13245-7138-461f-b832-e5b4f2256a1b','Kisii Branch','Kisii-01','5dae83b2-e858-4d55-922b-5295b8e9f81f','Kisii','2022-02-12 
@@ -607,7 +608,7 @@ CREATE TABLE `coop_employees` (
   CONSTRAINT `coop_employees_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `coop_employees_department_id_foreign` FOREIGN KEY (`department_id`) REFERENCES `coop_branch_departments` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `coop_employees_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `coop_employees` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `coop_employees` -- 
 LOCK TABLES `coop_employees` WRITE; /*!40000 ALTER TABLE `coop_employees` DISABLE KEYS */; INSERT INTO `coop_employees` VALUES 
 ('bc9b4c78-9056-4f61-85cd-dda81fadd137','1ea59c59-8243-426d-b1bb-ff1c9bc93d2f','Nairobi','Nairobi','Married','1979-10-24','Male','123456789','254789233004','0012','7845000','4444','5555','13e9b2dc-7b35-458a-b5fc-c147fd3ace51','10412d4d-4db7-4999-93c4-7e5b8f452582',1,'2021-11-20 
 12:57:39','2021-11-20 
@@ -631,7 +632,7 @@ LOCK TABLES `coop_employees` WRITE; /*!40000 ALTER TABLE `coop_employees` DISABL
   PRIMARY KEY (`id`),
   KEY `cooperative_payment_configs_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `cooperative_payment_configs_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `cooperative_payment_configs` -- LOCK TABLES `cooperative_payment_configs` WRITE; /*!40000 ALTER TABLE `cooperative_payment_configs` DISABLE 
 KEYS */; INSERT INTO `cooperative_payment_configs` VALUES 
 ('1','600978','Test','b2c','xXJoz3klAOzIkGFbtK0bA9lQeMucAoRG','K0vwa2rLwWxZDbJX','bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919','testapi','Safaricom978!','1','349228b3-afe3-497a-8001-2d236fb6b50b',NULL,NULL),('2','174379','Test','c2b','xXJoz3klAOzIkGFbtK0bA9lQeMucAoRG','K0vwa2rLwWxZDbJX','bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919','testapi','Safaricom978!','1','40801158-8d2a-49f5-920c-8e9b3f94240c',NULL,NULL); 
@@ -657,7 +658,7 @@ EXISTS `cooperatives`; /*!40101 SET @saved_cs_client = @@character_set_client */
   UNIQUE KEY `cooperatives_contact_details_unique` (`contact_details`),
   KEY `cooperatives_country_id_foreign` (`country_id`),
   CONSTRAINT `cooperatives_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `cooperatives` -- LOCK TABLES `cooperatives` WRITE; /*!40000 ALTER TABLE `cooperatives` DISABLE KEYS */; INSERT INTO `cooperatives` VALUES 
 ('349228b3-afe3-497a-8001-2d236fb6b50b','Shamba 
 Equity','ERP','1ea59c59-8243-426d-b1bb-ff1c9bc93d2f','Nairobi','','Nairobi','erp@shambaequity.co.ke','254716345621',NULL,'KSH','2021-07-22 
@@ -684,7 +685,7 @@ TABLE `countries` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- 
+  PRIMARY KEY (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- 
 -- Dumping data for table `countries` -- LOCK TABLES `countries` WRITE; /*!40000 ALTER TABLE `countries` DISABLE KEYS */; INSERT INTO `countries` 
 VALUES ('05545c71-5fec-42dd-858a-6984b691623e','Guadeloupe','gp','2021-07-23 00:36:53','2021-07-23 
 00:36:53',NULL),('05727175-7d68-4aed-9aed-b53cca7969f7','Guinea','gn','2021-07-23 00:36:53','2021-07-23 
@@ -953,7 +954,7 @@ VALUES ('05545c71-5fec-42dd-858a-6984b691623e','Guadeloupe','gp','2021-07-23 00:
   CONSTRAINT `cows_breed_id_foreign` FOREIGN KEY (`breed_id`) REFERENCES `breeds` (`id`),
   CONSTRAINT `cows_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`),
   CONSTRAINT `cows_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `cows` -- LOCK TABLES `cows` WRITE; 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `cows` -- LOCK TABLES `cows` WRITE; 
 /*!40000 ALTER TABLE `cows` DISABLE KEYS */; INSERT INTO `cows` VALUES 
 ('5a7bdd20-fd4a-4708-9a1c-9c3cbfd8b21a','Jay','ty','258ea13a-2508-4aba-99c1-99596d7547bc','2c5465ee-db91-46d9-a4d2-8dfc64370820','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-02-04 
 16:55:06','2022-02-04 16:55:06',NULL),('6115a63d-0c3e-4815-b1e2-9a421b5e8403','KILO 2','KILO 
@@ -986,7 +987,7 @@ TABLE IF EXISTS `customers`; /*!40101 SET @saved_cs_client = @@character_set_cli
   PRIMARY KEY (`id`),
   KEY `customers_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `customers_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `customers` 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `customers` 
 -- LOCK TABLES `customers` WRITE; /*!40000 ALTER TABLE `customers` DISABLE KEYS */; INSERT INTO `customers` VALUES 
 ('210d7791-0aad-4301-8f5c-8a59270dadd1','Raj 
 Vishnu','Dr.','M','rajvishnu@gmail.com','254723333333','2022-02-05','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-02-05 14:40:03','2022-02-05 
@@ -1011,7 +1012,7 @@ CREATE TABLE `disease_categories` (
   PRIMARY KEY (`id`),
   KEY `disease_categories_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `disease_categories_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `disease_categories` 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `disease_categories` 
 -- LOCK TABLES `disease_categories` WRITE; /*!40000 ALTER TABLE `disease_categories` DISABLE KEYS */; INSERT INTO `disease_categories` VALUES 
 ('1a8a99ab-0168-4d20-9f21-9b2d499ca262','Fungus','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-17 01:27:53','2021-12-17 
 01:27:53',NULL),('48db7050-51a3-46d2-978e-bc7219d004be','Critical','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 10:58:50','2021-07-24 
@@ -1033,7 +1034,7 @@ EXISTS `diseases`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*
   KEY `diseases_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `diseases_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`),
   CONSTRAINT `diseases_disease_category_id_foreign` FOREIGN KEY (`disease_category_id`) REFERENCES `disease_categories` (`id`) ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `diseases` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `diseases` -- LOCK 
 TABLES `diseases` WRITE; /*!40000 ALTER TABLE `diseases` DISABLE KEYS */; INSERT INTO `diseases` VALUES 
 ('169940f5-aeeb-4241-9fd6-3c51f72dfd44','Powdery mildew','7f57574a-6854-41cb-b96f-b37f1412d6e6','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-17 
 01:27:40','2021-12-17 01:27:40',NULL),('1ee54ee6-a5bc-4642-a879-2dcf9f061170','Sleeping 
@@ -1066,7 +1067,7 @@ TABLE `diseases` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table 
   KEY `employee_bank_details_bank_branch_id_foreign` (`bank_branch_id`),
   CONSTRAINT `employee_bank_details_bank_branch_id_foreign` FOREIGN KEY (`bank_branch_id`) REFERENCES `bank_branches` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `employee_bank_details_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `coop_employees` (`id`) ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `employee_bank_details` -- LOCK TABLES `employee_bank_details` WRITE; /*!40000 ALTER TABLE `employee_bank_details` DISABLE KEYS */; INSERT INTO 
 `employee_bank_details` VALUES ('4913ca99-20d1-452a-b98d-0015dc8aff6f','bc9b4c78-9056-4f61-85cd-dda81fadd137','ROBERT 
 WANJIKU','123123123','e3f5589b-ff2d-411c-9ca6-c04b5e71362f','2021-11-20 12:57:39','2021-11-20 
@@ -1086,7 +1087,7 @@ Njoroge','2222224','e3f5589b-ff2d-411c-9ca6-c04b5e71362f','2022-01-06 16:05:32',
   KEY `employee_employment_types_employment_type_id_foreign` (`employment_type_id`),
   CONSTRAINT `employee_employment_types_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `coop_employees` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `employee_employment_types_employment_type_id_foreign` FOREIGN KEY (`employment_type_id`) REFERENCES `employment_types` (`id`) ON UPDATE 
-CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping 
+CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping 
 data for table `employee_employment_types` -- LOCK TABLES `employee_employment_types` WRITE; /*!40000 ALTER TABLE `employee_employment_types` DISABLE 
 KEYS */; INSERT INTO `employee_employment_types` VALUES 
 ('035c1916-e195-4dbb-ad05-90524cffe306','9fa7b884-8248-473d-b149-411764f7094e','d24ca95a-316a-424a-8db9-871aa38b1a37','2022-01-06 
@@ -1105,7 +1106,7 @@ character_set_client = utf8 */; CREATE TABLE `employee_files` (
   PRIMARY KEY (`id`),
   KEY `employee_files_employee_id_foreign` (`employee_id`),
   CONSTRAINT `employee_files_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `coop_employees` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `employee_files` -- LOCK TABLES `employee_files` WRITE; /*!40000 ALTER TABLE `employee_files` DISABLE KEYS */; /*!40000 ALTER TABLE `employee_files` 
 ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `employee_leaves` -- DROP TABLE IF EXISTS `employee_leaves`; /*!40101 SET 
 @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `employee_leaves` (
@@ -1123,7 +1124,7 @@ ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `employee_leaves`
   PRIMARY KEY (`id`),
   KEY `employee_leaves_employee_id_foreign` (`employee_id`),
   CONSTRAINT `employee_leaves_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `coop_employees` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `employee_leaves` -- LOCK TABLES `employee_leaves` WRITE; /*!40000 ALTER TABLE `employee_leaves` DISABLE KEYS */; INSERT INTO `employee_leaves` VALUES 
 ('254b0413-e1cd-41ad-b435-6bd80e922e7d','2022-02-25','2022-03-04','Family Issues','Family issues 
 leave','',0,'bc9b4c78-9056-4f61-85cd-dda81fadd137','2022-02-12 17:05:47','2022-02-12 
@@ -1144,7 +1145,7 @@ KEYS */; UNLOCK TABLES; -- -- Table structure for table `employee_positions` -- 
   KEY `employee_positions_position_id_foreign` (`position_id`),
   CONSTRAINT `employee_positions_employee_id_foreign` FOREIGN KEY (`employee_id`) REFERENCES `coop_employees` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `employee_positions_position_id_foreign` FOREIGN KEY (`position_id`) REFERENCES `job_positions` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `employee_positions` -- LOCK TABLES `employee_positions` WRITE; /*!40000 ALTER TABLE `employee_positions` DISABLE KEYS */; INSERT INTO 
 `employee_positions` VALUES 
 ('11a210ac-b289-4df2-9911-4ab0fb919bd0','ea39212a-80d0-459c-86f5-d93537210742','bc9b4c78-9056-4f61-85cd-dda81fadd137','2021-11-20 
@@ -1162,7 +1163,7 @@ character_set_client = utf8 */; CREATE TABLE `employment_types` (
   PRIMARY KEY (`id`),
   KEY `employment_types_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `employment_types_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `employment_types` -- LOCK TABLES `employment_types` WRITE; /*!40000 ALTER TABLE `employment_types` DISABLE KEYS */; INSERT INTO 
 `employment_types` VALUES ('4adb5084-9ee2-4d82-80cb-4fcd7fae8e85','Permanent','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-01-06 16:12:10','2022-01-06 
 16:12:23','2022-01-06 16:12:23'),('9fa7b884-8248-473d-b149-411764f7094e','Permanent','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-11-20 
@@ -1202,7 +1203,7 @@ CREATE TABLE `farmers` (
   CONSTRAINT `farmers_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `farmers_route_id_foreign` FOREIGN KEY (`route_id`) REFERENCES `routes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `farmers_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `farmers` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; -- -- Dumping data for table `farmers` -- LOCK 
 TABLES `farmers` WRITE; /*!40000 ALTER TABLE `farmers` DISABLE KEYS */; INSERT INTO `farmers` VALUES 
 ('118b80b8-6427-4994-ab7a-ea09f677fba7','1ea59c59-8243-426d-b1bb-ff1c9bc93d2f','Taita','Taita','700700700','254740300300','44769ba4-d939-4569-b5c7-c062266534ac','1234567','e3f5589b-ff2d-411c-9ca6-c04b5e71362f','10003','monthly','7845500','37e9f0a5-aadd-441c-8a1c-02810e0f6387','2021-12-17 
 08:58:19','2021-12-17 
@@ -1234,7 +1235,7 @@ SET character_set_client = utf8 */; CREATE TABLE `farmers_products` (
   KEY `farmers_products_product_id_foreign` (`product_id`),
   CONSTRAINT `farmers_products_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `farmers_products_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- 
+ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- 
 Dumping data for table `farmers_products` -- LOCK TABLES `farmers_products` WRITE; /*!40000 ALTER TABLE `farmers_products` DISABLE KEYS */; INSERT 
 INTO `farmers_products` VALUES 
 (1,'af7f8d72-023c-47d1-ba90-29a20f6a4231','f62bb800-1182-4108-92dc-7d33da5e66df',NULL,NULL),(2,'3c71e95f-2785-4d86-9c02-f54b3d8e9ae9','7e3ad0c9-b573-4d2b-b7c4-259df964398d',NULL,NULL),(3,'00462423-508f-4cc1-88bc-52d5b5e11586','7e3ad0c9-b573-4d2b-b7c4-259df964398d',NULL,NULL),(4,'3366c996-2080-4cf2-a060-8ac85b2c8b80','7e3ad0c9-b573-4d2b-b7c4-259df964398d',NULL,NULL),(5,'37e9f0a5-aadd-441c-8a1c-02810e0f6387','24173b51-713b-40d7-bb97-0c1e7238021a',NULL,NULL),(6,'d9d25896-6a97-4997-bea2-e6c2c322efae','24173b51-713b-40d7-bb97-0c1e7238021a',NULL,NULL),(7,'f300236f-6fe1-41b4-bca1-7eb260bf21b3','24173b51-713b-40d7-bb97-0c1e7238021a',NULL,NULL),(8,'d0c10ae9-ffd8-4ef5-b9ef-fabec7d0d1b4','7e3ad0c9-b573-4d2b-b7c4-259df964398d',NULL,NULL),(9,'e15afdc0-03f0-40c2-86a0-01dfd6b9feab','6e8ea072-2c88-4be1-9bba-c4f2f36b8b71',NULL,NULL),(10,'e15afdc0-03f0-40c2-86a0-01dfd6b9feab','7e3ad0c9-b573-4d2b-b7c4-259df964398d',NULL,NULL),(11,'ec126071-2854-455c-964c-e70f546b8a9b','4f1f0ace-936e-4a69-a517-5fdf81c6ddcd',NULL,NULL),(12,'a484b8d4-243b-4a7c-ab1a-2340d23ef313','4f1f0ace-936e-4a69-a517-5fdf81c6ddcd',NULL,NULL),(13,'283b2a32-1ca8-4b59-a623-58de078147ab','a2b4651f-4238-4cc9-b9ed-92407440070d',NULL,NULL),(14,'bb008cef-2149-4018-b069-9d8032b38809','a2b4651f-4238-4cc9-b9ed-92407440070d',NULL,NULL),(15,'45a6aa4a-37a5-47a3-b831-c3cbda8cf1d7','a2b4651f-4238-4cc9-b9ed-92407440070d',NULL,NULL),(16,'395af6b3-bf32-48c6-8570-679ebb48f435','9d352572-18f9-4486-8add-ca0144292e14',NULL,NULL); 
@@ -1257,7 +1258,7 @@ INTO `farmers_products` VALUES
   CONSTRAINT `final_products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `final_products_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `final_products_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `final_products` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `final_products` -- 
 LOCK TABLES `final_products` WRITE; /*!40000 ALTER TABLE `final_products` DISABLE KEYS */; INSERT INTO `final_products` VALUES 
 ('201363a4-3ec0-4f48-89cb-1dbf0ba619ab','Cloth','2dd259d8-220a-4f85-b15b-365f1c63be43','5dae83b2-e858-4d55-922b-5295b8e9f81f','e899c22d-f213-4c19-b995-bdf2e3fb8944',1500.0000,'2022-01-06 
 15:08:52','2022-01-06 15:08:52',NULL),('32ab16ff-a397-44df-adf9-372adb42a38b','Dried 
@@ -1288,7 +1289,7 @@ character_set_client = utf8 */; CREATE TABLE `invoice_payments` (
   PRIMARY KEY (`id`),
   KEY `invoice_payments_invoice_id_foreign` (`invoice_id`),
   CONSTRAINT `invoice_payments_invoice_id_foreign` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `invoice_payments` 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `invoice_payments` 
 -- LOCK TABLES `invoice_payments` WRITE; /*!40000 ALTER TABLE `invoice_payments` DISABLE KEYS */; /*!40000 ALTER TABLE `invoice_payments` ENABLE KEYS 
 */; UNLOCK TABLES; -- -- Table structure for table `invoices` -- DROP TABLE IF EXISTS `invoices`; /*!40101 SET @saved_cs_client = 
 @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `invoices` (
@@ -1303,7 +1304,7 @@ CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = 
   PRIMARY KEY (`id`),
   KEY `invoices_sale_id_foreign` (`sale_id`),
   CONSTRAINT `invoices_sale_id_foreign` FOREIGN KEY (`sale_id`) REFERENCES `sales` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `invoices` -- LOCK TABLES `invoices` 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `invoices` -- LOCK TABLES `invoices` 
 WRITE; /*!40000 ALTER TABLE `invoices` DISABLE KEYS */; /*!40000 ALTER TABLE `invoices` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table 
 `job_positions` -- DROP TABLE IF EXISTS `job_positions`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client 
 = utf8 */; CREATE TABLE `job_positions` (
@@ -1319,7 +1320,7 @@ WRITE; /*!40000 ALTER TABLE `invoices` DISABLE KEYS */; /*!40000 ALTER TABLE `in
   PRIMARY KEY (`id`),
   KEY `job_positions_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `job_positions_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `job_positions` -- LOCK TABLES `job_positions` WRITE; /*!40000 ALTER TABLE `job_positions` DISABLE KEYS */; INSERT INTO `job_positions` VALUES 
 ('22c51f78-8800-44fe-ab2c-0be651b0f851','Quallity Assurance','Testing the quality','QA','Tests the quality of the produced 
 items.','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-01-06 16:02:24','2022-01-06 
@@ -1339,7 +1340,7 @@ activities','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-11-20 12:44:45','2021-1
   PRIMARY KEY (`id`),
   KEY `loan_limits_farmer_id_foreign` (`farmer_id`),
   CONSTRAINT `loan_limits_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `loan_limits` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `loan_limits` -- 
 LOCK TABLES `loan_limits` WRITE; /*!40000 ALTER TABLE `loan_limits` DISABLE KEYS */; /*!40000 ALTER TABLE `loan_limits` ENABLE KEYS */; UNLOCK TABLES; 
 -- -- Table structure for table `loan_payment_histories` -- DROP TABLE IF EXISTS `loan_payment_histories`; /*!40101 SET @saved_cs_client = 
 @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `loan_payment_histories` (
@@ -1354,7 +1355,7 @@ LOCK TABLES `loan_limits` WRITE; /*!40000 ALTER TABLE `loan_limits` DISABLE KEYS
   KEY `loan_payment_histories_wallet_transaction_id_foreign` (`wallet_transaction_id`),
   CONSTRAINT `loan_payment_histories_loan_id_foreign` FOREIGN KEY (`loan_id`) REFERENCES `loans` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `loan_payment_histories_wallet_transaction_id_foreign` FOREIGN KEY (`wallet_transaction_id`) REFERENCES `wallet_transactions` (`id`) ON 
-UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- 
+UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- 
 Dumping data for table `loan_payment_histories` -- LOCK TABLES `loan_payment_histories` WRITE; /*!40000 ALTER TABLE `loan_payment_histories` DISABLE 
 KEYS */; /*!40000 ALTER TABLE `loan_payment_histories` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `loans` -- DROP TABLE IF EXISTS 
 `loans`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `loans` (
@@ -1372,7 +1373,7 @@ KEYS */; /*!40000 ALTER TABLE `loan_payment_histories` ENABLE KEYS */; UNLOCK TA
   PRIMARY KEY (`id`),
   KEY `loans_farmer_id_foreign` (`farmer_id`),
   CONSTRAINT `loans_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `loans` -- LOCK TABLES `loans` 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `loans` -- LOCK TABLES `loans` 
 WRITE; /*!40000 ALTER TABLE `loans` DISABLE KEYS */; /*!40000 ALTER TABLE `loans` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table 
 `migrations` -- DROP TABLE IF EXISTS `migrations`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 
 */; CREATE TABLE `migrations` (
@@ -1392,7 +1393,7 @@ INSERT INTO `migrations` VALUES
   PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
   KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`),
   CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `model_has_permissions` -- LOCK TABLES `model_has_permissions` WRITE; /*!40000 ALTER TABLE `model_has_permissions` DISABLE KEYS */; /*!40000 
 ALTER TABLE `model_has_permissions` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `model_has_roles` -- DROP TABLE IF EXISTS 
 `model_has_roles`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE 
@@ -1403,7 +1404,7 @@ ALTER TABLE `model_has_permissions` ENABLE KEYS */; UNLOCK TABLES; -- -- Table s
   PRIMARY KEY (`role_id`,`model_id`,`model_type`),
   KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`),
   CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `model_has_roles` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `model_has_roles` -- 
 LOCK TABLES `model_has_roles` WRITE; /*!40000 ALTER TABLE `model_has_roles` DISABLE KEYS */; INSERT INTO `model_has_roles` VALUES 
 (3,'App\\User','00462423-508f-4cc1-88bc-52d5b5e11586'),(7,'App\\User','10412d4d-4db7-4999-93c4-7e5b8f452582'),(2,'App\\User','2a05069e-4f8e-46a0-931a-a88e0b8d23b9'),(2,'App\\User','2f46da5f-6c3a-43db-8f33-ab8acc6c89bf'),(3,'App\\User','3366c996-2080-4cf2-a060-8ac85b2c8b80'),(3,'App\\User','37e9f0a5-aadd-441c-8a1c-02810e0f6387'),(4,'App\\User','3a1c5fd8-c546-4598-907f-cab1c4691673'),(3,'App\\User','3c71e95f-2785-4d86-9c02-f54b3d8e9ae9'),(7,'App\\User','4d327539-ef33-45c0-97ba-50b419577f9f'),(1,'App\\User','597dfe2f-35c0-4a32-86c7-434901fe7269'),(2,'App\\User','6131b2b3-7245-4363-b25d-d208721f8e12'),(4,'App\\User','79291b6c-7f9d-467f-be92-d2fafe6d2e18'),(4,'App\\User','8ad317be-f6ce-4d2d-9856-69abeb325cdf'),(4,'App\\User','9e59a2f8-24c8-4c41-b310-3bdfbc5864f6'),(2,'App\\User','a1998913-1bd5-46aa-8501-bd4e9564d3b3'),(2,'App\\User','ae0c23e3-985b-4f06-931a-94a813c67404'),(3,'App\\User','af7f8d72-023c-47d1-ba90-29a20f6a4231'),(2,'App\\User','b0ce24c6-01ec-4a02-9f6a-9d0c85893ea1'),(3,'App\\User','d0c10ae9-ffd8-4ef5-b9ef-fabec7d0d1b4'),(3,'App\\User','d9d25896-6a97-4997-bea2-e6c2c322efae'),(3,'App\\User','e15afdc0-03f0-40c2-86a0-01dfd6b9feab'),(2,'App\\User','e9a2f744-8431-4efe-9b0b-c80deac79850'),(3,'App\\User','f300236f-6fe1-41b4-bca1-7eb260bf21b3'); 
 /*!40000 ALTER TABLE `model_has_roles` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `password_resets` -- DROP TABLE IF EXISTS 
@@ -1448,7 +1449,7 @@ TABLES; -- -- Table structure for table `production_materials` -- DROP TABLE IF 
   CONSTRAINT `production_materials_production_id_foreign` FOREIGN KEY (`production_id`) REFERENCES `productions` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `production_materials_raw_material_id_foreign` FOREIGN KEY (`raw_material_id`) REFERENCES `raw_materials` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `production_materials_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `production_materials` -- LOCK TABLES `production_materials` WRITE; /*!40000 ALTER TABLE `production_materials` DISABLE KEYS */; INSERT INTO 
 `production_materials` VALUES 
 ('73b3e98b-fd8e-4680-8788-b5db092c7c4e','445303e3-60f8-4303-abb2-8f977ac3955a','b3ee8c3e-7153-4a78-b0f6-0caca4281b1f','5dae83b2-e858-4d55-922b-5295b8e9f81f',20.0000,'1','8fe2fb27-23d1-4e5b-9a06-63191f1a07be','2021-12-17 
@@ -1469,7 +1470,7 @@ character_set_client = utf8 */; CREATE TABLE `productions` (
   KEY `productions_unit_id_foreign` (`unit_id`),
   CONSTRAINT `productions_final_product_id_foreign` FOREIGN KEY (`final_product_id`) REFERENCES `final_products` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `productions_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `productions` -- LOCK TABLES 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `productions` -- LOCK TABLES 
 `productions` WRITE; /*!40000 ALTER TABLE `productions` DISABLE KEYS */; INSERT INTO `productions` VALUES 
 ('66a23ef4-44bc-4bc1-a3bf-193e116d7797','6ea99c4f-eae3-473d-bb02-588464b952c0','100','0b63595c-0685-4faf-9091-4a608e6015df','250','2021-12-16 
 21:16:49','2022-02-05 14:57:13','2022-02-05 
@@ -1498,7 +1499,7 @@ for table `products` -- DROP TABLE IF EXISTS `products`; /*!40101 SET @saved_cs_
   CONSTRAINT `products_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `products_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `products_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `products` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `products` -- LOCK 
 TABLES `products` WRITE; /*!40000 ALTER TABLE `products` DISABLE KEYS */; INSERT INTO `products` VALUES ('1ca1979b-f2a2-4208-9e9a-60b4fec70f80','Dry 
 Pineapples','5dae83b2-e858-4d55-922b-5295b8e9f81f','Pineapples',100,16,'4512020',NULL,'8aa37bac-42ef-44a4-a2f2-bf69316308e3','8fe2fb27-23d1-4e5b-9a06-63191f1a07be','2021-12-17 
 12:34:02','2021-12-17 
@@ -1535,7 +1536,7 @@ Feeds',50,50,'Feeds -001',NULL,'78953dc4-c0c8-49b8-82b3-c756ead581ed','8fe2fb27-
   KEY `raw_materials_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `raw_materials_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `raw_materials_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `raw_materials` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `raw_materials` -- 
 LOCK TABLES `raw_materials` WRITE; /*!40000 ALTER TABLE `raw_materials` DISABLE KEYS */; INSERT INTO `raw_materials` VALUES 
 ('445303e3-60f8-4303-abb2-8f977ac3955a',NULL,'1ca1979b-f2a2-4208-9e9a-60b4fec70f80',20.0000,'2021-12-17 12:40:00','2021-12-17 
 12:40:00',NULL,NULL,NULL),('5200d0e8-b161-4233-944c-a2759e79b2f8',NULL,'24173b51-713b-40d7-bb97-0c1e7238021a',10.0000,'2022-01-06 
@@ -1570,7 +1571,7 @@ LOCK TABLES `raw_materials` WRITE; /*!40000 ALTER TABLE `raw_materials` DISABLE 
   PRIMARY KEY (`id`),
   KEY `recruitment_applications_recruitment_id_foreign` (`recruitment_id`),
   CONSTRAINT `recruitment_applications_recruitment_id_foreign` FOREIGN KEY (`recruitment_id`) REFERENCES `recruitments` (`id`) ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `recruitment_applications` -- LOCK TABLES `recruitment_applications` WRITE; /*!40000 ALTER TABLE `recruitment_applications` DISABLE KEYS */; 
 /*!40000 ALTER TABLE `recruitment_applications` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `recruitments` -- DROP TABLE IF EXISTS 
 `recruitments`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `recruitments` (
@@ -1592,7 +1593,7 @@ table `recruitment_applications` -- LOCK TABLES `recruitment_applications` WRITE
   PRIMARY KEY (`id`),
   KEY `recruitments_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `recruitments_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `recruitments` -- LOCK TABLES `recruitments` WRITE; /*!40000 ALTER TABLE `recruitments` DISABLE KEYS */; INSERT INTO `recruitments` VALUES 
 ('4cda9037-9e2c-408f-8a61-bd3f0136d6d7','ACCOUNTANT','Finance and Accounts Management','Holder of CPA and a Bachelors Degree','Bachelors 
 Degree','Permanent','100000','Kenya','',0,'2022-02-09 00:00:00','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-11-20 12:54:56','2021-11-20 
@@ -1609,7 +1610,7 @@ character_set_client = utf8 */; CREATE TABLE `role_has_permissions` (
   KEY `role_has_permissions_role_id_foreign` (`role_id`),
   CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `role_has_permissions` -- LOCK TABLES `role_has_permissions` WRITE; /*!40000 ALTER TABLE `role_has_permissions` DISABLE KEYS */; /*!40000 ALTER TABLE 
 `role_has_permissions` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `roles` -- DROP TABLE IF EXISTS `roles`; /*!40101 SET 
 @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `roles` (
@@ -1634,7 +1635,7 @@ table `routes` -- DROP TABLE IF EXISTS `routes`; /*!40101 SET @saved_cs_client =
   PRIMARY KEY (`id`),
   KEY `routes_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `routes_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `routes` -- LOCK TABLES `routes` WRITE; /*!40000 ALTER TABLE `routes` DISABLE KEYS */; INSERT INTO `routes` VALUES 
 ('0ced6a08-c2e2-40da-bfab-064bc7e49799','ELDAMA RAVINE','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 10:43:17','2021-07-24 
 10:43:17',NULL),('1fe0ef63-8903-44f5-969c-1572da384d82','Meru','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 10:43:08','2021-07-24 
@@ -1665,7 +1666,7 @@ table `routes` -- LOCK TABLES `routes` WRITE; /*!40000 ALTER TABLE `routes` DISA
   CONSTRAINT `sale_items_collection_id_foreign` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `sale_items_manufactured_product_id_foreign` FOREIGN KEY (`manufactured_product_id`) REFERENCES `productions` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `sale_items_sales_id_foreign` FOREIGN KEY (`sales_id`) REFERENCES `sales` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `sale_items` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `sale_items` -- LOCK 
 TABLES `sale_items` WRITE; /*!40000 ALTER TABLE `sale_items` DISABLE KEYS */; /*!40000 ALTER TABLE `sale_items` ENABLE KEYS */; UNLOCK TABLES; -- -- 
 Table structure for table `sales` -- DROP TABLE IF EXISTS `sales`; /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET 
 character_set_client = utf8 */; CREATE TABLE `sales` (
@@ -1689,7 +1690,7 @@ character_set_client = utf8 */; CREATE TABLE `sales` (
   CONSTRAINT `sales_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `sales_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `sales_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 
-COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `sales` -- LOCK TABLES `sales` 
+COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `sales` -- LOCK TABLES `sales` 
 WRITE; /*!40000 ALTER TABLE `sales` DISABLE KEYS */; INSERT INTO `sales` VALUES 
 ('0f6cfb4e-e921-4645-b835-f0dbae4cd5c6','2c5465ee-db91-46d9-a4d2-8dfc64370820','ae0c23e3-985b-4f06-931a-94a813c67404','5dae83b2-e858-4d55-922b-5295b8e9f81f',NULL,'202201oLlSyidKfTxH2weu','2022-01-11','2022-01-11 
 15:22:38','2022-01-11 
@@ -1712,7 +1713,7 @@ DROP TABLE IF EXISTS `units`; /*!40101 SET @saved_cs_client = @@character_set_cl
   PRIMARY KEY (`id`),
   KEY `units_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `units_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `units` -- LOCK TABLES `units` WRITE; /*!40000 ALTER TABLE `units` DISABLE KEYS */; INSERT INTO `units` VALUES 
 ('0b63595c-0685-4faf-9091-4a608e6015df','Litres','4995bc45-7b46-473c-8658-76d78011ae0c','2021-07-23 01:04:09','2021-07-23 
 01:04:09',NULL),('573a8272-3e37-4fe5-9730-f6d906286bda','LITRES','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-07-24 10:48:38','2021-07-24 
@@ -1738,7 +1739,7 @@ table `units` -- LOCK TABLES `units` WRITE; /*!40000 ALTER TABLE `units` DISABLE
   UNIQUE KEY `users_email_unique` (`email`),
   KEY `users_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `users_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `users` -- LOCK TABLES `users` WRITE; /*!40000 ALTER TABLE `users` DISABLE KEYS */; INSERT INTO `users` VALUES 
 ('00462423-508f-4cc1-88bc-52d5b5e11586','Michael','Muriuki','5dae83b2-e858-4d55-922b-5295b8e9f81f','MICHAEL','michael@gmail.com',NULL,'$2y$10$V8.dfM2C0ZVwkAO06We6I.HMDt0nvv/9xbsVf9z/UlNyb0G841XZa',NULL,'2021-07-24 
 10:56:18','2021-07-24 
@@ -1814,7 +1815,7 @@ TABLE IF EXISTS `vet_bookings`; /*!40101 SET @saved_cs_client = @@character_set_
   CONSTRAINT `vet_bookings_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `vet_bookings_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `vet_bookings_vet_id_foreign` FOREIGN KEY (`vet_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `vet_bookings` -- LOCK TABLES `vet_bookings` WRITE; /*!40000 ALTER TABLE `vet_bookings` DISABLE KEYS */; INSERT INTO `vet_bookings` VALUES 
 ('2734749b-24e3-47a3-983f-9d40148db61a','2021-12-13 14:00:00','2021-12-13 15:00:00','COW 
 SICK','3366c996-2080-4cf2-a060-8ac85b2c8b80','79291b6c-7f9d-467f-be92-d2fafe6d2e18','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-13 
@@ -1844,7 +1845,7 @@ DROP TABLE IF EXISTS `vet_items`; /*!40101 SET @saved_cs_client = @@character_se
   KEY `vet_items_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `vet_items_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `vet_items_unit_id_foreign` FOREIGN KEY (`unit_id`) REFERENCES `units` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB 
-DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `vet_items` 
+DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `vet_items` 
 -- LOCK TABLES `vet_items` WRITE; /*!40000 ALTER TABLE `vet_items` DISABLE KEYS */; INSERT INTO `vet_items` VALUES 
 ('0f9ddc6b-2770-499b-8d82-38ac591c8c1e','Syringes',100,4500,5500,'8fe2fb27-23d1-4e5b-9a06-63191f1a07be','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-20 
 21:27:12','2021-12-20 
@@ -1867,7 +1868,7 @@ TABLE `vet_services` (
   PRIMARY KEY (`id`),
   KEY `vet_services_cooperative_id_foreign` (`cooperative_id`),
   CONSTRAINT `vet_services_cooperative_id_foreign` FOREIGN KEY (`cooperative_id`) REFERENCES `cooperatives` (`id`) ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `vet_services` -- 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `vet_services` -- 
 LOCK TABLES `vet_services` WRITE; /*!40000 ALTER TABLE `vet_services` DISABLE KEYS */; INSERT INTO `vet_services` VALUES 
 ('1a1f6f09-6080-4bd4-b93c-5702cac6416b','Crop Spraying','Spraying Crops','5dae83b2-e858-4d55-922b-5295b8e9f81f','2021-12-17 09:05:08','2021-12-17 
 09:05:08',NULL),('50ed9320-6ea1-45e8-a883-f9aaff746fdb','Checkups','Regular Checkups','5dae83b2-e858-4d55-922b-5295b8e9f81f','2022-02-12 
@@ -1889,7 +1890,7 @@ DROP TABLE IF EXISTS `vets`; /*!40101 SET @saved_cs_client = @@character_set_cli
   PRIMARY KEY (`id`),
   KEY `vets_user_id_foreign` (`user_id`),
   CONSTRAINT `vets_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `vets` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `vets` -- LOCK 
 TABLES `vets` WRITE; /*!40000 ALTER TABLE `vets` DISABLE KEYS */; INSERT INTO `vets` VALUES 
 ('d8b1d684-f1f9-4bbc-abf5-00e51f86be9f','254712345678','1234567','M',NULL,'8ad317be-f6ce-4d2d-9856-69abeb325cdf','2022-02-12 18:00:51','2022-02-12 
 18:00:51',NULL),('e49325f5-62d4-4018-bcae-ee426de17ccf','254723678563','12345678','X',NULL,'9e59a2f8-24c8-4c41-b310-3bdfbc5864f6','2021-12-17 
@@ -1904,7 +1905,7 @@ TABLE `vets_vets_items` (
   KEY `vets_vets_items_vet_item_id_foreign` (`vet_item_id`),
   CONSTRAINT `vets_vets_items_vet_id_foreign` FOREIGN KEY (`vet_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `vets_vets_items_vet_item_id_foreign` FOREIGN KEY (`vet_item_id`) REFERENCES `vet_items` (`id`) ON DELETE SET NULL ON UPDATE CASCADE ) 
-ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for 
+ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for 
 table `vets_vets_items` -- LOCK TABLES `vets_vets_items` WRITE; /*!40000 ALTER TABLE `vets_vets_items` DISABLE KEYS */; /*!40000 ALTER TABLE 
 `vets_vets_items` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `wallet_transactions` -- DROP TABLE IF EXISTS `wallet_transactions`; 
 /*!40101 SET @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `wallet_transactions` (
@@ -1927,7 +1928,7 @@ table `vets_vets_items` -- LOCK TABLES `vets_vets_items` WRITE; /*!40000 ALTER T
   KEY `wallet_transactions_initiator_id_foreign` (`initiator_id`),
   CONSTRAINT `wallet_transactions_initiator_id_foreign` FOREIGN KEY (`initiator_id`) REFERENCES `users` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `wallet_transactions_wallet_id_foreign` FOREIGN KEY (`wallet_id`) REFERENCES `wallets` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table 
 `wallet_transactions` -- LOCK TABLES `wallet_transactions` WRITE; /*!40000 ALTER TABLE `wallet_transactions` DISABLE KEYS */; /*!40000 ALTER TABLE 
 `wallet_transactions` ENABLE KEYS */; UNLOCK TABLES; -- -- Table structure for table `wallets` -- DROP TABLE IF EXISTS `wallets`; /*!40101 SET 
 @saved_cs_client = @@character_set_client */; /*!40101 SET character_set_client = utf8 */; CREATE TABLE `wallets` (
@@ -1940,7 +1941,7 @@ CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = 
   PRIMARY KEY (`id`),
   KEY `wallets_farmer_id_foreign` (`farmer_id`),
   CONSTRAINT `wallets_farmer_id_foreign` FOREIGN KEY (`farmer_id`) REFERENCES `farmers` (`id`) ON UPDATE CASCADE ) ENGINE=InnoDB DEFAULT 
-CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = @saved_cs_client */; -- -- Dumping data for table `wallets` -- LOCK 
+CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci; /*!40101 SET character_set_client = utf8 */; -- -- Dumping data for table `wallets` -- LOCK 
 TABLES `wallets` WRITE; /*!40000 ALTER TABLE `wallets` DISABLE KEYS */; /*!40000 ALTER TABLE `wallets` ENABLE KEYS */; UNLOCK TABLES; /*!40103 SET 
 TIME_ZONE=@OLD_TIME_ZONE */; /*!40101 SET SQL_MODE=@OLD_SQL_MODE */; /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */; /*!40014 SET 
 UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */; /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */; /*!40101 SET 

@@ -76,8 +76,13 @@ Route::post('/update-password', 'UserManagementController@update_password')->nam
 //admin routes
 Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/optimize', "FirstTimeConfig@optimize_app")->name('optimize');
+
     Route::get('/cooperative/setup', 'CooperativeController@index')->name('cooperative');
     Route::post('/cooperative/setup', 'CooperativeController@add_company')->name('cooperative.setup');
+    Route::get('/cooperative/setup/update/{id}', 'CooperativeController@view_edit_company')->name('cooperative.setup.view-update');
+    Route::patch('/cooperative/setup/update', 'CooperativeController@edit_company')->name('cooperative.setup.update');
+    Route::get('/cooperative/setup/archive/{id}', 'CooperativeController@archive_company')->name('cooperative.setup.archive');
+
     Route::get('/cooperative/payroll-config', 'CooperativeController@payroll_config')->name('cooperative.payroll-config');
     Route::post('/cooperative/payroll-config', 'CooperativeController@add_payroll_config')->name('cooperative.payroll-config.add');
     Route::post('/cooperative/payroll-config/{id}', 'CooperativeController@edit_payroll_config')->name('cooperative.payroll-config.edit');

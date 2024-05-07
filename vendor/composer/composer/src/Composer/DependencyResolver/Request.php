@@ -43,28 +43,26 @@ class Request
     /** @var ?LockArrayRepository */
     protected $lockedRepository;
     /** @var array<string, ConstraintInterface> */
-    protected $requires = array();
+    protected $requires = [];
     /** @var array<string, BasePackage> */
-    protected $fixedPackages = array();
+    protected $fixedPackages = [];
     /** @var array<string, BasePackage> */
-    protected $lockedPackages = array();
+    protected $lockedPackages = [];
     /** @var array<string, BasePackage> */
-    protected $fixedLockedPackages = array();
-    /** @var string[] */
-    protected $updateAllowList = array();
+    protected $fixedLockedPackages = [];
+    /** @var array<string> */
+    protected $updateAllowList = [];
     /** @var false|self::UPDATE_* */
     protected $updateAllowTransitiveDependencies = false;
+    /** @var non-empty-list<string>|null */
+    private $restrictedPackages = null;
 
-    public function __construct(LockArrayRepository $lockedRepository = null)
+    public function __construct(?LockArrayRepository $lockedRepository = null)
     {
         $this->lockedRepository = $lockedRepository;
     }
 
-    /**
-     * @param string $packageName
-     * @return void
-     */
-    public function requireName(string $packageName, ConstraintInterface $constraint = null): void
+    public function requireName(string $packageName, ?ConstraintInterface $constraint = null): void
     {
         $packageName = strtolower($packageName);
 
@@ -82,8 +80,6 @@ class Request
      *
      * This is used for platform packages which cannot be modified by Composer. A rule enforcing their installation is
      * generated for dependency resolution. Partial updates with dependencies cannot in any way modify these packages.
-     *
-     * @return void
      */
     public function fixPackage(BasePackage $package): void
     {
@@ -99,8 +95,6 @@ class Request
      * However unlike fixed packages there will not be a special rule enforcing their installation for the solver, so
      * if nothing requires these packages they will be removed. Additionally in a partial update these packages can be
      * unlocked, meaning other versions can be installed if explicitly requested as part of the update.
-     *
-     * @return void
      */
     public function lockPackage(BasePackage $package): void
     {
@@ -113,8 +107,6 @@ class Request
      * This is necessary for the composer install step which verifies the lock file integrity and should not allow
      * removal of any packages. At the same time lock packages there cannot simply be marked fixed, as error reporting
      * would then report them as platform packages, so this still marks them as locked packages at the same time.
-     *
-     * @return void
      */
     public function fixLockedPackage(BasePackage $package): void
     {
@@ -122,18 +114,14 @@ class Request
         $this->fixedLockedPackages[spl_object_hash($package)] = $package;
     }
 
-    /**
-     * @return void
-     */
     public function unlockPackage(BasePackage $package): void
     {
         unset($this->lockedPackages[spl_object_hash($package)]);
     }
 
     /**
-     * @param string[] $updateAllowList
+     * @param array<string> $updateAllowList
      * @param false|self::UPDATE_* $updateAllowTransitiveDependencies
-     * @return void
      */
     public function setUpdateAllowList(array $updateAllowList, $updateAllowTransitiveDependencies): void
     {
@@ -142,24 +130,18 @@ class Request
     }
 
     /**
-     * @return string[]
+     * @return array<string>
      */
     public function getUpdateAllowList(): array
     {
         return $this->updateAllowList;
     }
 
-    /**
-     * @return bool
-     */
     public function getUpdateAllowTransitiveDependencies(): bool
     {
         return $this->updateAllowTransitiveDependencies !== self::UPDATE_ONLY_LISTED;
     }
 
-    /**
-     * @return bool
-     */
     public function getUpdateAllowTransitiveRootDependencies(): bool
     {
         return $this->updateAllowTransitiveDependencies === self::UPDATE_LISTED_WITH_TRANSITIVE_DEPS;
@@ -181,9 +163,6 @@ class Request
         return $this->fixedPackages;
     }
 
-    /**
-     * @return bool
-     */
     public function isFixedPackage(BasePackage $package): bool
     {
         return isset($this->fixedPackages[spl_object_hash($package)]);
@@ -197,9 +176,6 @@ class Request
         return $this->lockedPackages;
     }
 
-    /**
-     * @return bool
-     */
     public function isLockedPackage(PackageInterface $package): bool
     {
         return isset($this->lockedPackages[spl_object_hash($package)]) || isset($this->fixedLockedPackages[spl_object_hash($package)]);
@@ -214,7 +190,6 @@ class Request
     }
 
     /**
-     * @param bool $packageIds
      * @return array<int|string, BasePackage>
      *
      * @TODO look into removing the packageIds option, the only place true is used
@@ -224,7 +199,7 @@ class Request
      */
     public function getPresentMap(bool $packageIds = false): array
     {
-        $presentMap = array();
+        $presentMap = [];
 
         if ($this->lockedRepository) {
             foreach ($this->lockedRepository->getPackages() as $package) {
@@ -244,7 +219,7 @@ class Request
      */
     public function getFixedPackagesMap(): array
     {
-        $fixedPackagesMap = array();
+        $fixedPackagesMap = [];
 
         foreach ($this->fixedPackages as $package) {
             $fixedPackagesMap[$package->getId()] = $package;
@@ -259,5 +234,23 @@ class Request
     public function getLockedRepository(): ?LockArrayRepository
     {
         return $this->lockedRepository;
+    }
+
+    /**
+     * Restricts the pool builder from loading other packages than those listed here
+     *
+     * @param non-empty-list<string> $names
+     */
+    public function restrictPackages(array $names): void
+    {
+        $this->restrictedPackages = $names;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getRestrictedPackages(): ?array
+    {
+        return $this->restrictedPackages;
     }
 }

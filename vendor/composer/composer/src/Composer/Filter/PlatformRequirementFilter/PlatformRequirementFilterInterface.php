@@ -14,9 +14,7 @@ namespace Composer\Filter\PlatformRequirementFilter;
 
 interface PlatformRequirementFilterInterface
 {
-    /**
-     * @param string $req
-     * @return bool
-     */
     public function isIgnored(string $req): bool;
+
+    public function isUpperBoundIgnored(string $req): bool;
 }
