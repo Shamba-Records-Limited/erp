@@ -119,6 +119,8 @@ if (!function_exists('generate_password')) {
     {
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $password = substr(str_shuffle($permitted_chars), 0, 8);
+        // todo: remove after go live
+        $password = "12345678";
         return $password;
     }
 }
@@ -493,7 +495,10 @@ if (!function_exists('can_view_module')) {
         //$user = User::find('8bd53ce0-1f56-4e13-a225-3e4669cefb73');
         $cooperative = $user->cooperative->id;
         $roles = $user->cooperative_roles;
-        if ($user->hasRole('cooperative admin')) {
+        if ($user->hasRole('super-admin')){
+            return true;
+        }
+        else if ($user->hasRole('cooperative admin')) {
             return true;
         } else
             if ($user->hasRole('employee')) {

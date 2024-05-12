@@ -62,7 +62,6 @@ Route::prefix('/')->group(function () {
     Route::post('register', 'Farmer\RegisterController@register')->name('farmer.register');
     Route::get('cooperative/logistics/locations/search', 'TripController@locationSearch')->name('cooperative.logistics.location-search');
     Route::any('bank/{id}/branches', 'Farmer\RegisterController@bank_branches_by_bank')->name('bank-branches');
-
 });
 
 Route::get('/payment/{id}/receipt', 'Farmer\ProfileController@print_payment_reciept')->name('farmer-receipt');
@@ -72,6 +71,10 @@ Route::get('/payment/{id}/receipt', 'Farmer\ProfileController@print_payment_reci
 
 Route::get('/change-password', 'UserManagementController@change_password')->name('change-password');
 Route::post('/update-password', 'UserManagementController@update_password')->name('update-password');
+
+// superadmin routes
+Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {
+});
 
 //admin routes
 Route::middleware('role:admin')->prefix("admin")->group(function () {
@@ -85,6 +88,19 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/cooperative/setup/deactivate/{id}', 'CooperativeController@deactivate_company')->name('cooperative.setup.deactivate');
     Route::get('/cooperative/setup/activate/{id}', 'CooperativeController@activate_company')->name('cooperative.setup.activate');
 
+
+    //branches
+    Route::get('/branches', 'Admin\CoopBranchController@index')
+        ->name('branches.show');
+    Route::get('/branch/{id}', 'Admin\CoopBranchController@edit')
+        ->name('branches.detail');
+    Route::post('/branches/add', 'Admin\CoopBranchController@store')
+        ->name('branches.add');
+    Route::post('/branches/edit', 'Admin\CoopBranchController@update')
+        ->name('branches.edit');
+    Route::get('/branches/delete/{id}', 'Admin\CoopBranchController@delete')
+        ->name('branches.delete');
+
     Route::get('/cooperative/payroll-config', 'CooperativeController@payroll_config')->name('cooperative.payroll-config');
     Route::post('/cooperative/payroll-config', 'CooperativeController@add_payroll_config')->name('cooperative.payroll-config.add');
     Route::post('/cooperative/payroll-config/{id}', 'CooperativeController@edit_payroll_config')->name('cooperative.payroll-config.edit');
@@ -96,6 +112,76 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         Route::get('/sub-modules', 'SystemModuleController@subModule')->name('sub-modules');
         Route::post('/sub-modules', 'SystemModuleController@addSubmodules')->name('sub-modules.add');
     });
+
+    // users
+    Route::get('/users', 'Admin\UsersController@index')
+        ->name('admin.users.show');
+    Route::post('/users', 'Admin\UsersController@store')
+        ->name('admin.users.add');
+    Route::get('/users/{id}', 'Admin\UsersController@detail')
+        ->name('admin.users.detail');
+    Route::get('/users/make-employee/{id}', 'Admin\UsersController@viewMakeEmployee')
+        ->name('admin.users.view-make-employee');
+    Route::post('/users/make-employee/{id}', 'Admin\UsersController@makeEmployee')
+        ->name('admin.users.make-employee');
+    Route::get('/users/make-county-govt-official/{id}', 'Admin\UsersController@viewMakeCountyGovtAcc')
+        ->name('admin.users.view-make-county-govt-official');
+    Route::post('/users/make-employee', 'Admin\UsersController@makeCountyGovtAcc')
+        ->name('admin.users.make-county-govt-official');
+    Route::get('/users/edit/{id}', 'Admin\UsersController@edit')
+        ->name('admin.users.edit');
+    Route::post('/users/edit', 'Admin\UsersController@update')
+        ->name('admin.users.update');
+    // todo: implement activate/deactivate
+    // todo: implement delete
+
+    // employees
+    Route::get('/employees', 'Admin\EmployeesController@index')
+        ->name('admin.employees.show');
+    
+
+    // county govt officials
+    route::get('/county-govt-officials', 'admin\countygovtofficialscontroller@index')
+        ->name('admin.county-govt-officials.show');
+    Route::post('/county-govt-officials', 'Admin\CountyGovtOfficialsController@store')
+        ->name('admin.county-govt-officials.add');
+    Route::get('/county-govt-officials/edit/{id}', 'Admin\CountyGovtOfficialsController@edit')
+        ->name('admin.county-govt-officials.edit');
+    Route::post('/county-govt-officials/edit', 'Admin\CountyGovtOfficialsController@update')
+        ->name('admin.county-govt-officials.update');
+    Route::get('/county-govt-officials/delete/{id}', 'Admin\CountyGovtOfficialsController@delete')
+        ->name('admin.county-govt-officials.delete');
+
+    // farmers
+    
+
+    // roles
+    route::get('/roles', 'admin\RolesController@index')
+        ->name('admin.roles.show');
+    route::get('/roles/detail-permissions/{id}', 'admin\RolesController@detail_permissions')
+        ->name('admin.roles.show_permissions_tab');
+    route::get('/roles/detail-users/{id}', 'admin\RolesController@detail_users')
+        ->name('admin.roles.show_users_tab');
+
+});
+
+
+Route::middleware('role:county govt official')->prefix('county-govt')->group(function () {
+    route::get('/cooperatives', 'GovtOfficial\CooperativesController@index')
+        ->name('govt-official.cooperatives.show');
+    route::get('/cooperatives/{id}', 'GovtOfficial\CooperativesController@details')
+        ->name('govt-official.cooperatives.details');
+
+    route::get('/farmers', 'GovtOfficial\FarmersController@index')
+        ->name('govt-official.farmers.show');
+
+    
+    route::get('/collections', 'GovtOfficial\CollectionsController@index')
+        ->name('govt-official.collections.show');
+
+    
+    route::get('/sales', 'GovtOfficial\SalesController@index')
+        ->name('govt-official.sales.show');
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {
@@ -223,7 +309,7 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
                     ->name('cooperative.logistics.vehicles.show'); //** */
                 Route::post('/{id}', 'VehicleController@update')
                     ->middleware('module_permission:' . config('enums.system_modules')['Logistics']['vehicles'] . ',' . config('enums.system_permissions')['edit'])
-                    ->name('cooperative.logistics.vehicles.update');//** */
+                    ->name('cooperative.logistics.vehicles.update'); //** */
             });
 
             // transporters
@@ -264,7 +350,7 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
                     ->name('cooperative.logistics.weighbridges.show'); //** */
                 Route::post('/{id}', 'WeighBridgeController@update')
                     ->middleware('module_permission:' . config('enums.system_modules')['Logistics']['weighbridge'] . ',' . config('enums.system_permissions')['edit'])
-                    ->name('cooperative.logistics.weighbridges.update');//** */
+                    ->name('cooperative.logistics.weighbridges.update'); //** */
             });
 
 
@@ -288,9 +374,9 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             });
 
             // locations
-//            Route::group(['prefix' => '/locations'], function () {
-//                Route::get('/search', 'TripController@locationSearch')->name('cooperative.logistics.location-search');
-//            });
+            //            Route::group(['prefix' => '/locations'], function () {
+            //                Route::get('/search', 'TripController@locationSearch')->name('cooperative.logistics.location-search');
+            //            });
         });
 
         //collections
@@ -801,9 +887,9 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             Route::post('/employees/payroll/generate', 'EmployeePayrollController@generatePayroll')
                 ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['payroll'] . ',' . config('enums.system_permissions')['create'])
                 ->name('hr.employees.generatepayroll');
-//            Route::get('/employees/payroll/{payslip_id}/payslip', 'EmployeePayrollController@payslip')
-//                ->middleware('module_permission:'.config('enums.system_modules')['HR Management']['payroll'].','.config('enums.system_permissions')['view'])
-//                ->name('hr.employees.payslip.pdf');
+            //            Route::get('/employees/payroll/{payslip_id}/payslip', 'EmployeePayrollController@payslip')
+            //                ->middleware('module_permission:'.config('enums.system_modules')['HR Management']['payroll'].','.config('enums.system_permissions')['view'])
+            //                ->name('hr.employees.payslip.pdf');
             Route::get('/employee/{id}/payslip', 'EmployeePayrollController@payslip')
                 ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['payroll'] . ',' . config('enums.system_permissions')['view'])
                 ->name('hr.employee.payslip.pdf');
@@ -838,8 +924,8 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
                 ->name('hr.employees.payroll.advance.deduction.details');
 
             Route::post('/employee/advance-deduction/{id}/details/download/{type}', 'EmployeePayrollController@download_advance_deduction_transactions')
-                        ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['payroll'] . ',' . config('enums.system_permissions')['view'])
-                        ->name('hr.employees.payroll.advance.deduction.details.download');
+                ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['payroll'] . ',' . config('enums.system_permissions')['view'])
+                ->name('hr.employees.payroll.advance.deduction.details.download');
 
             //reports
             Route::get('/reports', 'CooperativeHrReports@reports')
@@ -848,7 +934,6 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             Route::get('/report/download', 'CooperativeHrReports@download_reports')
                 ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['dashboard'] . ',' . config('enums.system_permissions')['download'])
                 ->name('cooperative.hr.report.download');
-
         });
 
         //mfg
@@ -1109,7 +1194,6 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             Route::post("record-returned-items/{type?}", 'SalesController@export_returned_goods')
                 ->middleware('module_permission:' . config('enums.system_modules')['Sales']['returned_items'] . ',' . config('enums.system_permissions')['download'])
                 ->name('export.returned.items');
-
         });
 
         /*************
@@ -1504,7 +1588,6 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
                 Route::post('/print-profit-loss-report/{financial_period}', 'StatementsController@print_profit_loss_reports')
                     ->middleware('module_permission:' . config('enums.system_modules')['Accounting']['reports'] . ',' . config('enums.system_permissions')['download'])
                     ->name('cooperative.reports.print_profit_loss_reports');
-
             });
         Route::middleware('financial_period')->group(function () {
             Route::get('/payments', 'WalletController@initiate_payments')->name('cooperative.wallet.payments');
@@ -1550,7 +1633,6 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             Route::post('/rule/{id}/delete', 'AccountingRuleController@delete')
                 ->middleware('module_permission:' . config('enums.system_modules')['Accounting']['accounting_rules'] . ',' . config('enums.system_permissions')['delete'])
                 ->name('cooperative.accounting.rule.delete');
-
         });
 
         Route::post('/close_financial_period/{financial_period_id}', 'AccountingController@close_financial_period')
@@ -1575,9 +1657,7 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
         Route::post('/budget', 'BudgetController@store')
             ->middleware('module_permission:' . config('enums.system_modules')['Accounting']['budget'] . ',' . config('enums.system_permissions')['create'])
             ->name('cooperative.accounting.budget.store');
-
     });
-
 });
 
 
@@ -1688,7 +1768,6 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
         Route::get('/claim/{id}/status-transitions', 'Farmer\InsuranceController@claim_status_transition')->name('insurance.status-transitions');
         Route::get('/transaction-history', 'Farmer\InsuranceController@insurance_transaction_history')->name('insurance.transaction-history');
     });
-
 });
 
 
@@ -1737,7 +1816,7 @@ Route::group(['prefix' => 'basic-ui'], function () {
         return view('pages.basic-ui.pagination');
     });
     Route::get('tabs', function () {
-        return view('pages.basic-ui.tabs');
+        return view('pages.basic-ui./');
     });
     Route::get('typography', function () {
         return view('pages.basic-ui.typography');
