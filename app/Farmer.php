@@ -23,10 +23,7 @@ class Farmer extends Model
         'location_id',
         'id_no',
         'phone_no',
-        'route_id',
-        'bank_account',
         'member_no',
-        'bank_branch_id',
         'customer_type',
         'kra',
         'user_id'
@@ -56,16 +53,6 @@ class Farmer extends Model
         return $this->belongsTo(Country::class);
     }
 
-    public function bank_branch()
-    {
-        return $this->belongsTo(BankBranch::class);
-    }
-
-    public function route()
-    {
-        return $this->belongsTo(Route::class);
-    }
-
     public function sales()
     {
         return $this->hasMany(Sale::class);
@@ -73,15 +60,6 @@ class Farmer extends Model
     public function wallet()
     {
         return $this->hasOne(Wallet::class);
-    }
-
-    public function location(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Location::class);
-    }
-    public function limit()
-    {
-        return $this->hasOne(LoanLimit::class, 'farmer_id');
     }
 
     public function livestock(): \Illuminate\Database\Eloquent\Relations\HasMany

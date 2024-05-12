@@ -107,8 +107,8 @@
                 <span class="menu-title">County Govt Officials</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['admin/county-govt-officials']) }}">
-            <a class="nav-link" href="{{ route('admin.county-govt-officials.show') }}">
+<li class="nav-item {{ active_class(['admin/farmers']) }}">
+            <a class="nav-link" href="{{ route('admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Farmers</span>
             </a>
