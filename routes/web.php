@@ -153,8 +153,12 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.county-govt-officials.delete');
 
     // farmers
-    route::get('/farmers', 'admin\FarmersController@index')
+    Route::get('/farmers', 'admin\FarmersController@index')
         ->name('admin.farmers.show');
+    Route::post('/farmers', 'Admin\FarmersController@store')
+        ->name('admin.farmers.add');
+    Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
+        ->name('admin.farmers.detail');
 
 
     // roles
