@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\CoopBranch;
 use App\Cooperative;
 use App\CooperativeFinancialPeriod;
+use App\County;
 use App\Events\AuditTrailEvent;
 use App\Events\NewCompanyRegisteredEvent;
 use App\Events\NewCooperativeRegisteredEvent;
 use App\Events\NewUserRegisteredEvent;
 use App\PayrollDeduction;
+use App\SubCounty;
 use App\User;
 use Carbon\Carbon;
 use DateTime;
@@ -29,11 +32,16 @@ class CooperativeController extends Controller
 
     public function index()
     {
-        $countries = get_countries();
         $cooperatives = Cooperative::orderBy('default_coop', 'desc')
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('pages.admin.cooperatives', compact('countries', 'cooperatives'));
+
+        
+        $countries = get_countries();
+        $counties = County::all();
+        $sub_counties = SubCounty::all();
+
+        return view('pages.admin.cooperatives', compact('countries', 'cooperatives', 'counties', 'sub_counties'));
     }
 
 
@@ -46,7 +54,9 @@ class CooperativeController extends Controller
         $this->validate($request, [
             "cooperative_name" => "required|string",
             "abbr" => "sometimes|string",
-            "country" => "required",
+            "country_id" => "required",
+            "county_id" => "required|exists:counties,id",
+            "sub_county_id" => "required|exists:sub_counties,id",
             "location" => "required|string",
             "address" => "required|string",
             "cooperative_email" => "required|email|unique:cooperatives,email",
@@ -65,7 +75,7 @@ class CooperativeController extends Controller
             $cooperative = new Cooperative();
             $cooperative->name = $request->cooperative_name;
             $cooperative->abbreviation = $request->abbr;
-            $cooperative->country_id = $request->country;
+            $cooperative->country_id = $request->country_id;
             $cooperative->location = $request->location;
             $cooperative->address = $request->address;
             $cooperative->email = $request->cooperative_email;
@@ -74,6 +84,17 @@ class CooperativeController extends Controller
             $cooperative->save();
 
             $cooperative_id = $cooperative->id;
+
+            // default branch
+            $branch = new CoopBranch();
+            $branch->name = "Main";
+            $branch->code = "001";
+            $branch->cooperative_id = $cooperative_id;
+            $branch->county_id = $request->county_id;
+            $branch->sub_county_id = $request->sub_county_id;
+            $branch->location = $request->location;
+            $branch->save();
+
 
             // $this->create_financial_period($cooperative_id, 'annually');
             // $this->create_financial_period($cooperative_id, 'quarterly');
