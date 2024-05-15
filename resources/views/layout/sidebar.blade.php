@@ -95,6 +95,12 @@
                 <span class="menu-title">Millers</span>
             </a>
         </li>
+<li class="nav-item {{ active_class(['admin/miller-branches*']) }}">
+            <a class="nav-link" href="{{ route('admin.miller-branches.show') }}">
+                <i class="menu-icon mdi mdi-cogs"></i>
+                <span class="menu-title">Miller Branches</span>
+            </a>
+        </li>
         <li class="nav-item {{ active_class(['admin/users']) }}">
             <a class="nav-link" href="{{ route('admin.users.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
