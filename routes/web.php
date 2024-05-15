@@ -113,6 +113,13 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         Route::post('/sub-modules', 'SystemModuleController@addSubmodules')->name('sub-modules.add');
     });
 
+    // millers
+    Route::get('/millers', 'Admin\MillersController@index')
+        ->name('admin.millers.show');
+    Route::post('/millers/add', 'Admin\MillersController@store')
+        ->name('admin.millers.add');
+
+
     // users
     Route::get('/users', 'Admin\UsersController@index')
         ->name('admin.users.show');

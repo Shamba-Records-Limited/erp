@@ -8,11 +8,8 @@ use Webpatser\Uuid\Uuid;
 class Cooperative extends Model
 {
     protected $keyType = 'string';
-
     public $incrementing = false;
-
     protected $table = "cooperatives";
-
 
     protected $primaryKey = 'id';
 

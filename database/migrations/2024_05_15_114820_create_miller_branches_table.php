@@ -24,6 +24,7 @@ class CreateMillerBranchesTable extends Migration
             $table->unsignedBigInteger("sub_county_id");
             $table->foreign('sub_county_id')->references('id')->on('sub_counties')->onUpdate('cascade')->onDelete('cascade');
             $table->string('location');
+            $table->string('address');
             $table->timestamps();
         });
     }

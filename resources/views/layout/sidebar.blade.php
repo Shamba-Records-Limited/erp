@@ -89,6 +89,12 @@
                 <span class="menu-title">Cooperative Branches</span>
             </a>
         </li>
+<li class="nav-item {{ active_class(['admin/millers*']) }}">
+            <a class="nav-link" href="{{ route('admin.millers.show') }}">
+                <i class="menu-icon mdi mdi-cogs"></i>
+                <span class="menu-title">Millers</span>
+            </a>
+        </li>
         <li class="nav-item {{ active_class(['admin/users']) }}">
             <a class="nav-link" href="{{ route('admin.users.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
@@ -107,7 +113,7 @@
                 <span class="menu-title">County Govt Officials</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['admin/farmers']) }}">
+<li class="nav-item {{ active_class(['admin/farmers*']) }}">
             <a class="nav-link" href="{{ route('admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Farmers</span>
