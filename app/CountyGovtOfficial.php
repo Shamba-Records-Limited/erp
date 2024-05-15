@@ -15,13 +15,16 @@ class CountyGovtOfficial extends Model
     // todo: fill this
     protected $fillable = [
         'country_id',
-        'county',
+        'county_id',
+        'sub_county_id',
         'gender',
         'id_no',
         'phone_no',
         'employee_no',
         'user_id',
-        'status'
+        'status',
+        'ministry',
+        'designation'
     ];
 
     public static function boot()

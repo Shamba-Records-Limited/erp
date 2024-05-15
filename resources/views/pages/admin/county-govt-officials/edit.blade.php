@@ -84,28 +84,66 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="country">Country</label>
-                                <select name="country" id="country" class=" form-control select2bs4 {{ $errors->has('country') ? ' is-invalid' : '' }}">
-                                    <option value=""> -Select Country-</option>
+                                <label for="country_id">Country</label>
+                                <select name="country_id" id="country_id" class=" form-control select2bs4 {{ $errors->has('country_id') ? ' is-invalid' : '' }}">
                                     @foreach($countries as $country)
-                                    <option value="{{$country->id}}" @if ($country->id == $official->country_id) selected @endif> {{ $country->name }}</option>
+                                    <option value="{{$country->id}}" @if($country->name == "Kenya") selected @endif> {{ $country->name }}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('country_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('country_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="county_id">Select County</label>
+                                <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                    <option value=""> -Select County-</option>
+                                    @foreach($counties as $county)
+                                    <option value="{{$county->id}}" @if($county->id == $official->county_id) selected @endif> {{ $county->name }}</option>
                                     @endforeach
 
-                                    @if ($errors->has('country'))
+                                    @if ($errors->has('county_id'))
                                     <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('country')  }}</strong>
+                                        <strong>{{ $errors->first('county_id')  }}</strong>
                                     </span>
                                     @endif
                                 </select>
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="county">County</label>
-                                <input type="text" name="county" class="form-control {{ $errors->has('county') ? ' is-invalid' : '' }}" id="county" placeholder="Nairobi" value="{{ $official->county }}" required>
+                                <label for="sub_county">Select Sub County</label>
+                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                    <option value=""> -Select Sub County-</option>
+                                    <option value="{{$official->sub_county_id}}" selected>{{$official->sub_county_name}}</option>
 
-                                @if ($errors->has('county'))
+                                    @if ($errors->has('sub_county_id'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('sub_county_id')  }}</strong>
+                                    </span>
+                                    @endif
+                                </select>
+                            </div>
+
+<div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="ministry">Ministry</label>
+                                <input type="text" name="ministry" class="form-control  {{ $errors->has('ministry') ? ' is-invalid' : '' }}" value="{{ $official->ministry}}" id="ministry" placeholder="Enter govt ministry...">
+                                @if ($errors->has('ministry'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('county')  }}</strong>
+                                    <strong>{{ $errors->first('ministry')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+
+<div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="ministry">Designation</label>
+                                <input type="text" name="designation" class="form-control  {{ $errors->has('designation') ? ' is-invalid' : '' }}" value="{{ $official->designation}}" id="designation" placeholder="Enter ministry designation...">
+                                @if ($errors->has('designation'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('designation')  }}</strong>
                                 </span>
                                 @endif
                             </div>

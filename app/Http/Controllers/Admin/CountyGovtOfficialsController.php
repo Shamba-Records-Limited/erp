@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Cooperative;
+use App\County;
 use App\CountyGovtOfficial;
 use App\Events\AuditTrailEvent;
 use App\Events\NewUserRegisteredEvent;
 use App\Http\Controllers\Controller;
+use App\SubCounty;
 use App\User;
 use Auth;
 use DB;
@@ -27,21 +29,33 @@ class CountyGovtOfficialsController extends Controller
     {
 
         $officials = DB::select(DB::raw("
-            SELECT official.*, u.username FROM county_govt_officials official
+            SELECT official.*,
+                u.username,
+                country.name AS country_name,
+                c.name AS county_name,
+                sub_c.name AS sub_county_name
+            FROM county_govt_officials official
             JOIN users u ON official.user_id = u.id
+            LEFT JOIN countries country ON country.id = official.county_id
+            LEFT JOIN counties c ON c.id = official.county_id
+            LEFT JOIN sub_counties sub_c ON sub_c.id = official.sub_county_id
         "));
 
         $countries = get_countries();
         $cooperatives = Cooperative::all();
-        return view('pages.admin.county-govt-officials.index', compact('countries', 'officials', 'cooperatives'));
+        $counties = County::all();
+        $sub_counties = SubCounty::all();
+
+        return view('pages.admin.county-govt-officials.index', compact('countries', 'officials', 'cooperatives', 'counties', 'sub_counties'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'cooperative_id' => 'required|exists:cooperatives,id',
-            'country' => 'required',
-            'county' => 'required|string',
+            'country_id' => 'required',
+            'county_id' => 'required|exists:counties,id',
+            'sub_county_id' => 'required|exists:sub_counties,id',
             'id_no' => 'required|unique:county_govt_officials,id_no',
             'phone_no' => 'required|regex:/^[0-9]{12}$/|unique:county_govt_officials,phone_no',
             'employee_no' => 'required|string',
@@ -49,6 +63,8 @@ class CountyGovtOfficialsController extends Controller
             'first_name' => 'required|string',
             'other_names' => 'required|string',
             'gender' => 'required',
+            'ministry' => 'required|string',
+            'designation' => 'required|string',
             'profile_picture' => "sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072",
         ]);
 
@@ -71,13 +87,16 @@ class CountyGovtOfficialsController extends Controller
 
             //official...
             $official = new CountyGovtOfficial();
-            $official->country_id = $request->country;
-            $official->county = $request->county;
+            $official->country_id = $request->country_id;
+            $official->county_id = $request->county_id;
+            $official->sub_county_id = $request->sub_county_id;
             $official->gender = $request->gender;
             $official->id_no = $request->id_no;
             $official->phone_no = $request->phone_no;
             $official->employee_no = $request->employee_no;
             $official->user_id = $user->id;
+            $official->ministry = $request->ministry;
+            $official->designation = $request->designation;
             $official->save();
 
 
@@ -124,10 +143,15 @@ class CountyGovtOfficialsController extends Controller
     {
         // $branch = CoopBranch::find($id);
         $officials = DB::select(DB::raw("
-                    SELECT u.*, official.*, c.name as coop_name
+                    SELECT 
+                        u.*,
+                        official.*,
+                        c.name as coop_name,
+                        sub_county.name AS sub_county_name
                     FROM county_govt_officials official
                     JOIN users u ON official.user_id = u.id
                     JOIN cooperatives c ON u.cooperative_id = c.id
+                    LEFT JOIN sub_counties sub_county ON sub_county.id = official.sub_county_id
                     WHERE official.id = :id;
                 "), ["id" => $id]);
 
@@ -139,20 +163,25 @@ class CountyGovtOfficialsController extends Controller
   
         $countries = get_countries();
         $cooperatives = Cooperative::all();
+        $counties = County::all();
+        $sub_counties = SubCounty::all();
 
-        return view('pages.admin.county-govt-officials.edit', compact('official', 'id', 'cooperatives', 'countries'));
+        return view('pages.admin.county-govt-officials.edit', compact('official', 'id', 'cooperatives', 'countries', 'counties', 'sub_counties'));
     }
 
     public function update(Request $request)
     {
         $request->validate([
             'id' => 'required|exists:county_govt_officials,id',
-            'country' => 'required',
-            'county' => 'required|string',
+            'country_id' => 'required',
+            'county_id' => 'required|exists:counties,id',
+            'sub_county_id' => 'required|exists:sub_counties,id',
             'id_no' => "required|unique:county_govt_officials,id_no,$request->id",
             'phone_no' => "required|regex:/^[0-9]{12}$/|unique:county_govt_officials,phone_no,$request->id",
             'employee_no' => 'required|string',
             'gender' => 'required',
+            'ministry' => 'required',
+            'designation' => 'required'
         ]);
 
         try {
@@ -162,12 +191,15 @@ class CountyGovtOfficialsController extends Controller
            $official = CountyGovtOfficial::find($request->id);
 
             //official...
-            $official->country_id = $request->country;
-            $official->county = $request->county;
+            $official->country_id = $request->country_id;
+            $official->county_id = $request->county_id;
+            $official->sub_county_id = $request->sub_county_id;
             $official->gender = $request->gender;
             $official->id_no = $request->id_no;
             $official->phone_no = $request->phone_no;
             $official->employee_no = $request->employee_no;
+            $official->ministry = $request->ministry;
+            $official->designation = $request->designation;
             $official->save();
 
 
