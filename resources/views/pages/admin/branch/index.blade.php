@@ -91,6 +91,7 @@
                                 <th>Cooperative</th>
                                 <th>Name</th>
                                 <th>Branch Code</th>
+                                <th>Sub county</th>
                                 <th>Location</th>
                                 <th>Actions</th>
                             </tr>
@@ -106,6 +107,7 @@
                                 <td>{{$prod->coop_name}}</td>
                                 <td>{{$prod->name }} </td>
                                 <td>{{$prod->code }}</td>
+                                <td>{{$prod->sub_county_name}} - {{$prod->county_name}}</td>
                                 <td>{{$prod->location }}</td>
                                 <td>
                                     <div class="btn-group dropdown">

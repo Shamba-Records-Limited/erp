@@ -21,8 +21,15 @@ class CoopBranchController extends Controller
     public function index()
     {
         $branches = DB::select(DB::raw("
-                SELECT b.*, c.name as coop_name FROM coop_branches b
+                SELECT 
+                    b.*,
+                    c.name as coop_name,
+                    county.name as county_name,
+                    sub_county.name as sub_county_name
+                FROM coop_branches b
                 JOIN cooperatives c ON b.cooperative_id = c.id
+                LEFT JOIN counties county ON county.id = b.county_id
+                LEFT JOIN sub_counties sub_county ON sub_county.id = b.sub_county_id
                 WHERE b.deleted_at IS NULL
                 ORDER BY b.created_at DESC;
             "));

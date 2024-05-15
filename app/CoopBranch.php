@@ -16,7 +16,10 @@ class CoopBranch extends Model
         'name',
         'code',
         'cooperative_id',
-        'location'
+        'location',
+        'country_id',
+        'county_id',
+        'sub_county_id',
     ];
 
     public function getRouteKeyName()
