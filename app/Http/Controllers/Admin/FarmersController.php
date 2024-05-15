@@ -34,8 +34,8 @@ class FarmersController extends Controller
 
 
         $countries = get_countries();
-        $counties = County::all();
-        $sub_counties = SubCounty::all();
+        $counties = county::all();
+        $sub_counties = subcounty::all();
 
         return view('pages.admin.farmers.index', compact('farmers', 'countries', 'counties', 'sub_counties'));
     }
@@ -115,5 +115,40 @@ class FarmersController extends Controller
 
     public function detail(Request $request, $id)
     {
+        $farmers = DB::select(DB::raw("
+            SELECT
+                f.*,
+                c.name as country_name,
+                u.*,
+                county.name as county_name,
+                sub_county.name as sub_county_name
+            FROM farmers f
+            JOIN countries c ON f.country_id = c.id
+            JOIN users u ON f.user_id = u.id
+            LEFT JOIN counties county ON county.id = f.county_id
+            LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
+            WHERE f.id = :id;
+        "),["id" => $id]);
+
+        $farmer = null;
+        if (count($farmers) > 0) {
+            $farmer = $farmers[0];
+        }
+
+        $tab = $request->query('tab', 'cooperatives');
+
+        $farmerCooperatives = [];
+        if($tab == 'cooperatives') {
+            $farmerCooperatives = DB::select(DB::raw("
+                SELECT
+                    c.name as coop_name
+                FROM farmer_cooperative fc
+                JOIN cooperatives c ON c.id = fc.cooperative_id
+                WHERE fc.farmer_id = :id
+            "), ["id" => $id]);
+        }
+        
+
+        return view('pages.admin.farmers.detail', compact('farmer', 'tab', 'farmerCooperatives'));
     }
 }

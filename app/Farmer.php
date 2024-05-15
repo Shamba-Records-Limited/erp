@@ -19,7 +19,8 @@ class Farmer extends Model
 
     protected $fillable = [
         'country_id',
-        'county',
+        'county_id',
+        'sub_county_id',
         'location_id',
         'id_no',
         'phone_no',
