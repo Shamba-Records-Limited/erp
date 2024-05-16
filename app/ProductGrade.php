@@ -5,16 +5,14 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Category extends Model
+class ProductGrade extends Model
 {
-    protected $fillable = [
-        'name'
-    ];
+    //
+    protected $keyType = 'string';
+    public $incrementing = false;
+    protected $table = "product_grades";
 
-
-    protected  $primaryKey = "id";
-
-    protected  $keyType = "string";
+    protected $primaryKey = 'id';
 
     public function getRouteKeyName()
     {
@@ -27,9 +25,5 @@ class Category extends Model
         self::creating(function ($model) {
             $model->id = (string) Uuid::generate(4);
         });
-    }
-
-    public function products(){
-        return $this->hasMany(Category::class);
     }
 }

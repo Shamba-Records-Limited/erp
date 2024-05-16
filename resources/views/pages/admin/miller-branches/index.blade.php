@@ -20,13 +20,28 @@
                     </div>
 
 
-                    <form action="{{ route('admin.millers.add') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('admin.miller-branches.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         {{ $errors }}
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <h6 class="mb-3">Miller Branch Details</h6>
                             </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="miller_id">Miller</label>
+                                <select name="miller_id" id="miller_id" class="form-control select2bs4 {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
+                                    <option value=""> -- Select Miller --</option>
+                                    @foreach($millers as $miller)
+                                    <option value="{{$miller->id}}">{{$miller->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('miller_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('miller_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="miller_name">Name</label>
                                 <input type="text" name="miller_name" class="form-control {{ $errors->has('miller_name') ? ' is-invalid' : '' }}" id="miller_name" placeholder="ABC" value="{{ old('miller_name')}}" required>
@@ -39,15 +54,16 @@
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="abbreviation">Abbreviation</label>
-                                <input type="text" name="abbreviation" class="form-control  {{ $errors->has('abbreviation') ? ' is-invalid' : '' }}" id="abbreviation" placeholder="A.B.C" value="{{ old('abbreviation')}}">
+                                <label for="code">Code</label>
+                                <input type="text" name="code" class="form-control  {{ $errors->has('code') ? ' is-invalid' : '' }}" id="code" placeholder="AB12#" value="{{ old('code')}}">
 
-                                @if ($errors->has('abbreviation'))
+                                @if ($errors->has('code'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('abbreviation')  }}</strong>
+                                    <strong>{{ $errors->first('code')  }}</strong>
                                 </span>
                                 @endif
                             </div>
+
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="location">Location</label>
                                 <input type="text" name="location" class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}" value="{{ old('location')}}" id="location" placeholder="Nairobi" required>
@@ -64,20 +80,6 @@
                                 @if ($errors->has('address'))
                                 <span class="help-block text-danger">
                                     <strong>{{ $errors->first('address')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class=" form-control select2bs4 {{ $errors->has('country_id') ? ' is-invalid' : '' }}">
-                                    @foreach($countries as $country)
-                                    <option value="{{$country->id}}" @if($country->name == "Kenya") selected @endif> {{ $country->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('country_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('country_id')  }}</strong>
                                 </span>
                                 @endif
                             </div>
@@ -111,45 +113,11 @@
                                 </select>
                             </div>
 
+
+                        </div>
+                        <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="miller_email">Miller Email</label>
-                                <input type="email" name="miller_email" class="form-control {{ $errors->has('miller_email') ? ' is-invalid' : '' }}" id="miller_email" placeholder="info@abc.com" value="{{ old('miller_email')}}" required>
-
-
-                                @if ($errors->has('miller_email'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('miller_email')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="phone_no">Phone Number</label>
-                                <input type="text" name="phone_no" class="form-control {{ $errors->has('phone_no') ? ' is-invalid' : '' }}" id="phone_no" placeholder="2547....." value="{{ old('phone_no')}}" required>
-
-                                @if ($errors->has('phone_no'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('phone_no')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="miller_logo">Logo</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('miller_logo') is-invalid @enderror" id="miller_logo" name="miller_logo" value="{{ old('miller_logo') }}">
-                                        <label class="custom-file-label" for="exampleInputFile">Logo</label>
-
-                                        @if ($errors->has('miller_logo'))
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('miller_logo')  }}</strong>
-                                        </span>
-                                        @endif
-                                    </div>
-                                </div>
-
+                                <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
                             </div>
                         </div>
                     </form>

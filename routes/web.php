@@ -122,6 +122,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     // miller branches
     Route::get('/miller-branches', 'Admin\MillerBranchesController@index')
         ->name('admin.miller-branches.show');
+    Route::post('/miller-branches/add', 'Admin\MillerBranchesController@store')
+        ->name('admin.miller-branches.add');
 
     // users
     Route::get('/users', 'Admin\UsersController@index')
@@ -169,6 +171,49 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.add');
     Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
         ->name('admin.farmers.detail');
+
+    // products
+    Route::get('/products/dash', 'admin\ProductsController@dash')
+        ->name('admin.products.dash');
+
+    Route::get('/products/list', 'admin\ProductsController@list_products')
+        ->name('admin.products.show');
+    Route::post('/products', 'admin\ProductsController@store_products')
+        ->name('admin.products.store_product');
+
+    Route::get('/products/units', 'admin\ProductsController@list_units')
+        ->name('admin.products.units');
+    Route::post('/products/units', 'admin\ProductsController@store_unit')
+        ->name('admin.products.store_unit');
+    Route::get('/products/units/{id}', 'admin\ProductsController@view_edit_unit')
+        ->name('admin.products.view_edit_unit');
+    Route::post('/products/units/{id}', 'admin\ProductsController@edit_unit')
+        ->name('admin.products.edit_unit');
+    Route::get('/products/delete-unit/{id}', 'admin\ProductsController@delete_unit')
+        ->name('admin.products.delete_unit');
+
+
+    Route::get('/products/categories', 'admin\ProductsController@list_categories')
+        ->name('admin.products.categories');
+    Route::post('/products/categories', 'admin\ProductsController@store_category')
+        ->name('admin.products.store_category');
+    Route::get('/products/categories/{id}', 'admin\ProductsController@view_edit_category')
+        ->name('admin.products.view_edit_category');
+    Route::post('/products/categories/{id}', 'admin\ProductsController@edit_category')
+        ->name('admin.products.edit_category');
+    Route::get('/products/delete-category/{id}', 'admin\ProductsController@delete_category')
+        ->name('admin.products.delete_category');
+
+    Route::get('/products/grading', 'admin\ProductsController@list_grades')
+        ->name('admin.products.grades');
+    Route::post('/products/grading', 'admin\ProductsController@store_grade')
+        ->name('admin.products.store_grade');
+    Route::get('/products/grading/{id}', 'admin\ProductsController@view_edit_grade')
+        ->name('admin.products.view_edit_grade');
+    Route::post('/products/grading/{id}', 'admin\ProductsController@edit_grade')
+        ->name('admin.products.edit_grade');
+    Route::get('/products/delete-grade/{id}', 'admin\ProductsController@delete_grade')
+        ->name('admin.products.delete_grade');
 
 
     // roles

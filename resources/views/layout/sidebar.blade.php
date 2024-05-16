@@ -132,6 +132,33 @@
             </a>
         </li>
 
+        <li class="nav-item {!!  active_class(['admin/products/*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#productsManagement" aria-expanded="{!!  is_active_route(['cooperative/products/*'])  !!}" aria-controls="productdManagement">
+                <i class="menu-icon mdi mdi-flower"></i>
+                <span class="menu-title">Product Management</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['admin/products/*']) }}" id="productsManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['admin/products/dash']) }}">
+                        <a class="nav-link" href="{{ route('admin.products.dash') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['admin/products/list']) }}">
+                        <a class="nav-link" href="{{ route('admin.products.show') }}">Products</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['admin/products/units']) }}">
+                        <a class="nav-link" href="{{ route('admin.products.units') }}">Units</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['admin/products/categories']) }}">
+                        <a class="nav-link" href="{{ route('admin.products.categories') }}">Categories</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['admin/products/grading']) }}">
+                        <a class="nav-link" href="{{ route('admin.products.grades') }}">Grading</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item {!!  active_class(['basic-ui/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#basic-ui" aria-expanded="{!!  is_active_route(['basic-ui/*'])  !!}" aria-controls="basic-ui">
                 <i class="menu-icon mdi mdi-dna"></i>

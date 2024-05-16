@@ -57,6 +57,7 @@ class CoopBranchController extends Controller
 
         return view('pages.admin.branch.edit', compact('branch', 'id'));
     }
+    
     public function store(Request $request)
     {
         $this->validate($request, [
