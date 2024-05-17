@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Product;
+use App\ProductCategory;
 use App\ProductGrade;
 use App\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 class ProductsController extends Controller
@@ -23,13 +26,64 @@ class ProductsController extends Controller
 
     public function list_products()
     {
-
-        return view('pages.admin.products.products');
+        $categories = ProductCategory::all();
+        $products = DB::select(DB::raw("
+            SELECT p.id, p.name, pc.name as category_name FROM products p
+            LEFT JOIN product_categories pc ON p.category_id = pc.id;
+        "));
+        return view('pages.admin.products.products', compact("categories", "products"));
     }
 
-    public function store_product()
+    public function store_product(Request $request)
     {
-        return redirect()->back()->with_input();
+        $request->validate([
+            "name" => "required|unique:products,name",
+            "category_id" => "required|exists:product_categories,id",
+        ]);
+
+        try {
+            $product = new Product();
+            $product->name = $request->name;
+            $product->category_id = $request->category_id;
+            $product->save();
+
+            toastr()->success('Product Created Successfully');
+            return redirect()->route('admin.products.show');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back()->withInput();
+        }
+    }
+
+    public function view_edit_product($id)
+    {
+        $product = Product::find($id);
+        $categories = ProductCategory::all();
+
+        return view('pages.admin.products.products-edit', compact('product', 'categories'));
+    }
+
+    public function edit_product(Request $request, $id)
+    {
+        $request->validate([
+            "name" => "required|unique:products,name",
+            "category_id" => "required|exists:product_categories,id",
+        ]);
+
+        try {
+            $product = Product::find($id);
+            $product->name = $request->name;
+            $product->category_id = $request->category_id;
+            $product->save();
+
+            toastr()->success('Product Updated Successfully');
+            return redirect()->route('admin.products.show');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back()->withInput();
+        }
     }
 
     public function list_units()
@@ -107,18 +161,18 @@ class ProductsController extends Controller
 
     public function list_categories()
     {
-        $categories = Category::all();
+        $categories = ProductCategory::all();
         return view('pages.admin.products.categories', compact('categories'));
     }
 
     public function store_category(Request $request)
     {
         $request->validate([
-            "name" => "required|unique:categories,name"
+            "name" => "required|unique:product_categories,name"
         ]);
 
         try {
-            $category = new Category();
+            $category = new ProductCategory();
             $category->name = $request->name;
             $category->save();
 
@@ -133,7 +187,7 @@ class ProductsController extends Controller
 
     public function view_edit_category($id)
     {
-        $category = Category::find($id);
+        $category = ProductCategory::find($id);
 
         return view('pages.admin.products.categories-edit', compact('category'));
     }
@@ -141,11 +195,11 @@ class ProductsController extends Controller
     public function edit_category(Request $request, $id)
     {
         $request->validate([
-            "name" => "required|unique:categories,name,$id"
+            "name" => "required|unique:product_categories,name,$id"
         ]);
 
         try {
-            $category = Category::find($id);
+            $category = ProductCategory::find($id);
             $category->name = $request->name;
             $category->save();
 
@@ -161,7 +215,7 @@ class ProductsController extends Controller
     public function delete_category($id)
     {
         try {
-            $category = Category::find($id);
+            $category = ProductCategory::find($id);
             $category->delete();
 
             toastr()->success('Category deleted Successfully');

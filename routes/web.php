@@ -178,8 +178,12 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
 
     Route::get('/products/list', 'admin\ProductsController@list_products')
         ->name('admin.products.show');
-    Route::post('/products', 'admin\ProductsController@store_products')
+    Route::post('/products', 'admin\ProductsController@store_product')
         ->name('admin.products.store_product');
+    Route::get('/products/{id}', 'admin\ProductsController@view_edit_product')
+        ->name('admin.products.view_edit_product');
+    Route::post('/products/{id}', 'admin\ProductsController@edit_product')
+        ->name('admin.products.edit_product');
 
     Route::get('/products/units', 'admin\ProductsController@list_units')
         ->name('admin.products.units');
