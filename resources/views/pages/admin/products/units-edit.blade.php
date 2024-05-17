@@ -31,6 +31,16 @@
                                 @endif
                             </div>
 
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="abbreviation">Abbreviation</label>
+                                <input type="text" name="abbreviation" class="form-control {{ $errors->has('abbreviation') ? ' is-invalid' : '' }}" id="abbreviation" placeholder="Enter product abbreviation..." value="{{ $unit->abbreviation }}" required>
+
+                                @if ($errors->has('abbreviation'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('abbreviation')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">

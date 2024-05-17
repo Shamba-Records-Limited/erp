@@ -42,12 +42,14 @@ class ProductsController extends Controller
     public function store_unit(Request $request)
     {
         $request->validate([
-            "name" => "required|unique:units,name"
+            "name" => "required|unique:units,name",
+            "abbreviation" => "required|unique:units,abbreviation"
         ]);
 
         try {
             $unit = new Unit();
             $unit->name = $request->name;
+            $unit->abbreviation = $request->abbreviation;
             $unit->save();
 
             toastr()->success('Unit Created Successfully');
@@ -69,12 +71,14 @@ class ProductsController extends Controller
     public function edit_unit(Request $request, $id)
     {
         $request->validate([
-            "name" => "required|unique:units,name,$id"
+            "name" => "required|unique:units,name,$id",
+            "abbreviation" => "required|unique:units,abbreviation,$id"
         ]);
 
         try {
             $unit = Unit::find($id);
             $unit->name = $request->name;
+            $unit->abbreviation = $request->abbreviation;
             $unit->save();
 
             toastr()->success('Unit updated Successfully');

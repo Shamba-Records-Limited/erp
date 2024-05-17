@@ -34,6 +34,16 @@
                                 </span>
                                 @endif
                             </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="abbreviation">Abbreviation</label>
+                                <input type="text" name="abbreviation" class="form-control {{ $errors->has('abbreviation') ? ' is-invalid' : '' }}" id="abbreviation" placeholder="KG" value="{{ old('abbreviation')}}" required>
+
+                                @if ($errors->has('abbreviation'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('abbreviation')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
@@ -56,6 +66,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Abbreviation</th>
                                 <th>Name</th>
                                 <th></th>
                             </tr>
@@ -64,6 +75,7 @@
                             @foreach($units as $key => $unit)
                             <tr>
                                 <td>{{++$key }}</td>
+                                <td>{{$unit->abbreviation}}</td>
                                 <td>{{$unit->name }}</td>
                                 </td>
                                 <td>
@@ -96,4 +108,3 @@
 
 @push('custom-scripts')
 @endpush
-

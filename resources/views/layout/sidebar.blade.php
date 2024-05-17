@@ -89,13 +89,13 @@
                 <span class="menu-title">Cooperative Branches</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['admin/millers*']) }}">
+        <li class="nav-item {{ active_class(['admin/millers*']) }}">
             <a class="nav-link" href="{{ route('admin.millers.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Millers</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['admin/miller-branches*']) }}">
+        <li class="nav-item {{ active_class(['admin/miller-branches*']) }}">
             <a class="nav-link" href="{{ route('admin.miller-branches.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Miller Branches</span>
@@ -119,7 +119,7 @@
                 <span class="menu-title">County Govt Officials</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['admin/farmers*']) }}">
+        <li class="nav-item {{ active_class(['admin/farmers*']) }}">
             <a class="nav-link" href="{{ route('admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Farmers</span>
@@ -497,45 +497,55 @@
         </li>
         @endif
 
-<li class="nav-item {!!  active_class(['cooperative/products/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#productsManagement" aria-expanded="{!!  is_active_route(['cooperative/products/*'])  !!}" aria-controls="productdManagement">
-                <i class="menu-icon mdi mdi-flower"></i>
-                <span class="menu-title">Product Management</span>
+        <li class="nav-item {!!  active_class(['cooperative/collections*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#collectionsManagement" aria-expanded="{!!  is_active_route(['cooperative/collections/*'])  !!}" aria-controls="collectionsManagement">
+                <i class="menu-icon mdi mdi-chemical-weapon"></i>
+                <span class="menu-title">Collections</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse {{ show_class(['cooperative/products/*']) }}" id="productsManagement">
+            <div class="collapse {{ show_class(['cooperative/collections*']) }}" id="collectionsManagement">
                 <ul class="nav flex-column sub-menu">
-                    @if(has_right_permission(config('enums.system_modules')['Product Management']['dashboard'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/products/mini-dashboard']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.product-mini-dashboard') }}">{{config('enums.system_modules')['Product Management']['dashboard']}}</a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['Product Management']['units'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/products/units']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.units.show') }}">{{config('enums.system_modules')['Product Management']['units']}}</a>
+
+                    @if(has_right_permission(config('enums.system_modules')['Collections']['dashboard'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative/collections/dashboard']) }}">
+                        <a class="nav-link" href="{{ route('cooperative.collections.reports') }}">
+                            {{config('enums.system_modules')['Collections']['dashboard']}}
+                        </a>
                     </li>
                     @endif
 
-                    @if(has_right_permission(config('enums.system_modules')['Product Management']['categories'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/products/categories']) }}">
-                        <a class="nav-link" href="{{route('cooperative.categories.show') }}">{{config('enums.system_modules')['Product Management']['categories']}}</a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['Product Management']['products'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/products/show']) }}">
-                        <a class="nav-link" href="{{route('cooperative.products.show') }}">{{config('enums.system_modules')['Product Management']['products']}}</a>
+                    @if(has_right_permission(config('enums.system_modules')['Collections']['quality_std'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative/collections/quality-standards']) }}">
+                        <a class="nav-link" href="{{ route('cooperative.quality-standards.show') }}">
+                            {{config('enums.system_modules')['Collections']['quality_std']}}
+                        </a>
                     </li>
                     @endif
 
-                    @if(has_right_permission(config('enums.system_modules')['Product Management']['suppliers'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/products/suppliers*']) }}">
-                        <a class="nav-link" href="{{route('cooperative.products.suppliers.show') }}">{{config('enums.system_modules')['Product Management']['suppliers']}}</a>
+                    @if(has_right_permission(config('enums.system_modules')['Collections']['collect'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative/collections']) }}">
+                        <a class="nav-link" href="{{ route('cooperative.collections.show') }}">
+                            {{config('enums.system_modules')['Collections']['collect']}}
+                        </a>
+                    </li>
+                    @endif
+                    @if(has_right_permission(config('enums.system_modules')['Collections']['submitted_collection'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative/collections/submitted']) }}">
+                        <a class="nav-link" href="{{ route('cooperative.submitted.collections') }}">
+                            {{config('enums.system_modules')['Collections']['submitted_collection']}}
+                        </a>
+                    </li>
+                    @endif
+                    @if(has_right_permission(config('enums.system_modules')['Collections']['bulk_payment'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative/collections/bulk-payment']) }}">
+                        <a class="nav-link" href="{{ route('cooperative.collection.bulk-payment') }}">
+                            {{config('enums.system_modules')['Collections']['bulk_payment']}}
+                        </a>
                     </li>
                     @endif
                 </ul>
             </div>
         </li>
-
         @endif
 
         {{-- farmer menu --}}
