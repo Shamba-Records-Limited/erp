@@ -64,6 +64,7 @@ class CoopBranchController extends Controller
             'cooperative_id' => 'required|exists:cooperatives,id',
             'name' => 'required|string',
             'location' => 'required|string',
+            'main_product_id' => 'required|exists:products,id'
         ]);
         try {
             DB::beginTransaction();
@@ -77,6 +78,7 @@ class CoopBranchController extends Controller
             $branch->location = $request->location;
             $branch->code = $request->code;
             $branch->cooperative_id = $coop_id;
+            $branch->main_product_id = $request->main_product_id;
             $branch->save();
 
             //audit trail log
@@ -98,6 +100,7 @@ class CoopBranchController extends Controller
         $this->validate($request, [
             'name' => 'required|string',
             'location' => 'required|string',
+            'main_product_id' => 'required|exists:products,id'
         ]);
         try {
             DB::beginTransaction();
@@ -108,6 +111,7 @@ class CoopBranchController extends Controller
             $branch->name = $request->name;
             $branch->location = $request->location;
             $branch->code = $request->code;
+            $branch->main_product_id = $request->main_product_id;
             if ($branch->isDirty()) {
                 $branch->save();
 

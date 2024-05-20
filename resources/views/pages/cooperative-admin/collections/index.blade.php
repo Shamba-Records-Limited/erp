@@ -22,6 +22,20 @@
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="product_grade_id">Coop Branch</label>
+                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Branch --</option>
+                                    @foreach($coopBranches as $branch)
+                                    <option value="{{$branch->id}}" @if($branch->id == old('branch_id')) selected @endif>{{$branch->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('product_grade_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('product_grade_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="farmer_id">Farmer</label>
                                 <select name="farmer_id" id="farmer_id" class="form-control select2bs4 {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Farmer --</option>
@@ -36,11 +50,11 @@
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="product_id">Product</label>
+                                <label for="product_id">Product {{empty(old('product_id'))}}</label>
                                 <select name="product_id" id="product_id" class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Product --</option>
                                     @foreach($products as $product)
-                                    <option value="{{$product->id}}" @if($product->id == old('product_id')) selected @endif>{{$product->name}}</option>
+                                    <option value="{{$product->id}}" @if ($product->id == old('product_id')) selected @elseif (empty(old('product_id')) && $product->id == $default_product_id) selected @endif>{{$product->name}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('product_id'))
@@ -50,16 +64,16 @@
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="quality_standard_id">Quality Standards</label>
-                                <select name="quality_standard_id" id="quality_standard_id" class="form-control select2bs4 {{ $errors->has('quality_standard_id') ? ' is-invalid' : '' }}" required>
-                                    <option value="">-- Select Quality Standard --</option>
-                                    @foreach($qualityStandards as $standard)
-                                    <option value="{{$standard->id}}" @if($standard->id == old('quality_standard_id')) selected @endif>{{$standard->name}}</option>
+                                <label for="product_grade_id">Grade</label>
+                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Grade --</option>
+                                    @foreach($grading as $grade)
+                                    <option value="{{$grade->id}}" @if($grade->id == old('product_grade_id')) selected @endif>{{$grade->name}}</option>
                                     @endforeach
                                 </select>
-                                @if ($errors->has('quality_standard_id'))
+                                @if ($errors->has('product_grade_id'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('quality_standard_id')  }}</strong>
+                                    <strong>{{ $errors->first('product_grade_id')  }}</strong>
                                 </span>
                                 @endif
                             </div>

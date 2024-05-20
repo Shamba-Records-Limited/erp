@@ -165,6 +165,21 @@
                                 </div>
 
                             </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="main_product_id">Main Product</label>
+                                <select name="main_product_id" id="main_product_id" class="form-control select2bs4 {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Main Product --</option>
+                                    @foreach($products as $product)
+                                    <option value="{{$product->id}}" @if($product->id == old('main_product_id')) selected @endif>{{$product->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('main_product_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('main_product_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
                         <hr class="mt-1 mb-1">
                         <h6 class="h6 mt-2">Contact Person</h6>
@@ -341,9 +356,9 @@
 
         let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
         let filteredSubCounties = []
-        for(let subCounty of subCounties) {
+        for (let subCounty of subCounties) {
             console.log(subCounty)
-            if (subCounty.county_id == e.target.value){
+            if (subCounty.county_id == e.target.value) {
                 elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
                 $("#sub_county_id").append(elem)
             }

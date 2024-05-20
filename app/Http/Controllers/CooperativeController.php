@@ -40,8 +40,11 @@ class CooperativeController extends Controller
         $countries = get_countries();
         $counties = County::all();
         $sub_counties = SubCounty::all();
+        $products = DB::select(DB::raw("
+            SELECT p.id, p.name FROM products p;
+        "));
 
-        return view('pages.admin.cooperatives', compact('countries', 'cooperatives', 'counties', 'sub_counties'));
+        return view('pages.admin.cooperatives', compact('countries', 'cooperatives', 'counties', 'sub_counties', 'products'));
     }
 
 
@@ -66,6 +69,7 @@ class CooperativeController extends Controller
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
             'u_name' => 'required|unique:users,username',
+            "main_product_id" => 'required|exists:products,id'
         ]);
 
         try {
@@ -81,6 +85,7 @@ class CooperativeController extends Controller
             $cooperative->email = $request->cooperative_email;
             $cooperative->contact_details = $request->cooperative_contact;
             $cooperative->currency = $request->cooperative_currency;
+            $cooperative->main_product_id = $request->main_product_id;
             $cooperative->save();
 
             $cooperative_id = $cooperative->id;
@@ -93,6 +98,7 @@ class CooperativeController extends Controller
             $branch->county_id = $request->county_id;
             $branch->sub_county_id = $request->sub_county_id;
             $branch->location = $request->location;
+            $branch->product_id = $request->main_product_id;
             $branch->save();
 
 

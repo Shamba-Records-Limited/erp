@@ -66,6 +66,21 @@
                                 @endif
                             </div>
 
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="main_product_id">Main Product</label>
+                                <select name="main_product_id" id="main_product_id" class="form-control select2bs4 {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Main Product --</option>
+                                    @foreach($products as $product)
+                                    <option value="{{$product->id}}" @if($product->id == old('main_product_id')) selected @endif>{{$product->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('main_product_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('main_product_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+
                         </div>
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -145,13 +160,13 @@
 @push('custom-scripts')
 <script>
     function deleteBranch(id) {
-        shouldDelete =  confirm("Are you sure you want to delete this cooperative branch?")
-        if (!shouldDelete){
+        shouldDelete = confirm("Are you sure you want to delete this cooperative branch?")
+        if (!shouldDelete) {
             return
         }
 
 
-        window.location = "/branches/delete/"+id
+        window.location = "/branches/delete/" + id
     }
 </script>
 @endpush

@@ -264,6 +264,12 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     // collections
     Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
         ->name('cooperative-admin.collections.show');
+
+    // settings
+    Route::get("/settings", "CooperativeAdmin\SettingsController@index")
+        ->name("cooperative-admin.settings.show");
+    Route::post("/settings/set-main-product", "CooperativeAdmin\SettingsController@set_main_product")
+        ->name("cooperative-admin.settings.set_main_product");
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {

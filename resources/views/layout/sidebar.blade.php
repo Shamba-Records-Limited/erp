@@ -237,6 +237,13 @@
                 <span class="menu-title">Collections</span>
             </a>
         </li>
+        
+<li class="nav-item {{ active_class(['cooperative-admin/settings']) }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Settings</span>
+            </a>
+        </li>
 
         <li class="nav-item {!!  active_class(['cooperative/farmer/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#farmerManagement" aria-expanded="{!!  is_active_route(['cooperative/farmer/*'])  !!}" aria-controls="farmerManagement">
