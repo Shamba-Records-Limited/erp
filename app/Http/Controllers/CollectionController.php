@@ -50,7 +50,7 @@ class CollectionController extends Controller
         $coop = Auth::user()->cooperative->id;
         $collections = Collection::get_collections($coop, $request, 100);
         $recent_collections = Collection::where('cooperative_id', $coop)->latest()->limit(10)->get();
-        $products = Product::where('cooperative_id', $coop)->with(['unit'])->orderBy('name')->get();
+        $products = Product::with(['unit'])->orderBy('name')->get();
         $agents = get_agents($coop);
         return view('pages.cooperative.collections.index', compact(
             'collections',

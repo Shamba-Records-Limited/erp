@@ -180,8 +180,6 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.products.show');
     Route::post('/products', 'admin\ProductsController@store_product')
         ->name('admin.products.store_product');
-    Route::get('/products/{id}', 'admin\ProductsController@view_edit_product')
-        ->name('admin.products.view_edit_product');
     Route::post('/products/{id}', 'admin\ProductsController@edit_product')
         ->name('admin.products.edit_product');
 
@@ -220,6 +218,10 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.products.delete_grade');
 
 
+    Route::get('/products/{id}', 'admin\ProductsController@view_edit_product')
+        ->name('admin.products.view_edit_product');
+
+
     // roles
     route::get('/roles', 'admin\RolesController@index')
         ->name('admin.roles.show');
@@ -249,7 +251,25 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
         ->name('govt-official.sales.show');
 });
 
+Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(function () {
+    Route::get('/products', 'CooperativeAdmin\ProductsController@index')
+        ->name('cooperative-admin.products.show');
+    Route::get('/products/{id}', 'CooperativeAdmin\ProductsController@detail')
+        ->name('cooperative-admin.products.detail');
+
+    
+    Route::post('/products/product-pricing', 'CooperativeAdmin\ProductsController@store_product_pricing')
+        ->name('cooperative-admin.products.store_product_pricing');
+
+    // collections
+    Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
+        ->name('cooperative-admin.collections.show');
+});
+
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {
+
+
+
     Route::middleware('financial_period')->group(function () {
         Route::middleware('module_gate:Farmer CRM')->group(function () {
             //farmer
