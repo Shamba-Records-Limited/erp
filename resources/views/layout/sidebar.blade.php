@@ -231,6 +231,13 @@
             </a>
         </li>
 
+<li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Farmers</span>
+            </a>
+        </li>
+
         <li class="nav-item {{ active_class(['cooperative-admin/collections']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -263,11 +270,9 @@
                         <a class="nav-link" href="{{ route('cooperative.routes.show') }}">{{config('enums.system_modules')['Farmer CRM']['routes']}}</a>
                     </li>
                     @endif
-                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['farmers'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/farmer/show']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
+                    <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
                     </li>
-                    @endif
                 </ul>
             </div>
         </li>

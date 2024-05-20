@@ -252,6 +252,13 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
 });
 
 Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(function () {
+    // branches
+    Route::get("/branches/detail/{id}", "CooperativeAdmin\BranchesController@detail")
+        ->name("cooperative-admin.branches.detail");
+    Route::post("/branches/set_manager/{id}", "CooperativeAdmin\BranchesController@set_manager")
+        ->name("cooperative-admin.branches.set_manager");
+
+    // products
     Route::get('/products', 'CooperativeAdmin\ProductsController@index')
         ->name('cooperative-admin.products.show');
     Route::get('/products/{id}', 'CooperativeAdmin\ProductsController@detail')
@@ -260,6 +267,10 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     
     Route::post('/products/product-pricing', 'CooperativeAdmin\ProductsController@store_product_pricing')
         ->name('cooperative-admin.products.store_product_pricing');
+
+    // farmers
+    Route::get('/farmers', 'CooperativeAdmin\FarmersController@index')
+        ->name('cooperative-admin.farmers.show');
 
     // collections
     Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
