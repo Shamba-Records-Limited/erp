@@ -285,6 +285,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     // collections
     Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
         ->name('cooperative-admin.collections.show');
+    Route::post('/collections/add', 'CooperativeAdmin\CollectionsController@store')
+        ->name('cooperative-admin.collections.store');
 
     // settings
     Route::get("/settings", "CooperativeAdmin\SettingsController@index")

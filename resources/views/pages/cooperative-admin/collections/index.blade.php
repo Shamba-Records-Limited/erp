@@ -5,6 +5,9 @@
 @endpush
 
 @section('content')
+@php
+$collection_time_options = config('enums.collection_time');
+@endphp
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -18,20 +21,20 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('branches.add') }}" method="post">
+                    <form action="{{ route('cooperative-admin.collections.store') }}" method="post">
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="product_grade_id">Coop Branch</label>
-                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
+                                <label for="coop_branch_id">Coop Branch</label>
+                                <select name="coop_branch_id" id="coop_branch_id" class="form-control select2bs4 {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Branch --</option>
                                     @foreach($coopBranches as $branch)
                                     <option value="{{$branch->id}}" @if($branch->id == old('branch_id')) selected @endif>{{$branch->name}}</option>
                                     @endforeach
                                 </select>
-                                @if ($errors->has('product_grade_id'))
+                                @if ($errors->has('coop_branch_id'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('product_grade_id')  }}</strong>
+                                    <strong>{{ $errors->first('coop_branch_id')  }}</strong>
                                 </span>
                                 @endif
                             </div>
@@ -40,7 +43,7 @@
                                 <select name="farmer_id" id="farmer_id" class="form-control select2bs4 {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Farmer --</option>
                                     @foreach($farmers as $farmer)
-                                    <option value="{{$farmer->id}}" @if($product->id == old('farmer_id')) selected @endif>{{$farmer->name}}</option>
+                                    <option value="{{$farmer->id}}" @if($farmer->id == old('farmer_id')) selected @endif>{{$farmer->username}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('farmer_id'))
@@ -50,7 +53,7 @@
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="product_id">Product {{empty(old('product_id'))}}</label>
+                                <label for="product_id">Product</label>
                                 <select name="product_id" id="product_id" class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Product --</option>
                                     @foreach($products as $product)
@@ -77,7 +80,7 @@
                                 </span>
                                 @endif
                             </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12 d-none">
+                            <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="quantity">Quantity</label>
                                 <input type="text" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="10.5" value="{{ old('quantity')}}" required>
 
@@ -88,12 +91,26 @@
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="unit_id">Pricing Unit</label>
+                                <select name="unit_id" id="unit_id" class="form-control select2bs4 {{ $errors->has('unit_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Unit --</option>
+                                    @foreach($units as $unit)
+                                    <option value="{{$unit->id}}" @if($unit->id == old('unit_id')) selected @endif>{{$unit->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('unit_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('unit_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="collection_time">Collection Time</label>
                                 <select name="collection_time" id="collection_time" class="form-control select2bs4 {{ $errors->has('collection_time') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Collection Time --</option>
-                                    <option>Morning</option>
-                                    <option>Afternoon</option>
-                                    <option>Evening</option>
+                                    @foreach($collection_time_options as $key => $option)
+                                    <option value="{{$key}}">{{$option}}</option>
+                                    @endforeach
                                 </select>
                                 @if ($errors->has('quality_standard_id'))
                                 <span class="help-block text-danger">
@@ -105,7 +122,7 @@
                         <div class="form-row">
                             <div class="form-group col-lg-6 col-12">
                                 <label>Comments</label>
-                                <textarea class="form-control" rows="3"></textarea>
+                                <textarea class="form-control" rows="3" name="comments">{{old('comment')}}</textarea>
                             </div>
                         </div>
                         <div class="form-row">
@@ -114,6 +131,47 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Collections</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover dt clickable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Batch</th>
+                                <th>Farmer</th>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Collection Time</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($collections as $key => $collection)
+                            <tr>
+                                <td>{{++$key }}</td>
+                                <td>{{$collection->batch_no}}</td>
+                                <td>
+                                    <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$collection->username}}</a>
+                                </td>
+                                <td>{{$collection->product_name}}</td>
+                                <td>{{$collection->quantity}}</td>
+                                <td>{{$collection->unit_abbr}}</td>
+                                <td>{{ $collection_time_options[$collection->collection_time]}}</td>
+                                <td></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
