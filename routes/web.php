@@ -271,6 +271,16 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     // farmers
     Route::get('/farmers', 'CooperativeAdmin\FarmersController@index')
         ->name('cooperative-admin.farmers.show');
+    Route::get('/farmers/view-add-new', 'CooperativeAdmin\FarmersController@view_add_new')
+        ->name('cooperative-admin.farmers.view_add_new');
+    Route::get('/farmers/view-add-existing', 'CooperativeAdmin\FarmersController@view_add_existing')
+        ->name('cooperative-admin.farmers.view_add_existing');
+    Route::post('/farmers/add-existing', 'CooperativeAdmin\FarmersController@add_existing')
+        ->name('cooperative-admin.farmers.add_existing');
+    Route::get('/farmers/detail/{id}', 'CooperativeAdmin\FarmersController@detail')
+        ->name('cooperative-admin.farmers.detail');
+    Route::post('/farmers', 'CooperativeAdmin\FarmersController@store')
+        ->name('cooperative-admin.farmers.add');
 
     // collections
     Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')

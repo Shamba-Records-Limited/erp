@@ -741,7 +741,7 @@
       const loadBankBranches = (parentId, targetId, selectedValue) => {
         $("#" + targetId).empty()
         const bank = $("#" + parentId).val();
-        let url = '{{ route('cooperative.farmer.bank_branch.get',":bank_id") }}';
+        let url = "{{ route('cooperative.farmer.bank_branch.get',':bank_id') }}";
         url = url.replace(':bank_id', bank);
         let htmlCode = '';
         axios.post(url).then(res => {

@@ -4,16 +4,27 @@
 @endpush
 
 @section('content')
+@php
+$gender_options = config('enums.employee_configs')['gender'];
+$marital_status_options = config('enums.employee_configs')['marital_status'];
+@endphp
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addEmployeeAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addEmployeeAccordion">
+                <div class="row justify-content-end">
+<button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addEmployeeAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addEmployeeAccordion">
                     <span class="mdi mdi-plus"></span>Add Farmer
                 </button>
+                <a type="button" href="{{route('cooperative-admin.farmers.view_add_existing')}}" class="btn btn-primary btn-fw btn-sm ml-2">
+                    <span class="mdi mdi-plus"></span>Add Existing Farmer
+</a>
+                </div>
+                
+                
                 <div class="collapse @if ($errors->count() > 0) show @endif " id="addEmployeeAccordion">
 
-                    <form action="{{ route('admin.farmers.add') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('cooperative-admin.farmers.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         {{$errors}}
                         <div class="form-row">
@@ -217,7 +228,7 @@
                             <tr>
                                 <td>{{++$key }}</td>
                                 <td>
-                                    <a href="{{route('admin.farmers.detail', $farmer->id)}}">{{$farmer->username}}</a>
+                                    <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$farmer->username}}</a>
                                 </td>
                                 <td></td>
                             </tr>
