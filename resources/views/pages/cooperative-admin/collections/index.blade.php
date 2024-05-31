@@ -12,8 +12,15 @@ $collection_time_options = config('enums.collection_time');
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addCollectionForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Collect
-                </button>
+                <div>
+                    <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addCollectionForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Collect
+                    </button>
+                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+                    </a>
+                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+                    </a>
+                </div>
+
                 <div class="collapse @if ($errors->count() > 0) show @endif " id="addCollectionForm">
                     <div class="row mt-5">
                         <div class="col-lg-12 grid-margin stretch-card col-12">
@@ -146,7 +153,7 @@ $collection_time_options = config('enums.collection_time');
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Batch</th>
+                                <th>Lot No</th>
                                 <th>Farmer</th>
                                 <th>Product</th>
                                 <th>Qty</th>
@@ -159,7 +166,7 @@ $collection_time_options = config('enums.collection_time');
                             @foreach($collections as $key => $collection)
                             <tr>
                                 <td>{{++$key }}</td>
-                                <td>{{$collection->batch_no}}</td>
+                                <td>{{$collection->lot_number}}</td>
                                 <td>
                                     <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$collection->username}}</a>
                                 </td>

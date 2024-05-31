@@ -287,12 +287,22 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name('cooperative-admin.collections.show');
     Route::post('/collections/add', 'CooperativeAdmin\CollectionsController@store')
         ->name('cooperative-admin.collections.store');
+    Route::get('/collections/download/{type}', 'CooperativeAdmin\CollectionsController@export_collection')
+        ->name("cooperative-admin.collections.export");
 
     // settings
     Route::get("/settings", "CooperativeAdmin\SettingsController@index")
         ->name("cooperative-admin.settings.show");
     Route::post("/settings/set-main-product", "CooperativeAdmin\SettingsController@set_main_product")
         ->name("cooperative-admin.settings.set_main_product");
+});
+
+Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
+    // branches
+    Route::get("/warehouses", "MillerAdmin\WarehousesController@index")
+        ->name("miller-admin.warehouses.show");
+    Route::post('/warehouses/add', 'MillerAdmin\WarehousesController@store')
+        ->name('miller-admin.warehouses.store');
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {

@@ -62,6 +62,11 @@ class Collection extends Model
         return $this->belongsTo(Cooperative::class, 'cooperative_id', 'id');
     }
 
+    public function coop_branch()
+    {
+        return $this->belongsTo(CoopBranch::class, 'coop_branch_id', 'id');
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id', 'id');
@@ -85,6 +90,11 @@ class Collection extends Model
     public function sales()
     {
         return $this->hasMany(Sale::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_id', 'id');
     }
 
     /**

@@ -41,8 +41,17 @@ class HomeController extends Controller
 
         $user = Auth::user();
 
-        $data = $user->hasRole('farmer') ? $this->farmer_data($start, $end, $user) :
+        $cooperative = $user->cooperative;
+        $data = (object)[];
+
+        if (!is_null($cooperative)){
+
+            $data = $user->hasRole('farmer') ? $this->farmer_data($start, $end, $user) :
             $this->coop_admin_weekly_analytics($start, $end, $user);
+        } else {
+        }
+
+        
         return view('dashboard', compact('data'));
     }
 

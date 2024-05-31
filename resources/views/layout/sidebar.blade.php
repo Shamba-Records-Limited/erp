@@ -1,3 +1,9 @@
+@php
+$miller = null;
+if ($user->miller_admin){
+$miller = $user->miller_admin->miller;
+}
+@endphp
 <nav class="sidebar sidebar-offcanvas dynamic-active-class-disabled" id="sidebar">
     <ul class="nav">
         <li class="nav-item nav-profile not-navigation-link">
@@ -32,7 +38,11 @@
                             </a>
 
                             <small class="designation text-muted">
-                                {{$user ? ucwords(strtolower($user->cooperative->name)) : '' }}
+                                @if (!is_null($user->cooperative))
+                                {{ucwords(strtolower($user->cooperative->name))}}
+                                @elseif (!is_null($miller))
+                                {{$miller->name}}
+                                @endif
                             </small>
                             <div class="dropdown-menu" aria-labelledby="UsersettingsDropdown">
                                 <a class="dropdown-item p-0">
@@ -231,7 +241,7 @@
             </a>
         </li>
 
-<li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
+        <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Farmers</span>
@@ -244,8 +254,8 @@
                 <span class="menu-title">Collections</span>
             </a>
         </li>
-        
-<li class="nav-item {{ active_class(['cooperative-admin/settings']) }}">
+
+        <li class="nav-item {{ active_class(['cooperative-admin/settings']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Settings</span>
@@ -598,6 +608,15 @@
                     @endif
                 </ul>
             </div>
+        </li>
+        @endif
+
+        @if($user && $user->hasRole('miller admin'))
+        <li class="nav-item {{ active_class(['miller-admin/warehouses*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.warehouses.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Warehouse</span>
+            </a>
         </li>
         @endif
 

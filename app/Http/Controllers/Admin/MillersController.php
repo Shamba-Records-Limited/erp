@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\County;
 use App\Http\Controllers\Controller;
 use App\Miller;
+use App\MillerAdmin;
 use App\MillerBranch;
 use App\SubCounty;
 use App\User;
 use DB;
+use Hash;
 use Illuminate\Http\Request;
 use Log;
 use Spatie\Permission\Models\Role;
@@ -80,14 +82,24 @@ class MillersController extends Controller
             $branch->address = $request->address;
             $branch->save();
 
-            // miller admin
+            // user
+            $userPassword = generate_password();
+            $hashedPassword = Hash::make($userPassword);
+            
             $user = new User();
             $user->username = $request->u_name;
             $user->first_name = $request->f_name;
             $user->other_names = $request->o_names;
             $user->email = $request->user_email;
-            $user->password = generate_password();
+            $user->password = $hashedPassword;
             $user->save();
+
+            // miller admin
+            $millerAdmin = new MillerAdmin();
+            $millerAdmin->miller_id = $miller->id;
+            $millerAdmin->user_id = $user->id;
+            $millerAdmin->save();
+
 
             //get roles
             $role = Role::select('id', 'name')->where('name', '=', 'miller admin')->first();

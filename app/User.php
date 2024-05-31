@@ -71,6 +71,11 @@ class User extends Authenticatable
 
     }
 
+    public function miller_admin(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(MillerAdmin::class, "user_id", "id");
+    }
+
     public function audit_trails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(AuditTrail::class);

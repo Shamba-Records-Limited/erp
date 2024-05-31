@@ -3,14 +3,14 @@
 
         @php $user = Auth::user(); @endphp
         <a class="navbar-brand brand-logo" href="{{ url('/') }}">
-            @if($user && $user->cooperative->logo && $user->cooperative->logo  !== null)
+            @if($user && $user->cooperative && $user->cooperative->logo && $user->cooperative->logo  !== null)
                 <img src="{{ url('assets/images/logo.svg') }}" alt="logo"/>
             @else
                 <img src="{{ url('assets/images/favicon.png') }}" alt="logo"/>
             @endif
         </a>
         <a class="navbar-brand brand-logo-mini" href="{{ url('/') }}">
-            @if($user && $user->cooperative->logo !== null)
+            @if($user && $user->cooperative && $user->cooperative->logo !== null)
                 <img src="{{ url('assets/images/logo-mini.svg') }}" alt="logo"/>
             @else
                 <img src="{{ url('assets/images/favicon.png') }}" alt="logo"/>

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\CooperativeAdmin;
 
 use App\Collection;
 use App\CoopBranch;
+use App\Exports\CollectionExport;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Unit;
 use Carbon\Carbon;
+use Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -97,7 +99,7 @@ class CollectionsController extends Controller
             $collection->unit_id = $request->unit_id;
             $collection->collection_time = $request->collection_time;
             $collection->comments = $request->comments;
-            $collection->batch_no = strtoupper(Carbon::now()->format('Ymd'));
+            $collection->lot_number = strtoupper(Carbon::now()->format('Ymd'));
             $collection->date_collected = Carbon::now();
             $collection->save();
 
@@ -108,6 +110,32 @@ class CollectionsController extends Controller
             Log::error($th->getMessage());
             toastr()->error('Oops! Operation failed');
             return redirect()->back()->withInput();
+        }
+    }
+
+    public function export_collection($type)
+    {
+        $cooperative = Auth::user()->cooperative->id;
+        // if ($request->request_data == '[]') {
+        //     $request = null;
+        // } else {
+        //     $request = json_decode($request->request_data);
+        // }
+
+        $collections = Collection::where("cooperative_id", $cooperative)->get();
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('collections_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new CollectionExport($collections), $file_name);
+        } else {
+            $data = [
+                'title' => 'Collections',
+                'pdf_view' => 'collections',
+                'records' => $collections,
+                'filename' => strtolower('collections_' . date('d_m_Y')),
+                'orientation' => 'portrait'
+            ];
+            return download_pdf($data);
         }
     }
 }
