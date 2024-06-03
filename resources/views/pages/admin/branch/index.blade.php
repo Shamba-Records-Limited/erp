@@ -133,7 +133,7 @@
                                             <a class="text-info dropdown-item" href="{{ route('branches.detail', $prod->id) }}">
                                                 <i class="fa fa-edit"></i>Edit
                                             </a>
-                                            <a onclick="return confirm('Sure to Delete?')" href="/admin/branches/delete/{{ $prod->id }}" class="text-danger dropdown-item">
+                                            <a onclick="return confirm('sure to delete?')" href="/admin/branches/delete/{{ $prod->id }}" class="text-danger dropdown-item">
                                                 <i class="fa fa-trash-alt"></i>Delete</a>
                                         </div>
                                     </div>

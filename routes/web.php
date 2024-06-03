@@ -290,6 +290,24 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     Route::get('/collections/download/{type}', 'CooperativeAdmin\CollectionsController@export_collection')
         ->name("cooperative-admin.collections.export");
 
+    // orders
+    Route::get("/orders", "CooperativeAdmin\OrdersController@index")
+        ->name("cooperative-admin.orders.show");
+    Route::get("/orders/{id}", "CooperativeAdmin\OrdersController@detail")
+        ->name("cooperative-admin.orders.detail");
+    // order-delivery
+    Route::get("/order/{order_id}/add-delivery-item", "CooperativeAdmin\OrdersController@add_delivery_item")
+        ->name("cooperative-admin.order-delivery.add-item");
+    Route::delete("/order/delete-delivery-item/{id}", "CooperativeAdmin\OrdersController@delete_delivery_item")
+        ->name("cooperative-admin.order-delivery.delete-item");
+    Route::get("/order/publish-delivery-draft/{id}", "CooperativeAdmin\OrdersController@publish_delivery_draft")
+        ->name("cooperative-admin.order-delivery.publish-delivery-draft");
+    Route::delete("/order/discard-delivery-draft/{id}", "CooperativeAdmin\OrdersController@discard_delivery_draft")
+        ->name("cooperative-admin.order-delivery.discard-delivery-draft");
+
+    // delivery
+
+
     // settings
     Route::get("/settings", "CooperativeAdmin\SettingsController@index")
         ->name("cooperative-admin.settings.show");
@@ -298,11 +316,33 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
 });
 
 Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
-    // branches
+    // warehouses
     Route::get("/warehouses", "MillerAdmin\WarehousesController@index")
         ->name("miller-admin.warehouses.show");
     Route::post('/warehouses/add', 'MillerAdmin\WarehousesController@store')
         ->name('miller-admin.warehouses.store');
+
+    // market/auction
+    Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")
+        ->name("miller-admin.market-auction.show");
+    Route::get("/market-auction/{coop_id}", "MillerAdmin\MarketAuctionController@view_coop_collections")
+        ->name("miller-admin.market-auction.coop-collections.show");
+    Route::get("/market-auction/{coop_id}/add_to_cart/{collection_id}", "MillerAdmin\MarketAuctionController@add_collection_to_cart")
+        ->name("miller-admin.market-auction.add-to-cart");
+    Route::delete("/market-auction/{coop_id}/remove_from_cart/{collection_id}", "MillerAdmin\MarketAuctionController@remove_collection_from_cart")
+        ->name("miller-admin.market-auction.remove-from-cart");
+    Route::delete("/market-auction/{coop_id}/clear_cart", "MillerAdmin\MarketAuctionController@clear_cart")
+        ->name("miller-admin.market-auction.clear-cart");
+    Route::get("/market-auction/{coop_id}/view-checkout-cart", "MillerAdmin\MarketAuctionController@view_checkout_cart")
+        ->name("miller-admin.market-auction.view-checkout-cart");
+    Route::post("/market-auction/{coop_id}/checkout-cart", "MillerAdmin\MarketAuctionController@checkout_cart")
+        ->name("miller-admin.market-auction.checkout-cart");
+
+    // orders
+    Route::get("/orders", "MillerAdmin\OrdersController@index")
+        ->name("miller-admin.orders.show");
+    Route::get("/orders/{id}", "MillerAdmin\OrdersController@detail")
+        ->name("miller-admin.orders.detail");
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {

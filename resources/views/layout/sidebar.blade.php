@@ -1,8 +1,12 @@
 @php
-$miller = null;
-if ($user->miller_admin){
+try{
 $miller = $user->miller_admin->miller;
+
+} catch (\Throwable $th) {
+$miller = null;
+
 }
+
 @endphp
 <nav class="sidebar sidebar-offcanvas dynamic-active-class-disabled" id="sidebar">
     <ul class="nav">
@@ -254,7 +258,12 @@ $miller = $user->miller_admin->miller;
                 <span class="menu-title">Collections</span>
             </a>
         </li>
-
+<li class="nav-item {{ active_class(['cooperative-admin/orders*']) }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.orders.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Orders</span>
+            </a>
+        </li>
         <li class="nav-item {{ active_class(['cooperative-admin/settings']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -616,6 +625,18 @@ $miller = $user->miller_admin->miller;
             <a class="nav-link" href="{{ route('miller-admin.warehouses.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Warehouse</span>
+            </a>
+        </li>
+        <li class="nav-item {{ active_class(['miller-admin/market-auction*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.market-auction.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Market/Auction</span>
+            </a>
+        </li>
+        <li class="nav-item {{ active_class(['miller-admin/orders*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.orders.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Orders</span>
             </a>
         </li>
         @endif
