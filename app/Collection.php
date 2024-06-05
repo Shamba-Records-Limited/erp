@@ -92,10 +92,10 @@ class Collection extends Model
         return $this->hasMany(Sale::class);
     }
 
-    public function unit()
-    {
-        return $this->belongsTo(Unit::class, 'unit_id', 'id');
-    }
+   public function getUnitAttribute()
+   {
+       return $this->product->product_category->unit;
+   } 
 
     /**
      * @param array $request

@@ -5,12 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class ProductCategory extends Model
+class LotGradeDistribution extends Model
 {
     //
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $table = "product_categories";
+    protected $table = "lot_grade_distributions";
 
     protected $primaryKey = 'id';
 
@@ -25,10 +25,5 @@ class ProductCategory extends Model
         self::creating(function ($model) {
             $model->id = (string) Uuid::generate(4);
         });
-    }
-
-    public function getUnitAttribute()
-    {
-        return $this->attributes['unit'];
     }
 }

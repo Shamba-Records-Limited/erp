@@ -14,9 +14,9 @@
         <div class="p-3">
             @foreach($cartItems as $key => $item)
             <div class="row border rounded shadow-sm bg-white p-2 mt-2">
-                <div class="col-7">{{$item->product_category}} - {{$item->product_name}}</div>
+                <div class="col-7">{{$item->lot_number}}</div>
                 <div class="col-2">
-                    {{$item->quantity}} {{$item->unit}}
+                    {{$item->quantity}} -KG-
                 </div>
                 <div class="col-3 justify-self-end">
                     <button class="btn btn-danger btn-sm">Remove</button>

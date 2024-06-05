@@ -72,6 +72,11 @@ Route::get('/payment/{id}/receipt', 'Farmer\ProfileController@print_payment_reci
 Route::get('/change-password', 'UserManagementController@change_password')->name('change-password');
 Route::post('/update-password', 'UserManagementController@update_password')->name('update-password');
 
+// common
+Route::get('/common/collection/{collection_id}/unit', 'Common\CommonController@collection_unit')->name('collection.get-collection-unit');
+Route::get('/common/product/{product_id}/unit', 'Common\CommonController@product_unit')->name('collection.get-product-unit');
+
+
 // superadmin routes
 Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {
 });
@@ -282,6 +287,14 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     Route::post('/farmers', 'CooperativeAdmin\FarmersController@store')
         ->name('cooperative-admin.farmers.add');
 
+    // lots
+    Route::get('/lots', 'CooperativeAdmin\LotsController@index')
+        ->name('cooperative-admin.lots.show');
+    Route::get('/lots/{lot_number}', 'CooperativeAdmin\LotsController@detail')
+        ->name('cooperative-admin.lots.detail');
+    Route::post('/lots/{lot_number}/store-grade-distribution', 'CooperativeAdmin\LotsController@store_grade_distribution')
+        ->name('cooperative-admin.lots.store-grade-distribution');
+
     // collections
     Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
         ->name('cooperative-admin.collections.show');
@@ -338,11 +351,48 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::post("/market-auction/{coop_id}/checkout-cart", "MillerAdmin\MarketAuctionController@checkout_cart")
         ->name("miller-admin.market-auction.checkout-cart");
 
+    
+    Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
+        ->name("miller-admin.market-auction.increase-quantity-in-cart");
+    Route::put("/market-auction/{coop_id}/set_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@set_quantity_in_cart")
+        ->name("miller-admin.market-auction.set-quantity-in-cart");
+    Route::get("/market-auction/{coop_id}/decrease_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@decrease_quantity_in_cart")
+        ->name("miller-admin.market-auction.decrease-quantity-in-cart");
+
+        
     // orders
     Route::get("/orders", "MillerAdmin\OrdersController@index")
         ->name("miller-admin.orders.show");
+    
+    // order object
+    Route::get("/orders/create-order/{coop_id}", "MillerAdmin\OrdersController@view_create_order")
+        ->name("miller-admin.market-auction.coop-collections.view-create-order");
+    Route::get("/orders/render-order-row/{item_id}", "MillerAdmin\OrdersController@render_order_row")
+        ->name("miller-admin.market-auction.coop-collections.render-order-row");
+    Route::get("/orders/empty-order-row", "MillerAdmin\OrdersController@empty_order_row")
+        ->name("miller-admin.market-auction.coop-collections.get-empty-order-row");
+    Route::get("/orders/create-order-row/{coop_id}", "MillerAdmin\OrdersController@create_order_row")
+        ->name("miller-admin.market-auction.coop-collections.create-order-row");
+
+
     Route::get("/orders/{id}", "MillerAdmin\OrdersController@detail")
         ->name("miller-admin.orders.detail");
+    Route::get("/orders/approve-delivery/{delivery_id}", "MillerAdmin\OrdersController@approve_delivery")
+        ->name("miller-admin.orders.approve-delivery");
+
+    // inventory
+    Route::get("/inventory", "MillerAdmin\InventoryController@index")
+        ->name("miller-admin.inventory.show");
+    Route::post("/inventory", "MillerAdmin\InventoryController@store")
+        ->name("miller-admin.inventory.store");
+    Route::post("/inventory/add-item", "MillerAdmin\InventoryController@add_item")
+        ->name("miller-admin.inventory.add-item");
+
+    // inventory auction
+    Route::get("/inventory-auction", "MillerAdmin\InventoryAuctionController@index")
+        ->name("miller-admin.inventory-auction.show");
+    Route::get("/inventory-auction/add-sale", "MillerAdmin\InventoryAuctionController@add_sale")
+        ->name("miller-admin.inventory-auction.add-sale");
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {

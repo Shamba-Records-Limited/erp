@@ -98,18 +98,19 @@ $collection_time_options = config('enums.collection_time');
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="unit_id">Pricing Unit</label>
-                                <select name="unit_id" id="unit_id" class="form-control select2bs4 {{ $errors->has('unit_id') ? ' is-invalid' : '' }}" required>
+                                <label for="unit">Unit</label>
+                                <!-- <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
                                     <option value="">-- Select Unit --</option>
-                                    @foreach($units as $unit)
-                                    <option value="{{$unit->id}}" @if($unit->id == old('unit_id')) selected @endif>{{$unit->name}}</option>
+                                    @foreach(config('enums.units') as $key => $unit)
+                                    <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>
                                     @endforeach
                                 </select>
-                                @if ($errors->has('unit_id'))
+                                @if ($errors->has('unit'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('unit_id')  }}</strong>
+                                    <strong>{{ $errors->first('unit')  }}</strong>
                                 </span>
-                                @endif
+                                @endif -->
+                                <input type="text" name="unit" class="form-control {{ $errors->has('unit') ? ' is-invalid' : '' }}" id="unit" placeholder="KG" value="{{ old('unit')}}" required readonly>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="collection_time">Collection Time</label>
@@ -153,6 +154,7 @@ $collection_time_options = config('enums.collection_time');
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Collection No</th>
                                 <th>Lot No</th>
                                 <th>Farmer</th>
                                 <th>Product</th>
@@ -166,13 +168,14 @@ $collection_time_options = config('enums.collection_time');
                             @foreach($collections as $key => $collection)
                             <tr>
                                 <td>{{++$key }}</td>
+                                <td>{{$collection->collection_number}}</td>
                                 <td>{{$collection->lot_number}}</td>
                                 <td>
                                     <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$collection->username}}</a>
                                 </td>
                                 <td>{{$collection->product_name}}</td>
                                 <td>{{$collection->quantity}}</td>
-                                <td>{{$collection->unit_abbr}}</td>
+                                <td>{{$collection->unit}}</td>
                                 <td>{{ $collection_time_options[$collection->collection_time]}}</td>
                                 <td></td>
                             </tr>
@@ -190,4 +193,26 @@ $collection_time_options = config('enums.collection_time');
 @endpush
 
 @push('custom-scripts')
+<script>
+    function set_unit_id() {
+        let product_id = $("#product_id").val();
+        if (product_id == "") {
+            return;
+        }
+
+        let url = `/common/product/${product_id}/unit`
+        console.log(url);
+        axios.get(url).then(function(response) {
+            unit = response.data;
+            $("#unit").val(unit);
+            $("#unit").trigger("change");
+        }).catch(function(error) {
+            console.log(error);
+        });
+    }
+
+    $(document).ready(function() {
+        set_unit_id();
+    });
+</script>
 @endpush

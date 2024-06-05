@@ -18,12 +18,13 @@ class CreateMillerAuctionOrderTable extends Migration
             $table->string("batch_number")->unique();
             $table->uuid("miller_id");
             $table->foreign('miller_id')->references('id')->on('millers')->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid("miller_warehouse_id");
+            $table->uuid("miller_warehouse_id")->nullable();
             $table->foreign('miller_warehouse_id')->references('id')->on('miller_warehouse')->onUpdate('cascade')->onDelete('cascade');
             $table->uuid("cooperative_id");
             $table->foreign('cooperative_id')->references('id')->on('cooperatives')->onUpdate('cascade')->onDelete('cascade');
             $table->uuid("user_id");
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->timestamp("published_at")->nullable();
             $table->timestamps();
         });
     }

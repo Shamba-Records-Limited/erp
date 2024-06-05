@@ -5,30 +5,23 @@
 @endpush
 
 @section('content')
-<div>Orders</div>
 <div class="card">
     <div class="card-body">
-        <div class="card-title">Orders</div>
+        <div class="card-title">Lots</div>
         <div class="table-responsive">
             <table class="table table-hover dt clickable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Batch No</th>
-                        <th>Cooperative</th>
-                        <th>Status</th>
+                        <th>Lot No</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($orders as $key => $order)
+                    @foreach($lots as $key => $lot)
                     <tr>
                         <td>{{++$key }}</td>
-                        <td><a href="{{route('miller-admin.orders.detail', $order->id)}}">{{$order->batch_number}}</a></td>
-                        <td>{{$order->cooperative_name}}</td>
-                        <td>
-                            Status
-                        </td>
+                        <td><a href="{{route('cooperative-admin.lots.detail', $lot->lot_number)}}">{{$lot->lot_number}}</a></td>
                         <td></td>
                     </tr>
                     @endforeach

@@ -17,8 +17,8 @@ class CreateMillerAuctionOrderItemTable extends Migration
             $table->uuid("id")->primary();
             $table->uuid("order_id");
             $table->foreign('order_id')->references('id')->on('miller_auction_order')->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid("collection_id");
-            $table->foreign('collection_id')->references('id')->on('collections')->onUpdate('cascade')->onDelete('cascade');
+            $table->uuid("product_category_id");
+            $table->foreign('product_category_id')->references('id')->on('product_categories')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

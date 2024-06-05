@@ -34,6 +34,21 @@
                                 </span>
                                 @endif
                             </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="unit">Unit</label>
+                                <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Unit --</option>
+                                    @foreach(config('enums.units') as $key => $unit)
+                                    <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('unit'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('unit')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
@@ -57,6 +72,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Unit</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -65,7 +81,7 @@
                             <tr>
                                 <td>{{++$key }}</td>
                                 <td>{{$category->name }}</td>
-                                </td>
+                                <td>{{$category->unit }}</td>
                                 <td>
                                     <div class="btn-group dropdown">
                                         <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

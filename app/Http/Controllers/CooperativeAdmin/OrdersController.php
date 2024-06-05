@@ -60,18 +60,10 @@ class OrdersController extends Controller
         $orderItems = [];
         if ($tab == 'items' || ($tab == 'deliveries' && $action == 'add_delivery')) {
             $orderItems = DB::select(DB::raw("
-                SELECT item.*,
-                    c.quantity,
-                    c.unit_id,
-                    p.name as product_name,
-                    pc.name as product_category,
-                    u.abbreviation as unit_abbr
+                SELECT item.*, (item.quantity - (SELECT SUM(quantity) FROM auction_order_delivery_item delivery_item WHERE delivery_item.order_item_id = item.id)) as undelivered
                 FROM miller_auction_order_item item
-                JOIN collections c ON item.collection_id = c.id
-                JOIN products p ON p.id = c.product_id
-                JOIN product_categories pc ON pc.id = p.category_id
-                JOIN units u ON u.id = c.unit_id
-                WHERE item.order_id = :order_id;
+                WHERE item.order_id = :order_id
+                ORDER BY undelivered DESC;
             "), ["order_id" => $id]);
         }
 
@@ -95,14 +87,10 @@ class OrdersController extends Controller
             "));
 
             $draft_delivery_items = DB::select(DB::raw("
-                SELECT item.*, p.name as product_name, pc.name as product_category, u.abbreviation as unit_abbr
+                SELECT item.*, order_item.lot_number
                 FROM auction_order_delivery_item item
-                JOIN units u ON u.id = item.unit_id
                 JOIN auction_order_delivery delivery ON delivery.id = item.delivery_id
                 JOIN miller_auction_order_item order_item ON order_item.id = item.order_item_id
-                JOIN collections c ON c.id = order_item.collection_id
-                JOIN products p ON p.id = c.product_id
-                JOIN product_categories pc ON pc.id = p.category_id
                 WHERE delivery.user_id = :user_id AND
                     delivery.order_id = :order_id AND
                     delivery.published_at IS NULL
@@ -166,7 +154,6 @@ class OrdersController extends Controller
             $item->delivery_id = $delivery->id;
             $item->order_item_id = $request->order_item_id;
             $item->quantity = $request->quantity;
-            $item->unit_id = $request->unit_id;
             $item->save();
         } catch (\Throwable $th) {
             Log::error($th->getMessage());

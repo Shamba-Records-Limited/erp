@@ -5,14 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class ProductCategory extends Model
+class InventoryItem extends Model
 {
     //
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $table = "product_categories";
-
-    protected $primaryKey = 'id';
+    protected $table = "inventory_items";
 
     public function getRouteKeyName()
     {
@@ -27,8 +25,8 @@ class ProductCategory extends Model
         });
     }
 
-    public function getUnitAttribute()
+    public function Inventory()
     {
-        return $this->attributes['unit'];
+        return $this->belongsTo(Inventory::class, 'inventory_id', 'id');
     }
 }

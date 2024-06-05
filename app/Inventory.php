@@ -5,14 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class ProductCategory extends Model
+class Inventory extends Model
 {
     //
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $table = "product_categories";
-
-    protected $primaryKey = 'id';
+    protected $table = "inventories";
 
     public function getRouteKeyName()
     {
@@ -27,8 +25,8 @@ class ProductCategory extends Model
         });
     }
 
-    public function getUnitAttribute()
+    public function Order()
     {
-        return $this->attributes['unit'];
+        return $this->belongsTo(MillerAuctionOrder::class, 'order_id', 'id');
     }
 }

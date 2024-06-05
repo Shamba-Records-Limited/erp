@@ -26,10 +26,9 @@ class MarketAuctionController extends Controller
     {
         $cooperatives = DB::select(DB::raw("
             SELECT coop.*,
-                (SELECT count(1) FROM collections c
-                    WHERE c.cooperative_id = coop.id AND
-                    (SELECT count(1) FROM miller_auction_order_item item WHERE item.collection_id = c.id) = 0
-                ) AS collections_count FROM cooperatives coop
+                (SELECT count(1) FROM lots l
+                    WHERE l.cooperative_id = coop.id
+                ) AS lots_count FROM cooperatives coop
         "));
 
         return view('pages.miller-admin.market-auction.index', compact('cooperatives'));
@@ -69,29 +68,17 @@ class MarketAuctionController extends Controller
             }
         }
 
-        $collections = DB::select(DB::raw("
-            SELECT c.*,
-                p.name as product_name,
-                pc.name as product_category,
-                u.abbreviation as unit,
-                (SELECT count(1) 
-                    FROM miller_auction_cart_item item
-                    WHERE item.collection_id = c.id AND
-                    item.cart_id = :cart_id
-                ) AS in_cart
-            FROM collections c 
-            JOIN products p ON p.id = c.product_id
-            LEFT JOIN product_categories pc ON pc.id = p.category_id
+        $lots = DB::select(DB::raw("
+            SELECT l.*, item.quantity AS qty
+            FROM lots l
+            LEFT JOIN miller_auction_cart_item item ON item.lot_number = l.lot_number
+            LEFT JOIN miller_auction_cart cart ON cart.id = item.cart_id
+            where l.cooperative_id = :coop_id
+        "), ["coop_id" => $coop_id]);
 
-            LEFT JOIN units u ON u.id = c.unit_id
-
-            where c.cooperative_id = :coop_id AND
-            (SELECT count(1) FROM miller_auction_order_item item WHERE item.collection_id = c.id) = 0
-        "), ["coop_id" => $coop_id, "cart_id" => $cart->id]);
-
-        $collections_count = DB::select(DB::raw("
-            SELECT count(1) FROM collections c
-            where c.cooperative_id = :coop_id
+        $lots_count = DB::select(DB::raw("
+            SELECT count(1) FROM lots l
+            where l.cooperative_id = :coop_id
         "), ["coop_id" => $coop_id]);
 
         // cooperative
@@ -108,9 +95,10 @@ class MarketAuctionController extends Controller
         "), ["cart_id" => $cart->id])[0]->count;
 
 
-        return view('pages.miller-admin.market-auction.coop-collections', compact('cooperative', 'collections', 'collections_count', 'items_in_cart_count'));
+        return view('pages.miller-admin.market-auction.coop-lots', compact('cooperative', 'lots', 'lots_count', 'items_in_cart_count'));
     }
 
+    // todo: remove
     public function add_collection_to_cart($coop_id, $collection_id)
     {
         $user = Auth::user();
@@ -177,6 +165,7 @@ class MarketAuctionController extends Controller
         return redirect()->route("miller-admin.market-auction.coop-collections.show", $coop_id);
     }
 
+    // todo: replace with remove lot from cart
     public function remove_collection_from_cart($coop_id, $collection_id)
     {
         $user = Auth::user();
@@ -223,17 +212,9 @@ class MarketAuctionController extends Controller
             ->first();
 
         $cartItems = DB::select(DB::raw("
-            SELECT item.*,
-                p.name as product_name,
-                pc.name as product_category,
-                c.quantity as quantity,
-                u.abbreviation as unit
+            SELECT item.*
             FROM miller_auction_cart_item item
-            JOIN miller_auction_cart cart ON cart.id = item.cart_id AND cart.id = :cart_id
-            JOIN collections c ON c.id = item.collection_id
-            JOIN products p ON p.id = c.product_id
-            LEFT JOIN product_categories pc ON pc.id = p.category_id
-            LEFT JOIN units u ON u.id = c.unit_id;
+            JOIN miller_auction_cart cart ON cart.id = item.cart_id AND cart.id = :cart_id;
         "), ["cart_id" => $cart->id]);
 
         // cooperative
@@ -257,6 +238,7 @@ class MarketAuctionController extends Controller
         return view('pages.miller-admin.market-auction.cart-checkout', compact('cooperative', 'cartItems', 'warehouses', 'default_batch_number'));
     }
 
+    // todo: implement
     public function clear_cart($coop_id)
     {
         $user = Auth::user();
@@ -328,18 +310,19 @@ class MarketAuctionController extends Controller
         }
 
         // retrieve collections in cart
-        $collectionsInCart = DB::select(DB::raw("
-            SELECT item.collection_id FROM miller_auction_cart_item item
+        $lotsInCart = DB::select(DB::raw("
+            SELECT item.lot_number, item.quantity FROM miller_auction_cart_item item
             WHERE item.cart_id = :cart_id
         "), ["cart_id" => $cart->id]);
 
-        foreach ($collectionsInCart as $item) {
+        foreach ($lotsInCart as $item) {
             try {
-                $collection_id = $item->collection_id;
+                $lot_number = $item->lot_number;
 
                 $orderItem = new MillerAuctionOrderItem();
                 $orderItem->order_id = $order->id;
-                $orderItem->collection_id = $collection_id;
+                $orderItem->lot_number = $lot_number;
+                $orderItem->quantity = $item->quantity;
                 $orderItem->save();
             } catch (\Throwable $th) {
                 Log::error($th->getMessage());
@@ -357,6 +340,147 @@ class MarketAuctionController extends Controller
         toastr()->error('Unable to create order item');
 
         // redirect to orders
-       return redirect()->route("miller-admin.orders.show"); 
+        return redirect()->route("miller-admin.orders.show");
+    }
+
+    public function get_or_create_cart_item($coop_id, $lot_number): MillerAuctionCartItem
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+        // update or create cart
+        $cart = null;
+        try {
+            $cart = MillerAuctionCart::where("miller_id", $miller_id)
+                ->where("cooperative_id", $coop_id)
+                ->where("user_id", $user->id)
+                ->first();
+            if ($cart == null) {
+                throw new \Throwable("cart does not exist");
+            }
+        } catch (\Throwable $th) {
+            try {
+                $cart = new MillerAuctionCart();
+                $cart->miller_id = $miller_id;
+                $cart->cooperative_id = $coop_id;
+                $cart->user_id = $user->id;
+                $cart->save();
+            } catch (\Throwable $th) {
+                Log::error($th->getMessage());
+                DB::rollBack();
+                toastr()->error('Unable to initialize cart');
+                return redirect()->back();
+            }
+        }
+
+        try {
+            $cartItem = MillerAuctionCartItem::where("cart_id", $cart->id)
+                ->where("lot_number", $lot_number)
+                ->firstOrFail();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $cartItem = new MillerAuctionCartItem();
+            $cartItem->cart_id = $cart->id;
+            $cartItem->lot_number = $lot_number;
+            $cartItem->quantity = 0;
+            $cartItem->save();
+        }
+
+        return $cartItem;
+    }
+
+    public function set_quantity_in_cart($coop_id, $lot_number, Request $request)
+    {
+        $request->validate([
+            'in_cart_quantity' => 'required|numeric'
+        ]);
+
+        DB::beginTransaction();
+        try {
+            //code...
+            $cartItem = $this->get_or_create_cart_item($coop_id, $lot_number);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to retrieve cart item');
+            return redirect()->back();
+        }
+
+        try {
+            $cartItem->quantity = $request->in_cart_quantity;
+            $cartItem->save();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to initialize cart');
+            return redirect()->back();
+        }
+
+        DB::commit();
+        toastr()->success('Cart updated successfully');
+        return redirect()->back();
+    }
+
+    public function increase_quantity_in_cart($coop_id, $lot_number)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $cartItem = $this->get_or_create_cart_item($coop_id, $lot_number);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to retrieve cart item');
+            return redirect()->back();
+        }
+
+        try {
+            $cartItem->quantity += 1;   // increasing quantity
+            $cartItem->save();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to initialize cart');
+            return redirect()->back();
+        }
+
+        DB::commit();
+
+        toastr()->success('Cart updated successfully');
+        return redirect()->back();
+    }
+
+    public function decrease_quantity_in_cart($coop_id, $lot_number, Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            //code...
+            $cartItem = $this->get_or_create_cart_item($coop_id, $lot_number);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to retrieve cart item');
+            return redirect()->back();
+        }
+
+        try {
+            $cartItem->quantity -= 1;   // decreasing quantity
+            $cartItem->save();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to initialize cart');
+            return redirect()->back();
+        }
+
+        DB::commit();
+        toastr()->success('Cart updated successfully');
+        return redirect()->back();
     }
 }

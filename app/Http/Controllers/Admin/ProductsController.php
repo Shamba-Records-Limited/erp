@@ -10,6 +10,7 @@ use App\ProductGrade;
 use App\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Log;
 
 class ProductsController extends Controller
@@ -161,19 +162,33 @@ class ProductsController extends Controller
 
     public function list_categories()
     {
-        $categories = ProductCategory::all();
+        // $categories = ProductCategory::all();
+        $categories = DB::select(DB::raw("
+            SELECT pc.id, pc.name, pc.unit FROM product_categories pc;
+        "));
+
         return view('pages.admin.products.categories', compact('categories'));
     }
 
     public function store_category(Request $request)
     {
+        $units = [];
+        foreach (config('enums.units') as $k => $u) {
+            $units[] = $k;
+        }
+
         $request->validate([
-            "name" => "required|unique:product_categories,name"
+            "name" => "required|unique:product_categories,name",
+            "unit" => [
+                "required",
+                Rule::in($units),
+            ],
         ]);
 
         try {
             $category = new ProductCategory();
             $category->name = $request->name;
+            $category->unit = $request->unit;
             $category->save();
 
             toastr()->success('Category Created Successfully');
@@ -194,13 +209,23 @@ class ProductsController extends Controller
 
     public function edit_category(Request $request, $id)
     {
+        $units = [];
+        foreach (config('enums.units') as $k => $u) {
+            $units[] = $k;
+        }
+
         $request->validate([
-            "name" => "required|unique:product_categories,name,$id"
+            "name" => "required|unique:product_categories,name,$id",
+            "unit" => [
+                "required",
+                Rule::in($units),
+            ],
         ]);
 
         try {
             $category = ProductCategory::find($id);
             $category->name = $request->name;
+            $category->unit = $request->unit;
             $category->save();
 
             toastr()->success('Category updated Successfully');

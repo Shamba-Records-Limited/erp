@@ -1,10 +1,14 @@
 @php
 try{
 $miller = $user->miller_admin->miller;
-
 } catch (\Throwable $th) {
 $miller = null;
+}
 
+try{
+    $cooperative = $user->cooperative;
+} catch (\Throwable $th) {
+    $cooperative = null;
 }
 
 @endphp
@@ -42,8 +46,8 @@ $miller = null;
                             </a>
 
                             <small class="designation text-muted">
-                                @if (!is_null($user->cooperative))
-                                {{ucwords(strtolower($user->cooperative->name))}}
+                                @if (!is_null($cooperative))
+                                {{ucwords(strtolower($cooperative->name))}}
                                 @elseif (!is_null($miller))
                                 {{$miller->name}}
                                 @endif
@@ -251,14 +255,19 @@ $miller = null;
                 <span class="menu-title">Farmers</span>
             </a>
         </li>
-
+        <li class="nav-item {{ active_class(['cooperative-admin/lots*']) }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Lots</span>
+            </a>
+        </li>
         <li class="nav-item {{ active_class(['cooperative-admin/collections']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Collections</span>
             </a>
         </li>
-<li class="nav-item {{ active_class(['cooperative-admin/orders*']) }}">
+        <li class="nav-item {{ active_class(['cooperative-admin/orders*']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.orders.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Orders</span>
@@ -637,6 +646,18 @@ $miller = null;
             <a class="nav-link" href="{{ route('miller-admin.orders.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Orders</span>
+            </a>
+        </li>
+        <li class="nav-item {{ active_class(['miller-admin/inventory*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.inventory.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Inventory</span>
+            </a>
+        </li>
+        <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.inventory-auction.show') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Inventory Auction</span>
             </a>
         </li>
         @endif

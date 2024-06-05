@@ -37,27 +37,35 @@
                     <tr>
                         <th>#</th>
                         <th>Lot No</th>
-                        <th>Product</th>
-                        <th>Quantity</th>
+                        <th>Available Quantity</th>
+                        <th>In Cart</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($collections as $key => $collection)
+                    @foreach($lots as $key => $lot)
                     <tr>
                         <td>{{++$key }}</td>
-                        <td>{{$collection->lot_number}}</td>
-                        <td>{{$collection->product_name}} - {{$collection->product_category}}</td>
-                        <td>{{$collection->quantity}} {{$collection->unit}}</td>
+                        <td>{{$lot->lot_number}}</td>
+                        <td>{{$lot->available_quantity}} unit_here</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <a href="{{ route('miller-admin.market-auction.decrease-quantity-in-cart', [$cooperative->id, $lot->lot_number]) }}" class="btn btn-outline-danger"><i class="mdi mdi-minus"></i></a>
+                                <form class="in_cart_quantity_form" action="{{ route('miller-admin.market-auction.set-quantity-in-cart', [$cooperative->id, $lot->lot_number]) }}" method="POST">
+                                    @csrf
+                                    {{ method_field('PUT') }}
+                                    <input type="number" class="mx-2 form-control form-control-sm in_cart_quantity" name="in_cart_quantity" style="width: 100px;" value="{{$lot->qty}}" onblur="this.form.submit()">
+                                </form>
+                                <a href="{{ route('miller-admin.market-auction.increase-quantity-in-cart', [$cooperative->id, $lot->lot_number]) }}" class="btn btn-outline-primary"><i class="mdi mdi-plus"></i></a>
+                            </div>
+                        </td>
                         <td class="text-right">
-                            @if ($collection->in_cart)
-                            <form action="{{route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $collection->id])}}" method="post">
+                            @if ($lot->qty > 0)
+                            <form action="{{route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $lot->lot_number])}}" method="post">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                 <button onclick="return confirm('sure to remove?')" class="btn btn-danger">Remove from Cart</button>
                             </form>
-                            @else
-                            <a href="{{route('miller-admin.market-auction.add-to-cart', [$cooperative->id, $collection->id])}}" class="btn btn-primary">Add to Cart</a>
                             @endif
                         </td>
                     </tr>
@@ -74,4 +82,6 @@
 @endpush
 
 @push('custom-scripts')
+<script>
+</script>
 @endpush

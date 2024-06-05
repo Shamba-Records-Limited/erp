@@ -34,7 +34,7 @@
                                     <select name="order_item_id" id="order_item_id" class="form-control select2bs4 {{ $errors->has('order_item_id') ? ' is-invalid' : '' }}" data-orderitems='@json($orderItems)'>
                                         <option value="">-- Select Order Item --</option>
                                         @foreach($orderItems as $item)
-                                        <option value="{{$item->id}}"> {{ $item->product_name }} - {{$item->product_category}}</option>
+                                        <option value="{{$item->id}}"> {{ $item->lot_number }}</option>
                                         @endforeach
 
                                         @if ($errors->has('order_item_id'))
@@ -82,7 +82,7 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Product</th>
+                                        <th>Lot</th>
                                         <th>Quantity</th>
                                         <th></th>
                                     </tr>
@@ -91,8 +91,8 @@
                                     @foreach($draft_delivery_items as $key => $delivery_item)
                                     <tr>
                                         <td>{{$key+1}}</td>
-                                        <td>{{$delivery_item->product_name}} - {{$delivery_item->product_category}}</td>
-                                        <td>{{$delivery_item->quantity}} {{$delivery_item->unit_abbr}}</td>
+                                        <td>{{$delivery_item->lot_number}}</td>
+                                        <td>{{$delivery_item->quantity}}</td>
                                         <td>
                                             <form action="{{route('cooperative-admin.order-delivery.delete-item', $delivery_item->id)}}" method="POST">
                                                 @csrf
@@ -147,8 +147,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Product</th>
+                        <th>Lot</th>
                         <th>Quantity</th>
+                        <th>Not Delivered</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -156,8 +157,9 @@
                     @foreach($orderItems as $key => $item)
                     <tr>
                         <td>{{++$key}}</td>
-                        <td>{{$item->product_name}} - {{$item->product_category}}</td>
-                        <td>{{$item->quantity}} {{$item->unit_abbr}}</td>
+                        <td>{{$item->lot_number}}</td>
+                        <td>{{$item->quantity}}</td>
+                        <td>{{$item->undelivered}}</td>
                         <td></td>
                     </tr>
                     @endforeach

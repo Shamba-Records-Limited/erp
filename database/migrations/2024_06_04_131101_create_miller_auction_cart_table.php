@@ -16,11 +16,14 @@ class CreateMillerAuctionCartTable extends Migration
         Schema::create('miller_auction_cart', function (Blueprint $table) {
             $table->uuid("id")->primary();
             $table->uuid("miller_id");
-            $table->foreign('miller_id')->references('id')->on('millers')->onUpdate('cascade')->onDelete('cascade');
-            $table->uuid("cooperative_id");
-            $table->foreign('cooperative_id')->references('id')->on('cooperatives')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign("miller_id")->references("id")->on("millers")
+                ->onUpdate("cascade")->onDelete("cascade");
+            $table->uuid('cooperative_id');
+            $table->foreign('cooperative_id')->references('id')->on('cooperatives')
+                ->onUpdate('cascade')->onDelete('cascade');
             $table->uuid("user_id");
-            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign("user_id")->references("id")->on("users")
+                ->onUpdate("cascade")->onDelete("cascade");
             $table->timestamps();
         });
     }

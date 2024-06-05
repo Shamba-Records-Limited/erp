@@ -401,5 +401,28 @@ return [
     'payroll_deduction_base_value' => [
         '0' => 'Gross Pay Reducing',
         '1' => 'Gross Pay Fixed'
+    ],
+    'units' => [
+        'KG' => [
+            'name' => 'Kilograms'
+        ],
+        'G' => [
+            'name' => 'Grams',
+        ],
+        'L' => [
+            'name' => 'Litres',
+        ],
+        'ML' => [
+            'name' => 'Millilitres',
+        ],
+        'M' => [
+            'name' => 'Meters',
+        ],
+        'CM' => [
+            'name' => 'Centimeters',
+        ],
+        'IN' => [
+            'name' => 'Inches',
+        ],
     ]
 ];
