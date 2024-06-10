@@ -13,12 +13,57 @@ $collection_time_options = config('enums.collection_time');
         <div class="card">
             <div class="card-body">
                 <div>
+                    <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#bulkUploadCollectionsAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="bulkUploadCollectionsAccordion">
+                        <span class="mdi mdi-plus">Bulk Import</span>
+                    </button>
                     <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addCollectionForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Collect
                     </button>
                     <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
                     </a>
                     <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
                     </a>
+                </div>
+
+                <div class="collapse @if ($errors->count() > 0 || isset($uploadErrors)) show @endif " id="bulkUploadCollectionsAccordion">
+                    <form action="{{ route('cooperative-admin.collections.import-bulk') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <h6 class="mb-3">Bulk Import Collections</h6>
+                            </div>
+                            <div class="form-row col-12">
+                                @if(isset($uploadErrors))
+                                <div>
+                                    @foreach($uploadErrors as $error)
+                                    <li class="list text-danger">{{ $error[0] }}</li>
+                                    @endforeach
+                                </div>
+                                @endif
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <a download="collections_bulk_import" href="{{ route('cooperative-admin.download-upload-collections-template') }}">
+                                    Download Template</a>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input @error('collections') is-invalid @enderror" id="collections" name="collections" value="{{ old('collections') }}">
+                                        <label class="custom-file-label" for="exampleInputFile">Collections File</label>
+
+                                        @if ($errors->has('collections'))
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('collections')  }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <button type="submit" class="btn btn-primary btn-fw btn-block">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="collapse @if ($errors->count() > 0) show @endif " id="addCollectionForm">
@@ -70,20 +115,6 @@ $collection_time_options = config('enums.collection_time');
                                 @if ($errors->has('product_id'))
                                 <span class="help-block text-danger">
                                     <strong>{{ $errors->first('product_id')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="product_grade_id">Grade</label>
-                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
-                                    <option value="">-- Select Grade --</option>
-                                    @foreach($grading as $grade)
-                                    <option value="{{$grade->id}}" @if($grade->id == old('product_grade_id')) selected @endif>{{$grade->name}}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('product_grade_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('product_grade_id')  }}</strong>
                                 </span>
                                 @endif
                             </div>

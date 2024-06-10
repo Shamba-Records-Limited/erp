@@ -6,9 +6,9 @@ $miller = null;
 }
 
 try{
-    $cooperative = $user->cooperative;
+$cooperative = $user->cooperative;
 } catch (\Throwable $th) {
-    $cooperative = null;
+$cooperative = null;
 }
 
 @endphp
@@ -234,12 +234,49 @@ try{
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-
         <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
             <a class="nav-link" href="{{ route('hr.branches.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Branches</span>
             </a>
+        </li>
+
+        <li class="nav-item {!!  active_class(['cooperative-admin/farmers*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#farmerManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/farmers*'])  !!}" aria-controls="farmerManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Farmer CRM</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['cooperative-admin/farmers*']) }}" id="farmerManagement">
+                <ul class="nav flex-column sub-menu">
+                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['dashboard'], config('enums.system_permissions')['view']))
+                    <li class="nav-item {{ active_class(['cooperative-admin/farmers-mini-dashboard']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">{{config('enums.system_modules')['Farmer CRM']['dashboard']}}</a>
+                    </li>
+                    @endif
+                    <li class="nav-item {{ active_class(['cooperative-admin/farmers/*']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <li class="nav-item {!!  active_class(['cooperative-admin/collections*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#collectionManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/collections*'])  !!}" aria-controls="farmerManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Collection CRM</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['cooperative-admin/collections*']) }}" id="collectionManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['cooperative-admin/collections-mini-dashboard']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/collections/*']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">Collections</a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item {{ active_class(['cooperative-admin/products']) }}">
@@ -280,30 +317,7 @@ try{
             </a>
         </li>
 
-        <li class="nav-item {!!  active_class(['cooperative/farmer/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#farmerManagement" aria-expanded="{!!  is_active_route(['cooperative/farmer/*'])  !!}" aria-controls="farmerManagement">
-                <i class="menu-icon mdi mdi-account-multiple"></i>
-                <span class="menu-title">Farmer CRM</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['cooperative/farmer/*']) }}" id="farmerManagement">
-                <ul class="nav flex-column sub-menu">
-                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['dashboard'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/farmer/dashboard']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.farmer.mini-dashboard') }}">{{config('enums.system_modules')['Farmer CRM']['dashboard']}}</a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['routes'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/farmer/route']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.routes.show') }}">{{config('enums.system_modules')['Farmer CRM']['routes']}}</a>
-                    </li>
-                    @endif
-                    <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
+
 
         @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'], config('enums.system_permissions')['view']))
         <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">

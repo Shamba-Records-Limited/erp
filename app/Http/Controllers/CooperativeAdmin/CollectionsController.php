@@ -76,7 +76,13 @@ class CollectionsController extends Controller
         "), ["id" => $coop->id]);
 
         return view('pages.cooperative-admin.collections.index', compact(
-            'collections','products', 'farmers', 'grading', 'default_product_id', 'coopBranches'));
+            'collections',
+            'products',
+            'farmers',
+            'grading',
+            'default_product_id',
+            'coopBranches'
+        ));
     }
 
     public function store(Request $request)
@@ -91,7 +97,6 @@ class CollectionsController extends Controller
             "coop_branch_id" => "required",
             "farmer_id" => "required",
             "product_id" => "required",
-            "product_grade_id" => "required",
             "quantity" => "required",
             "unit" => [
                 "required",
@@ -109,11 +114,12 @@ class CollectionsController extends Controller
 
         DB::beginTransaction();
         try {
+            // creating lot
             $now = Carbon::now();
             $now_str = strtoupper($now->format('Ymd'));
-            $date_str = $now->format('Y-m-d')." 00:00:00";
+            $date_str = $now->format('Y-m-d') . " 00:00:00";
 
-            $dateAfter_str = $now->format('Y-m-d')." 23:59:59";
+            $dateAfter_str = $now->format('Y-m-d') . " 23:59:59";
 
             $lot_count = Lot::where('created_at', '>=', $date_str)
                 ->where('created_at', '<', $dateAfter_str)
@@ -121,8 +127,8 @@ class CollectionsController extends Controller
 
             $lot_ind = $lot_count + 1;
 
-            $lot_number =  'LOT'.$now_str.$lot_ind;
-            try{
+            $lot_number =  'LOT' . $now_str . $lot_ind;
+            try {
                 $lot = Lot::where('cooperative_id', $coop->id)
                     ->where('created_at', '<', $dateAfter_str)
                     ->where('created_at', '>=', $date_str)
@@ -138,13 +144,14 @@ class CollectionsController extends Controller
             $lot->available_quantity += floatval($request->quantity);
             $lot->save();
 
+            // creating collection
             $collection_count = Collection::where('cooperative_id', $coop->id)
                 ->where('lot_number', $lot->lot_number)
                 ->count();
 
             $collection_ind = $collection_count + 1;
 
-            $collection_number = 'COL'.$now_str.$collection_ind;
+            $collection_number = 'COL' . $now_str . $collection_ind;
 
             $collection = new Collection();
             $collection->lot_number = $lot->lot_number;
@@ -153,7 +160,6 @@ class CollectionsController extends Controller
             $collection->coop_branch_id = $request->coop_branch_id;
             $collection->farmer_id = $request->farmer_id;
             $collection->product_id = $request->product_id;
-            $collection->product_grade_id = $request->product_grade_id;
             $collection->quantity = $request->quantity;
             $collection->collection_time = $request->collection_time;
             $collection->comments = $request->comments;
@@ -198,5 +204,117 @@ class CollectionsController extends Controller
             ];
             return download_pdf($data);
         }
+    }
+
+    public function collections_mini_dashboard(Request $request)
+    {
+        // collection over time
+        $date_range = $request->query("date_range", "week");
+        $from_date = $request->query("from_date", "");
+        $to_date = $request->query("from_date", "");
+        $from_date_prev = "";
+        $to_date_prev = "";
+        $prevCollections = [];
+
+        if ($date_range == "custom") {
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+        } else if ($date_range == "week") {
+            $from_date = date("Y-m-d", strtotime("-7 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Week";
+            $from_date_prev = date("Y-m-d", strtotime("-14 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-7 days"));
+        } else if ($date_range == "month") {
+            $from_date = date("Y-m-d", strtotime("-30 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Month";
+            $from_date_prev = date("Y-m-d", strtotime("-60 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-30 days"));
+        } else if ($date_range == "year") {
+            $from_date = date("Y-m-d", strtotime("-365 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Year";
+            $from_date_prev = date("Y-m-d", strtotime("-730 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-365 days"));
+        }
+
+
+        $suggested_chart_mode = "daily";
+        // to 60 days
+        if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
+            $suggested_chart_mode = "daily";
+        }
+        // to 4 months
+        else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
+            $suggested_chart_mode = "weekly";
+        }
+        // to 3 years
+        else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
+            $suggested_chart_mode = "monthly";
+        } else {
+            $suggested_chart_mode = "yearly";
+        }
+
+
+
+        $collections = [];
+        if ($suggested_chart_mode == "daily") {
+            $dailyQuery = "
+                WITH RECURSIVE date_series AS (
+                    SELECT :from_date AS date
+                    UNION ALL
+                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                    FROM date_series
+                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
+                )
+                SELECT date_series.date AS x, IFNULL(SUM(collections.quantity), 0) AS y FROM date_series
+                LEFT JOIN collections ON date_series.date = collections.date_collected
+                GROUP BY date_series.date;
+            ";
+            $collections = DB::select(DB::raw($dailyQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+            ]);
+            if ($from_date_prev != "") {
+                $prevCollections = DB::select(DB::raw($dailyQuery), [
+                    "from_date" => $from_date_prev,
+                    "to_date" => $to_date_prev,
+                ]);
+            }
+        } else if ($suggested_chart_mode == "monthly") {
+            $monthlyQuery = "
+                WITH RECURSIVE date_series AS (
+                    SELECT DATE_FORMAT(:from_date, '%Y-%b') AS month_year, :from_date AS date
+                    UNION ALL
+                    SELECT DATE_FORMAT(DATE_ADD(date, INTERVAL 1 MONTH), '%Y-%b'), DATE_ADD(date, INTERVAL 1 MONTH)
+                    FROM date_series
+                    WHERE DATE_ADD(date, INTERVAL 1 MONTH) <= :to_date
+                )
+                SELECT date_series.month_year AS x, IFNULL(SUM(c.quantity), 0) AS y FROM date_series
+                LEFT JOIN collections c ON DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year
+                GROUP BY date_series.month_year;
+            ";
+            $collections = DB::select(DB::raw($monthlyQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+            ]);
+            if ($from_date_prev != "") {
+                $prevCollections = DB::select(DB::raw($monthlyQuery), [
+                    "from_date" => $from_date_prev,
+                    "to_date" => $to_date_prev,
+                ]);
+            }
+        }
+
+        $data = [
+            "collections" => $collections,
+        ];
+
+        return view("pages.cooperative-admin.collections.mini-dashboard", compact('data',
+            'date_range',
+            'from_date',
+            'to_date'
+        ));
     }
 }

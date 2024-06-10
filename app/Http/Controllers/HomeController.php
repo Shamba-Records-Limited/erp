@@ -29,6 +29,18 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+        $user = Auth::user();
+
+        $roles = $user->getRoleNames()->toArray();
+        if (in_array('cooperative admin', $roles)){
+            return redirect()->route('cooperative-admin.dashboard');
+        }
+
+        return $this->coop_admin_dashboard($request);
+    }
+
+    public function coop_admin_dashboard(Request $request)
+    {
 
         if ($request->date) {
             $dates = split_dates($request->date);

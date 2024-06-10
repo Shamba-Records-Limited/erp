@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect('/dashboard');
-});
+// Route::get('/', function () {
+//     return redirect('/dashboard');
+// });
+
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('home');
+
 Route::get('/download/employee-upload-template', function () {
     return Storage::disk('public')->download('templates/employee_bulk_import.csv');
 })->name('download-upload-employee-template');
@@ -47,7 +51,7 @@ Route::get("/countries/data", "FirstTimeConfig@save_country_details")
 
 Route::get('/admin/roles', 'RolesNPermissionsContoller@admin_roles');
 
-Route::get('/dashboard', 'HomeController@index')->name('home');
+Route::get('/old-dashboard', 'HomeController@coop_admin_dashboard')->name('old-dashboard');
 
 Route::get('/dashboard-analytics', 'HomeController@dashboard_data')
     ->name('cooperative.dashboard');
@@ -257,6 +261,12 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
 });
 
 Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(function () {
+    // dashboard
+    Route::get("/dashboard", "CooperativeAdmin\DashboardController@index")
+        ->name("cooperative-admin.dashboard");
+    Route::post("/dashboard/export", "CooperativeAdmin\DashboardController@export_dashboard")
+        ->name("cooperative-admin.dashboard.export");
+
     // branches
     Route::get("/branches/detail/{id}", "CooperativeAdmin\BranchesController@detail")
         ->name("cooperative-admin.branches.detail");
@@ -274,7 +284,9 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name('cooperative-admin.products.store_product_pricing');
 
     // farmers
-    Route::get('/farmers', 'CooperativeAdmin\FarmersController@index')
+    Route::get('/farmers-mini-dashboard', 'CooperativeAdmin\FarmersController@farmer_mini_dashboard')
+        ->name('cooperative-admin.farmers.mini-dashboard');
+    Route::get('/farmers/show', 'CooperativeAdmin\FarmersController@index')
         ->name('cooperative-admin.farmers.show');
     Route::get('/farmers/view-add-new', 'CooperativeAdmin\FarmersController@view_add_new')
         ->name('cooperative-admin.farmers.view_add_new');
@@ -286,6 +298,12 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name('cooperative-admin.farmers.detail');
     Route::post('/farmers', 'CooperativeAdmin\FarmersController@store')
         ->name('cooperative-admin.farmers.add');
+    Route::get('/download/farmers-upload-template', function () {
+        return Storage::disk('public')->download('templates/coop_farmers_bulk_import.csv');
+    })->name('cooperative-admin.download-upload-farmers-template');
+    Route::post('/farmers/import-bulk', 'CooperativeAdmin\FarmersController@import_bulk')
+        ->name('cooperative-admin.farmers.import-bulk');
+    
 
     // lots
     Route::get('/lots', 'CooperativeAdmin\LotsController@index')
@@ -296,12 +314,19 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name('cooperative-admin.lots.store-grade-distribution');
 
     // collections
-    Route::get('/collections', 'CooperativeAdmin\CollectionsController@index')
+    Route::get('/collections-mini-dashboard', 'CooperativeAdmin\CollectionsController@collections_mini_dashboard')
+        ->name('cooperative-admin.collections.mini-dashboard');
+    Route::get('/collections/show', 'CooperativeAdmin\CollectionsController@index')
         ->name('cooperative-admin.collections.show');
     Route::post('/collections/add', 'CooperativeAdmin\CollectionsController@store')
         ->name('cooperative-admin.collections.store');
     Route::get('/collections/download/{type}', 'CooperativeAdmin\CollectionsController@export_collection')
         ->name("cooperative-admin.collections.export");
+    Route::get('/download/collections-upload-template', function () {
+        return Storage::disk('public')->download('templates/coop_collections_bulk_import.csv');
+    })->name('cooperative-admin.download-upload-collections-template');
+    Route::post('/collections/import-bulk', 'CooperativeAdmin\CollectionsController@import_bulk')
+        ->name('cooperative-admin.collections.import-bulk');
 
     // orders
     Route::get("/orders", "CooperativeAdmin\OrdersController@index")

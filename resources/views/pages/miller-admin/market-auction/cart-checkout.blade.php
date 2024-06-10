@@ -11,6 +11,20 @@
         <div class="card-subtitle">Cart Checkout</div>
         <div class="font-weight-bold">Cooperative: {{$cooperative->name}}</div>
 
+        <div>
+            <div>Total: 50KG</div>
+        </div>
+
+        <div>
+            <h4>Grading Distribution</h4>
+            <div>
+                10KG of Grade A
+            </div>
+            <div>
+                10KG of Grade A
+            </div>
+        </div>
+
         <div class="p-3">
             @foreach($cartItems as $key => $item)
             <div class="row border rounded shadow-sm bg-white p-2 mt-2">
@@ -18,8 +32,23 @@
                 <div class="col-2">
                     {{$item->quantity}} -KG-
                 </div>
-                <div class="col-3 justify-self-end">
+                <div class="col-2 justify-self-end">
                     <button class="btn btn-danger btn-sm">Remove</button>
+                </div>
+                <div class="col">
+                    <button class="btn btn-outline-primary">
+                        <div class="mdi mdi-chevron-down"></div>
+                    </button>
+                </div>
+                <div class="col-12">
+                    Grade Distribution:
+                    <div>
+                        10KG of Grade A
+                    </div>
+                    <div>
+                        10KG of Grade A
+                    </div>
+                    
                 </div>
             </div>
             @endforeach

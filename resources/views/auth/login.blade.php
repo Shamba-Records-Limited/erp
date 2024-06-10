@@ -2,7 +2,7 @@
 @section('content')
 
     <div class="content-wrapper d-flex align-items-center justify-content-center auth theme-one"
-         style="background-image: url({{ url('assets/images/auth/login_1.jpg') }}); background-size: cover;">
+         style="background-image: {{ url('assets/images/auth/login_1.jpg') }}; background-size: cover;">
         <div class="row w-100">
             <div class="col-lg-4 mx-auto">
                 <div class="auto-form-wrapper">

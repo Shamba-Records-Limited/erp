@@ -31,6 +31,9 @@
                 </div>
             </div>
         </div>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary">Add All Lots</button>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover dt clickable">
                 <thead>

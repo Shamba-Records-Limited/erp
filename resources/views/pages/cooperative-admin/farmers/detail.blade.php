@@ -30,17 +30,21 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Collection Number</th>
+                        <th>Lot Number</th>
                         <th>Name</th>
-                        <th>Added On</th>
-                        <th>Added By</th>
+                        <th>Collection Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($farmerCollections as $key => $collection)
                     <tr>
-                        <td>{{$key++}}</td>
-                        <td>Collection</td>
-                        <td></td>
+                        <td>{{++$key}}</td>
+                        <td>{{$collection->collection_number}}</td>
+                        <td>{{$collection->lot_number}}</td>
+                        <td>{{$collection->name}}</td>
+                        <td>{{$collection->date_collected}}</td>
                         <td></td>
                     </tr>
                     @endforeach

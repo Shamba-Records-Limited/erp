@@ -13,17 +13,61 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-end">
-<button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addEmployeeAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addEmployeeAccordion">
-                    <span class="mdi mdi-plus"></span>Add Farmer
-                </button>
-                <a type="button" href="{{route('cooperative-admin.farmers.view_add_existing')}}" class="btn btn-primary btn-fw btn-sm ml-2">
-                    <span class="mdi mdi-plus"></span>Add Existing Farmer
-</a>
+                    <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#bulkUploadFarmerAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="bulkUploadFarmerAccordion">
+                        <span class="mdi mdi-plus">Bulk Import</span>
+                    </button>
+                    <button type="button" class="btn btn-primary btn-fw btn-sm ml-2" data-toggle="collapse" data-target="#addFarmerAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addFarmerAccordion">
+                        <span class="mdi mdi-plus"></span>Add Farmer
+                    </button>
+                    <a type="button" href="{{route('cooperative-admin.farmers.view_add_existing')}}" class="btn btn-primary btn-fw btn-sm ml-2">
+                        <span class="mdi mdi-plus"></span>Add Existing Farmer
+                    </a>
                 </div>
-                
-                
-                <div class="collapse @if ($errors->count() > 0) show @endif " id="addEmployeeAccordion">
 
+
+                <div class="collapse @if ($errors->count() > 0 || isset($uploadErrors)) show @endif " id="bulkUploadFarmerAccordion">
+                    <form action="{{ route('cooperative-admin.farmers.import-bulk') }}" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <h6 class="mb-3">Bulk Import Farmers</h6>
+                            </div>
+                            <div class="form-row col-12">
+                                @if(isset($uploadErrors))
+                                <div>
+                                    @foreach($uploadErrors as $error)
+                                    <li class="list text-danger">{{ $error[0] }}</li>
+                                    @endforeach
+                                </div>
+                                @endif
+                            </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <a download="farmers_bulk_import" href="{{ route('cooperative-admin.download-upload-farmers-template') }}">
+                                    Download Template</a>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input @error('farmers') is-invalid @enderror" id="farmers" name="farmers" value="{{ old('farmers') }}">
+                                        <label class="custom-file-label" for="exampleInputFile">Farmers File</label>
+
+                                        @if ($errors->has('farmers'))
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('farmers')  }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <button type="submit" class="btn btn-primary btn-fw btn-block">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="collapse @if ($errors->count() > 0) show @endif " id="addFarmerAccordion">
                     <form action="{{ route('cooperative-admin.farmers.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         {{$errors}}
@@ -42,7 +86,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="other_name">Other Names</label>
+                                <label for="other_name">Sur Name</label>
                                 <input type="text" name="other_names" value="{{ old('other_names')}}" class="form-control {{ $errors->has('other_names') ? ' is-invalid' : '' }}" id="other_name" placeholder="Doe" required>
                                 @if ($errors->has('other_names'))
                                 <span class="help-block text-danger">
@@ -114,6 +158,17 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                     </span>
                                     @endif
                                 </select>
+                            </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="member_no">Member No</label>
+                                <input type="text" name="member_no" class="form-control {{ $errors->has('member_no') ? ' is-invalid' : '' }}" id="member_no" placeholder="A236...Z" value="{{ old('member_no')}}">
+
+                                @if ($errors->has('member_no'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('member_no')  }}</strong>
+                                </span>
+                                @endif
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -220,6 +275,9 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
+                                <th>Gender</th>
+                                <th>County</th>
+                                <th>Sub County</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -230,6 +288,9 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 <td>
                                     <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$farmer->username}}</a>
                                 </td>
+                                <td>{{$farmer->gender}}</td>
+                                <td>{{$farmer->county_name}}</td>
+                                <td>{{$farmer->sub_county_name}}</td>
                                 <td></td>
                             </tr>
                             @endforeach
@@ -255,9 +316,9 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
         let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
         let filteredSubCounties = []
-        for(let subCounty of subCounties) {
+        for (let subCounty of subCounties) {
             console.log(subCounty)
-            if (subCounty.county_id == e.target.value){
+            if (subCounty.county_id == e.target.value) {
                 elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
                 $("#sub_county_id").append(elem)
             }
