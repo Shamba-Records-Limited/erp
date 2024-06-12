@@ -8,7 +8,49 @@
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 @endpush
 
+@push('plugin-styles')
+<style>
+    .grid {
+        display: grid;
+    }
+
+    .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashgrid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 10px;
+    }
+
+    .span-8 {
+        grid-column: span 8;
+    }
+
+    .span-4 {
+        grid-column: span 4;
+    }
+
+    .span-2 {
+        grid-column: span 2;
+    }
+
+    .span-6 {
+        grid-column: span 6;
+    }
+
+
+    .row-span-2 {
+        grid-row: span 2;
+    }
+</style>
+@endpush
+
 @section('content')
+@php
+$total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other
+@endphp
 <div class="d-flex justify-content-between w-100">
     <div>Dashboard</div>
     <div class="d-flex align-items-start">
@@ -33,108 +75,95 @@
 
 </div>
 
-<div class="row grid-margin">
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Farmer Count
-                </div>
-                <div class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</div>
+<div class="dashgrid">
+    <div class="card span-8 row-span-2">
+        <div class="card-body">
+            <div class="card-title">
+                Collections Weight (KGs)
+            </div>
+            <div>
+                <canvas id="CollectionsBarChart" class="mb-4 mb-md-0" height="250"></canvas>
             </div>
         </div>
     </div>
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collection Count
-                </div>
-                <div class="card-subtitle" id="collectionCount">{{$data["collection_count"]}}</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collection Total Weight
-                </div>
-                <div class="card-subtitle" id="collectionTotalWeight">{{$data["total_collection_weight"]}} KG</div>
-            </div>
-        </div>
-    </div>
-</div>
 
-@php
-$total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other
-@endphp
-<div class="row">
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collections Weight (KGs)
-                </div>
-                <div>
-                    <canvas id="CollectionsBarChart" class="mb-4 mb-md-0" height="250"></canvas>
-                </div>
+    <div class="card span-4">
+        <div class="card-body">
+            <div class="card-title">
+                Collection Total Weight
             </div>
+            <h3 class="card-subtitle " id="collectionTotalWeight">{{$data["total_collection_weight"]}} KG</h3>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collections Weight (KGs) By Gender
-                </div>
-                <div>
-                    <canvas id="CollectionsGenderBarChart" class="mb-4 mb-md-0" height="250"></canvas>
-                </div>
+
+    <div class="card span-2">
+        <div class="card-body">
+            <div class="card-title">
+                Farmer Count
             </div>
+            <h3 class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</h3>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-6 grid-margin stretch-card">
-        <div class="card" style="overflow-y: scroll; height:350px;">
-            <div class="card-body">
-                <div class="card-title">Collection By Wet Mills (KGs)</div>
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <canvas id="WetMillCollectionsBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
-                    </div>
+
+    <div class="card span-2">
+        <div class="card-body">
+            <div class="card-title">
+                Collection Count
+            </div>
+            <h3 class="card-subtitle" id="collectionCount">{{$data["collection_count"]}}</h3>
+        </div>
+    </div>
+
+
+    <div class="span-4 card" style="overflow-y: scroll; height:350px;">
+        <div class="card-body">
+            <div class="card-title">Gender Distribution</div>
+            <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                    <canvas id="FarmersGenderDoughnutChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
+                </div>
+            </div>
+            <div class="grid grid-cols-2">
+                <div class="p-4">
+                    <div>Male</div>
+                    <h3 id="maleCount">{{$data["gender"]->male}}</h3>
+                </div>
+                <div class="p-4">
+                    <div>Female</div>
+                    <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-sm-12 col-md-6 col-lg-6 grid-margin stretch-card">
-        <div class="card" style="overflow-y: scroll; height:350px;">
-            <div class="card-body">
-                <div class="card-title">Grade Distribution KGs</div>
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
-                    </div>
+    <div class="card span-8">
+        <div class="card-body">
+            <div class="card-title">
+                Collections Weight (KGs) By Gender
+            </div>
+            <div>
+                <canvas id="CollectionsGenderBarChart" class="mb-4 mb-md-0" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="card span-6" style="overflow-y: scroll; height:350px;">
+        <div class="card-body">
+            <div class="card-title">Collection By Wet Mills (KGs)</div>
+            <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                    <canvas id="WetMillCollectionsBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 
-
-</div>
-<div class="row">
-    <div class="col-sm-12 col-md-6 col-lg-6 grid-margin stretch-card">
-        <div class="card" style="overflow-y: scroll; height:350px;">
-            <div class="card-body">
-                <div class="card-title">Gender Distribution</div>
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <canvas id="FarmersGenderDoughnutChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
-                    </div>
+    <div class="card span-6" style="overflow-y: scroll; height:350px;">
+        <div class="card-body">
+            <div class="card-title">Grade Distribution KGs</div>
+            <div class="row">
+                <div class="col-12 d-flex align-items-center">
+                    <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
                 </div>
             </div>
         </div>
@@ -196,7 +225,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
     let maleCollectionsData = @json($data['male_collections']);
     console.log(maleCollectionsData);
     let maleCollectionValues = maleCollectionsData.map(c => c.y);
-    
+
     let collectionsGenderLabels = maleCollectionsData.map(c => c.x)
     let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart")
 
@@ -328,14 +357,12 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         datasets: [{
             data: genderData,
             backgroundColor: [
-                successColor,
-                primaryColor,
-                dangerColor
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
             ],
             borderColor: [
-                successColor,
-                primaryColor,
-                dangerColor
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 99, 132, 1)',
             ]
         }],
         labels: ["Male", "Female", "Other"]
