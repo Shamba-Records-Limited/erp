@@ -6,6 +6,7 @@ use App\County;
 use App\Farmer;
 use App\FarmerCooperative;
 use App\Http\Controllers\Controller;
+use App\Imports\CooperativeAdmin\FarmerImport;
 use App\SubCounty;
 use App\User;
 use DB;
@@ -13,6 +14,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FarmersController extends Controller
 {
@@ -538,6 +540,26 @@ class FarmersController extends Controller
 
     function import_bulk(Request $request)
     {
-    
+        $this->validate($request, [
+            'farmers' => 'required'
+        ]);
+
+        try {
+            if ($request->hasFile('farmers')) {
+                Excel::import(new FarmerImport, $request->farmers);
+            }
+            toastr()->success("Farmers created successfully");
+            return redirect()->back();
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $uploadErrors = [];
+            foreach ($failures as $failure) {
+                $uploadErrors[] = [
+                    'Row #' . $failure->row() . ' ' . $failure->attribute() . ': ' . $failure->errors()[0] . ' (' . $failure->values()[$failure->attribute()] . ')'
+                ];
+            }
+            toastr()->error('Upload was  not successful');
+            return redirect()->back()->with(['uploadErrors' => $uploadErrors]);
+        }
     }
 }
