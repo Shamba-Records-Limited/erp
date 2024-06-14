@@ -24,6 +24,9 @@ $collection_time_options = config('enums.collection_time');
                     </a>
                 </div>
 
+                @php
+                $uploadErrors = Session::get('uploadErrors');
+                @endphp
                 <div class="collapse @if ($errors->count() > 0 || isset($uploadErrors)) show @endif " id="bulkUploadCollectionsAccordion">
                     <form action="{{ route('cooperative-admin.collections.import-bulk') }}" method="post" enctype="multipart/form-data">
                         @csrf
