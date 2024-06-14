@@ -11,3 +11,5 @@ output
 
 storage/framework
 vendor/
+
+mysql_data/
