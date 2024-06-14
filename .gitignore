@@ -9,7 +9,9 @@ node_modules
 output
 
 
-storage/framework
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
 vendor/
 
 mysql_data/
