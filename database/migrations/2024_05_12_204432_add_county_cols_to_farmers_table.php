@@ -18,8 +18,8 @@ class AddCountyColsToFarmersTable extends Migration
             $table->dropColumn("county");
             $table->string("county_id")->nullable();
             $table->foreign('county_id')->references('id')->on('counties')->onUpdate('cascade')->onDelete('cascade');
-            $table->string("sub_county_id")->nullable();
-            $table->foreign('sub_county_id')->references('id')->on('sub_counties')->onUpdate('cascade')->onDelete('set null');
+            $table->unsignedBigInteger("sub_county_id")->nullable();
+            $table->foreign('sub_county_id')->references('id')->on('sub_counties')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
