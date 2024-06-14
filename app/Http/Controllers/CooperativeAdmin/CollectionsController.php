@@ -7,6 +7,7 @@ use App\CoopBranch;
 use App\Cooperative;
 use App\Exports\CollectionExport;
 use App\Http\Controllers\Controller;
+use App\Imports\CooperativeAdmin\CollectionImport;
 use App\Lot;
 use App\Product;
 use App\Unit;
@@ -15,6 +16,7 @@ use Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 use Log;
 
@@ -316,5 +318,29 @@ class CollectionsController extends Controller
             'from_date',
             'to_date'
         ));
+    }
+
+    function import_bulk(Request $request)
+    {
+        $this->validate($request, [
+            'collections' => 'required'
+        ]);
+
+        try {
+            if ($request->hasFile('collections')) {
+                Excel::import(new CollectionImport, $request->collections);
+            }
+            toastr()->success("Collections created successfully");
+            return redirect()->back();
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $uploadErrors = [];
+            foreach ($failures as $failure) {
+                $uploadErrors[] = ['Row #' . $failure->row() . ' ' . $failure->attribute() . ': ' . $failure->errors()[0] . ' (' . $failure->values()[$failure->attribute()] . ')'];
+            }
+            toastr()->error('Upload was  not successful');
+            Session::flash('uploadErrors', $uploadErrors);
+            return redirect()->back();
+        }
     }
 }
