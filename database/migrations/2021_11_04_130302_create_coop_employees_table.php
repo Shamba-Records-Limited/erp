@@ -15,7 +15,7 @@ class CreateCoopEmployeesTable extends Migration
     {
         Schema::create('coop_employees', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('country_id');
+            $table->string('country_code');
             $table->uuid('county_of_residence');
             $table->string('area_of_residence')->nullable();
             $table->string('marital_status')->nullable();
@@ -33,7 +33,6 @@ class CreateCoopEmployeesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('CASCADE')->onDelete('RESTRICT');
             $table->foreign('department_id')->references('id')->on('coop_branch_departments')->onUpdate('CASCADE')->onDelete('RESTRICT');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
         });

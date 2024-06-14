@@ -17,8 +17,7 @@ class CreateMillersTable extends Migration
             $table->uuid("id")->primary();
             $table->string("name");
             $table->string("abbreviation");
-            $table->string("country_id");
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
+            $table->string("country_code");
             $table->string("email")->unique();
             $table->string("logo")->nullable();
             $table->string("address");

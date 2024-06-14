@@ -15,12 +15,11 @@ class CreateCountiesTable extends Migration
     {
         Schema::create('counties', function (Blueprint $table) {
             $table->uuid("id")->primary();
-            $table->uuid("country_id");
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('cascade');
+            $table->string("country_code");
             $table->integer("code");
             $table->string("name");
 
-            $table->unique(["country_id", "code"]);
+            $table->unique(["country_code", "code"]);
         });
     }
 

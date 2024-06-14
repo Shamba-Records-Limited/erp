@@ -17,8 +17,7 @@ class CreateCooperativesTable extends Migration
             $table->uuid("id")->primary();
             $table->string("name");
             $table->string("abbreviation")->nullable();
-            $table->uuid("country_id")->nullable();
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('set null');
+            $table->uuid("country_code")->nullable();
             $table->string("location");
             $table->string("rate_type")->default('');
             $table->string("address");

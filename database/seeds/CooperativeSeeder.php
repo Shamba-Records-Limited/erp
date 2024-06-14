@@ -16,7 +16,7 @@ class CooperativeSeeder extends Seeder
         DB::table('cooperatives')->insert([
             'id' => (string) Uuid::generate(4),
             'default_coop' => 1,
-            'country_id' => \App\Country::where("iso_code",'=', 'ke')->first()->id,
+            'country_code' => "KE",
             'name' => 'Shamba Equity',
             'abbreviation' => 'ERP',
             'address' => "Nairobi",

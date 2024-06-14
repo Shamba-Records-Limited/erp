@@ -21,12 +21,7 @@ class CreatePayrollDeductionsTable extends Migration
             $table->double('max_amount')->nullable();
             $table->double('amount')->nullable();
             $table->double('rate')->nullable();
-            $table->uuid('country_id');
-            $table->foreign('country_id')
-                ->on('countries')
-                ->references('id')
-                ->onDelete('RESTRICT')
-                ->onUpdate('CASCADE');
+            $table->uuid('country_code');
             $table->timestamps();
         });
     }

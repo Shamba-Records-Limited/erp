@@ -15,8 +15,7 @@ class CreateFarmersTable extends Migration
     {
         Schema::create('farmers', function (Blueprint $table) {
             $table->uuid("id")->primary();
-            $table->uuid("country_id")->nullable();
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('cascade')->onDelete('set null');
+            $table->string("country_code")->nullable();
             $table->string('county');
             $table->string('location');
             $table->string('id_no');

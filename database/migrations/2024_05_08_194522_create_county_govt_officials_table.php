@@ -15,7 +15,7 @@ class CreateCountyGovtOfficialsTable extends Migration
     {
         Schema::create('county_govt_officials', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('country_id');
+            $table->string('country_code');
             $table->uuid('county');
             $table->string('gender');
             $table->string('id_no')->nullable();
@@ -26,7 +26,6 @@ class CreateCountyGovtOfficialsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('country_id')->references('id')->on('countries')->onUpdate('CASCADE')->onDelete('RESTRICT');
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('RESTRICT');
         });
     }
