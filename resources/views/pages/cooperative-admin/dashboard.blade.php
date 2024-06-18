@@ -49,7 +49,7 @@
 
 @section('content')
 @php
-$total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other
+$total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other;
 @endphp
 <div class="d-flex justify-content-between w-100">
     <div>Dashboard</div>
@@ -87,19 +87,28 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
     </div>
 
-    <div class="card span-4">
+    <div class="card border span-4">
         <div class="card-body">
-            <div class="card-title">
-                Collection Total Weight
+            <div class="card-title d-flex align-items-center">
+                <div class="mr-2">
+                    <i class="mdi mdi-basket-outline" style="font-size: 35px;color: #4bc0c0;"></i>
+                </div>
+                <div>Collection Total Weight</div>
             </div>
-            <h3 class="card-subtitle " id="collectionTotalWeight">{{$data["total_collection_weight"]}} KG</h3>
+            <h3 class="card-subtitle " id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</h3>
         </div>
     </div>
 
     <div class="card span-2">
         <div class="card-body">
-            <div class="card-title">
-                Farmer Count
+            <div class="card-title d-flex align-items-center">
+                <div class="mr-2">
+                    <i class="mdi mdi-account-group-outline" style="font-size: 30px;color: #36a2eb;"></i>
+                </div>
+                <div>
+                    Farmer Count
+                </div>
+
             </div>
             <h3 class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</h3>
         </div>
@@ -107,8 +116,13 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 
     <div class="card span-2">
         <div class="card-body">
-            <div class="card-title">
+            <div class="card-title d-flex align-items-center">
+                <div class="mr-2">
+                    <i class="mdi mdi-basket-outline" style="font-size: 30px;color: #a57150;"></i>
+                </div>
+                <div>
                 Collection Count
+                </div>
             </div>
             <h3 class="card-subtitle" id="collectionCount">{{$data["collection_count"]}}</h3>
         </div>

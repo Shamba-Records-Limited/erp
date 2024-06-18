@@ -85,6 +85,26 @@ class LotsController extends Controller
 
         DB::beginTransaction();
         try {
+            // check ungraded quantity
+            $lot_metrics = DB::select(DB::raw("
+                SELECT
+                    (SELECT SUM(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as total_collection_quantity,
+                    (SELECT SUM(d.quantity) FROM lot_grade_distributions d WHERE d.lot_number = l.lot_number) as total_graded_quantity
+                FROM lots l
+                WHERE l.lot_number = :lot_number
+            "), ["lot_number" => $lot_number]);
+
+            $ungraded_quantity = 0;
+            if (count($lot_metrics) > 0) {
+                $ungraded_quantity = $lot_metrics[0]->total_collection_quantity - $lot_metrics[0]->total_graded_quantity;
+            }
+
+            if ($request->quantity > $ungraded_quantity) {
+                DB::rollBack();
+                toastr()->error("Quantity exceeds ungraded quantity($ungraded_quantity) for this lot");
+                return redirect()->back();
+            }
+
             $gradeDistribution = new LotGradeDistribution();
             $gradeDistribution->lot_number = $lot_number;
             $gradeDistribution->product_grade_id = $request->product_grade_id;

@@ -100,7 +100,21 @@ if (!function_exists('show_class')) {
 if (!function_exists('get_countries')) {
     function get_countries()
     {
-        return \App\Country::select('id', 'name', 'iso_code')->orderBy('name')->get();
+        // load countries from json file: countries.json {'<country_code': {'name': '<name>', 'flag': '<flag>', 'dial_code': '<dial_code>'}}
+        $raw_countries = json_decode(file_get_contents(base_path('countries.json')), true);
+        $countries = [];
+
+        foreach ($raw_countries as $code => $value) {
+            # code...
+            $countries[] = [
+                'code' => $code,
+                'name' => $value['name'],
+                'flag' => $value['flag'],
+                'dial_code' => $value['dial_code']
+            ];
+        }
+
+        return $countries;
     }
 }
 

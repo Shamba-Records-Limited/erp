@@ -108,4 +108,26 @@ class BranchesController extends Controller
             return redirect()->back()->withInput();
         }
     }
+
+    public function branches_mini_dashboard(Request $request)
+    {
+        $user = Auth::user();
+        $coop = $user->cooperative;
+        $coop_id = $coop->id;
+        // collections by wet mills
+        $collections_by_wet_mills = DB::select(DB::raw("
+            SELECT SUM(quantity) AS quantity, branch.name AS name
+            FROM collections c
+            JOIN coop_branches branch ON branch.id = c.coop_branch_id
+            WHERE c.cooperative_id = :coop_id
+            GROUP BY branch.id
+            ORDER BY quantity DESC
+        "), ["coop_id" => $coop_id]);
+    
+        $data = [
+            "collections_by_wet_mills" => $collections_by_wet_mills,
+        ];
+
+        return view('pages.cooperative-admin.branches.mini-dashboard', compact("data"));
+    }
 }

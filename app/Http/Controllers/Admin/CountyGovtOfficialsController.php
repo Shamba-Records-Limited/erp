@@ -31,29 +31,26 @@ class CountyGovtOfficialsController extends Controller
         $officials = DB::select(DB::raw("
             SELECT official.*,
                 u.username,
-                country.name AS country_name,
                 c.name AS county_name,
                 sub_c.name AS sub_county_name
             FROM county_govt_officials official
             JOIN users u ON official.user_id = u.id
-            LEFT JOIN countries country ON country.id = official.county_id
             LEFT JOIN counties c ON c.id = official.county_id
             LEFT JOIN sub_counties sub_c ON sub_c.id = official.sub_county_id
         "));
 
-        $countries = get_countries();
         $cooperatives = Cooperative::all();
         $counties = County::all();
         $sub_counties = SubCounty::all();
 
-        return view('pages.admin.county-govt-officials.index', compact('countries', 'officials', 'cooperatives', 'counties', 'sub_counties'));
+        return view('pages.admin.county-govt-officials.index', compact('officials', 'cooperatives', 'counties', 'sub_counties'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'cooperative_id' => 'required|exists:cooperatives,id',
-            'country_id' => 'required',
+            'country_code' => 'required',
             'county_id' => 'required|exists:counties,id',
             'sub_county_id' => 'required|exists:sub_counties,id',
             'id_no' => 'required|unique:county_govt_officials,id_no',
@@ -87,7 +84,7 @@ class CountyGovtOfficialsController extends Controller
 
             //official...
             $official = new CountyGovtOfficial();
-            $official->country_id = $request->country_id;
+            $official->country_code = $request->country_code;
             $official->county_id = $request->county_id;
             $official->sub_county_id = $request->sub_county_id;
             $official->gender = $request->gender;
@@ -173,7 +170,7 @@ class CountyGovtOfficialsController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:county_govt_officials,id',
-            'country_id' => 'required',
+            'country_code' => 'required',
             'county_id' => 'required|exists:counties,id',
             'sub_county_id' => 'required|exists:sub_counties,id',
             'id_no' => "required|unique:county_govt_officials,id_no,$request->id",
@@ -191,7 +188,7 @@ class CountyGovtOfficialsController extends Controller
            $official = CountyGovtOfficial::find($request->id);
 
             //official...
-            $official->country_id = $request->country_id;
+            $official->country_code = $request->country_code;
             $official->county_id = $request->county_id;
             $official->sub_county_id = $request->sub_county_id;
             $official->gender = $request->gender;

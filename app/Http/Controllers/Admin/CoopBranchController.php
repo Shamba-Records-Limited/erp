@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\CoopBranch;
 use App\Cooperative;
 use App\Events\AuditTrailEvent;
+use App\Product;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Log;
@@ -36,7 +37,9 @@ class CoopBranchController extends Controller
 
         $cooperatives = Cooperative::all();
 
-        return view('pages.admin.branch.index', compact('branches', 'cooperatives'));
+        $products = Product::all();
+
+        return view('pages.admin.branch.index', compact('branches', 'cooperatives', 'products'));
     }
 
     public function edit($id)

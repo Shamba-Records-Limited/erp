@@ -34,7 +34,6 @@ class CollectionsController extends Controller
                     f.id,
                     u.username
                 FROM farmers f
-                JOIN countries c ON f.country_id = c.id
                 JOIN users u ON f.user_id = u.id
                 JOIN farmer_cooperative fc ON fc.farmer_id = f.id;
             "));

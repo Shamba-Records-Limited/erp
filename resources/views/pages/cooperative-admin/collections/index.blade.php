@@ -27,7 +27,7 @@ $collection_time_options = config('enums.collection_time');
                 @php
                 $uploadErrors = Session::get('uploadErrors');
                 @endphp
-                <div class="collapse @if ($errors->count() > 0 || isset($uploadErrors)) show @endif " id="bulkUploadCollectionsAccordion">
+                <div class="collapse @if (isset($uploadErrors)) show @endif " id="bulkUploadCollectionsAccordion">
                     <form action="{{ route('cooperative-admin.collections.import-bulk') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
@@ -78,6 +78,7 @@ $collection_time_options = config('enums.collection_time');
 
                     <form action="{{ route('cooperative-admin.collections.store') }}" method="post">
                         @csrf
+                        {{$errors}}
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="coop_branch_id">Coop Branch</label>
@@ -109,7 +110,7 @@ $collection_time_options = config('enums.collection_time');
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="product_id">Product</label>
-                                <select name="product_id" id="product_id" class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}" required>
+                                <select name="product_id" id="product_id" class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}" required onchange="set_unit_id()">
                                     <option value="">-- Select Product --</option>
                                     @foreach($products as $product)
                                     <option value="{{$product->id}}" @if ($product->id == old('product_id')) selected @elseif (empty(old('product_id')) && $product->id == $default_product_id) selected @endif>{{$product->name}}</option>

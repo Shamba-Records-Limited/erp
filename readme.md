@@ -59,12 +59,28 @@ Follow these steps to setup the project
    `docker compose build`
 2. Run Docker Container
    `docker compose up -d`
+3. Create storage folders
+   `sudo mkdir -p storage/framework/cache`
+   `sudo mkdir -p storage/framework/sessions`
+   `sudo mkdir -p storage/framework/views`
+   `sudo mkdir -p storage/logs`
+4. Set Proper permissions
+   `sudo chown -R www-data:www-data storage bootstrap/cache`
+   `sudo chmod -R 775 storage bootstrap/cache`
+5. Install Composer Packages
+   `sudo docker exec laravel-app composer install`
 3. Run the migrations
-   `docker exec laravel-app php artisan migrate`
+   `sudo docker exec laravel-app php artisan migrate`
+
 3. Run database seeds.<br>
    1. `docker exec laravel-app php artisan db:seed --class=DatabaseSeeder`
 6. Run the following command to create default cooperative admin `docker exec laravel-app php artisan create:coopadmin`
 7. Default super admin credentials `username: admin` and `password: 12345678`
+8. Add admin to admin role
+   `docker exec -it laravel-app php artisan tinker`
+   `$user = App\Models\User::where('username', 'admin')->first();`
+   `$user->assignRole('admin');`
+   `exit`
 
 
 #### API Setup Instructions (Passports)

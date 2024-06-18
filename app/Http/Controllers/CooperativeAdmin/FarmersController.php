@@ -280,14 +280,12 @@ class FarmersController extends Controller
         $routes = [];
         $banks = [];
         $products = [];
-        $countries = [];
         $locations = [];
         $farmers = [];
         // $routes = Route::select('name', 'id')->where('cooperative_id', $coop)->orderBy('name', 'asc')->get();
         // $banks = Bank::select('name', 'id')->where('cooperative_id', $coop)->latest()->get();
         // $products = Product::select('id', 'name')->where('cooperative_id', $coop)->orderBy('name', 'asc')->get();
         // $farmers = $this->farmers($request, $coop, 10);
-        // $countries = get_countries();
         // $locations = Location::select('id', 'name')
         //     ->where('cooperative_id', $coop)
         //     ->orderBy('name')
@@ -297,12 +295,10 @@ class FarmersController extends Controller
                 SELECT
                     f.id,
                     f.gender,
-                    c.name as country_name,
                     u.username,
                     county.name as county_name,
                     sub_county.name as sub_county_name
                 FROM farmers f
-                JOIN countries c ON f.country_id = c.id
                 JOIN users u ON f.user_id = u.id
                 LEFT JOIN counties county ON county.id = f.county_id
                 LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
@@ -310,15 +306,14 @@ class FarmersController extends Controller
             "));
 
 
-        $countries = get_countries();
         $counties = County::all();
         $sub_counties = SubCounty::all();
 
-        return view('pages.cooperative-admin.farmers.index', compact('farmers', 'countries', 'counties', 'sub_counties'));
+        return view('pages.cooperative-admin.farmers.index', compact('farmers', 'counties', 'sub_counties'));
 
         // return view(
         //     'pages.cooperative-admin.farmers.index',
-        //     compact('routes', 'products', 'farmers', 'countries', 'banks', 'locations')
+        //     compact('routes', 'products', 'farmers', 'banks', 'locations')
         // );
     }
 
@@ -330,14 +325,12 @@ class FarmersController extends Controller
         $routes = [];
         $banks = [];
         $products = [];
-        $countries = [];
         $locations = [];
         $farmers = [];
         // $routes = Route::select('name', 'id')->where('cooperative_id', $coop)->orderBy('name', 'asc')->get();
         // $banks = Bank::select('name', 'id')->where('cooperative_id', $coop)->latest()->get();
         // $products = Product::select('id', 'name')->where('cooperative_id', $coop)->orderBy('name', 'asc')->get();
         // $farmers = $this->farmers($request, $coop, 10);
-        // $countries = get_countries();
         // $locations = Location::select('id', 'name')
         //     ->where('cooperative_id', $coop)
         //     ->orderBy('name')
@@ -346,21 +339,18 @@ class FarmersController extends Controller
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
-                    c.name as country_name,
                     u.username
                 FROM farmers f
-                JOIN countries c ON f.country_id = c.id
                 JOIN users u ON f.user_id = u.id
                 JOIN farmer_cooperative fc ON fc.farmer_id = f.id;
             "));
 
 
-        $countries = get_countries();
         $counties = County::all();
         $sub_counties = SubCounty::all();
 
 
-        return view("pages.cooperative-admin.farmers.add-new", compact('farmers', 'countries', 'counties', 'sub_counties'));
+        return view("pages.cooperative-admin.farmers.add-new", compact('farmers', 'counties', 'sub_counties'));
     }
 
     public function view_add_existing(Request $request)
@@ -421,7 +411,7 @@ class FarmersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'country_id' => 'required',
+            'country_code' => 'required',
             'county_id' => 'required|string',
             'sub_county_id' => 'required|string',
             'member_no' => 'required|unique:farmers,member_no',
@@ -459,7 +449,7 @@ class FarmersController extends Controller
             // farmer
             $farmer = new Farmer();
             $farmer->user_id = $user->id;
-            $farmer->country_id = $request->country_id;
+            $farmer->country_code = $request->country_code;
             $farmer->county_id = $request->county_id;
             $farmer->sub_county_id = $request->sub_county_id;
             $farmer->member_no = $request->member_no;
@@ -508,12 +498,10 @@ class FarmersController extends Controller
         $farmers = DB::select(DB::raw("
             SELECT
                 f.*,
-                c.name as country_name,
                 u.*,
                 county.name as county_name,
                 sub_county.name as sub_county_name
             FROM farmers f
-            JOIN countries c ON f.country_id = c.id
             JOIN users u ON f.user_id = u.id
             LEFT JOIN counties county ON county.id = f.county_id
             LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id

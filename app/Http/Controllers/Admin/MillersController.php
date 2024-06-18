@@ -24,20 +24,13 @@ class MillersController extends Controller
 
     public function index()
     {
-        $millers = DB::select(DB::raw("
-                SELECT
-                    m.*,
-                    c.name as country_name
-                FROM millers m
-                JOIN countries c ON m.country_id = c.id;
-            "));
+        $millers = Miller::all();
 
 
-        $countries = get_countries();
         $counties = County::all();
         $sub_counties = SubCounty::all();
 
-        return view('pages.admin.millers.index', compact('millers', 'countries', 'counties', 'sub_counties'));
+        return view('pages.admin.millers.index', compact('millers', 'counties', 'sub_counties'));
     }
 
     public function store(Request $request)
@@ -45,7 +38,7 @@ class MillersController extends Controller
         $this->validate($request, [
             "miller_name" => "required|string",
             "abbreviation" => "required|string",
-            "country_id" => "required",
+            "country_code" => "required",
             "county_id" => "required|exists:counties,id",
             "sub_county_id" => "required|exists:sub_counties,id",
             "location" => "required|string",
@@ -65,7 +58,7 @@ class MillersController extends Controller
             $miller = new Miller();
             $miller->name = $request->miller_name;
             $miller->abbreviation = $request->abbreviation;
-            $miller->country_id = $request->country_id;
+            $miller->country_code = $request->country_code;
             $miller->email = $request->miller_email;
             $miller->address = $request->address;
             $miller->phone_no = $request->phone_no;
@@ -111,6 +104,7 @@ class MillersController extends Controller
             toastr()->success('Miller Created Successfully');
             return redirect()->route('admin.millers.show')->withInput();
         } catch (\Throwable $th) {
+            dd($th);
             Log::error($th->getMessage());
             DB::rollback();
             toastr()->error('Oops! Operation failed');

@@ -5,7 +5,9 @@
 @endpush
 
 @section('content')
-
+@php
+$countries = get_countries();
+@endphp
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -22,6 +24,7 @@
 
                     <form action="{{ route('cooperative.setup') }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        {{ $errors }}
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <h6 class="mb-3">Cooperative Details</h6>
@@ -68,17 +71,19 @@
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class=" form-control select2bs4 {{ $errors->has('country_id') ? ' is-invalid' : '' }}">
+                                <label for="country_code">Country</label>
+                                <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="Kenya">
+                                    <option value=""> -Select Country-</option>
                                     @foreach($countries as $country)
-                                    <option value="{{$country->id}}" @if($country->name == "Kenya") selected @endif> {{ $country->name }}</option>
+                                    <option value="{{$country['code']}}" @if($country['name'] == 'Kenya') selected @endif> {{ $country['name'] }}</option>
                                     @endforeach
+
+                                    @if ($errors->has('country_code'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('country_code')  }}</strong>
+                                    </span>
+                                    @endif
                                 </select>
-                                @if ($errors->has('country_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('country_id')  }}</strong>
-                                </span>
-                                @endif
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -262,10 +267,10 @@
                                 <td>{{$cop->name }} ({{$cop->abbreviation}})</td>
                                 <td>{{$cop->email }}</td>
                                 <td>{{$cop->contact_details }}</td>
-                                <td> {{$cop->country->name }}
-                                    <span class="mr-2 table-flag">
-                                        <img src="{{ asset(get_country_flag($cop->country->iso_code)) }}" />
-                                    </span>
+                                <td> {{$cop->country_code }}
+                                    <!-- <span class="mr-2 table-flag">
+                                        <img src="{{ asset(get_country_flag($cop->country_code)) }}" />
+                                    </span> -->
                                 </td>
                                 <td>{{$cop->location }}</td>
                                 <td>{{$cop->address }}</td>

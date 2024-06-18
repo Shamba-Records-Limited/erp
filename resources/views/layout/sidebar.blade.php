@@ -74,17 +74,6 @@ $cooperative = null;
                         </div>
                     </div>
                 </div>
-                @if($user && $user->hasRole('admin'))
-                @php
-                $countries = \App\Country::count();
-                @endphp
-                @if($countries < 1) <a class="btn btn-success btn-block text-white" href="{{ route('countries-data') }}">
-                    Populate Countries <i class="mdi mdi-flag"></i></a>
-                    @endif
-                    <br>
-                    <a class="btn btn-danger btn-block text-white" href="{{ route('optimize') }}">
-                        Optimize App <i class="mdi mdi-timelapse"></i></a>
-                    @endif
             </div>
         </li>
 
@@ -234,11 +223,28 @@ $cooperative = null;
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
-            <a class="nav-link" href="{{ route('hr.branches.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Branches</span>
+
+        @php
+        $activeArr = ['cooperative-admin/branches*', 'cooperative/hr/branches*'];
+        @endphp
+        <li class="nav-item {!!  active_class($activeArr) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#wetMillsManagement" aria-expanded="{!!  is_active_route($activeArr)  !!}" aria-controls="wetMillsManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Wet Mills CRM</span>
+                <i class="menu-arrow"></i>
             </a>
+
+            <div class="collapse {{ show_class($activeArr) }}" id="wetMillsManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['cooperative-admin/branches-mini-dashboard']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
+                        <a class="nav-link" href="{{ route('hr.branches.show') }}">Wet Mills
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item {!!  active_class(['cooperative-admin/farmers*']) !!} ">
@@ -261,16 +267,21 @@ $cooperative = null;
             </div>
         </li>
 
-        <li class="nav-item {!!  active_class(['cooperative-admin/collections*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#collectionManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/collections*'])  !!}" aria-controls="farmerManagement">
+        <li class="nav-item {!!  active_class(['cooperative-admin/collections*', 'cooperative-admin/lots*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#collectionManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/collections*',  'cooperative-admin/lots*'])  !!}" aria-controls="farmerManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Collection CRM</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse {{ show_class(['cooperative-admin/collections*']) }}" id="collectionManagement">
+            <div class="collapse {{ show_class(['cooperative-admin/collections*', 'cooperative-admin/lots*']) }}" id="collectionManagement">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item {{ active_class(['cooperative-admin/collections-mini-dashboard']) }}">
                         <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/lots*']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
+                            Lots
+                        </a>
                     </li>
                     <li class="nav-item {{ active_class(['cooperative-admin/collections/*']) }}">
                         <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">Collections</a>
@@ -292,12 +303,7 @@ $cooperative = null;
                 <span class="menu-title">Farmers</span>
             </a>
         </li>
-        <li class="nav-item {{ active_class(['cooperative-admin/lots*']) }}">
-            <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Lots</span>
-            </a>
-        </li>
+
         <li class="nav-item {{ active_class(['cooperative-admin/collections']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>

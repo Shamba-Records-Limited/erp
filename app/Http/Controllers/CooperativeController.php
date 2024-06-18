@@ -37,14 +37,13 @@ class CooperativeController extends Controller
             ->get();
 
         
-        $countries = get_countries();
         $counties = County::all();
         $sub_counties = SubCounty::all();
         $products = DB::select(DB::raw("
             SELECT p.id, p.name FROM products p;
         "));
 
-        return view('pages.admin.cooperatives', compact('countries', 'cooperatives', 'counties', 'sub_counties', 'products'));
+        return view('pages.admin.cooperatives', compact('cooperatives', 'counties', 'sub_counties', 'products'));
     }
 
 
@@ -57,7 +56,7 @@ class CooperativeController extends Controller
         $this->validate($request, [
             "cooperative_name" => "required|string",
             "abbr" => "sometimes|string",
-            "country_id" => "required",
+            "country_code" => "required",
             "county_id" => "required|exists:counties,id",
             "sub_county_id" => "required|exists:sub_counties,id",
             "location" => "required|string",
@@ -79,7 +78,7 @@ class CooperativeController extends Controller
             $cooperative = new Cooperative();
             $cooperative->name = $request->cooperative_name;
             $cooperative->abbreviation = $request->abbr;
-            $cooperative->country_id = $request->country_id;
+            $cooperative->country_code = $request->country_code;
             $cooperative->location = $request->location;
             $cooperative->address = $request->address;
             $cooperative->email = $request->cooperative_email;

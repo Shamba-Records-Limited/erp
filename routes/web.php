@@ -268,6 +268,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.dashboard.export");
 
     // branches
+    Route::get('/branches-mini-dashboard', 'CooperativeAdmin\BranchesController@branches_mini_dashboard')
+        ->name('cooperative-admin.branches.mini-dashboard');
     Route::get("/branches/detail/{id}", "CooperativeAdmin\BranchesController@detail")
         ->name("cooperative-admin.branches.detail");
     Route::post("/branches/set_manager/{id}", "CooperativeAdmin\BranchesController@set_manager")

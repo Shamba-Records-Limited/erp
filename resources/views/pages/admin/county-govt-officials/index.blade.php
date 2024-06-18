@@ -11,6 +11,7 @@
 @php
 $gender_options = config('enums.employee_configs')['gender'];
 $marital_status_options = config('enums.employee_configs')['marital_status'];
+$countries = get_countries();
 @endphp
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
@@ -83,17 +84,19 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class=" form-control select2bs4 {{ $errors->has('country_id') ? ' is-invalid' : '' }}">
+                                <label for="country_code">Country</label>
+                                <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="Kenya">
+                                    <option value=""> -Select Country-</option>
                                     @foreach($countries as $country)
-                                    <option value="{{$country->id}}" @if($country->name == "Kenya") selected @endif> {{ $country->name }}</option>
+                                    <option value="{{$country['code']}}" @if($country['name'] == 'Kenya') selected @endif> {{ $country['name'] }}</option>
                                     @endforeach
+
+                                    @if ($errors->has('country_code'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('country_code')  }}</strong>
+                                    </span>
+                                    @endif
                                 </select>
-                                @if ($errors->has('country_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('country_id')  }}</strong>
-                                </span>
-                                @endif
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -325,7 +328,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 <td>
                                     <a>{{ ucwords(strtolower( $official->username))}}</a>
                                 </td>
-                                <td> {{$official->country_name }} <span class="mr-2 table-flag"></span>
+                                <td> {{$official->country_code }} <span class="mr-2 table-flag"></span>
                                 </td>
                                 <td>{{$official->county_name}} - {{$official->sub_county_name}}</td>
                                 <td>{{$official->employee_no}}</td>
