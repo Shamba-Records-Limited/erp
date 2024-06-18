@@ -114,12 +114,12 @@ $cooperative = null;
                 <span class="menu-title">Users</span>
             </a>
         </li>
-        <li class="nav-item {{ active_class(['admin/employees']) }}">
+        <!-- <li class="nav-item {{ active_class(['admin/employees']) }}">
             <a class="nav-link" href="{{ route('admin.employees.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Employees</span>
             </a>
-        </li>
+        </li> -->
         <li class="nav-item {{ active_class(['admin/county-govt-officials']) }}">
             <a class="nav-link" href="{{ route('admin.county-govt-officials.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
@@ -297,19 +297,19 @@ $cooperative = null;
             </a>
         </li>
 
-        <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
+        <!-- <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Farmers</span>
             </a>
-        </li>
+        </li> -->
 
-        <li class="nav-item {{ active_class(['cooperative-admin/collections']) }}">
+        <!-- <li class="nav-item {{ active_class(['cooperative-admin/collections']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Collections</span>
             </a>
-        </li>
+        </li> -->
         <li class="nav-item {{ active_class(['cooperative-admin/orders*']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.orders.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -326,17 +326,17 @@ $cooperative = null;
 
 
         @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'], config('enums.system_permissions')['view']))
-        <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
+        <!-- <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
             <a class="nav-link" href="{{ route('hr.employees.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Employees</span>
-                <!-- {{config('enums.system_modules')['HR Management']['employees']}} -->
+                {{config('enums.system_modules')['HR Management']['employees']}}
             </a>
-        </li>
+        </li> -->
         @endif
 
         @if(can_view_module('User Management'))
-        <li class="nav-item {!!  active_class(['cooperative/user-management/*']) !!} ">
+        <!-- <li class="nav-item {!!  active_class(['cooperative/user-management/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#userManagement" aria-expanded="{!!  is_active_route(['cooperative/user-management/*'])  !!}" aria-controls="userManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">User Management</span>
@@ -388,11 +388,11 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+        </li> -->
         @endif
 
         @if(can_view_module('HR Management'))
-        <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
+        <!-- <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#hrManagement" aria-expanded="{!!  is_active_route(['cooperative/hr/*'])  !!}" aria-controls="hrManagement">
                 <i class="menu-icon mdi mdi mdi-account-network"></i>
                 <span class="menu-title">HR Management</span>
@@ -489,11 +489,11 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+        </li> -->
         @endif
 
         @if(can_view_module('Bank Management'))
-        <li class="nav-item {!!  active_class(['cooperative/bank/*']) !!} ">
+        <!-- <li class="nav-item {!!  active_class(['cooperative/bank/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#bankManagement" aria-expanded="{!!  is_active_route(['cooperative/bank/*'])  !!}" aria-controls="bankManagement">
                 <i class="menu-icon mdi mdi-bank"></i>
                 <span class="menu-title">Bank Management</span>
@@ -517,11 +517,11 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+        </li> -->
         @endif
 
         @if(can_view_module('Farmer CRM'))
-        <li class="nav-item {!!  active_class(['cooperative/farm/*']) !!} ">
+        <!-- <li class="nav-item {!!  active_class(['cooperative/farm/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#herdManagement" aria-expanded="{!!  is_active_route(['cooperative/farm/*'])  !!}" aria-controls="heardManagement">
                 <i class="menu-icon mdi mdi-cow"></i>
                 <span class="menu-title">Farm Management</span>
@@ -595,10 +595,10 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+        </li> -->
         @endif
 
-        <li class="nav-item {!!  active_class(['cooperative/collections*']) !!} ">
+        <!-- <li class="nav-item {!!  active_class(['cooperative/collections*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#collectionsManagement" aria-expanded="{!!  is_active_route(['cooperative/collections/*'])  !!}" aria-controls="collectionsManagement">
                 <i class="menu-icon mdi mdi-chemical-weapon"></i>
                 <span class="menu-title">Collections</span>
@@ -646,7 +646,7 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+        </li> -->
         @endif
 
         @if($user && $user->hasRole('miller admin'))

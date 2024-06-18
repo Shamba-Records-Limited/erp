@@ -12,11 +12,11 @@
             <div class="col-3 border m-2 rounded">Username: {{$farmer->username}}</div>
             <div class="col-3 border m-2 rounded">Email: {{$farmer->email}}</div>
             <div class="col-3 border m-2 rounded">Phone: {{$farmer->phone_no}}</div>
-            <div class="col-3 border m-2 rounded">Country: {{$farmer->country_name}}</div>
+            <div class="col-3 border m-2 rounded">Country: {{$farmer->country_code}}</div>
             <div class="col-3 border m-2 rounded">County: {{$farmer->county_name}}</div>
             <div class="col-3 border m-2 rounded">sub County: {{$farmer->sub_county_name}}</div>
             <div class="col-3 border m-2 rounded">Id Number: {{$farmer->id_no}}</div>
-            <div class="col-3 border m-2 rounded">Kra Pin: {{$farmer->kra}}</div>
+            <div class="col-3 border m-2 rounded">Member Number: {{$farmer->member_no}}</div>
             <div class="col-3 border m-2 rounded">Gender: {{$farmer->gender}}</div>
         </div>
         <ul class="nav nav-tabs">
