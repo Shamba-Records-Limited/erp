@@ -61,17 +61,19 @@
                         </div>
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
-                            <label for="country">Country</label>
-                            <select name="country" id="country" class=" form-control select2bs4 {{ $errors->has('address') ? ' is-invalid' : '' }}">
+                            <label for="country_code">Country</label>
+                            <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="KE">
+                                <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
-                                <option value="{{$country->id}}" {{$country->id == $cooperative->country_id ? 'selected' : '' }}> {{ $country->name }}</option>
+                                <option value="{{$country['code']}}" @if($country['name']=='Kenya' ) selected @endif> {{ $country['name'] }}</option>
                                 @endforeach
+
+                                @if ($errors->has('country_code'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('country_code')  }}</strong>
+                                </span>
+                                @endif
                             </select>
-                            @if ($errors->has('country'))
-                            <span class="help-block text-danger">
-                                <strong>{{ $errors->first('country')  }}</strong>
-                            </span>
-                            @endif
                         </div>
 
                         <div class="form-group col-lg-3 col-md-6 col-12">

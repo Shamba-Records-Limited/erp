@@ -218,11 +218,11 @@ class CooperativeController extends Controller
             "id" => "required",
             "cooperative_name" => "required|string",
             "abbr" => "sometimes|string",
-            "country" => "required",
+            "country_code" => "required",
             "location" => "required|string",
             "address" => "required|string",
             "cooperative_email" => "required|email|unique:cooperatives,email,$id",
-            'cooperative_contact' => "required|regex:/^[0-9]{10}$/|unique:cooperatives,contact_details,$id",
+            'cooperative_contact' => "required|regex:/^[0-9]{10,15}$/|unique:cooperatives,contact_details,$id",
             'cooperative_currency' => 'required|string|min:2',
         ]);
 
@@ -234,7 +234,7 @@ class CooperativeController extends Controller
             $cooperative = Cooperative::find($request->id);
             $cooperative->name = $request->cooperative_name;
             $cooperative->abbreviation = $request->abbr;
-            $cooperative->country_id = $request->country;
+            $cooperative->country_code = $request->country_code;
             $cooperative->location = $request->location;
             $cooperative->address = $request->address;
             $cooperative->email = $request->cooperative_email;
