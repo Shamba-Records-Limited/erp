@@ -25,25 +25,22 @@ class FarmersController extends Controller
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
-                    c.name as country_name,
                     u.username
                 FROM farmers f
-                JOIN countries c ON f.country_id = c.id
                 JOIN users u ON f.user_id = u.id;
             "));
 
 
-        $countries = get_countries();
         $counties = county::all();
         $sub_counties = subcounty::all();
 
-        return view('pages.admin.farmers.index', compact('farmers', 'countries', 'counties', 'sub_counties'));
+        return view('pages.admin.farmers.index', compact('farmers', 'counties', 'sub_counties'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'country_id' => 'required',
+            'country_code' => 'required',
             'county_id' => 'required|string',
             'sub_county_id' => 'required|string',
             'id_no' => 'required|unique:farmers,id_no',
@@ -76,7 +73,7 @@ class FarmersController extends Controller
             // farmer
             $farmer = new Farmer();
             $farmer->user_id = $user->id;
-            $farmer->country_id = $request->country_id;
+            $farmer->country_code = $request->country_code;
             $farmer->county_id = $request->county_id;
             $farmer->sub_county_id = $request->sub_county_id;
             $farmer->id_no = $request->id_no;
@@ -118,12 +115,10 @@ class FarmersController extends Controller
         $farmers = DB::select(DB::raw("
             SELECT
                 f.*,
-                c.name as country_name,
                 u.*,
                 county.name as county_name,
                 sub_county.name as sub_county_name
             FROM farmers f
-            JOIN countries c ON f.country_id = c.id
             JOIN users u ON f.user_id = u.id
             LEFT JOIN counties county ON county.id = f.county_id
             LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id

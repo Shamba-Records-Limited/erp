@@ -6,6 +6,7 @@
 
 @php
 $gender_options = config('enums.employee_configs')['gender'];
+$countries = get_countries();
 @endphp
 @section('content')
 <div class="row">
@@ -65,16 +66,16 @@ $gender_options = config('enums.employee_configs')['gender'];
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class=" form-control select2bs4 {{ $errors->has('country_id') ? ' is-invalid' : '' }}" value="Kenya">
+                                <label for="country_code">Country</label>
+                                <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="Kenya">
                                     <option value=""> -Select Country-</option>
                                     @foreach($countries as $country)
-                                    <option value="{{$country->id}}" @if($country->name == 'Kenya') selected @endif> {{ $country->name }}</option>
+                                    <option value="{{$country['code']}}" @if($country['name'] == 'Kenya') selected @endif> {{ $country['name'] }}</option>
                                     @endforeach
 
-                                    @if ($errors->has('country_id'))
+                                    @if ($errors->has('country_code'))
                                     <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('country_id')  }}</strong>
+                                        <strong>{{ $errors->first('country_code')  }}</strong>
                                     </span>
                                     @endif
                                 </select>
