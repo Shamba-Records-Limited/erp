@@ -25,7 +25,10 @@ class FarmersController extends Controller
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
-                    u.username
+                    f.member_no,
+                    u.username,
+                    u.first_name,
+                    u.other_names
                 FROM farmers f
                 JOIN users u ON f.user_id = u.id;
             "));

@@ -212,6 +212,8 @@ $countries = get_countries();
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Username</th>
+                                <th>Member Number</th>
                                 <th>Name</th>
                                 <th></th>
                             </tr>
@@ -223,6 +225,8 @@ $countries = get_countries();
                                 <td>
                                     <a href="{{route('admin.farmers.detail', $farmer->id)}}">{{$farmer->username}}</a>
                                 </td>
+                                <td>{{ $farmer->member_no }}</td> 
+                                <td>{{$farmer->first_name}} {{$farmer->other_names}}</td>
                                 <td></td>
                             </tr>
                             @endforeach
