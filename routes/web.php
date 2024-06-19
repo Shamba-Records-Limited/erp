@@ -174,7 +174,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.county-govt-officials.delete');
 
     // farmers
-    Route::get('/farmers', 'admin\FarmersController@index')
+    Route::get('/farmers', 'Admin\FarmersController@index')
         ->name('admin.farmers.show');
     Route::post('/farmers', 'Admin\FarmersController@store')
         ->name('admin.farmers.add');
@@ -182,61 +182,61 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.detail');
 
     // products
-    Route::get('/products/dash', 'admin\ProductsController@dash')
+    Route::get('/products/dash', 'Admin\ProductsController@dash')
         ->name('admin.products.dash');
 
-    Route::get('/products/list', 'admin\ProductsController@list_products')
+    Route::get('/products/list', 'Admin\ProductsController@list_products')
         ->name('admin.products.show');
-    Route::post('/products', 'admin\ProductsController@store_product')
+    Route::post('/products', 'Admin\ProductsController@store_product')
         ->name('admin.products.store_product');
 
-    Route::get('/products/units', 'admin\ProductsController@list_units')
+    Route::get('/products/units', 'Admin\ProductsController@list_units')
         ->name('admin.products.units');
-    Route::post('/products/units', 'admin\ProductsController@store_unit')
+    Route::post('/products/units', 'Admin\ProductsController@store_unit')
         ->name('admin.products.store_unit');
-    Route::get('/products/units/{id}', 'admin\ProductsController@view_edit_unit')
+    Route::get('/products/units/{id}', 'Admin\ProductsController@view_edit_unit')
         ->name('admin.products.view_edit_unit');
-    Route::post('/products/units/{id}', 'admin\ProductsController@edit_unit')
+    Route::post('/products/units/{id}', 'Admin\ProductsController@edit_unit')
         ->name('admin.products.edit_unit');
-    Route::get('/products/delete-unit/{id}', 'admin\ProductsController@delete_unit')
+    Route::get('/products/delete-unit/{id}', 'Admin\ProductsController@delete_unit')
         ->name('admin.products.delete_unit');
 
 
-    Route::get('/products/categories', 'admin\ProductsController@list_categories')
+    Route::get('/products/categories', 'Admin\ProductsController@list_categories')
         ->name('admin.products.categories');
-    Route::post('/products/categories', 'admin\ProductsController@store_category')
+    Route::post('/products/categories', 'Admin\ProductsController@store_category')
         ->name('admin.products.store_category');
-    Route::get('/products/categories/{id}', 'admin\ProductsController@view_edit_category')
+    Route::get('/products/categories/{id}', 'Admin\ProductsController@view_edit_category')
         ->name('admin.products.view_edit_category');
-    Route::post('/products/categories/{id}', 'admin\ProductsController@edit_category')
+    Route::post('/products/categories/{id}', 'Admin\ProductsController@edit_category')
         ->name('admin.products.edit_category');
-    Route::get('/products/delete-category/{id}', 'admin\ProductsController@delete_category')
+    Route::get('/products/delete-category/{id}', 'Admin\ProductsController@delete_category')
         ->name('admin.products.delete_category');
 
-    Route::get('/products/grading', 'admin\ProductsController@list_grades')
+    Route::get('/products/grading', 'Admin\ProductsController@list_grades')
         ->name('admin.products.grades');
-    Route::post('/products/grading', 'admin\ProductsController@store_grade')
+    Route::post('/products/grading', 'Admin\ProductsController@store_grade')
         ->name('admin.products.store_grade');
-    Route::get('/products/grading/{id}', 'admin\ProductsController@view_edit_grade')
+    Route::get('/products/grading/{id}', 'Admin\ProductsController@view_edit_grade')
         ->name('admin.products.view_edit_grade');
-    Route::post('/products/grading/{id}', 'admin\ProductsController@edit_grade')
+    Route::post('/products/grading/{id}', 'Admin\ProductsController@edit_grade')
         ->name('admin.products.edit_grade');
-    Route::get('/products/delete-grade/{id}', 'admin\ProductsController@delete_grade')
+    Route::get('/products/delete-grade/{id}', 'Admin\ProductsController@delete_grade')
         ->name('admin.products.delete_grade');
 
 
-    Route::get('/products/{id}', 'admin\ProductsController@view_edit_product')
+    Route::get('/products/{id}', 'Admin\ProductsController@view_edit_product')
         ->name('admin.products.view_edit_product');
-    Route::post('/products/{id}', 'admin\ProductsController@edit_product')
+    Route::post('/products/{id}', 'Admin\ProductsController@edit_product')
         ->name('admin.products.edit_product');
 
 
     // roles
-    route::get('/roles', 'admin\RolesController@index')
+    route::get('/roles', 'Admin\RolesController@index')
         ->name('admin.roles.show');
-    route::get('/roles/detail-permissions/{id}', 'admin\RolesController@detail_permissions')
+    route::get('/roles/detail-permissions/{id}', 'Admin\RolesController@detail_permissions')
         ->name('admin.roles.show_permissions_tab');
-    route::get('/roles/detail-users/{id}', 'admin\RolesController@detail_users')
+    route::get('/roles/detail-users/{id}', 'Admin\RolesController@detail_users')
         ->name('admin.roles.show_users_tab');
 
 });
