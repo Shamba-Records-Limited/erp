@@ -126,7 +126,7 @@ class FarmersController extends Controller
             LEFT JOIN counties county ON county.id = f.county_id
             LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
             WHERE f.id = :id;
-        "),["id" => $id]);
+        "), ["id" => $id]);
 
         $farmer = null;
         if (count($farmers) > 0) {
@@ -136,7 +136,9 @@ class FarmersController extends Controller
         $tab = $request->query('tab', 'cooperatives');
 
         $farmerCooperatives = [];
-        if($tab == 'cooperatives') {
+        $farmerCollections = [];
+
+        if ($tab == 'cooperatives') {
             $farmerCooperatives = DB::select(DB::raw("
                 SELECT
                     c.name as coop_name
@@ -144,9 +146,18 @@ class FarmersController extends Controller
                 JOIN cooperatives c ON c.id = fc.cooperative_id
                 WHERE fc.farmer_id = :id
             "), ["id" => $id]);
+        } else if ($tab == 'collections') {
+            $farmerCollections = DB::select(DB::raw("
+                SELECT
+                    c.*, p.name, coop.name as coop_name
+                FROM collections c
+                JOIN products p ON c.product_id = p.id
+                JOIN cooperatives coop ON coop.id = c.cooperative_id
+                WHERE c.farmer_id = :farmer_id;
+            "), ["farmer_id" => $id]);
         }
-        
 
-        return view('pages.admin.farmers.detail', compact('farmer', 'tab', 'farmerCooperatives'));
+
+        return view('pages.admin.farmers.detail', compact('farmer', 'tab', 'farmerCooperatives', 'farmerCollections'));
     }
 }

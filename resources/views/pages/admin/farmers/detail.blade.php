@@ -24,6 +24,9 @@
             <li class="nav-item">
                 <a class="nav-link {{ $tab == 'cooperatives'?'active':'' }}" href="?tab=cooperatives">Cooperatives</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'collections'?'active':'' }}" href="?tab=collections">Collections</a>
+            </li>
         </ul>
         @if ($tab == 'cooperatives' || empty($tab))
         <div class="table-responsive p-2">
@@ -42,6 +45,35 @@
                         <td>{{$key++}}</td>
                         <td>{{$coop->coop_name}}</td>
                         <td></td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @elseif ($tab == 'collections')
+        <div class="table-responsive p-2">
+            <table class="table table-hover dt clickable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cooperative</th>
+                        <th>Collection Number</th>
+                        <th>Lot Number</th>
+                        <th>Name</th>
+                        <th>Collection Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($farmerCollections as $key => $collection)
+                    <tr>
+                        <td>{{++$key}}</td>
+                        <td>{{$collection->coop_name}}</td>
+                        <td>{{$collection->collection_number}}</td>
+                        <td>{{$collection->lot_number}}</td>
+                        <td>{{$collection->name}}</td>
+                        <td>{{$collection->date_collected}}</td>
                         <td></td>
                     </tr>
                     @endforeach
