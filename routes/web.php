@@ -162,7 +162,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     
 
     // county govt officials
-    route::get('/county-govt-officials', 'admin\CountyGovtOfficialsController@index')
+    route::get('/county-govt-officials', 'Admin\CountyGovtOfficialsController@index')
         ->name('admin.county-govt-officials.show');
     Route::post('/county-govt-officials', 'Admin\CountyGovtOfficialsController@store')
         ->name('admin.county-govt-officials.add');
