@@ -94,14 +94,14 @@ class UsersController extends Controller
                     u.email,
                     c.name as coop_name,
                     official.id as official_id,
-                    official.county as official_county,
+                    official_county.name as official_county,
                     official.gender as official_gender,
                     official.id_no as official_id_no,
                     official.phone_no as official_phone_no,
                     official.employee_no as official_employee_no,
-                    official_country.name as official_country_name,
+                    official.country_code as official_country_name,
                     employee.id as employee_id,
-                    employee_country.name as employee_country_name,
+                    employee.country_code as employee_country_name,
                     employee.county_of_residence as employee_county,
                     employee.area_of_residence as employee_residence_area,
                     employee.marital_status as employee_marital_status,
@@ -118,10 +118,9 @@ class UsersController extends Controller
                 JOIN cooperatives c ON u.cooperative_id = c.id
 
                 LEFT JOIN county_govt_officials official ON official.user_id = u.id
-                LEFT JOIN countries official_country ON official_country.id = official.country_id
+                LEFT JOIN counties official_county ON official_county.id = official.county_id
 
                 LEFT JOIN coop_employees employee ON employee.user_id = u.id
-                LEFT JOIN countries employee_country ON employee_country.id = employee.country_id
                 LEFT JOIN coop_branch_departments employee_department ON employee_department.id = employee.department_id
 
                 WHERE u.id = :id
