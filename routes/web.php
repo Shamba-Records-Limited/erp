@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', 'HomeController@index')->name('home');
-Route::get('/dashboard', 'HomeController@index')->name('home');
 
 Route::get('/download/employee-upload-template', function () {
     return Storage::disk('public')->download('templates/employee_bulk_import.csv');
@@ -87,6 +86,7 @@ Route::middleware('role:super-admin')->prefix("super-admin")->group(function () 
 
 //admin routes
 Route::middleware('role:admin')->prefix("admin")->group(function () {
+    Route::get('/dashboard', 'Admin\DashboardController@index')->name('admin.dashboard');
     Route::get('/optimize', "FirstTimeConfig@optimize_app")->name('optimize');
 
     Route::get('/cooperative/setup', 'CooperativeController@index')->name('cooperative');

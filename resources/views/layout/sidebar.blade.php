@@ -78,8 +78,8 @@ $cooperative = null;
         </li>
 
         @if($user && $user->hasRole('admin'))
-        <li class="nav-item {{ active_class(['dashboard']) }}">
-            <a class="nav-link" href="{{ url('dashboard') }}">
+        <li class="nav-item {{ active_class(['admin/dashboard']) }}">
+            <a class="nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
@@ -130,6 +130,12 @@ $cooperative = null;
             <a class="nav-link" href="{{ route('admin.farmers.show') }}">
                 <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Farmers</span>
+            </a>
+        </li>
+        <li class="nav-item {{ active_class(['admin/collections*']) }}">
+            <a class="nav-link" href="{{ route('admin.collections.show') }}">
+                <i class="menu-icon mdi mdi-cogs"></i>
+                <span class="menu-title">Collections</span>
             </a>
         </li>
         <li class="nav-item {{ active_class(['admin/roles*']) }}">
@@ -218,7 +224,7 @@ $cooperative = null;
 
         @if($user && $user->hasRole('cooperative admin|employee'))
         <li class="nav-item {{ active_class(['dashboard']) }}">
-            <a class="nav-link" href="{{ url('dashboard') }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
