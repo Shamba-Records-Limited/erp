@@ -114,7 +114,8 @@ class DashboardController extends Controller
                         FROM collections
                         JOIN farmers f ON f.id = collections.farmer_id
                         WHERE collections.date_collected = date_series.date AND
-                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END
+                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END AND
+                            collections.cooperative_id = :coop_id
                     ) AS y
                 FROM date_series
                 GROUP BY date_series.date;
@@ -126,6 +127,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
             if ($from_date_prev != "") {
                 $prevCollections = DB::select(DB::raw($dailyQuery), [
@@ -133,6 +135,7 @@ class DashboardController extends Controller
                     "to_date" => $to_date_prev,
                     "gender" => $gender,
                     "gender1" => $gender,
+                    "coop_id" => $coop_id,
                 ]);
             }
 
@@ -142,6 +145,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
 
             $gender = "F";
@@ -150,6 +154,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
 
             $gender = "X";
@@ -158,6 +163,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
         } else if ($suggested_chart_mode == "monthly") {
             $monthlyQuery = "
@@ -174,7 +180,8 @@ class DashboardController extends Controller
                         FROM collections c
                         JOIN farmers f ON f.id = c.farmer_id
                         WHERE DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year AND
-                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END
+                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END AND
+                            c.cooperative_id = :coop_id
                     ) AS y
                 FROM date_series
                 GROUP BY date_series.month_year;
@@ -186,6 +193,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
             if ($from_date_prev != "") {
                 $prevCollections = DB::select(DB::raw($monthlyQuery), [
@@ -194,6 +202,7 @@ class DashboardController extends Controller
                     "to_date" => $to_date_prev,
                     "gender" => $gender,
                     "gender1" => $gender,
+                    "coop_id" => $coop_id,
                 ]);
             }
 
@@ -204,6 +213,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
 
             $gender = 'F';
@@ -213,6 +223,7 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $coop_id,
             ]);
         }
 
@@ -244,6 +255,7 @@ class DashboardController extends Controller
             count(case when gender='F' then 1 end) as female,
             count(case when gender='X' then 1 end) as other
             from farmers f
+            JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id
             "), ["coop_id" => $coop_id])[0];
         // $collectionsCount = DB::select(DB::raw("
         //     SELECT 

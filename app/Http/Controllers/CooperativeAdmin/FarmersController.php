@@ -35,6 +35,7 @@ class FarmersController extends Controller
             count(case when gender='F' then 1 end) as female,
             count(case when gender='X' then 1 end) as other
             from farmers f
+            JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id
         "), ["coop_id" => $coop_id])[0];
 
         // collection over time
@@ -275,7 +276,7 @@ class FarmersController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $coop = $user->cooperative->id;
+        $coop_id = $user->cooperative->id;
 
         $routes = [];
         $banks = [];
@@ -302,8 +303,8 @@ class FarmersController extends Controller
                 JOIN users u ON f.user_id = u.id
                 LEFT JOIN counties county ON county.id = f.county_id
                 LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
-                JOIN farmer_cooperative fc ON fc.farmer_id = f.id;
-            "));
+                JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
+            "),["coop_id" => $coop_id]);
 
 
         $counties = County::all();
