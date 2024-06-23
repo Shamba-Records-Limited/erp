@@ -29,14 +29,15 @@ class CollectionsController extends Controller
 
     public function index()
     {
+        $coop_id = Auth::user()->cooperative->id;
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
                     u.username
                 FROM farmers f
                 JOIN users u ON f.user_id = u.id
-                JOIN farmer_cooperative fc ON fc.farmer_id = f.id;
-            "));
+                JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
+            "), ["coop_id" => $coop_id]);
 
         $grading = DB::select(DB::raw("
             SELECT g.id, g.name FROM product_grades g;
@@ -66,7 +67,8 @@ class CollectionsController extends Controller
         $units = Unit::all();
 
         $collections = DB::select(DB::raw("
-            SELECT usr.username, p.name as product_name, quantity, c.*, pc.unit
+            SELECT usr.username, p.name as product_name, quantity, c.*, pc.unit,
+                f.id as farmer_id
             FROM collections c
             JOIN farmers f ON f.id = c.farmer_id
             JOIN users usr ON usr.id = f.user_id

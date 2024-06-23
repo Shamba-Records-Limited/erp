@@ -424,5 +424,6 @@ return [
         'IN' => [
             'name' => 'Inches',
         ],
-    ]
+    ],
+    "ticket_labels" => ["Bug", "Feature Request", "Enhancement", "Task"],
 ];

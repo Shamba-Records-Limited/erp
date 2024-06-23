@@ -230,6 +230,11 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post('/products/{id}', 'Admin\ProductsController@edit_product')
         ->name('admin.products.edit_product');
 
+    // collections
+    Route::get('/collections', 'Admin\CollectionsController@index')
+        ->name('admin.collections.show');
+
+
 
     // roles
     route::get('/roles', 'Admin\RolesController@index')
@@ -238,6 +243,16 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.roles.show_permissions_tab');
     route::get('/roles/detail-users/{id}', 'Admin\RolesController@detail_users')
         ->name('admin.roles.show_users_tab');
+
+    // support
+    route::get('/support', 'Admin\SupportController@index')
+        ->name('admin.support.show');
+    Route::post("/support/add_comment", "Admin\SupportController@add_comment")
+        ->name("admin.support.add-ticket-comment");
+    Route::get("/support/{ticket_number}", "Admin\SupportController@view_ticket")
+        ->name("admin.support.view-ticket");
+    Route::get("/support/resolve-ticket/{ticket_number}", "Admin\SupportController@resolve_ticket")
+        ->name("admin.support.resolve-ticket");
 
 });
 
@@ -353,6 +368,25 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.settings.show");
     Route::post("/settings/set-main-product", "CooperativeAdmin\SettingsController@set_main_product")
         ->name("cooperative-admin.settings.set_main_product");
+
+    // support
+    Route::get("/support", "CooperativeAdmin\SupportController@index")
+        ->name("cooperative-admin.support.show");
+    Route::get("/support/add-ticket", "CooperativeAdmin\SupportController@view_add_ticket")
+        ->name("cooperative-admin.support.view_add_ticket");
+    Route::post("/support/add-ticket", "CooperativeAdmin\SupportController@add_ticket")
+        ->name("cooperative-admin.support.add_ticket");
+    Route::post("/support/publish-ticket", "CooperativeAdmin\SupportController@publish_ticket")
+        ->name("cooperative-admin.support.publish_ticket");
+    Route::delete("support/delete-ticket/{id}", "CooperativeAdmin\SupportController@delete_ticket")
+        ->name("cooperative-admin.support.delete_ticket");
+    Route::post("/support/add_comment", "CooperativeAdmin\SupportController@add_comment")
+        ->name("cooperative-admin.support.add-ticket-comment");
+    Route::get("/support/confirm_ticket_resolved/{ticket_number}", "CooperativeAdmin\SupportController@confirm_ticket_resolved")
+        ->name("cooperative-admin.support.confirm-ticket-resolved");
+    Route::get("/support/{ticket_number}", "CooperativeAdmin\SupportController@view_ticket")
+        ->name("cooperative-admin.support.view-ticket");
+    
 });
 
 Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
