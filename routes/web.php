@@ -401,9 +401,9 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.market-auction.show");
     Route::get("/market-auction/{coop_id}", "MillerAdmin\MarketAuctionController@view_coop_collections")
         ->name("miller-admin.market-auction.coop-collections.show");
-    Route::get("/market-auction/{coop_id}/add_to_cart/{collection_id}", "MillerAdmin\MarketAuctionController@add_collection_to_cart")
+    Route::get("/market-auction/{coop_id}/add_to_cart/{lot_id}", "MillerAdmin\MarketAuctionController@add_lot_to_cart")
         ->name("miller-admin.market-auction.add-to-cart");
-    Route::delete("/market-auction/{coop_id}/remove_from_cart/{collection_id}", "MillerAdmin\MarketAuctionController@remove_collection_from_cart")
+    Route::delete("/market-auction/{coop_id}/remove_from_cart/{item_id}", "MillerAdmin\MarketAuctionController@remove_lot_from_cart")
         ->name("miller-admin.market-auction.remove-from-cart");
     Route::delete("/market-auction/{coop_id}/clear_cart", "MillerAdmin\MarketAuctionController@clear_cart")
         ->name("miller-admin.market-auction.clear-cart");
@@ -413,12 +413,12 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.market-auction.checkout-cart");
 
     
-    Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
-        ->name("miller-admin.market-auction.increase-quantity-in-cart");
-    Route::put("/market-auction/{coop_id}/set_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@set_quantity_in_cart")
-        ->name("miller-admin.market-auction.set-quantity-in-cart");
-    Route::get("/market-auction/{coop_id}/decrease_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@decrease_quantity_in_cart")
-        ->name("miller-admin.market-auction.decrease-quantity-in-cart");
+    // Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
+    //     ->name("miller-admin.market-auction.increase-quantity-in-cart");
+    // Route::put("/market-auction/{coop_id}/set_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@set_quantity_in_cart")
+    //     ->name("miller-admin.market-auction.set-quantity-in-cart");
+    // Route::get("/market-auction/{coop_id}/decrease_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@decrease_quantity_in_cart")
+    //     ->name("miller-admin.market-auction.decrease-quantity-in-cart");
 
         
     // orders
