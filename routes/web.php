@@ -442,18 +442,45 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.orders.approve-delivery");
 
     // inventory
-    Route::get("/inventory", "MillerAdmin\InventoryController@index")
-        ->name("miller-admin.inventory.show");
-    Route::post("/inventory", "MillerAdmin\InventoryController@store")
-        ->name("miller-admin.inventory.store");
-    Route::post("/inventory/add-item", "MillerAdmin\InventoryController@add_item")
-        ->name("miller-admin.inventory.add-item");
+    Route::get("/inventory/pre-milled", "MillerAdmin\InventoryController@pre_milled")
+        ->name("miller-admin.pre-milled-inventory.show");
+    Route::post("/inventory/save-milling", "MillerAdmin\InventoryController@save_milling")
+        ->name("miller-admin.milling.save");
+    Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
+        ->name("miller-admin.milled-inventory.show");
+    // Route::post("/inventory", "MillerAdmin\InventoryController@save")
+    //     ->name("miller-admin.inventory.save");
+    // Route::post("/inventory", "MillerAdmin\InventoryController@store")
+    //     ->name("miller-admin.inventory.store");
+    // Route::post("/inventory/add-item", "MillerAdmin\InventoryController@add_item")
+    //     ->name("miller-admin.inventory.add-item");
+    // Route::get("/inventory/publish/{inventory_number}", "MillerAdmin\InventoryController@publish")
+    //     ->name("miller-admin.inventory.publish");
 
     // inventory auction
     Route::get("/inventory-auction", "MillerAdmin\InventoryAuctionController@index")
         ->name("miller-admin.inventory-auction.show");
     Route::get("/inventory-auction/add-sale", "MillerAdmin\InventoryAuctionController@add_sale")
         ->name("miller-admin.inventory-auction.add-sale");
+    
+    // support
+    Route::get("/support", "MillerAdmin\SupportController@index")
+        ->name("miller-admin.support.show");
+    Route::get("/support/add-ticket", "MillerAdmin\SupportController@view_add_ticket")
+        ->name("miller-admin.support.view_add_ticket");
+    Route::post("/support/add-ticket", "MillerAdmin\SupportController@add_ticket")
+        ->name("miller-admin.support.add_ticket");
+    Route::post("/support/publish-ticket", "MillerAdmin\SupportController@publish_ticket")
+        ->name("miller-admin.support.publish_ticket");
+    Route::delete("support/delete-ticket/{id}", "MillerAdmin\SupportController@delete_ticket")
+        ->name("miller-admin.support.delete_ticket");
+    Route::post("/support/add_comment", "MillerAdmin\SupportController@add_comment")
+        ->name("miller-admin.support.add-ticket-comment");
+    Route::get("/support/confirm_ticket_resolved/{ticket_number}", "MillerAdmin\SupportController@confirm_ticket_resolved")
+        ->name("miller-admin.support.confirm-ticket-resolved");
+    Route::get("/support/{ticket_number}", "MillerAdmin\SupportController@view_ticket")
+        ->name("miller-admin.support.view-ticket");
+
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {

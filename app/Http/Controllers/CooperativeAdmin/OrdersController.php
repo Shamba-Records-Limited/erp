@@ -38,6 +38,29 @@ class OrdersController extends Controller
 
     public function detail($id, Request $request)
     {
+
+        // total in order
+        $totalInOrder = DB::select(DB::raw("
+            SELECT sum(item.quantity) AS total
+            FROM miller_auction_order_item item
+            WHERE item.order_id = :order_id
+        "), ["order_id" => $id])[0]->total;
+
+        // aggregate grade distribution
+        $aggregateGradeDistribution = DB::select(DB::raw("
+            SELECT SUM(d.quantity) AS total,
+                pg.name AS grade
+            FROM lot_grade_distributions d
+            JOIN product_grades pg ON pg.id = d.product_grade_id
+            JOIN lots l ON l.lot_number = d.lot_number
+            JOIN miller_auction_order_item item ON item.lot_number = l.lot_number
+            WHERE item.order_id = :order_id
+            GROUP BY d.product_grade_id
+            ORDER BY total DESC
+        "), ["order_id" => $id,]);
+
+
+
         $user_id = Auth::id();
 
         $order = null;
@@ -82,9 +105,7 @@ class OrdersController extends Controller
         $draft_delivery = null;
         $draft_delivery_items = [];
         if ($action == 'add_delivery') {
-            $units = DB::select(DB::raw("
-                SELECT u.id, u.name, u.abbreviation FROM units u
-            "));
+            $units = config('enums.units');
 
             $draft_delivery_items = DB::select(DB::raw("
                 SELECT item.*, order_item.lot_number
@@ -109,7 +130,7 @@ class OrdersController extends Controller
 
 
 
-        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items'));
+        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items', 'totalInOrder', 'aggregateGradeDistribution'));
     }
 
     public function add_delivery_item(Request $request, $order_id)
@@ -117,7 +138,6 @@ class OrdersController extends Controller
         $request->validate([
             "order_item_id" => "required|exists:miller_auction_order_item,id",
             "quantity" => "required",
-            "unit_id" => "required|exists:units,id",
         ]);
 
         $user = Auth::user();
@@ -205,7 +225,7 @@ class OrdersController extends Controller
         }
 
         toastr()->success('Draft delivery item published');
-        return redirect();
+        return redirect()->back();
     }
 
     public function discard_delivery_draft($id)

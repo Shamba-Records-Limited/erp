@@ -88,6 +88,27 @@ class OrdersController extends Controller
 
     public function detail($id, Request $request)
     {
+
+        // total in order
+        $totalInOrder = DB::select(DB::raw("
+            SELECT sum(item.quantity) AS total
+            FROM miller_auction_order_item item
+            WHERE item.order_id = :order_id
+        "), ["order_id" => $id])[0]->total;
+
+        // aggregate grade distribution
+        $aggregateGradeDistribution = DB::select(DB::raw("
+            SELECT SUM(d.quantity) AS total,
+                pg.name AS grade
+            FROM lot_grade_distributions d
+            JOIN product_grades pg ON pg.id = d.product_grade_id
+            JOIN lots l ON l.lot_number = d.lot_number
+            JOIN miller_auction_order_item item ON item.lot_number = l.lot_number
+            WHERE item.order_id = :order_id
+            GROUP BY d.product_grade_id
+            ORDER BY total DESC
+        "), ["order_id" => $id,]);
+
         $order = null;
         $orders = DB::select(DB::raw("
             SELECT ord.*,
@@ -141,7 +162,7 @@ class OrdersController extends Controller
         }
 
 
-        return view('pages.miller-admin.orders.detail', compact('order', 'tab', 'orderItems', 'orderDeliveries', 'delivery_to_view', 'deliveryItems'));
+        return view('pages.miller-admin.orders.detail', compact('order', 'tab', 'orderItems', 'orderDeliveries', 'delivery_to_view', 'deliveryItems', 'totalInOrder', 'aggregateGradeDistribution'));
     }
 
     public function return_order_row(Request $request, $item_id)

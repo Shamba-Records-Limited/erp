@@ -54,21 +54,6 @@
                                     </span>
                                     @endif
                                 </div>
-                                <div class="form-group col-lg-4 col-md-4 col-12">
-                                    <label for="unit_id">Select Unit</label>
-                                    <select name="unit_id" id="unit_id" class="form-control select2bs4 {{ $errors->has('unit_id') ? ' is-invalid' : '' }}" readonly>
-                                        <option value="">-- Select Unit --</option>
-                                        @foreach($units as $unit)
-                                        <option value="{{$unit->id}}"> {{ $unit->name }}</option>
-                                        @endforeach
-
-                                        @if ($errors->has('unit_id'))
-                                        <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('unit_id')  }}</strong>
-                                        </span>
-                                        @endif
-                                    </select>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -132,6 +117,33 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Order Details</div>
+
+        <div class="row mb-2">
+            <div class="col-12 col-md-6 col-lg-4 border rounded p-2">
+                Batch Number: <span class="font-weight-bold">{{$order->batch_number}}</span>
+            </div>
+        </div>
+
+        <div class="border border-success rounded  shadow-sm p-2 mb-2">
+            <div class="d-flex justify-content-between">
+                <div class="text-success">Total: <span class="font-weight-bold">{{$totalInOrder}}KG</span> </div>
+                <div>
+                    <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#aggregateDistribution" aria-controls="aggregateDistribution">
+                        <div class="mdi mdi-chevron-down"></div>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse p-2" id="aggregateDistribution">
+                <h4>Grading Distribution</h4>
+                @foreach ($aggregateGradeDistribution as $distribution)
+                <div>
+                    {{$distribution->total}}KG of {{ $distribution->grade }}
+                </div>
+                @endforeach
+
+            </div>
+        </div>
+
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link {{ $tab == 'items'?'active':'' }}" href="?tab=items">Items</a>

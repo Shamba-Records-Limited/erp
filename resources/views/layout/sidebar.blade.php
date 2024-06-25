@@ -314,7 +314,7 @@ $cooperative = null;
                 <span class="menu-title">Settings</span>
             </a>
         </li>
-        
+
         <li class="nav-item {{ active_class(['cooperative-admin/support*']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.support.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
@@ -658,7 +658,7 @@ $cooperative = null;
         <li class="nav-item {{ active_class(['miller-admin/market-auction*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.market-auction.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Market/Auction</span>
+                <span class="menu-title">Marketplace</span>
             </a>
         </li>
         <li class="nav-item {{ active_class(['miller-admin/orders*']) }}">
@@ -667,16 +667,41 @@ $cooperative = null;
                 <span class="menu-title">Orders</span>
             </a>
         </li>
-        <li class="nav-item {{ active_class(['miller-admin/inventory*']) }}">
-            <a class="nav-link" href="{{ route('miller-admin.inventory.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
+        <li class="nav-item {!!  active_class(['miller-admin/inventory*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#inventoryManagement" aria-expanded="{!!  is_active_route(['miller-admin/inventory*'])  !!}" aria-controls="inventoryManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Inventory</span>
+                <i class="menu-arrow"></i>
             </a>
+            <div class="collapse {{ show_class(['miller-admin/inventory*']) }}" id="inventoryManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/pre-milled']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.pre-milled-inventory.show') }}">
+                            <i class="menu-icon mdi mdi-television"></i>
+                            <span class="menu-title">Pre-milled Inventory</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                            <i class="menu-icon mdi mdi-television"></i>
+                            <span class="menu-title">Milled Inventory</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
+        
         <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.inventory-auction.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Inventory Auction</span>
+            </a>
+        </li>
+        
+        <li class="nav-item {{ active_class(['miller-admin/support*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.support.show') }}">
+                <i class="menu-icon mdi mdi-help-circle-outline"></i>
+                <span class="menu-title">Support</span>
             </a>
         </li>
         @endif

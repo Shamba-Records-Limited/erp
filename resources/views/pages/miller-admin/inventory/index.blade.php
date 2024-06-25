@@ -1,7 +1,6 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('topItem')
@@ -23,136 +22,132 @@
                 <div class="card-body">
                     <div class="text-warning m-2 border border-warning p-2 rounded">You are working on a draft inventory. Publish it to apply changes</div>
                     <div>
-                        @if (!is_null($draftInventory))
-                        <form action="{{route('miller-admin.inventory.store')}}" method="POST">
-                            @else
-                            <form action="{{route('miller-admin.inventory.update', $draftInventory->id)}}" method="POST">
-                                @endif
-                                @csrf
-                                <div class="form-group">
-                                    <label for="inventory_number">Inventory Number</label>
-                                    <input type="text" class="form-control {{ $errors->has('inventory_number') ? ' is-invalid' : '' }}" id="inventory_number" placeholder="Inventory Number" name="inventory_number" value="{{$inventoryNumber}}" @if(!is_null($draftInventory)) disabled @endif>
+                        <form action="{{route('miller-admin.inventory.save', $draftInventory->id)}}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="inventory_number">Inventory Number</label>
+                                <input type="text" class="form-control {{ $errors->has('inventory_number') ? ' is-invalid' : '' }}" id="inventory_number" placeholder="Inventory Number" name="inventory_number" value="{{$inventoryNumber}}" @if(!is_null($draftInventory)) readonly @endif>
 
-                                    @if ($errors->inventory_number)
+                                @if ($errors->inventory_number)
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('inventory_number') }}</strong>
+                                </span>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <label for="order_id">Order</label>
+                                <select name="order_id" id="order_id" class="form-control select2bs4 {{ $errors->has('order_id') ? ' is-invalid' : '' }}" onchange="submitForm()">
+                                    <option value="">-- Select Order Item --</option>
+                                    @foreach($selectableOrderItems as $item)
+                                    <option value="{{$item->id}}" @if(!is_null($draftInventory) && $draftInventory->order_id == $item->id) selected @endif> {{ $item->batch_number }}</option>
+                                    @endforeach
+
+                                    @if ($errors->has('order_id'))
                                     <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('inventory_number') }}</strong>
+                                        <strong>{{ $errors->first('order_id')  }}</strong>
                                     </span>
                                     @endif
-                                </div>
-                                <div class="form-group">
-                                    <label for="order_id">Order</label>
-                                    <select name="order_id" id="order_id" class="form-control select2bs4 {{ $errors->has('order_id') ? ' is-invalid' : '' }}">
-                                        <option value="">-- Select Order Item --</option>
-                                        @foreach($selectableOrderItems as $item)
-                                        <option value="{{$item->id}}" @if(!is_null($draftInventory) && $draftInventory->order_id == $item->id) selected @endif> {{ $item->batch_number }}</option>
-                                        @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Inventory</button>
+                        </form>
+                        <div class="mt-3">
 
-                                        @if ($errors->has('order_id'))
+                            <button id="addInventoryButton" class="btn border p-3 w-100" data-toggle="collapse" data-target="#addInventoryItemForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addInventoryItemForm">Add Inventory Item</button>
+                            <form id="addInventoryItemForm" class="border rounded p-2 collapse @if ($errors->count() > 0) show @endif " action="{{route('miller-admin.inventory.add-item')}}" method="POST">
+                                @csrf
+                                {{$errors}}
+                                <div class="row">
+                                    <input type="hidden" name="inventory_id" value="{{$draftInventory->id}}">
+                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                        <label for="name">Name</label>
+                                        <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="Enter name" value="{{ old('name') }}" required>
+
+                                        @if ($errors->has('name'))
                                         <span class="help-block text-danger">
-                                            <strong>{{ $errors->first('order_id')  }}</strong>
+                                            <strong>{{ $errors->first('name')  }}</strong>
                                         </span>
                                         @endif
-                                    </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                        <label for="quantity">Quantity</label>
+                                        <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}" required>
+
+                                        @if ($errors->has('batch_number'))
+                                        <span class="help-block text-danger">
+                                            <strong>{{ $errors->first('batch_number')  }}</strong>
+                                        </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                        <label for="unit">Select Unit</label>
+                                        <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" readonly>
+                                            <option value="">-- Select Unit --</option>
+                                            @foreach(config('enums.units') as $key => $unit)
+                                            <option value="{{$key}}"> {{ $key }}</option>
+                                            @endforeach
+
+                                            @if ($errors->has('unit'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('unit')  }}</strong>
+                                            </span>
+                                            @endif
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4 col-md-4 col-12">
+                                        <label for="product_grade_id">Select Grade</label>
+                                        <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" readonly>
+                                            <option value="">-- Select Grade --</option>
+                                            @foreach($grades as $grade)
+                                            <option value="{{$grade->id}}"> {{ $grade->name }}</option>
+                                            @endforeach
+
+                                            @if ($errors->has('product_grade_id'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('product_grade_id')  }}</strong>
+                                            </span>
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Save Inventory</button>
+                                <div class="row">
+                                    <div class="col">
+                                        <button class="btn btn-primary">Save Inventory Item</button>
+                                    </div>
+                                </div>
                             </form>
-                            <div class="mt-3">
+                        </div>
+                        <div class="font-weight-bold">Inventory Items</div>
 
-                                <button id="addInventoryButton" class="btn border p-3 w-100" data-toggle="collapse" data-target="#addInventoryItemForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addInventoryItemForm">Add Delivery Item</button>
-                                <form id="addInventoryItemForm" class="border rounded p-2 collapse @if ($errors->count() > 0) show @endif " action="{{route('miller-admin.inventory.add-item')}}" method="POST">
-                                    @csrf
-                                    {{$errors}}
-                                    <div class="row">
-                                        <input type="hidden" name="inventory_id" value="{{$draftInventory->id}}">
-                                        <div class="form-group col-lg-4 col-md-4 col-12">
-                                            <label for="name">Name</label>
-                                            <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="Enter name" value="{{ old('name') }}" required>
+                        <div class="table-responsive p-2">
+                            <table class="table table-hover dt clickable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th>Grade</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($draftInventoryItems as $key => $inventory_item)
+                                    <tr>
+                                        <td>{{$key+1}}</td>
+                                        <td>{{$inventory_item->name}}</td>
+                                        <td>{{$inventory_item->quantity}} {{$inventory_item->unit}}</td>
+                                        <td>{{$inventory_item->product_grade}}</td>
+                                        <td></td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
 
-                                            @if ($errors->has('name'))
-                                            <span class="help-block text-danger">
-                                                <strong>{{ $errors->first('name')  }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-4 col-12">
-                                            <label for="quantity">Quantity</label>
-                                            <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}" required>
-
-                                            @if ($errors->has('batch_number'))
-                                            <span class="help-block text-danger">
-                                                <strong>{{ $errors->first('batch_number')  }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-4 col-12">
-                                            <label for="unit">Select Unit</label>
-                                            <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" readonly>
-                                                <option value="">-- Select Unit --</option>
-                                                @foreach(config('enums.units') as $key => $unit)
-                                                <option value="{{$key}}"> {{ $key }}</option>
-                                                @endforeach
-
-                                                @if ($errors->has('unit'))
-                                                <span class="help-block text-danger">
-                                                    <strong>{{ $errors->first('unit')  }}</strong>
-                                                </span>
-                                                @endif
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-lg-4 col-md-4 col-12">
-                                            <label for="product_grade_id">Select Grade</label>
-                                            <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" readonly>
-                                                <option value="">-- Select Grade --</option>
-                                                @foreach($grades as $grade)
-                                                <option value="{{$grade->id}}"> {{ $grade->name }}</option>
-                                                @endforeach
-
-                                                @if ($errors->has('product_grade_id'))
-                                                <span class="help-block text-danger">
-                                                    <strong>{{ $errors->first('product_grade_id')  }}</strong>
-                                                </span>
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <button class="btn btn-primary">Save Delivery Item</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="font-weight-bold">Inventory Items</div>
-
-                            <div class="table-responsive p-2">
-                                <table class="table table-hover dt clickable">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Name</th>
-                                            <th>Quantity</th>
-                                            <th>Grade</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($draftInventoryItems as $key => $inventory_item)
-                                        <tr>
-                                            <td>{{$key+1}}</td>
-                                            <td>{{$inventory_item->name}}</td>
-                                            <td>{{$inventory_item->quantity}} {{$inventory_item->unit}}</td>
-                                            <td>{{$inventory_item->product_grade}}</td>
-                                            <td></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="mt-4 d-flex">
-                                <a class="btn btn-secondary ml-2" href="?">Discard Draft</a>
-                                <a class="btn btn-success ml-2" href="?">Publish</a>
-                            </div>
+                        <div class="mt-4 d-flex">
+                            <a class="btn btn-secondary ml-2" href="?">Discard Draft</a>
+                            <a class="btn btn-success ml-2" href="{{route('miller-admin.inventory.publish', $draftInventory->inventory_number)}}">Publish</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -186,7 +181,7 @@
                     <tr>
                         <td>{{$key+1}}</td>
                         <td>{{$inventory->inventory_number}}</td>
-                        <td>{{$inventory->order->batch_number}}</td>
+                        <td>{{$inventory->order ? $inventory->order->batch_number : 'N/A'}}</td>
                         <td>
                             @if (!is_null($inventory->published_at))
                             <div>Published</div>

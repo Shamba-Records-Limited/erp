@@ -93,6 +93,14 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Order Details</div>
+        <div class="row mb-2">
+            <div class="col-12 col-md-6 col-lg-4 border rounded p-2">
+                Batch Number: <span class="font-weight-bold">{{$order->batch_number}}</span>
+            </div>
+        </div>
+
+        
+
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link {{ $tab == 'items'?'active':'' }}" href="?tab=items">Items</a>

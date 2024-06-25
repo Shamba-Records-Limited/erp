@@ -11,17 +11,23 @@
         <div class="card-subtitle">Cart Checkout</div>
         <div class="font-weight-bold">Cooperative: {{$cooperative->name}}</div>
 
-        <div>
-            <div>Total: 50KG</div>
-        </div>
-
-        <div>
-            <h4>Grading Distribution</h4>
-            <div>
-                10KG of Grade A
+        <div class="border border-success rounded  shadow-sm p-2">
+            <div class="d-flex justify-content-between">
+                <div class="text-success">Total: <span class="font-weight-bold">{{$totalInCart}}KG</span> </div>
+                <div>
+                    <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#aggregateDistribution" aria-controls="aggregateDistribution">
+                        <div class="mdi mdi-chevron-down"></div>
+                    </button>
+                </div>
             </div>
-            <div>
-                10KG of Grade A
+            <div class="collapse p-2" id="aggregateDistribution">
+                <h4>Grading Distribution</h4>
+                @foreach ($aggregateGradeDistribution as $distribution)
+                <div>
+                    {{$distribution->total}}KG of {{ $distribution->grade }}
+                </div>
+                @endforeach
+
             </div>
         </div>
 
@@ -30,32 +36,34 @@
             <div class="row border rounded shadow-sm bg-white p-2 mt-2">
                 <div class="col-7">{{$item->lot_number}}</div>
                 <div class="col-2">
-                    {{$item->quantity}} -KG-
+                    {{$item->quantity}} KG
                 </div>
                 <div class="col-2 justify-self-end">
-                    <button class="btn btn-danger btn-sm">Remove</button>
+                    <form action="{{route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $item->lot_number])}}" method="post">
+                        @csrf
+                        {{ method_field('DELETE') }}
+                        <button onclick="return confirm('sure to remove?')" class="btn btn-outline-danger">Remove</button>
+                    </form>
                 </div>
                 <div class="col">
-                    <button class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#distribution{{$item->id}}" aria-controls="distribution{{$item->id}}">
                         <div class="mdi mdi-chevron-down"></div>
                     </button>
                 </div>
-                <div class="col-12">
-                    Grade Distribution:
+
+                <div id="distribution{{$item->id}}" class="col-12 collapse">
+                    <h4 class="">Grade Distribution:</h4>
+                    @foreach($item->distributions as $distribution)
                     <div>
-                        10KG of Grade A
+                        {{$distribution->total}}KG of {{$distribution->grade}}
                     </div>
-                    <div>
-                        10KG of Grade A
-                    </div>
-                    
+                    @endforeach
                 </div>
             </div>
             @endforeach
         </div>
 
         <form class="mt-3" action="{{route('miller-admin.market-auction.checkout-cart', $cooperative->id)}}" method="POST">
-            {{$errors}}
             @csrf
             <div class="form-row">
                 <div class="form-group col-lg-3 col-md-6 col-12">
