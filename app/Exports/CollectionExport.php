@@ -42,7 +42,7 @@ class CollectionExport implements FromCollection, WithMapping, WithHeadings
             $collection->farmer->user->username,
             $collection->product->name,
             $collection->quantity,
-            $collection->unit->abbreviation,
+            $collection->unit,
             config("enums.collection_time")[$collection->collection_time],
             $collection->date_collected,
         ];
