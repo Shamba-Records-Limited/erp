@@ -178,6 +178,13 @@ $cooperative = null;
                 <span class="menu-title">Support</span>
             </a>
         </li>
+        
+        <li class="nav-item {{ active_class(['chat*']) }}">
+            <a class="nav-link" href="{{ route('chat.index') }}">
+                <i class="menu-icon mdi mdi-chat-outline"></i>
+                <span class="menu-title">Chat</span>
+            </a>
+        </li>
         @endif
 
 

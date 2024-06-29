@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Farmer;
 use App\Bank;
 use App\BankBranch;
 use App\Cooperative;
+use App\County;
 use App\Farmer;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\FarmerController;
 use App\Location;
 use App\Product;
 use App\Route;
+use App\SubCounty;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -31,13 +33,10 @@ class RegisterController extends Controller
     public function index()
     {
         $countries = get_countries();
-        $cooperative = Cooperative::where('default_coop', 1)->first();
-        $locations = Location::select('name', 'id')->where('cooperative_id', $cooperative->id)->get();
-        $routes = Route::select('id', 'name')->where('cooperative_id', $cooperative->id)->get();
-        $banks = Bank::select('id', 'name')->where('cooperative_id', $cooperative->id)->get();
-        $products = Product::select('id', 'name')->where('cooperative_id', $cooperative->id)->get();
-        $coopId = $cooperative->id;
-        return view('auth.farmer_register', compact('countries', 'products', 'locations', 'banks', 'routes', 'coopId'));
+        $counties = County::all();
+        $sub_counties = SubCounty::all();
+
+        return view('auth.farmer_register', compact('countries', 'counties', 'sub_counties'));
     }
 
     public function bank_branches_by_bank($bankId)
@@ -53,24 +52,17 @@ class RegisterController extends Controller
             return redirect()->back()->withInput();
         }
         $this->validate($req, [
-            'country_id' => 'required|string',
-            'county' => 'required|string',
-            'location' => 'required',
+            'country_code' => 'required|string',
+            'county_id' => 'required|string|exists:counties,id',
+            'sub_county_id' => 'required|string|exists:sub_counties,id',
             'id_no' => 'required|string',
             'phone_no' => 'required|regex:/^[0-9]{10}$/|unique:cooperatives,contact_details',
-            'route_id' => 'required|string',
-            'bank_account' => 'required|string',
-            'bank_branch_id' => 'required|string',
-            'customer_type' => 'required|string',
-            'kra' => 'required|string',
             'f_name' => 'required|string',
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
             'u_name' => 'required|unique:users,username',
-            'products' => 'required',
             'dob' => 'required',
             'gender' => 'required',
-            'farm_size' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'password' => 'required_with:c_password|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/',
             'c_password' => 'required|same:password'
         ]);

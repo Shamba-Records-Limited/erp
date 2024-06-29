@@ -267,20 +267,6 @@
 
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
-                                        <label for="kra">KRA PIN</label>
-                                        <input type="text" name="kra"
-                                               class="form-control {{ $errors->has('kra') ? ' is-invalid' : '' }}"
-                                               id="kra" placeholder="A236...Z"
-                                               value="{{ old('kra')}}" required>
-
-                                        @if ($errors->has('kra'))
-                                            <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('kra')  }}</strong>
-                                </span>
-                                        @endif
-                                    </div>
-
-                                    <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="member_no">Member No.</label>
                                         <input type="text" name="member_no"
                                                class="form-control {{ $errors->has('member_no') ? ' is-invalid' : '' }}"

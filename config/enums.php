@@ -229,7 +229,7 @@ return [
         'gender' => [
             'male' => 'Male',
             'female' => 'Female',
-            'other' => 'Female',
+            'other' => 'Other',
         ],
         'marital_status' => [
             'married' => 'Married',
