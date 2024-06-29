@@ -118,6 +118,20 @@ class InventoryController extends Controller
 
     }
 
+    public function final_products()
+    {
+        $user_id = Auth::id();
+        
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+        
+        
+    }
+
     public function index(Request $request)
     {
         $user_id = Auth::id();

@@ -322,6 +322,13 @@ $cooperative = null;
             </a>
         </li>
 
+        <li class="nav-item {{ active_class(['chat*']) }}">
+            <a class="nav-link" href="{{ route('chat.index') }}">
+                <i class="menu-icon mdi mdi-chat-outline"></i>
+                <span class="menu-title">Chat</span>
+            </a>
+        </li>
+
 
 
         @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'], config('enums.system_permissions')['view']))
@@ -677,31 +684,41 @@ $cooperative = null;
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item {{ active_class(['miller-admin/inventory/pre-milled']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.pre-milled-inventory.show') }}">
-                            <i class="menu-icon mdi mdi-television"></i>
                             <span class="menu-title">Pre-milled Inventory</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
-                            <i class="menu-icon mdi mdi-television"></i>
                             <span class="menu-title">Milled Inventory</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/final-products']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.final-products.show') }}">
+                            <span class="menu-title">Final Product</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </li>
-        
+
         <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.inventory-auction.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Inventory Auction</span>
             </a>
         </li>
-        
+
         <li class="nav-item {{ active_class(['miller-admin/support*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.support.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
                 <span class="menu-title">Support</span>
+            </a>
+        </li>
+        
+        <li class="nav-item {{ active_class(['chat*']) }}">
+            <a class="nav-link" href="{{ route('chat.index') }}">
+                <i class="menu-icon mdi mdi-chat-outline"></i>
+                <span class="menu-title">Chat</span>
             </a>
         </li>
         @endif

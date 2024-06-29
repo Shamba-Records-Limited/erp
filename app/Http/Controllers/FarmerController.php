@@ -127,7 +127,6 @@ class FarmerController extends Controller
             'member_no' => 'required|string|unique:farmers,member_no',
             'bank_branch_id' => 'required|string',
             'customer_type' => 'required|string',
-            'kra' => 'required|string',
             'f_name' => 'required|string',
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',

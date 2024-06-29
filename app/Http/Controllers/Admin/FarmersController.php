@@ -48,7 +48,6 @@ class FarmersController extends Controller
             'sub_county_id' => 'required|string',
             'id_no' => 'required|unique:farmers,id_no',
             'phone_no' => 'required|regex:/^[0-9]{12}$/|unique:farmers,phone_no',
-            'kra' => 'string|unique:farmers,kra',
             'first_name' => 'required|string',
             'other_names' => 'required|string',
             'email' => 'required|email|unique:users,email',
@@ -83,7 +82,6 @@ class FarmersController extends Controller
             $farmer->member_no = $request->id_no;
             $farmer->gender = $request->gender[0];
             $farmer->phone_no = $request->phone_no;
-            $farmer->kra = $request->kra;
             $farmer->save();
 
             $data = [

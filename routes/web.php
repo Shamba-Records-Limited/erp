@@ -84,6 +84,15 @@ Route::get('/common/product/{product_id}/unit', 'Common\CommonController@product
 Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {
 });
 
+Route::prefix("chat")->group(function() {
+    Route::get("/", 'ChatController@index')->name('chat.index');
+    Route::post("/add-group", 'ChatController@add_group')->name('chat.add-group');
+    Route::post("/send-message", 'ChatController@send_message')->name('chat.send-message');
+    Route::post("/search-group-to-join", 'ChatController@search_group_to_join')->name('chat.search-group-to-join');
+    Route::post("/add-group-member", 'ChatController@add_group_member')->name('chat.add-group-member');
+    Route::post("/add-chat", 'ChatController@add_chat')->name('chat.add-chat');
+});
+
 //admin routes
 Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/dashboard', 'Admin\DashboardController@index')->name('admin.dashboard');
@@ -448,6 +457,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.milling.save");
     Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
         ->name("miller-admin.milled-inventory.show");
+    Route::get("/inventory/final-products", "MillerAdmin\InventoryController@final_products")
+        ->name("miller-admin.final-products.show");
     // Route::post("/inventory", "MillerAdmin\InventoryController@save")
     //     ->name("miller-admin.inventory.save");
     // Route::post("/inventory", "MillerAdmin\InventoryController@store")

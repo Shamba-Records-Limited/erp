@@ -150,17 +150,6 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                 </div>
 
                 <div class="form-group col-lg-3 col-md-6 col-12">
-                    <label for="kra">KRA PIN</label>
-                    <input type="text" name="kra" class="form-control {{ $errors->has('kra') ? ' is-invalid' : '' }}" id="kra" placeholder="A236...Z" value="{{ old('kra')}}">
-
-                    @if ($errors->has('kra'))
-                    <span class="help-block text-danger">
-                        <strong>{{ $errors->first('kra')  }}</strong>
-                    </span>
-                    @endif
-                </div>
-
-                <div class="form-group col-lg-3 col-md-6 col-12">
                     <label for="mainImage">Profile Picture</label>
                     <div class="input-group">
                         <div class="custom-file">
