@@ -15,6 +15,10 @@ class AddMillerIdToCustomersTable extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             //
+            $table->uuid("miller_id")->nullable();
+            $table->foreign('miller_id')->references('id')->on('millers')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
         });
     }
 
@@ -27,6 +31,8 @@ class AddMillerIdToCustomersTable extends Migration
     {
         Schema::table('customers', function (Blueprint $table) {
             //
+            $table->dropForeign("customers_miller_id_foreign");
+            $table->dropColumn("miller_id");
         });
     }
 }

@@ -681,8 +681,8 @@ $cooperative = null;
                 <span class="menu-title">Orders</span>
             </a>
         </li>
-        <li class="nav-item {!!  active_class(['miller-admin/inventory*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#inventoryManagement" aria-expanded="{!!  is_active_route(['miller-admin/inventory*'])  !!}" aria-controls="inventoryManagement">
+        <li class="nav-item {!!  active_class(['miller-admin/inventory/*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#inventoryManagement" aria-expanded="{!!  is_active_route(['miller-admin/inventory/*'])  !!}" aria-controls="inventoryManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Inventory</span>
                 <i class="menu-arrow"></i>
@@ -716,8 +716,8 @@ $cooperative = null;
             </a>
             <div class="collapse {{ show_class(['miller-admin/inventory-auction*']) }}" id="inventoryAuction">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['miller-admin/inventory/pre-milled']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.pre-milled-inventory.show') }}">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory-auction/customers*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-customers') }}">
                             <span class="menu-title">Customers</span>
                         </a>
                     </li>
@@ -734,13 +734,6 @@ $cooperative = null;
                 </ul>
             </div>
         </li>
-
-        <!-- <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
-            <a class="nav-link" href="{{ route('miller-admin.inventory-auction.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Inventory Auction</span>
-            </a>
-        </li> -->
 
         <li class="nav-item {{ active_class(['miller-admin/support*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.support.show') }}">

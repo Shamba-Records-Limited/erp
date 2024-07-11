@@ -484,9 +484,23 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // Route::get("/inventory/publish/{inventory_number}", "MillerAdmin\InventoryController@publish")
     //     ->name("miller-admin.inventory.publish");
 
-    // inventory auction
-    Route::get("/inventory-auction", "MillerAdmin\InventoryAuctionController@customers")
+    // inventory auction: customers
+    Route::get("/inventory-auction/customers", "MillerAdmin\InventoryAuctionController@list_customers")
         ->name("miller-admin.inventory-auction.list-customers");
+    Route::get("/inventory-auction/customers/add-customer/",  "MillerAdmin\InventoryAuctionController@add_customer")
+        ->name("miller-admin.inventory-auction.add-customer");
+    Route::get("/inventory-auction/customers/save-details/{id}", "MillerAdmin\InventoryAuctionController@view_update_customer_details")
+        ->name("miller-admin.inventory-auction.view-update-customer-details");
+    Route::put("/inventory-auction/customers/update", "MillerAdmin\InventoryAuctionController@update_customer_details")
+        ->name("miller-admin.inventory-auction.update-customer-details");
+    Route::get("/inventory-auction/customers/details/{id}", "MillerAdmin\InventoryAuctionController@view_customer")
+        ->name("miller-admin.inventory-auction.view-customer");
+    // inventory auction: quotations
+    Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
+        ->name("miller-admin.inventory-auction.list-quotations");
+    // inventory auction: sales
+    Route::get("/inventory-auction/sales", "MillerAdmin\InventoryAuctionController@list_sales")
+        ->name("miller-admin.inventory-auction.list-sales");
     
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")

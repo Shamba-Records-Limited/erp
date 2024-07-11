@@ -1,7 +1,6 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('topItem')
