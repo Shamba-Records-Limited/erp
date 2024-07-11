@@ -34,7 +34,7 @@
                                     <select name="order_item_id" id="order_item_id" class="form-control select2bs4 {{ $errors->has('order_item_id') ? ' is-invalid' : '' }}" data-orderitems='@json($orderItems)'>
                                         <option value="">-- Select Order Item --</option>
                                         @foreach($orderItems as $item)
-                                        <option value="{{$item->id}}"> {{ $item->lot_number }}</option>
+                                        <option value="{{$item->id}}" {{ old('order_item_id') == $item->id ? 'selected' : '' }}> {{ $item->lot_number }}</option>
                                         @endforeach
 
                                         @if ($errors->has('order_item_id'))
@@ -46,11 +46,11 @@
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-12">
                                     <label for="quantity">Quantity</label>
-                                    <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}" required readonly>
+                                    <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}">
 
-                                    @if ($errors->has('batch_number'))
+                                    @if ($errors->has('quantity'))
                                     <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('batch_number')  }}</strong>
+                                        <strong>{{ $errors->first('quantity')  }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -187,8 +187,11 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Delivery No.</th>
                         <th>No of Items</th>
                         <th>Status</th>
+                        <th>Delivered At</th>
+                        <th>Approved At</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -196,12 +199,21 @@
                     @foreach($orderDeliveries as $key => $delivery)
                     <tr>
                         <td>{{++$key}}</td>
+                        <td>{{$delivery->delivery_number}}</td>
                         <td>{{$delivery->total_items}}</td>
                         <td>
                             @if($delivery->published_at)
                             <div class="text-success">Published</div>
                             @else
                             <div class="text-warning">Draft</div>
+                            @endif
+                        </td>
+                        <td>{{$delivery->published_at}}</td>
+                        <td>
+                            @if ($delivery->approved_at)
+                            {{$delivery->approved_at}}
+                            @else
+                            <div class="text-warning">Not Approved</div>
                             @endif
                         </td>
                         <td class="d-flex justify-items-end">

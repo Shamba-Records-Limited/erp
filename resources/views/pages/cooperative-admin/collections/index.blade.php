@@ -78,7 +78,6 @@ $collection_time_options = config('enums.collection_time');
 
                     <form action="{{ route('cooperative-admin.collections.store') }}" method="post">
                         @csrf
-                        {{$errors}}
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="coop_branch_id">Coop Branch</label>

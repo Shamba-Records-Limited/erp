@@ -457,8 +457,24 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.milling.save");
     Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
         ->name("miller-admin.milled-inventory.show");
+    Route::get("/inventory/milled/{id}", "MillerAdmin\InventoryController@milled_details")
+        ->name("miller-admin.milled-inventory.detail");
+    Route::post("/inventory/milled/store-grade", "MillerAdmin\InventoryController@store_milled_inventory_grade")
+        ->name("miller-admin.milled-inventory.store-grade");
+    Route::delete("/inventory/milled/delete-grade/{id}", "MillerAdmin\InventoryController@delete_milled_inventory_grade")
+        ->name("miller-admin.milled-inventory.delete-grade");
     Route::get("/inventory/final-products", "MillerAdmin\InventoryController@final_products")
         ->name("miller-admin.final-products.show");
+    Route::post("/inventory/final-products/save-details", "MillerAdmin\InventoryController@save_final_product_details")
+        ->name("miller-admin.final-product.save-details");
+    Route::post("/inventory/final-products/save-raw-material", "MillerAdmin\InventoryController@save_final_product_raw_material")
+        ->name("miller-admin.final-product.save-raw-material");
+    Route::delete("/inventory/final-products/delete-raw-material/{id}", "MillerAdmin\InventoryController@delete_final_product_raw_material")
+        ->name("miller-admin.final-product.delete-raw-material");
+    Route::delete("/inventory/final-product/discard-draft", "MillerAdmin\InventoryController@discard_final_product_draft")
+        ->name("miller-admin.final-product.discard-draft");
+    Route::get("/inventory/final-products/publish", "MillerAdmin\InventoryController@publish_final_product")
+        ->name("miller-admin.final-products.publish");
     // Route::post("/inventory", "MillerAdmin\InventoryController@save")
     //     ->name("miller-admin.inventory.save");
     // Route::post("/inventory", "MillerAdmin\InventoryController@store")
@@ -469,10 +485,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     //     ->name("miller-admin.inventory.publish");
 
     // inventory auction
-    Route::get("/inventory-auction", "MillerAdmin\InventoryAuctionController@index")
-        ->name("miller-admin.inventory-auction.show");
-    Route::get("/inventory-auction/add-sale", "MillerAdmin\InventoryAuctionController@add_sale")
-        ->name("miller-admin.inventory-auction.add-sale");
+    Route::get("/inventory-auction", "MillerAdmin\InventoryAuctionController@customers")
+        ->name("miller-admin.inventory-auction.list-customers");
     
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")

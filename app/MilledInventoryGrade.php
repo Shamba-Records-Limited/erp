@@ -5,12 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Miller extends Model
+class MilledInventoryGrade extends Model
 {
     //
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $table = "millers";
+    protected $table = "milled_inventory_grades";
 
     protected $primaryKey = 'id';
 
@@ -27,13 +27,8 @@ class Miller extends Model
         });
     }
 
-    public function country()
+    public function product_grade()
     {
-        return $this->belongsTo(Country::class);
-    }
-
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(ProductGrade::class, "product_grade_id", "id");
     }
 }

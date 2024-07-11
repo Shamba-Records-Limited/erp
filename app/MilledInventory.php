@@ -5,12 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 
-class Miller extends Model
+class MilledInventory extends Model
 {
     //
     protected $keyType = 'string';
     public $incrementing = false;
-    protected $table = "millers";
+    protected $table = "milled_inventories";
 
     protected $primaryKey = 'id';
 
@@ -27,13 +27,5 @@ class Miller extends Model
         });
     }
 
-    public function country()
-    {
-        return $this->belongsTo(Country::class);
-    }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 }

@@ -178,7 +178,7 @@ $cooperative = null;
                 <span class="menu-title">Support</span>
             </a>
         </li>
-        
+
         <li class="nav-item {{ active_class(['chat*']) }}">
             <a class="nav-link" href="{{ route('chat.index') }}">
                 <i class="menu-icon mdi mdi-chat-outline"></i>
@@ -687,7 +687,7 @@ $cooperative = null;
                 <span class="menu-title">Inventory</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse {{ show_class(['miller-admin/inventory*']) }}" id="inventoryManagement">
+            <div class="collapse {{ show_class(['miller-admin/inventory/*']) }}" id="inventoryManagement">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item {{ active_class(['miller-admin/inventory/pre-milled']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.pre-milled-inventory.show') }}">
@@ -708,12 +708,39 @@ $cooperative = null;
             </div>
         </li>
 
-        <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
+        <li class="nav-item {!!  active_class(['miller-admin/inventory-auction*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#inventoryAuction" aria-expanded="{!!  is_active_route(['miller-admin/inventory-auction*'])  !!}" aria-controls="inventoryAuction">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Inventory Auction</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['miller-admin/inventory-auction*']) }}" id="inventoryAuction">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/pre-milled']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.pre-milled-inventory.show') }}">
+                            <span class="menu-title">Customers</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                            <span class="menu-title">Quotations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/final-products']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.final-products.show') }}">
+                            <span class="menu-title">Sales</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
+        <!-- <li class="nav-item {{ active_class(['miller-admin/inventory-auction*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.inventory-auction.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Inventory Auction</span>
             </a>
-        </li>
+        </li> -->
 
         <li class="nav-item {{ active_class(['miller-admin/support*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.support.show') }}">
@@ -721,7 +748,7 @@ $cooperative = null;
                 <span class="menu-title">Support</span>
             </a>
         </li>
-        
+
         <li class="nav-item {{ active_class(['chat*']) }}">
             <a class="nav-link" href="{{ route('chat.index') }}">
                 <i class="menu-icon mdi mdi-chat-outline"></i>

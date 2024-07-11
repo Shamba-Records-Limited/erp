@@ -53,33 +53,23 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <div class="card-title">Inventory Auction</div>
+        <div class="card-title">Inventory Auction Sales</div>
         <div class="d-flex justify-content-end">
-            <a href="?is_adding_sale=1" class="btn btn-primary">Add Sale</a>
+            <a href="?is_adding_sale=1" class="btn btn-primary">Record Sale</a>
         </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt clickable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Inventory Number</th>
-                        <th>Quantity</th>
-                        <th>Sold</th>
+                        <th>Sale Number</th>
+                        <th>Description</th>
+                        <th>Total</th>
+                        <th>Created At</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($inventoryItems as $key => $item)
-                    <tr>
-                        <td>{{$key+1}}</td>
-                        <td>{{$item->inventory_number}}</td>
-                        <td>{{$item->quantity}} {{$item->unit}}</td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -25,10 +25,12 @@
                     <tr>
                         <td>{{++$key }}</td>
                         <td><a href="{{route('miller-admin.orders.detail', $order->id)}}">{{$order->batch_number}}</a></td>
-                        <td>{{$order->cooperative_name}}</td>
-                        <td>
-                            Status
-                        </td>
+                        <td>{{$order->cooperative->name}}</td>
+                        @php
+                        $orderStatus = $order->deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+                        $statusClass = $order->deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
+                        @endphp
+                        <td class="text-{{$statusClass}}">{{$orderStatus}}</td>
                         <td></td>
                     </tr>
                     @endforeach

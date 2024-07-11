@@ -22,9 +22,9 @@
                     <div>
                         <form action="{{route('miller-admin.milling.save')}}" method="POST">
                             @csrf
-                            <input type="hidden" name="inventory_id" value="{{$inventory->id}}" />
-                            @if($errors->has('inventory_id'))
-                            <div class="text-danger">{{$errors->first('inventory_id')}}</div>
+                            <input type="hidden" name="pre_milled_inventory_id" value="{{$preMilledInventoryId}}" />
+                            @if($errors->has('pre_milled_inventory_id'))
+                            <div class="text-danger">{{$errors->first('pre_milled_inventory_id')}}</div>
                             @endif
 
                             <div class="form-group">
@@ -43,7 +43,7 @@
                                 <div class="text-danger">{{$errors->first('waste_quantity')}}</div>
                                 @endif
                             </div>
-                            <p>Totals should add up to: {{$inventory->quantity}} KG</p>
+                            <p>Totals should add up to: {{$millingQty}} KG</p>
                             <button type="submit" class="btn btn-primary">Mill</button>
                         </form>
                     </div>
@@ -65,6 +65,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Inventory Number</th>
                         <th>Batch Number</th>
                         <th>Lot Number</th>
                         <th>Quantity</th>
@@ -72,14 +73,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($preMilledInventory as $key => $inventory)
+                    @foreach($preMilledInventories as $key => $inventory)
                     <tr>
                         <td>{{$key+1}}</td>
+                        <td>{{$inventory->inventory_number}}</td>
                         <td>{{$inventory->batch_number}}</td>
                         <td>{{$inventory->l_num}}</td>
                         <td>{{$inventory->quantity}} KG</td>
                         <td>
-                            <a class="btn btn-primary" href="?inventory_id={{$inventory->id}}&is_milling=1">Mill</a>
+                            <a class="btn btn-primary" href="?pre_milled_inventory_id={{$inventory->id}}&is_milling=1">Mill</a>
                         </td>
                     </tr>
                     @endforeach

@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="card-title">Lots</div>
         <div class="table-responsive">
-            <table class="table table-hover dt clickable">
+            <table class="table table-hover dt">
                 <thead>
                     <tr>
                         <th>#</th>

@@ -25,13 +25,15 @@ class OrdersController extends Controller
         $user = Auth::user();
         $coop = $user->cooperative;
 
-        $orders = DB::select(DB::raw("
-            SELECT ord.*,
-                millers.name as miller_name
-            FROM miller_auction_order ord
-            JOIN millers ON millers.id = ord.miller_id
-            WHERE ord.cooperative_id = :coop_id
-        "), ["coop_id" => $coop->id]);
+        // $orders = DB::select(DB::raw("
+        //     SELECT ord.*,
+        //         millers.name as miller_name
+        //     FROM miller_auction_order ord
+        //     JOIN millers ON millers.id = ord.miller_id
+        //     WHERE ord.cooperative_id = :coop_id
+        // "), ["coop_id" => $coop->id]);
+
+        $orders = MillerAuctionOrder::where("cooperative_id", $coop->id)->get();
 
         return view("pages.cooperative-admin.orders.index", compact('orders'));
     }
@@ -123,7 +125,7 @@ class OrdersController extends Controller
                     order_id = :order_id AND
                     user_id = :user_id
             "), ["user_id" => $user_id, "order_id" => $id]);
-            if(count($draft_deliveries) > 0){
+            if (count($draft_deliveries) > 0) {
                 $draft_delivery = $draft_deliveries[0];
             }
         }
@@ -135,9 +137,19 @@ class OrdersController extends Controller
 
     public function add_delivery_item(Request $request, $order_id)
     {
+        try {
+            $order = MillerAuctionOrder::find($order_id);
+        } catch (\Throwable $th) {
+            $order = null;
+            if ($order == null) {
+                toastr()->error('Order not found');
+                return redirect()->back();
+            }
+        }
+
         $request->validate([
             "order_item_id" => "required|exists:miller_auction_order_item,id",
-            "quantity" => "required",
+            "quantity" => "required|gt:0|lte:$order->undeliveredQuantity",
         ]);
 
         $user = Auth::user();
@@ -156,7 +168,23 @@ class OrdersController extends Controller
             }
         } catch (\Throwable $th) {
             try {
+                // generate delivery number
+                $now = Carbon::now();
+                $now_str = strtoupper($now->format('Ymd'));
+                $date_str = $now->format('Y-m-d') . " 00:00:00";
+            
+                $dateAfter_str = $now->format('Y-m-d') . " 23:59:59";
+                
+                $delivery_count = AuctionOrderDelivery::where('created_at', '>=', $date_str)
+                    ->where('created_at', '<', $dateAfter_str)
+                    ->count();
+
+                $delivery_ind = $delivery_count + 1;
+
+                $deliveryNumber = "DLV" . $now_str . str_pad($delivery_ind, 3, '0', STR_PAD_LEFT);
+
                 $delivery = new AuctionOrderDelivery();
+                $delivery->delivery_number = $deliveryNumber;
                 $delivery->order_id = $order_id;
                 $delivery->user_id = $user->id;
                 $delivery->save();

@@ -7,6 +7,7 @@ use App\Cooperative;
 use App\Http\Controllers\Controller;
 use App\MillerAuctionOrder;
 use App\MillerAuctionOrderItem;
+use App\PreMilledInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -29,13 +30,15 @@ class OrdersController extends Controller
             $miller_id = null;
         }
 
-        $orders = DB::select(DB::raw("
-            SELECT ord.*,
-                coop.name as cooperative_name
-            FROM miller_auction_order ord
-            JOIN cooperatives coop ON coop.id = ord.cooperative_id
-            JOIN millers ON millers.id = ord.miller_id AND millers.id = :miller_id;
-        "), ["miller_id" => $miller_id]);
+        // $orders = DB::select(DB::raw("
+        //     SELECT ord.*,
+        //         coop.name as cooperative_name
+        //     FROM miller_auction_order ord
+        //     JOIN cooperatives coop ON coop.id = ord.cooperative_id
+        //     JOIN millers ON millers.id = ord.miller_id AND millers.id = :miller_id;
+        // "), ["miller_id" => $miller_id]);
+
+        $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->get();
 
         return view('pages.miller-admin.orders.index', compact('orders'));
     }
@@ -196,6 +199,14 @@ class OrdersController extends Controller
 
     public function approve_delivery($delivery_id)
     {
+
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
         DB::beginTransaction();
         try {
             $user_id = Auth::id();
@@ -203,6 +214,29 @@ class OrdersController extends Controller
             $delivery->approved_at = Carbon::now();
             $delivery->approved_by = $user_id;
             $delivery->save();
+
+            $now = Carbon::now();
+            $inventoryNumber = "INV";
+            $inventoryNumber .= $now->format('Ymd');
+
+            // count today's inventories
+            $todaysInventories = PreMilledInventory::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
+
+            $ind = 1;
+            foreach ($delivery->items as $delivery_item) {
+                $inventoryNumber .= str_pad($todaysInventories + $ind, 3, '0', STR_PAD_LEFT);
+                $ind += 1;
+
+                $pre_milled_inventory = new PreMilledInventory();
+                $pre_milled_inventory->miller_id = $miller_id;
+                $pre_milled_inventory->delivery_id = $delivery->id;
+                $pre_milled_inventory->delivery_item_id = $delivery_item->id;
+                $pre_milled_inventory->inventory_number = $inventoryNumber;
+                $pre_milled_inventory->user_id = $user_id;
+                $pre_milled_inventory->quantity = $delivery_item->quantity;
+                $pre_milled_inventory->unit = $delivery_item->unit;
+                $pre_milled_inventory->save();
+            }            
 
             DB::commit();
             toastr()->success('Delivery approved');

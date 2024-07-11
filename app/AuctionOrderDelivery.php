@@ -35,6 +35,11 @@ class AuctionOrderDelivery extends Model
 
     public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(MillerAuctionOrderItem::class, 'order_id', 'id');
+        return $this->hasMany(AuctionOrderDeliveryItem::class, 'delivery_id', 'id');
+    }
+
+    public function order(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(MillerAuctionOrder::class);
     }
 }
