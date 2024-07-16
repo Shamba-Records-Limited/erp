@@ -205,13 +205,24 @@ $collection_time_options = config('enums.collection_time');
                                 <td>{{$collection->collection_number}}</td>
                                 <td>{{$collection->lot_number}}</td>
                                 <td>
-                                    <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$collection->username}}</a>
+                                    <a href="{{route('cooperative-admin.farmers.detail', $collection->farmer_id)}}">{{$collection->first_name}} {{$collection->other_names}} - {{$collection->member_no}}</a>
                                 </td>
                                 <td>{{$collection->product_name}}</td>
                                 <td>{{$collection->quantity}}</td>
                                 <td>{{$collection->unit}}</td>
                                 <td>{{ $collection_time_options[$collection->collection_time]}}</td>
-                                <td></td>
+                                <td>
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="text-primary dropdown-item" href="#">
+                                                <i class="fa fa-pdf"></i> Generate Receipt
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

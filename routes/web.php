@@ -484,6 +484,12 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // Route::get("/inventory/publish/{inventory_number}", "MillerAdmin\InventoryController@publish")
     //     ->name("miller-admin.inventory.publish");
 
+    // inventory auction: supporting ajax
+    Route::get("/inventory-auction/final-product/{id}", "MillerAdmin\InventoryAuctionController@retrieve_final_product")
+        ->name("miller-admin.inventory-auction.retrieve-final-product");
+    Route::get("/inventory-auction/milled-inventory/{id}", "MillerAdmin\InventoryAuctionController@retrieve_milled_inventory")
+        ->name("miller-admin.inventory-auction.retrieve-milled-inventory");
+
     // inventory auction: customers
     Route::get("/inventory-auction/customers", "MillerAdmin\InventoryAuctionController@list_customers")
         ->name("miller-admin.inventory-auction.list-customers");
@@ -498,9 +504,42 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: quotations
     Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
         ->name("miller-admin.inventory-auction.list-quotations");
+    Route::post("/inventory-auction/quotations/save-customer", "MillerAdmin\InventoryAuctionController@save_quotation_customer")
+        ->name("miller-admin.inventory-auction.quotations.save-customer");
+    Route::post("/inventory-auction/quotations/save-quotation-item", "MillerAdmin\InventoryAuctionController@save_quotation_item")
+        ->name("miller-admin.inventory-auction.quotations.save-quotation-item");
+    Route::delete("/inventory-auction/quotations/delete-quotation-item/{id}", "MillerAdmin\InventoryAuctionController@delete_quotation_item")
+        ->name("miller-admin.inventory-auction.quotations.delete-quotation-item");
+    Route::get("/inventory-auction/quotations/publish-quotation", "MillerAdmin\InventoryAuctionController@publish_quotation")
+        ->name("miller-admin.inventory-auction.quotations.publish-quotation");
+    Route::get("/inventory-auction/quotations/create-invoice/{id}", "MillerAdmin\InventoryAuctionController@create_invoice_from_quotation")
+        ->name("miller-admin.inventory-auction.quotations.create-invoice");
+
+    // inventory auction: invoices
+    Route::get("/inventory-auction/invoices", "MillerAdmin\InventoryAuctionController@list_invoices")
+        ->name("miller-admin.inventory-auction.list-invoices");
+    Route::post("/inventory-auction/invoices/save-customer", "MillerAdmin\InventoryAuctionController@save_invoice_customer")
+        ->name("miller-admin.inventory-auction.invoices.save-customer");
+    Route::post("/inventory-auction/invoices/save-invoice-item", "MillerAdmin\InventoryAuctionController@save_invoice_item")
+        ->name("miller-admin.inventory-auction.invoices.save-invoice-item");
+    Route::delete("/inventory-auction/invoices/delete-invoice-item/{id}", "MillerAdmin\InventoryAuctionController@delete_invoice_item")
+        ->name("miller-admin.inventory-auction.invoices.delete-invoice-item");
+    Route::get("/inventory-auction/invoices/publish-invoice", "MillerAdmin\InventoryAuctionController@publish_invoice")
+        ->name("miller-admin.inventory-auction.invoices.publish-invoice");
+    Route::get("/inventory-auction/quotations/create-receipt/{id}", "MillerAdmin\InventoryAuctionController@create_receipt_from_invoice")
+        ->name("miller-admin.inventory-auction.invoices.create-receipt");
+
+    // inventory auction: receipts
+    Route::get("/inventory-auction/receipts", "MillerAdmin\InventoryAuctionController@list_receipts")
+        ->name("miller-admin.inventory-auction.list-receipts");
+
     // inventory auction: sales
     Route::get("/inventory-auction/sales", "MillerAdmin\InventoryAuctionController@list_sales")
         ->name("miller-admin.inventory-auction.list-sales");
+    Route::get("/inventory-auction/sales/add-sale/",  "MillerAdmin\InventoryAuctionController@add_sale")
+        ->name("miller-admin.inventory-auction.add-sale");
+    Route::get("/inventory-auction/sales/save-details/{id}", "MillerAdmin\InventoryAuctionController@view_update_sale")
+        ->name("miller-admin.inventory-auction.view-update-sale");
     
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")

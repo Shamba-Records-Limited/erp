@@ -68,7 +68,7 @@ class CollectionsController extends Controller
 
         $collections = DB::select(DB::raw("
             SELECT usr.username, p.name as product_name, quantity, c.*, pc.unit,
-                f.id as farmer_id
+                f.id as farmer_id, usr.first_name, usr.other_names, f.member_no
             FROM collections c
             JOIN farmers f ON f.id = c.farmer_id
             JOIN users usr ON usr.id = f.user_id

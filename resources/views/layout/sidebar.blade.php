@@ -721,13 +721,23 @@ $cooperative = null;
                             <span class="menu-title">Customers</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory-auction/quotations*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-quotations') }}">
                             <span class="menu-title">Quotations</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ active_class(['miller-admin/inventory/final-products']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.final-products.show') }}">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory-auction/invoices*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-invoices') }}">
+                            <span class="menu-title">Invoices</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory-auction/receipts*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-receipts') }}">
+                            <span class="menu-title">Receipt</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/inventory-auction/sales*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-sales') }}">
                             <span class="menu-title">Sales</span>
                         </a>
                     </li>
