@@ -32,10 +32,7 @@
                                 <td>{{$cop->name }} ({{$cop->abbreviation}})</td>
                                 <td>{{$cop->email }}</td>
                                 <td>{{$cop->contact_details }}</td>
-                                <td> {{$cop->country->name }}
-                                    <span class="mr-2 table-flag">
-                                        <img src="{{ asset(get_country_flag($cop->country->iso_code)) }}" />
-                                    </span>
+                                <td> {{$cop->country_code }}
                                 </td>
                                 <td>{{$cop->location }}</td>
                                 <td>{{$cop->address }}</td>

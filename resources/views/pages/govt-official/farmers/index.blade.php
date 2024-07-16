@@ -1,7 +1,6 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('content')
@@ -13,6 +12,36 @@
                 <option>All</option>
                 <option>Coop x</option>
             </select>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover dt clickable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Cooperative</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>County</th>
+                        <th>Sub County</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($farmers as $key => $farmer)
+                    <tr>
+                        <td>{{++$key }}</td>
+                        <td>{{$farmer->coop_name}}</td>
+                        <td>
+                            <a href="{{route('govt-official.farmers.details', $farmer->id)}}">{{$farmer->first_name}} {{$farmer->other_names}}</a>
+                        </td>
+                        <td>{{$farmer->gender}}</td>
+                        <td>{{$farmer->county_name}}</td>
+                        <td>{{$farmer->sub_county_name}}</td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

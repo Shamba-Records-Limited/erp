@@ -5,8 +5,110 @@
 @endpush
 
 @section('content')
+@php
+$collection_time_options = config('enums.collection_time');
+@endphp
 <div class="card">
-    <card-body class="card-title">Cooperative</card-body>
+    <div class="card-body">
+        <div class="card-title">
+            Cooperative:
+            <span class="font-weight-bold">{{$cooperative->name}}</span>
+        </div>
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'collections'?'active':'' }}" href="?tab=collections">Collections</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'lots'?'active':'' }}" href="?tab=lots">Lots</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'grades'?'active':'' }}" href="?tab=grades">Grades</a>
+            </li>
+        </ul>
+
+
+        @if($tab == 'collections')
+        <div class="table-responsive p-2">
+            <table class="table table-hover dt">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Collection No</th>
+                        <th>Lot No</th>
+                        <th>Farmer</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                        <th>Collection Time</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($collections as $key => $collection)
+                    <tr>
+                        <td>{{++$key }}</td>
+                        <td>{{$collection->collection_number}}</td>
+                        <td>{{$collection->lot_number}}</td>
+                        <td>
+                            <a href="{{route('cooperative-admin.farmers.detail', $collection->farmer_id)}}">{{$collection->first_name}} {{$collection->other_names}} - {{$collection->member_no}}</a>
+                        </td>
+                        <td>{{$collection->product_name}}</td>
+                        <td>{{$collection->quantity}}</td>
+                        <td>{{$collection->unit}}</td>
+                        <td>{{ $collection_time_options[$collection->collection_time]}}</td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @elseif($tab == 'lots')
+        <div class="table-responsive p-2">
+            <table class="table table-hover dt">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Lot No</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($lots as $key => $lot)
+                    <tr>
+                        <td>{{++$key }}</td>
+                        <td><a href="{{route('cooperative-admin.lots.detail', $lot->lot_number)}}">{{$lot->lot_number}}</a></td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <div class="table-responsive p-2">
+            <table class="table table-hover dt">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Grade</th>
+                        <th>Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($grades as $key => $grade)
+                    <tr>
+                        <td>{{++$key }}</td>
+                        <td>{{$grade->name}}</td>
+                        <td>{{$grade->quantity}} KG</td>
+                        <td></td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
+    </div>
 </div>
 @endsection
 
@@ -14,14 +116,4 @@
 @endpush
 
 @push('custom-scripts')
-<script>
-    function deleteCoop(id) {
-        shouldDelete =  confirm("Are you sure you want to delete this cooperative?")
-        if (!shouldDelete){
-            return
-        }
-
-        window.location = "/admin/cooperative/setup/delete/"+id
-    }
-</script>
 @endpush
