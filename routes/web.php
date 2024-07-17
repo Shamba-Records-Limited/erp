@@ -276,6 +276,9 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
 
     route::get('/farmers', 'GovtOfficial\FarmersController@index')
         ->name('govt-official.farmers.show');
+    route::get('/farmers/{id}', 'GovtOfficial\FarmersController@details')
+        ->name('govt-official.farmers.details');
+
 
     
     route::get('/collections', 'GovtOfficial\CollectionsController@index')
