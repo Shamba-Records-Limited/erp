@@ -15,13 +15,14 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Cooperative Name</th>
                                 <th>Email</th>
-                                <th>Contact Details</th>
-                                <th>Country</th>
+                                <th>Contact person</th>
+                                <th>Contact No</th>
                                 <th>Location</th>
                                 <th>Address</th>
-                                <th>Currency</th>
+                                <th>No. of farmers</th>
+                                <th>Season Qty</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -31,12 +32,12 @@
                                 <td>{{++$key }}</td>
                                 <td>{{$cop->name }} ({{$cop->abbreviation}})</td>
                                 <td>{{$cop->email }}</td>
+                                <td>{{$cop->first_name}} {{$cop->other_names}}</td>
                                 <td>{{$cop->contact_details }}</td>
-                                <td> {{$cop->country_code }}
-                                </td>
                                 <td>{{$cop->location }}</td>
                                 <td>{{$cop->address }}</td>
-                                <td>{{$cop->currency }} {{ $cop->deactivated_at}}</td>
+                                <td>{{$cop->num_of_farmers}}</td>
+                                <td></td>
                                 <td>
                                     <a href="{{ route('govt-official.cooperatives.details', $cop->id) }}" class="btn btn-primary">View</a>
                                 </td>

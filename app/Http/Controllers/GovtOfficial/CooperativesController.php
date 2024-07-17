@@ -17,7 +17,20 @@ class CooperativesController extends Controller
 
     public function index()
     {
-        $cooperatives = Cooperative::all();
+        $cooperatives = DB::select(DB::raw("
+            SELECT c.*, u.first_name, u.other_names, (SELECT count(1) FROM farmers f JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = c.id) AS num_of_farmers FROM cooperatives c
+         JOIN users u ON u.id = (
+            select u.id FROM users u
+            JOIN model_has_roles ur ON ur.model_id = u.id
+            JOIN roles r ON r.id = ur.role_id and r.name = 'cooperative admin'
+            WHERE u.cooperative_id = c.id
+            LIMIT 1
+        )
+                                
+                                
+        "));
+
+        // $cooperatives = Cooperative::all();
 
         return view('pages.govt-official.cooperatives.index', compact('cooperatives'));
     }
