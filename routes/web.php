@@ -267,6 +267,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
 
 
 Route::middleware('role:county govt official')->prefix('county-govt')->group(function () {
+    Route::get('/dashboard', 'GovtOfficial\DashboardController@index')->name('govt-official.dashboard');
+    
     route::get('/cooperatives', 'GovtOfficial\CooperativesController@index')
         ->name('govt-official.cooperatives.show');
     route::get('/cooperatives/{id}', 'GovtOfficial\CooperativesController@details')

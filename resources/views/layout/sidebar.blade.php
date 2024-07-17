@@ -189,6 +189,13 @@ $cooperative = null;
 
 
         @if($user && $user->hasRole('county govt official'))
+        <li class="nav-item {{ active_class(['county-govt/dashboard']) }}">
+            <a class="nav-link" href="{{ route('govt-official.dashboard') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li>
+
         <li class="nav-item {{ active_class(['county-govt/cooperatives*']) }}">
             <a class="nav-link" href="{{ route('govt-official.cooperatives.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -201,16 +208,10 @@ $cooperative = null;
                 <span class="menu-title">Farmers</span>
             </a>
         </li>
-        <li class="nav-item {{ active_class(['county-govt/collections*']) }}">
-            <a class="nav-link" href="{{ route('govt-official.collections.show') }}">
+        <li class="nav-item {{ active_class(['county-govt/millers*']) }}">
+            <a class="nav-link" href="{{ route('govt-official.millers.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Collections</span>
-            </a>
-        </li>
-        <li class="nav-item {{ active_class(['county-govt/sales*']) }}">
-            <a class="nav-link" href="{{ route('govt-official.sales.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
-                <span class="menu-title">Sales</span>
+                <span class="menu-title">Millers</span>
             </a>
         </li>
         @endif
@@ -733,7 +734,7 @@ $cooperative = null;
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/inventory-auction/receipts*']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-receipts') }}">
-                            <span class="menu-title">Receipt</span>
+                            <span class="menu-title">Payment Receipt</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/inventory-auction/sales*']) }}">
