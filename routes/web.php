@@ -526,8 +526,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: invoices
     Route::get("/inventory-auction/invoices", "MillerAdmin\InventoryAuctionController@list_invoices")
         ->name("miller-admin.inventory-auction.list-invoices");
-    Route::post("/inventory-auction/invoices/save-customer", "MillerAdmin\InventoryAuctionController@save_invoice_customer")
-        ->name("miller-admin.inventory-auction.invoices.save-customer");
+    Route::post("/inventory-auction/invoices/save-basic-details", "MillerAdmin\InventoryAuctionController@save_invoice_basic_details")
+        ->name("miller-admin.inventory-auction.invoices.save-basic-details");
     Route::post("/inventory-auction/invoices/save-invoice-item", "MillerAdmin\InventoryAuctionController@save_invoice_item")
         ->name("miller-admin.inventory-auction.invoices.save-invoice-item");
     Route::delete("/inventory-auction/invoices/delete-invoice-item/{id}", "MillerAdmin\InventoryAuctionController@delete_invoice_item")

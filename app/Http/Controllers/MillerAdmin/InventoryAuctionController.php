@@ -359,7 +359,6 @@ class InventoryAuctionController extends Controller
         $request->validate([
             "quotation_id" => "required|exists:quotations,id",
             "customer_id" => "required|exists:customers,id",
-            "expires_at" => "required"
         ]);
 
         DB::beginTransaction();
@@ -518,7 +517,7 @@ class InventoryAuctionController extends Controller
         }
     }
 
-    public function save_invoice_customer(Request $request)
+    public function save_invoice_basic_details(Request $request)
     {
         $request->validate([
             "invoice_id" => "required|exists:new_invoices,id",
@@ -529,11 +528,12 @@ class InventoryAuctionController extends Controller
         try {
             $invoice = NewInvoice::find($request->invoice_id);
             $invoice->customer_id = $request->customer_id;
+            $invoice->expires_at = $request->expires_at;
             $invoice->save();
 
 
             DB::commit();
-            toastr()->success('Customer saved successfully.');
+            toastr()->success('Invoice basic details saved successfully.');
             return redirect()->back();
         } catch (\Throwable $th) {
             DB::rollBack();

@@ -21,7 +21,7 @@
                 </div>
                 <div class="card-body">
                     <h5 class="">Invoice Number: <span class="font-weight-bold">{{$draftInvoice->invoice_number}}</span></h5>
-                    <form action="{{route('miller-admin.inventory-auction.invoices.save-customer')}}" method="post">
+                    <form action="{{route('miller-admin.inventory-auction.invoices.save-basic-details')}}" method="post">
                         @csrf
                         <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
                         <div class="form-group">
@@ -33,7 +33,18 @@
                                 @endforeach
                             </select>
                         </div>
-                        <button class="btn btn-primary">Save Customer</button>
+                        <div class="form-group">
+                            <label for="expires_at">Valid To</label>
+                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftInvoice->expires_at) }}">
+                            <span class="help-block text-danger" id="expires_at_error">
+                                <strong>{{ $errors->first('expires_at') }}</strong>
+                            </span>
+                            <div>
+                                <button class="btn btn-light" type="button" onclick="setNeverExpires()">Never</button>
+                                <button class="btn btn-light" type="button" onclick="setExpiresInAMonth()">In a month</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Save Basic Details</button>
                     </form>
                     <hr />
                     <div class="d-flex justify-content-between">
@@ -241,6 +252,36 @@
 
     $("#item_type").change(function() {
         displayItemSelector();
+    });
+
+    function setNeverExpires() {
+        $("#expires_at").val("");
+    }
+
+    function setExpiresInAMonth() {
+        var currentDate = new Date();
+        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+        var formattedDate = newDate.toISOString().slice(0, 16);
+
+        $("#expires_at").val(formattedDate);
+    }
+
+    $('#save_basic_details_form').on('submit', function(event) {
+        // Get the current datetime
+        var currentDate = new Date();
+
+        // Get the selected datetime from the input
+        var rawSelectedDate = $('#dateInput').val();
+        if (rawSelectedDate != "") {
+            var selectedDate = new Date(rawSelectedDate);
+
+            // Compare the selected datetime with the current datetime
+            if (selectedDate <= currentDate) {
+                // Prevent form submission
+                event.preventDefault();
+                $("expires_at_error").val("Please select a datetime that is after the current datetime.")
+            }
+        }
     });
 </script>
 @endpush
