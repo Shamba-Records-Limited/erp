@@ -56,14 +56,4 @@
 @endpush
 
 @push('custom-scripts')
-<script>
-    function deleteCoop(id) {
-        shouldDelete =  confirm("Are you sure you want to delete this cooperative?")
-        if (!shouldDelete){
-            return
-        }
-
-        window.location = "/admin/cooperative/setup/delete/"+id
-    }
-</script>
 @endpush
