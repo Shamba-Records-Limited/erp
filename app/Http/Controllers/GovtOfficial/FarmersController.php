@@ -2,19 +2,51 @@
 
 namespace App\Http\Controllers\GovtOfficial;
 
+use App\Collection;
+use App\Farmer;
 use App\Http\Controllers\Controller;
+use DB;
+use Illuminate\Http\Request;
 
 class FarmersController extends Controller
 {
-public function __construct()
+    public function __construct()
     {
         return $this->middleware('auth');
     }
 
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('pages.govt-official.farmers.index');
+        $coopId = $request->query("coop_id", '');
+
+        $farmersQuery = "
+            SELECT
+                f.id,
+                coop.name as coop_name,
+                f.gender,
+                u.username,
+                u.first_name,
+                u.other_names,
+                county.name as county_name,
+                sub_county.name as sub_county_name
+            FROM farmers f
+            JOIN users u ON f.user_id = u.id
+            LEFT JOIN counties county ON county.id = f.county_id
+            LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
+            JOIN farmer_cooperative fc ON fc.farmer_id = f.id
+            JOIN cooperatives coop ON coop.id = fc.cooperative_id
+        ";
+
+        $farmers = [];
+        if ($coopId != '') {
+            $farmersQuery += " WHERE fc.cooperative_id = :coop_id";
+            $farmers = DB::select(DB::raw($farmersQuery), ["coop_id" => $coopId]);
+        } else {
+            $farmers = DB::select(DB::raw($farmersQuery));
+        }
+
+        return view('pages.govt-official.farmers.index', compact('farmers'));
     }
 
     public function details($id)
