@@ -29,6 +29,20 @@ $collection_time_options = config('enums.collection_time');
 
 
         @if($tab == 'collections')
+        <div>
+            <form class="d-flex justify-content-end">
+                <div class="d-flex align-items-center">
+                    Product Filter: 
+                    <select name="product_id" class="form-control select2bs4" onchange="this.form.submit()">
+                        <option value="">All</option>
+                        @foreach($selectableProducts as $product)
+                        <option value="{{$product->id}}" @if($product->id == $productId) selected @endif> {{ $product->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+            </form>
+        </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt">
                 <thead>
@@ -62,6 +76,17 @@ $collection_time_options = config('enums.collection_time');
                     @endforeach
                 </tbody>
             </table>
+
+
+        </div>
+        <div class="row">
+            <div class="col border rounded p-2">
+                <div>Total Collections:</div>
+                <div>{{$totalCollectionQty}} KGs</div>
+            </div>
+            <div class="col">
+
+            </div>
         </div>
         @elseif($tab == 'lots')
         <div class="table-responsive p-2">

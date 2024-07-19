@@ -5,6 +5,7 @@ namespace App\Http\Controllers\GovtOfficial;
 use App\Collection;
 use App\Cooperative;
 use App\Http\Controllers\Controller;
+use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -19,18 +20,14 @@ class CooperativesController extends Controller
     {
         $cooperatives = DB::select(DB::raw("
             SELECT c.*, u.first_name, u.other_names, (SELECT count(1) FROM farmers f JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = c.id) AS num_of_farmers FROM cooperatives c
-         JOIN users u ON u.id = (
-            select u.id FROM users u
-            JOIN model_has_roles ur ON ur.model_id = u.id
-            JOIN roles r ON r.id = ur.role_id and r.name = 'cooperative admin'
-            WHERE u.cooperative_id = c.id
-            LIMIT 1
-        )
-                                
-                                
+            JOIN users u ON u.id = (
+                select u.id FROM users u
+                JOIN model_has_roles ur ON ur.model_id = u.id
+                JOIN roles r ON r.id = ur.role_id and r.name = 'cooperative admin'
+                WHERE u.cooperative_id = c.id
+                LIMIT 1
+            )
         "));
-
-        // $cooperatives = Cooperative::all();
 
         return view('pages.govt-official.cooperatives.index', compact('cooperatives'));
     }
@@ -38,12 +35,16 @@ class CooperativesController extends Controller
     public function details(Request $request, $id)
     {
         $tab = $request->query("tab", "collections");
+        $productId = $request->query("product_id", "");
 
         $cooperative = Cooperative::find($id);
 
+        $totalCollectionQty = 0;
         $collections = [];
+        $selectableProducts = [];
         $lots = [];
         $grades = [];
+
         if ($tab == 'collections') {
             $collections = DB::select(DB::raw("
                 SELECT usr.username, p.name as product_name, quantity, c.*, pc.unit,
@@ -54,9 +55,21 @@ class CooperativesController extends Controller
                 JOIN products p ON p.id = c.product_id
                 JOIN product_categories pc ON pc.id = p.category_id
                 JOIN cooperatives co ON co.id = c.cooperative_id
-                WHERE c.cooperative_id = :coop_id
+                WHERE c.cooperative_id = :coop_id AND 
+                CASE WHEN :product_id != ''
+                    THEN p.id = :product_id2
+                    ELSE
+                    true
+                END
                 ORDER BY c.created_at DESC;
-            "), ["coop_id" => $id]);
+            "), ["coop_id" => $id, "product_id" => $productId, "product_id2" => $productId]);
+
+            $totalCollectionQty = DB::select(DB::raw("
+                SELECT sum(c.quantity) AS qty FROM collections c
+                WHERE c.cooperative_id = :coop_id
+            "), ["coop_id" => $id])[0]->qty;
+
+            $selectableProducts = Product::all();
         }
         else if ($tab == 'lots') {
             $lots = DB::select(DB::raw("
@@ -75,6 +88,6 @@ class CooperativesController extends Controller
         }
 
 
-        return view('pages.govt-official.cooperatives.detail', compact('cooperative', 'tab', 'collections', 'lots', 'grades'));
+        return view('pages.govt-official.cooperatives.detail', compact('cooperative', 'tab', 'collections', 'lots', 'grades', 'totalCollectionQty', 'selectableProducts', "productId"));
     }
 }
