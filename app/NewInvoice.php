@@ -43,4 +43,13 @@ class NewInvoice extends Model
         }
        return $totalPrice;
     }
+
+    public function receipt(){
+        return $this->hasOne(Receipt::class, 'new_invoice_id', 'id');
+    }
+
+    public function getHasReceiptAttribute(){
+       return Receipt::where("new_invoice_id", $this->id)->exists();
+
+    }
 }

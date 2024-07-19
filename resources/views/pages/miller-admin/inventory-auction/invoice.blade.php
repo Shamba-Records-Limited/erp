@@ -192,6 +192,7 @@
                         <th>Invoice Number</th>
                         <th>Number of Items</th>
                         <th>Total Price</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -201,23 +202,52 @@
                         <td>{{$invoice->invoice_number}}</td>
                         <td>{{$invoice->items_count}}</td>
                         <td>KES {{$invoice->total_price}}</td>
-                        <td>
-                            <div class="btn-group dropdown">
-                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="#">
-                                        <i class="fa fa-pdf"></i> Print Receipt
-                                    </a>
-                                    @if($invoice->has_receipt == false)
-                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
-                                        <i class="fa fa-edit"></i>Create Receipt From Invoice
-                                    </a>
-                                    @endif
+                        @php
+                        $status = 'Pending Payment';
+                        if($invoice->expires_at != ''){
+                            $now = now();
+                            
+                            if($invoice->expires_at < $now) {
+                                $status='Expired' ;
+                            }
+                        }
+                        if($invoice->has_receipt){
+                            $status = 'Complete';
+                        }
+                        @endphp <td>
+                            @if($status == 'Pending Payment')
+                            <div class="badge badge-warning">{{$status}}</div>
+                            @elseif($status == 'Expired')
+                            <div class="badge badge-danger">{{$status}}</div>
+                            @elseif($status == 'Complete')
+                            <div class="badge badge-success">{{$status}}</div>
+                            @endif
+                            </td>
+                            <td>
+                                <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="text-info dropdown-item" href="#">
+                                            <i class="fa fa-pdf"></i> Print Invoice
+                                        </a>
+                                        @if($status == 'Expired')
+                                        <a class="text-primary dropdown-item" href="#">
+                                            <i class="fa fa-pdf"></i> Regenerate Invoice
+                                        </a>
+                                        @elseif($status == 'Complete')
+                                        <a class="text-primary dropdown-item" href="#">
+                                            <i class="fa fa-pdf"></i> Print Receipt
+                                        </a>
+                                        @elseif($invoice->has_receipt == false)
+                                        <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
+                                            <i class="fa fa-edit"></i>Create Receipt From Invoice
+                                        </a>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
                     </tr>
                     @endforeach
                 </tbody>
