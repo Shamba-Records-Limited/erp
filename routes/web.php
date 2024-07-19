@@ -279,6 +279,9 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
     route::get('/farmers/{id}', 'GovtOfficial\FarmersController@details')
         ->name('govt-official.farmers.details');
 
+    
+    route::get('/millers', 'GovtOfficial\MillersController@index')
+        ->name('govt-official.millers.show');
 
     
     route::get('/collections', 'GovtOfficial\CollectionsController@index')
@@ -509,8 +512,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: quotations
     Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
         ->name("miller-admin.inventory-auction.list-quotations");
-    Route::post("/inventory-auction/quotations/save-customer", "MillerAdmin\InventoryAuctionController@save_quotation_customer")
-        ->name("miller-admin.inventory-auction.quotations.save-customer");
+    Route::post("/inventory-auction/quotations/save-basic-details", "MillerAdmin\InventoryAuctionController@save_quotation_basic_details")
+        ->name("miller-admin.inventory-auction.quotations.save-basic_details");
     Route::post("/inventory-auction/quotations/save-quotation-item", "MillerAdmin\InventoryAuctionController@save_quotation_item")
         ->name("miller-admin.inventory-auction.quotations.save-quotation-item");
     Route::delete("/inventory-auction/quotations/delete-quotation-item/{id}", "MillerAdmin\InventoryAuctionController@delete_quotation_item")
