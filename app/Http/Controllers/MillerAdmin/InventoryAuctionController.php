@@ -354,22 +354,24 @@ class InventoryAuctionController extends Controller
         }
     }
 
-    public function save_quotation_customer(Request $request)
+    public function save_quotation_basic_details(Request $request)
     {
         $request->validate([
             "quotation_id" => "required|exists:quotations,id",
             "customer_id" => "required|exists:customers,id",
+            "expires_at" => "required"
         ]);
 
         DB::beginTransaction();
         try {
             $quotation = Quotation::find($request->quotation_id);
             $quotation->customer_id = $request->customer_id;
+            $quotation->expires_at = $request->expires_at;
             $quotation->save();
 
 
             DB::commit();
-            toastr()->success('Customer saved successfully.');
+            toastr()->success('Basic Quotation Details saved successfully.');
             return redirect()->back();
         } catch (\Throwable $th) {
             DB::rollBack();
