@@ -48,6 +48,9 @@ Route::get("/quotations/{id}", "Common\CommonController@view_quotation")
     ->name("common.view-quotation");
 Route::get("/invoices/{id}", "Common\CommonController@view_invoice")
     ->name("common.view-invoice");
+Route::get("/receipts/{id}", "Common\CommonController@view_receipt")
+    ->name("common.view-receipt");
+
 //load countries
 Route::get("/countries/data", "FirstTimeConfig@save_country_details")
     ->name('countries-data');
@@ -541,7 +544,7 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.invoices.delete-invoice-item");
     Route::get("/inventory-auction/invoices/publish-invoice", "MillerAdmin\InventoryAuctionController@publish_invoice")
         ->name("miller-admin.inventory-auction.invoices.publish-invoice");
-    Route::get("/inventory-auction/quotations/create-receipt/{id}", "MillerAdmin\InventoryAuctionController@create_receipt_from_invoice")
+    Route::get("/inventory-auction/invoices/create-receipt/{id}", "MillerAdmin\InventoryAuctionController@create_receipt_from_invoice")
         ->name("miller-admin.inventory-auction.invoices.create-receipt");
     Route::get("/inventory-auction/invoices/export/{id}", "MillerAdmin\InventoryAuctionController@export_invoice")
         ->name("miller-admin.inventory-auction.invoices.export-invoice");
@@ -549,6 +552,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: receipts
     Route::get("/inventory-auction/receipts", "MillerAdmin\InventoryAuctionController@list_receipts")
         ->name("miller-admin.inventory-auction.list-receipts");
+    Route::get("/inventory-auction/receipts/export/{id}", "MillerAdmin\InventoryAuctionController@export_receipt")
+        ->name("miller-admin.inventory-auction.receipts.export-receipt");
 
     // inventory auction: sales
     Route::get("/inventory-auction/sales", "MillerAdmin\InventoryAuctionController@list_sales")

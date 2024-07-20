@@ -135,17 +135,17 @@ class InventoryAuctionController extends Controller
         $tab = $request->query("tab", "quotations");
 
         $quotations = [];
-        if($tab == 'quotations'){
+        if ($tab == 'quotations') {
             $quotations = Quotation::where("miller_id", $miller_id)->where("customer_id", $id)->get();
         }
 
         $invoices = [];
-        if($tab == 'invoices'){
+        if ($tab == 'invoices') {
             $invoices = NewInvoice::where("miller_id", $miller_id)->where("customer_id", $id)->get();
         }
 
         $receipts = [];
-        if($tab == 'receipts'){
+        if ($tab == 'receipts') {
             $receipts = Receipt::where("miller_id", $miller_id)->where("customer_id", $id)->get();
         }
 
@@ -676,4 +676,13 @@ class InventoryAuctionController extends Controller
         return $pdf->download("invoice_$invoice->invoice_number.pdf");
     }
 
+    public function export_receipt($id)
+    {
+        $receipt = Receipt::find($id);
+
+
+        $pdf = PDF::loadView('pdf.receipt', compact("receipt"));
+
+        return $pdf->download("invoice_$receipt->receipt_number.pdf");
+    }
 }

@@ -29,7 +29,7 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="#">
+                                    <a class="text-primary dropdown-item" href="{{route('miller-admin.inventory-auction.receipts.export-receipt', $receipt->id)}}">
                                         <i class="fa fa-pdf"></i> Print Receipt
                                     </a>
                                 </div>

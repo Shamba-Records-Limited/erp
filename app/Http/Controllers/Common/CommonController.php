@@ -6,6 +6,7 @@ use App\Collection;
 use App\Http\Controllers\Controller;
 use App\NewInvoice;
 use App\Quotation;
+use App\Receipt;
 use Illuminate\Support\Facades\DB;
 use Log;
 
@@ -67,4 +68,9 @@ class CommonController extends Controller
         return view('pages.common.view_invoice', compact('invoice'));
     }
 
+    public function view_receipt($id) {
+        $receipt = Receipt::find($id);
+
+        // return view('pages.common.view_receipt', compact('receipt'));
+    }
 }

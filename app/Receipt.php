@@ -27,20 +27,28 @@ class Receipt extends Model
         });
     }
 
-    public function items(){
+    public function items()
+    {
         return $this->hasMany(ReceiptItem::class, 'receipt_id', 'id');
     }
 
-    public function getItemsCountAttribute(){
-       return ReceiptItem::where("receipt_id", $this->id)->count();
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-    public function getTotalPriceAttribute(){
+    public function getItemsCountAttribute()
+    {
+        return ReceiptItem::where("receipt_id", $this->id)->count();
+    }
+
+    public function getTotalPriceAttribute()
+    {
         $items = $this->items;
         $totalPrice = 0;
-        foreach($items as $item){
+        foreach ($items as $item) {
             $totalPrice += ($item->price * $item->quantity);
         }
-       return $totalPrice;
+        return $totalPrice;
     }
 }
