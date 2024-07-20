@@ -4,16 +4,12 @@ namespace App\Http\Controllers\Common;
 
 use App\Collection;
 use App\Http\Controllers\Controller;
+use App\Quotation;
 use Illuminate\Support\Facades\DB;
 use Log;
 
 class CommonController extends Controller
 {
-    public function __construct()
-    {
-        return $this->middleware('auth');
-    }
-
     public function collection_unit($collection_id)
     {
         try {
@@ -57,4 +53,10 @@ class CommonController extends Controller
         }
     }
 
+    public function view_quotation($id)
+    {
+        $quotation = Quotation::find($id);
+
+        return view('pages.common.view_quotation', compact('quotation'));
+    }
 }

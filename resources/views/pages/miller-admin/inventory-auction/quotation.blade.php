@@ -180,6 +180,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
+
         <div class="card-title">Quotations</div>
         <div class="d-flex justify-content-end">
             <a href="?is_adding_quotation=1" class="btn btn-primary">Add Quotation</a>
@@ -192,6 +193,7 @@
                         <th>Quotation Number</th>
                         <th>Number of Items</th>
                         <th>Total Price</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -201,23 +203,52 @@
                         <td>{{$quotation->quotation_number}}</td>
                         <td>{{$quotation->items_count}}</td>
                         <td>KES {{$quotation->total_price}}</td>
-                        <td>
-                            <div class="btn-group dropdown">
-                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Actions
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="#">
-                                        <i class="fa fa-pdf"></i> Print Quotation
-                                    </a>
-                                    @if($quotation->no_invoice)
-                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
-                                        <i class="fa fa-edit"></i>Create Invoice From Quotation
-                                    </a>
-                                    @endif
+                        @php
+                        $status = 'Invoice Pending';
+                        if($quotation->expires_at != ''){
+                        $now = now();
+
+                        if($quotation->expires_at < $now) { $status='Expired' ; } } if($quotation->has_invoice){
+                            $status = 'Complete';
+                            }
+                            @endphp
+                            <td>
+                                @if($status == 'Invoice Pending')
+                                <div class="badge badge-warning">{{$status}}</div>
+                                @elseif($status == 'Expired')
+                                <div class="badge badge-danger">{{$status}}</div>
+                                @elseif($status == 'Complete')
+                                <div class="badge badge-success">{{$status}}</div>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="btn-group dropdown">
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <!-- <a class="text-info dropdown-item" href="{{route('common.view-quotation', $quotation->id)}}">
+                                            <i class="fa fa-pdf"></i> View Quotation
+                                        </a> -->
+                                        <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}">
+                                            <i class="fa fa-pdf"></i> Print Quotation
+                                        </a>
+                                        @if($status == 'Expired')
+                                        <a class="text-primary dropdown-item" href="#">
+                                            <i class="fa fa-pdf"></i> Regenerate Quotation
+                                        </a>
+                                        @elseif($status == 'Complete')
+                                        <a class="text-primary dropdown-item" href="#">
+                                            <i class="md md-edit"></i> Print Invoice
+                                        </a>
+                                        @elseif($quotation->no_invoice)
+                                        <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
+                                            <i class="md md-edit"></i>Create Invoice From Quotation
+                                        </a>
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
                     </tr>
                     @endforeach
                 </tbody>

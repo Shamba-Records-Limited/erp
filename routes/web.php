@@ -43,6 +43,9 @@ Auth::routes(
     ]
 );
 
+// view quotation
+Route::get("/quotations/{id}", "Common\CommonController@view_quotation")
+    ->name("common.view-quotation");
 //load countries
 Route::get("/countries/data", "FirstTimeConfig@save_country_details")
     ->name('countries-data');
@@ -522,6 +525,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.quotations.publish-quotation");
     Route::get("/inventory-auction/quotations/create-invoice/{id}", "MillerAdmin\InventoryAuctionController@create_invoice_from_quotation")
         ->name("miller-admin.inventory-auction.quotations.create-invoice");
+    Route::get("/inventory-auction/quotations/export/{id}", "MillerAdmin\InventoryAuctionController@export_quotation")
+        ->name("miller-admin.inventory-auction.quotations.export-quotation");
 
     // inventory auction: invoices
     Route::get("/inventory-auction/invoices", "MillerAdmin\InventoryAuctionController@list_invoices")

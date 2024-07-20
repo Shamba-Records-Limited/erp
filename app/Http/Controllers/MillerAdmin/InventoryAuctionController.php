@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use Log;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class InventoryAuctionController extends Controller
 {
@@ -654,4 +655,15 @@ class InventoryAuctionController extends Controller
 
         return view('pages.miller-admin.inventory-auction.sales.update-sale', compact('sale'));
     }
+
+    public function export_quotation($id)
+    {
+        $quotation = Quotation::find($id);
+
+
+        $pdf = PDF::loadView('pdf.quotation', compact("quotation"));
+
+        return $pdf->download("quotation_$quotation->quotation_number.pdf");
+    }
+
 }

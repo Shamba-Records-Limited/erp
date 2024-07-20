@@ -27,6 +27,10 @@ class Quotation extends Model
         });
     }
 
+    public function customer(){
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
     public function items(){
         return $this->hasMany(QuotationItem::class, 'quotation_id', 'id');
     }
@@ -42,6 +46,10 @@ class Quotation extends Model
             $totalPrice += ($item->price * $item->quantity);
         }
        return $totalPrice;
+    }
+
+    public function getHasInvoiceAttribute(){
+        return NewInvoice::where("quotation_id", $this->id)->exists();
     }
 
     public function getNoInvoiceAttribute(){
