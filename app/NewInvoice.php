@@ -31,6 +31,10 @@ class NewInvoice extends Model
         return $this->hasMany(NewInvoiceItem::class, 'new_invoice_id', 'id');
     }
 
+    public function customer(){
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
     public function getItemsCountAttribute(){
        return NewInvoiceItem::where("new_invoice_id", $this->id)->count();
     }

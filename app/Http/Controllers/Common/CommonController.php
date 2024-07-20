@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Common;
 
 use App\Collection;
 use App\Http\Controllers\Controller;
+use App\NewInvoice;
 use App\Quotation;
 use Illuminate\Support\Facades\DB;
 use Log;
@@ -59,4 +60,11 @@ class CommonController extends Controller
 
         return view('pages.common.view_quotation', compact('quotation'));
     }
+
+    public function view_invoice($id) {
+        $invoice = NewInvoice::find($id);
+
+        return view('pages.common.view_invoice', compact('invoice'));
+    }
+
 }

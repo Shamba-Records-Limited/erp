@@ -666,4 +666,14 @@ class InventoryAuctionController extends Controller
         return $pdf->download("quotation_$quotation->quotation_number.pdf");
     }
 
+    public function export_invoice($id)
+    {
+        $invoice = NewInvoice::find($id);
+
+
+        $pdf = PDF::loadView('pdf.invoice', compact("invoice"));
+
+        return $pdf->download("invoice_$invoice->invoice_number.pdf");
+    }
+
 }

@@ -229,7 +229,10 @@
                                         Actions
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="text-info dropdown-item" href="#">
+                                        <!-- <a class="text-info dropdown-item" href="{{route('common.view-invoice', $invoice->id)}}">
+                                            <i class="fa fa-pdf"></i> View Invoice
+                                        </a> -->
+                                        <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.invoices.export-invoice', $invoice->id)}}">
                                             <i class="fa fa-pdf"></i> Print Invoice
                                         </a>
                                         @if($status == 'Expired')
