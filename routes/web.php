@@ -411,6 +411,16 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.support.confirm-ticket-resolved");
     Route::get("/support/{ticket_number}", "CooperativeAdmin\SupportController@view_ticket")
         ->name("cooperative-admin.support.view-ticket");
+
+    // transactions
+    Route::get("/transactions", "CooperativeAdmin\TransactionController@index")
+        ->name("cooperative-admin.transactions.show");
+    Route::get("/transactions/add", "CooperativeAdmin\TransactionController@view_add")
+        ->name("cooperative-admin.transactions.view-add");
+    Route::get("/transactions/add/collection-selector/{id}", "CooperativeAdmin\TransactionController@view_add_collection_selector")
+        ->name("cooperative-admin.transactions.view-add-collection-selector");
+    Route::post("/transactions/add", "CooperativeAdmin\TransactionController@add")
+        ->name("cooperative-admin.transactions.add");
     
 });
 
@@ -562,6 +572,17 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.add-sale");
     Route::get("/inventory-auction/sales/save-details/{id}", "MillerAdmin\InventoryAuctionController@view_update_sale")
         ->name("miller-admin.inventory-auction.view-update-sale");
+
+    // transactions
+    Route::get("/transactions", "MillerAdmin\TransactionController@index")
+        ->name("miller-admin.transactions.show");
+    Route::get("/transactions/add", "MillerAdmin\TransactionController@view_add")
+        ->name("miller-admin.transactions.view-add");
+    Route::get("/transactions/add/miller-selector/{id}", "MillerAdmin\TransactionController@view_add_lot_selector")
+        ->name("miller-admin.transactions.view-add-lot-selector");
+    Route::post("/transactions/add", "MillerAdmin\TransactionController@add")
+        ->name("miller-admin.transactions.add");
+
     
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")
@@ -580,6 +601,16 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.support.confirm-ticket-resolved");
     Route::get("/support/{ticket_number}", "MillerAdmin\SupportController@view_ticket")
         ->name("miller-admin.support.view-ticket");
+
+    // tracking tree
+    Route::get("/tracking-tree", "MillerAdmin\TrackingTreeController@index")
+        ->name("miller-admin.tracking-tree.show");
+    Route::get("/tracking-tree/root-identifier/{root_type}", "MillerAdmin\TrackingTreeController@root_identifier")
+        ->name("miller-admin.tracking-tree.root_identifier");
+    Route::post("/tracking-tree/root-details", "MillerAdmin\TrackingTreeController@root_details")
+        ->name("miller-admin.tracking-tree.root_details");
+    Route::post("/tracking-tree/node-children", "MillerAdmin\TrackingTreeController@node_children")
+        ->name("miller-admin.tracking-tree.node-children");
 
 });
 

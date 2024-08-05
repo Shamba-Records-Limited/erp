@@ -296,6 +296,13 @@ $cooperative = null;
                 <span class="menu-title">Products</span>
             </a>
         </li>
+        
+        <li class="nav-item {{ active_class(['cooperative-admin/transactions*']) }}">
+            <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
+                <i class="menu-icon mdi mdi-help-circle-outline"></i>
+                <span class="menu-title">Transactions</span>
+            </a>
+        </li>
 
         <!-- <li class="nav-item {{ active_class(['cooperative-admin/farmers']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
@@ -746,6 +753,13 @@ $cooperative = null;
             </div>
         </li>
 
+        <li class="nav-item {{ active_class(['miller-admin/transactions*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.transactions.show') }}">
+                <i class="menu-icon mdi mdi-help-circle-outline"></i>
+                <span class="menu-title">Transactions</span>
+            </a>
+        </li>
+
         <li class="nav-item {{ active_class(['miller-admin/support*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.support.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
@@ -757,6 +771,13 @@ $cooperative = null;
             <a class="nav-link" href="{{ route('chat.index') }}">
                 <i class="menu-icon mdi mdi-chat-outline"></i>
                 <span class="menu-title">Chat</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ active_class(['miller-admin/tracking-tree*']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.tracking-tree.show') }}">
+                <i class="menu-icon mdi mdi-help-circle-outline"></i>
+                <span class="menu-title">Tracking Tree</span>
             </a>
         </li>
         @endif

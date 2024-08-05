@@ -17,6 +17,9 @@ class DashboardController extends Controller
 
     public function index(Request $request)
     {
+
+        $cooperative_id = $request->query("cooperative_id", "all");
+
         // farmer count
         $farmerCount = DB::select(DB::raw("
             SELECT 
@@ -29,7 +32,8 @@ class DashboardController extends Controller
             SELECT 
                 SUM(quantity) AS quantity
             FROM collections
-        "))[0]->quantity;
+            WHERE CASE WHEN :coop_id = 'all' THEN 1 ELSE collections.cooperative_id = :coop_id1 END
+        "), ["coop_id" => $cooperative_id, "coop_id1" => $cooperative_id])[0]->quantity;
 
         $cooperativeCount = Cooperative::count();
 
@@ -106,7 +110,8 @@ class DashboardController extends Controller
                         FROM collections
                         JOIN farmers f ON f.id = collections.farmer_id
                         WHERE collections.date_collected = date_series.date AND
-                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END
+                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END AND
+                            CASE WHEN :coop_id = '' THEN 1 ELSE collections.cooperative_id = :coop_id1 END
                     ) AS y
                 FROM date_series
                 GROUP BY date_series.date;
@@ -118,6 +123,8 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                "coop_id" => $cooperative_id,
+                "coop_id1" => $cooperative_id,
             ]);
             if ($from_date_prev != "") {
                 $prevCollections = DB::select(DB::raw($dailyQuery), [
@@ -125,6 +132,8 @@ class DashboardController extends Controller
                     "to_date" => $to_date_prev,
                     "gender" => $gender,
                     "gender1" => $gender,
+                    'coop_id' => $cooperative_id,
+                    'coop_id1' => $cooperative_id,
                 ]);
             }
 
@@ -134,6 +143,8 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                'coop_id' => $cooperative_id,
+                'coop_id1' => $cooperative_id,
             ]);
 
             $gender = "F";
@@ -142,6 +153,8 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                'coop_id' => $cooperative_id,
+                'coop_id1' => $cooperative_id,
             ]);
 
             $gender = "X";
@@ -150,6 +163,8 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                'coop_id' => $cooperative_id,
+                'coop_id1' => $cooperative_id,
             ]);
         } else if ($suggested_chart_mode == "monthly") {
             $monthlyQuery = "
@@ -166,7 +181,8 @@ class DashboardController extends Controller
                         FROM collections c
                         JOIN farmers f ON f.id = c.farmer_id
                         WHERE DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year AND
-                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END
+                            CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END AND
+                            CASE WHEN :coop_id = '' THEN 1 ELSE collections.cooperative_id = :coop_id2 END
                     ) AS y
                 FROM date_series
                 GROUP BY date_series.month_year;
@@ -178,6 +194,8 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "gender" => $gender,
                 "gender1" => $gender,
+                'coop_id' => $cooperative_id,
+                'coop_id1' => $cooperative_id,
             ]);
             if ($from_date_prev != "") {
                 $prevCollections = DB::select(DB::raw($monthlyQuery), [
@@ -186,6 +204,8 @@ class DashboardController extends Controller
                     "to_date" => $to_date_prev,
                     "gender" => $gender,
                     "gender1" => $gender,
+                    'coop_id' => $cooperative_id,
+                    'coop_id1' => $cooperative_id,
                 ]);
             }
 
@@ -208,6 +228,26 @@ class DashboardController extends Controller
             ]);
         }
 
+        $gender_distribution = DB::select(DB::raw("select
+            count(case when gender='M' then 1 end) as male,
+            count(case when gender='F' then 1 end) as female,
+            count(case when gender='X' then 1 end) as other
+            from farmers f
+            JOIN farmer_cooperative fc ON fc.farmer_id = f.id
+            WHERE CASE WHEN :coop_id = 'all' THEN 1 ELSE fc.cooperative_id = :coop_id1 END
+        "), ["coop_id" => $cooperative_id, "coop_id1" => $cooperative_id])[0];
+
+        // coffee grade distribution
+        $grade_distribution = DB::select(DB::raw("
+            SELECT SUM(quantity) AS quantity, pg.name AS name
+            FROM lot_grade_distributions lgd
+            JOIN product_grades pg ON pg.id = lgd.product_grade_id
+            JOIN lots l ON l.lot_number = lgd.lot_number 
+            WHERE CASE WHEN :coop_id = 'all' THEN 1 ELSE l.cooperative_id = :coop_id1 END
+            GROUP BY lgd.product_grade_id
+            ORDER BY quantity DESC
+        "), ["coop_id" => $cooperative_id, "coop_id1" => $cooperative_id]);
+
         $data = [
             "farmer_count" => $farmerCount,
             "cooperative_count" => $cooperativeCount,
@@ -217,10 +257,16 @@ class DashboardController extends Controller
             "male_collections" => $maleCollections,
             "female_collections" => $femaleCollections,
             "other_gender_collections" => $otherGenderCollections,
-            "prev_collections" => $prevCollections
+            "prev_collections" => $prevCollections,
+            "gender" => $gender_distribution,
+            "grade_distribution" => $grade_distribution,
         ];
 
+        $selectableCooperatives = DB::select(DB::raw("
+            SELECT c.id, c.name FROM cooperatives c;
+        "));
 
-        return view('pages.govt-official.dashboard', compact("data", "date_range", "from_date", "to_date"));
+
+        return view('pages.govt-official.dashboard', compact("data", "date_range", "from_date", "to_date", "selectableCooperatives", "cooperative_id"));
     }
 }

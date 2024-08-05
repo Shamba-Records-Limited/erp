@@ -307,7 +307,7 @@ class InventoryController extends Controller
         }
 
 
-        return view("pages.miller-admin.inventory.final_products", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
+        return view("pages.miller-admin.inventory.final_products.index", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
     }
 
     public function save_final_product_details(Request $request)

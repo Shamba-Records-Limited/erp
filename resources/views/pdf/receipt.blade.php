@@ -13,6 +13,18 @@
 </style>
 
 <body>
+    <table>
+        <tr>
+            <td>
+                <h2>Shamba Records</h2>
+
+        <img src="{{ url('assets/images/shamba_records_logo.jpeg') }}" alt="logo" />
+            </td>
+        </tr>
+    </table>
+    <div style="display: flex; justify-content:between;">
+        <img src="{{ url('assets/images/favicon.png') }}" alt="logo" />
+    </div>
     <div style="text-align: center;">
         <img src="data:image/png;base64, {!! base64_encode(QrCode::size(150)->generate(route('common.view-receipt', $receipt->id))) !!} ">
     </div>
@@ -20,7 +32,7 @@
         <div>{{$receipt->created_at}}</div>
     </div>
     <div>
-        <h3>Invoice: {{$receipt->receipt_number}}</h3>
+        <h3>Payment Receipt: {{$receipt->receipt_number}}</h3>
     </div>
     <div>
         Customer: {{$receipt->customer->name}}
