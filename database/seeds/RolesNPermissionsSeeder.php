@@ -22,6 +22,7 @@ class RolesNPermissionsSeeder extends Seeder
             array( 'name'=>'employee', 'guard_name'=>'web','created_at'=>date('Y-m-d h:i:s')),
             array( 'name'=>'miller admin', 'guard_name'=>'web','created_at'=>date('Y-m-d h:i:s')),
             array( 'name'=>'miller warehouse admin', 'guard_name'=>'web','created_at'=>date('Y-m-d h:i:s')),
+            array( 'name'=>'county govt official', 'guard_name'=>'web','created_at'=>date('Y-m-d h:i:s')),
         );
 
         $permissions =  array(
