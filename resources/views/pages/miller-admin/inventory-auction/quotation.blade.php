@@ -5,7 +5,7 @@
 
 
 @section('topItem')
-@if($isAddingQuotation == '1')
+@if($isAddingQuotation == '1' || !empty($viewingQuotationId))
 <div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; height: 100vh;">
     <div class="container-fluid h-100 w-100">
         <div class="row h-100">
@@ -16,40 +16,55 @@
                         <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?">
                             <i class="mdi mdi-close"></i>
                         </a>
+                        @if($isAddingQuotation == '1')
                         <h4 class="text-center">Add Quotation</h4>
+                        @else
+                        <h4 class="text-center">View Quotation</h4>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary" onclick="printQuotation('{{$draftQuotation->id}}')">
+                            <i class="fa fa-pdf"></i> Print Quotation
+                        </button>
+                    </div>
                     <h5 class="">Quotation Number: <span class="font-weight-bold">{{$draftQuotation->quotation_number}}</span></h5>
                     <form action="{{route('miller-admin.inventory-auction.quotations.save-basic_details')}}" method="post" id="save_basic_details_form">
                         @csrf
                         <input type="hidden" name="quotation_id" value="{{$draftQuotation->id}}">
                         <div class="form-group">
                             <label for="">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}">
+                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingQuotationId)) disabled @endif>
                                 <option value="">-- Select Customer --</option>
                                 @foreach($customers as $customer)
-                                <option value="{{$customer->id}}" @if(old('customer_id',$draftQuotation->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>
+                                <option value="{{$customer->id}}" @if(old('customer_id',$draftQuotation->customer_id) == $customer->id) selected @endif >{{$customer->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="expires_at">Valid To</label>
-                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftQuotation->expires_at) }}">
+                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftQuotation->expires_at) }}" @if(!empty($viewingQuotationId)) disabled @endif>
                             <span class="help-block text-danger" id="expires_at_error">
                                 <strong>{{ $errors->first('expires_at') }}</strong>
                             </span>
+                            @if($isAddingQuotation == '1')
                             <div>
                                 <button class="btn btn-light" type="button" onclick="setNeverExpires()">Never</button>
                                 <button class="btn btn-light" type="button" onclick="setExpiresInAMonth()">In a month</button>
                             </div>
+                            @endif
                         </div>
+                        @if($isAddingQuotation == '1')
                         <button class="btn btn-primary">Save Basic Details</button>
+                        @endif
                     </form>
                     <hr />
                     <div class="d-flex justify-content-between">
                         <h5>Quotation Items</h5>
+                        @if($isAddingQuotation == '1')
                         <button class="btn btn-primary" data-toggle="collapse" href="#addQuotationItem">Add Quotation Item</button>
+                        @endif
                     </div>
                     <div class="collapse border rounded p-2" id="addQuotationItem">
                         <form action="{{route('miller-admin.inventory-auction.quotations.save-quotation-item')}}" method="post">
@@ -127,7 +142,7 @@
                                 <th>Item</th>
                                 <th>Price</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Sub Total</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -144,6 +159,9 @@
                                     <button class="btn btn-danger">Remove</button>
                                 </td>
                             </tr> -->
+                            @php
+                            $total = 0;
+                            @endphp
                             @foreach($draftQuotation->items as $item)
                             <tr>
                                 <td>
@@ -152,23 +170,40 @@
                                 </td>
                                 <td>KES {{$item->price}}</td>
                                 <td class="item_quantity">{{$item->quantity}}</td>
-                                <td>KES {{$item->price * $item->quantity}}</td>
+                                @php
+                                $subTotal = $item->price * $item->quantity;
+                                $total += $subTotal
+                                @endphp
+                                <td>KES {{$subTotal}}</td>
                                 <td>
+                                    @if($isAddingQuotation == '1')
                                     <form action="{{route('miller-admin.inventory-auction.quotations.delete-quotation-item', $item->id)}}" method="post">
                                         @csrf
                                         @method("DELETE")
                                         <button class="btn btn-danger" type="submit">Remove</button>
                                     </form>
-
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
 
-                    <div class="mt-2">
-                        <a href="{{route('miller-admin.inventory-auction.quotations.publish-quotation')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish quotation?')">Publish</a>
+                    <div class="d-flex justify-content-end p-2">
+                        Total:&nbsp;<span class="font-weight-bold text-success">KES. {{$total}}</span>
                     </div>
+
+                    <div class="mt-2">
+                        @if($isAddingQuotation == '1')
+                        <a href="{{route('miller-admin.inventory-auction.quotations.publish-quotation')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish quotation?')">Publish</a>
+                        @endif
+                    </div>
+
+                    @if(!empty($viewingQuotationId))
+                    <div style="text-align: center;">
+                        {{ QrCode::size(70)->generate(route('common.view-quotation', $draftQuotation->id)) }}
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -231,6 +266,9 @@
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a> -->
                                         <!-- <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}"> -->
+                                        <a class="text-info dropdown-item" href="?viewing_quotation_id={{$quotation->id}}" onclick="">
+                                            <i class="fa fa-pdf"></i> View Quotation
+                                        </a>
                                         <button class="text-info dropdown-item" onclick="printQuotation('{{$quotation->id}}')">
                                             <i class="fa fa-pdf"></i> Print Quotation
                                         </button>

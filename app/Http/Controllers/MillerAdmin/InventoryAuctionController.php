@@ -176,6 +176,7 @@ class InventoryAuctionController extends Controller
 
 
         $isAddingQuotation = $request->query("is_adding_quotation", "0");
+        $viewingQuotationId = $request->query("viewing_quotation_id", "");
 
         $draftQuotation = null;
         $customers = [];
@@ -207,10 +208,18 @@ class InventoryAuctionController extends Controller
                 $draftQuotation = Quotation::where("user_id", $user_id)->where("miller_id", $miller_id)->where("published_at", null)->firstOrFail();
             }
         }
+        if(!empty($viewingQuotationId)) {
+            $customers = Customer::where("miller_id", $miller_id)->whereNotNull("published_at")->get();
+
+            $finalProducts = FinalProduct::where("miller_id", $miller_id)->get();
+
+            $milledInventories = MilledInventory::where("miller_id", $miller_id)->get();
+            $draftQuotation = Quotation::where("id", $viewingQuotationId)->firstOrFail();
+        }
 
         $quotations = Quotation::whereNotNull("published_at")->get();
 
-        return view('pages.miller-admin.inventory-auction.quotation', compact("isAddingQuotation", "draftQuotation", "customers", "finalProducts", "milledInventories", "quotations"));
+        return view('pages.miller-admin.inventory-auction.quotation', compact("isAddingQuotation", "viewingQuotationId", "draftQuotation", "customers", "finalProducts", "milledInventories", "quotations"));
     }
 
     public function save_quotation_item(Request $request)
