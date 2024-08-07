@@ -48,12 +48,12 @@ class NewInvoice extends Model
        return $totalPrice;
     }
 
-    public function receipt(){
-        return $this->hasOne(Receipt::class, 'new_invoice_id', 'id');
+    public function getTransactionAttribute(){
+        return Transaction::where("subject_type", "INVOICE")->where("subject_id", $this->id)->first();
     }
 
     public function getHasReceiptAttribute(){
-       return Receipt::where("new_invoice_id", $this->id)->exists();
+       return Transaction::where("subject_type", "INVOICE")->where("subject_id", $this->id)->exists();
 
     }
 }

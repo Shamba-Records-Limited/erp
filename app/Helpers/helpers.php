@@ -23,6 +23,9 @@ use App\CooperativeFinancialPeriod;
 use App\CooperativeProperty;
 use App\CooperativeWallet;
 use App\Location;
+use App\NewInvoice;
+use App\Receipt;
+use App\ReceiptItem;
 use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -32,8 +35,10 @@ use Intervention\Image\Facades\Image;
 use Mockery\Exception;
 use Webpatser\Uuid\Uuid;
 
-const COLORS = ["#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "#f20812", "#0f412a", "#1a0b81", "#bcbc08", "#6d3c2c",
-    "#2ac48c", "#6b5557", "#de6329"];
+const COLORS = [
+    "#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "#f20812", "#0f412a", "#1a0b81", "#bcbc08", "#6d3c2c",
+    "#2ac48c", "#6b5557", "#de6329"
+];
 
 const MINIMUM_TAXABLE_AMOUNT = 24000;
 const MINIMUM_TAXABLE_AMOUNT_RATE = 0.1;
@@ -58,11 +63,10 @@ if (!function_exists('check_if_booked')) {
             }
 
             return VetBooking::where('vet_id', $vet)
-                    ->where('farmer_id', '!=', $vet_booking->farmer_id)
-                    ->whereBetween('event_start', [$start_time, $end_time])
-                    ->orWhereBetween('event_end', [$start_time, $end_time])
-                    ->count() - 1;
-
+                ->where('farmer_id', '!=', $vet_booking->farmer_id)
+                ->whereBetween('event_start', [$start_time, $end_time])
+                ->orWhereBetween('event_end', [$start_time, $end_time])
+                ->count() - 1;
         }
 
         return VetBooking::where('vet_id', $vet)
@@ -83,7 +87,7 @@ if (!function_exists('active_class')) {
 
 
 if (!function_exists('is_active_route')) {
-// For checking activated route
+    // For checking activated route
     function is_active_route($path)
     {
         return call_user_func_array('Request::is', (array)$path) ? 'true' : 'false';
@@ -126,7 +130,6 @@ if (!function_exists('get_country_flag')) {
     {
         return 'files/cooperative/country-flags/' . $iso . '.png';
     }
-
 }
 
 
@@ -163,20 +166,21 @@ if (!function_exists('save_user_image')) {
     function save_user_image(User $user, $request)
     {
         Log::info("Updating user profile picture");
-        if ($user->profile_picture && File::exists('storage/'.$user->profile_picture)) {
-            $file_path = 'storage/'.$user->profile_picture;
+        if ($user->profile_picture && File::exists('storage/' . $user->profile_picture)) {
+            $file_path = 'storage/' . $user->profile_picture;
             Log::info("Deleting file: {$file_path}");
             File::delete($file_path);
         }
 
         $user->profile_picture = $request->has('profile_picture') ?
-            store_image($request,
+            store_image(
+                $request,
                 "profile_picture",
                 $request->file("profile_picture"),
                 "images/profile",
                 200,
-                200) : $user->profile_picture;
-
+                200
+            ) : $user->profile_picture;
     }
 }
 
@@ -210,7 +214,6 @@ if (!function_exists('get_farmers')) {
     {
         return \App\Farmer::select(['farmers.id as id'])->join('users', 'users.id', '=', 'farmers.user_id')
             ->where('users.cooperative_id', $cooperative_id)->whereIn('farmers.user_id', $userIds);
-
     }
 }
 
@@ -313,17 +316,14 @@ if (!function_exists('create_account_transaction_old')) {
                 }
 
                 return false;
-
             } else {
                 \Illuminate\Support\Facades\Log::error('No active financial period existing');
                 return false;
             }
-
         } catch (Exception $e) {
             \Illuminate\Support\Facades\Log::error($e->getMessage());
             \Illuminate\Support\Facades\DB::rollBack();
             return false;
-
         }
     }
 }
@@ -379,18 +379,15 @@ if (!function_exists('create_account_transaction')) {
                 Log::info("No accounting Rule");
 
                 return false;
-
             } else {
                 Log::error('No active financial period existing');
                 return false;
             }
-
         } catch (Exception $e) {
             Log::error($e);
             Log::error($e->getMessage());
             DB::rollBack();
             return false;
-
         }
     }
 }
@@ -410,7 +407,7 @@ if (!function_exists('get_financial_period_statement_ranges')) {
         }
 
         $period = Carbon::parse($from)->format('M d, Y') . ' / ' . Carbon::parse($to)
-                ->format('M d, Y');
+            ->format('M d, Y');
 
         return [
             "period" => $period,
@@ -479,14 +476,11 @@ if (!function_exists('has_recorded_income_expense')) {
             $data = ['user_id' => $data["user_id"], 'activity' => 'Added cooperative income/expense', 'cooperative_id' => $data['cooperative_id']];
             event(new AuditTrailEvent($data));
             return true;
-
         } catch (Throwable $exception) {
             DB::rollBack();
             Log::error($exception->getMessage());
             return false;
         }
-
-
     }
 }
 
@@ -497,10 +491,10 @@ if (!function_exists('check_active_financial_period')) {
         $cooperative = Auth::user()->cooperative->id;
         $today = Carbon::now()->format('Y-m-d');
         return CooperativeFinancialPeriod::where('cooperative_id', $cooperative)
-                ->whereDate('start_period', '<=', $today)
-                ->whereDate('end_period', '>=', $today)
-                ->where('active', true)
-                ->count() === 3;
+            ->whereDate('start_period', '<=', $today)
+            ->whereDate('end_period', '>=', $today)
+            ->where('active', true)
+            ->count() === 3;
     }
 }
 
@@ -512,34 +506,33 @@ if (!function_exists('can_view_module')) {
         //$user = User::find('8bd53ce0-1f56-4e13-a225-3e4669cefb73');
         $cooperative = $user->cooperative->id;
         $roles = $user->cooperative_roles;
-        if ($user->hasRole('super-admin')){
+        if ($user->hasRole('super-admin')) {
             return true;
-        }
-        else if ($user->hasRole('cooperative admin')) {
+        } else if ($user->hasRole('cooperative admin')) {
             return true;
         } else
             if ($user->hasRole('employee')) {
-                //get internal roles of the user.
-                $user_roles = [];
-                foreach ($roles as $r) {
-                    if (!in_array($r->id, $user_roles)) {
-                        $user_roles [] = $r->id;
-                    }
+            //get internal roles of the user.
+            $user_roles = [];
+            foreach ($roles as $r) {
+                if (!in_array($r->id, $user_roles)) {
+                    $user_roles[] = $r->id;
                 }
-                //check if the module has that role
-                $module = \App\SystemModule::where('name', $module_name)->first();
+            }
+            //check if the module has that role
+            $module = \App\SystemModule::where('name', $module_name)->first();
 
-                if ($module) {
-                    $module_role_details = $module->cooperative_roles;
-                    foreach ($module_role_details as $m_role) {
-                        if ($cooperative == $m_role->cooperative_id && in_array($m_role->id, $user_roles)) {
-                            return true;
-                        }
+            if ($module) {
+                $module_role_details = $module->cooperative_roles;
+                foreach ($module_role_details as $m_role) {
+                    if ($cooperative == $m_role->cooperative_id && in_array($m_role->id, $user_roles)) {
+                        return true;
                     }
-                    return false;
                 }
                 return false;
             }
+            return false;
+        }
         return false;
     }
 }
@@ -555,40 +548,40 @@ if (!function_exists('has_right_permission')) {
         } else
             if ($user->hasRole('employee')) {
 
-                $subModule = \App\SystemSubmodule::where('name', $submodule)->first();
+            $subModule = \App\SystemSubmodule::where('name', $submodule)->first();
 
-                if ($subModule == null) {
-                    toastr()->error('Submodule: ' . $submodule . ' is not created. Contact admin for support');
-                    return false;
-                }
-                $permission = \App\InternalUserPermission::select('internal_user_permissions.' . $operation)
-                    ->where('employee_id', $user->id)
-                    ->where('submodule_id', $subModule->id)
-                    ->where('internal_user_permissions.' . $operation, 1)
-                    ->first();
-
-                if ($permission) {
-                    return true;
-                }
-
-                $module_roles = $subModule->module->cooperative_roles->pluck('id')->toArray();
-                $user_roles = $user->cooperative_roles->pluck('id')->toArray();
-                $module_user_role = array_values(array_intersect($user_roles, $module_roles));
-
-                if (empty($module_user_role)) {
-                    return false;
-                }
-
-                $rolePermission = \App\InternalRolePermission::select('internal_role_permissions.' . $operation)
-                    ->where('internal_role_permissions.' . $operation, 1)
-                    ->whereIn('internal_role_id', $module_user_role)
-                    ->get();
-
-                if (count($rolePermission) > 0) {
-                    return true;
-                }
+            if ($subModule == null) {
+                toastr()->error('Submodule: ' . $submodule . ' is not created. Contact admin for support');
                 return false;
             }
+            $permission = \App\InternalUserPermission::select('internal_user_permissions.' . $operation)
+                ->where('employee_id', $user->id)
+                ->where('submodule_id', $subModule->id)
+                ->where('internal_user_permissions.' . $operation, 1)
+                ->first();
+
+            if ($permission) {
+                return true;
+            }
+
+            $module_roles = $subModule->module->cooperative_roles->pluck('id')->toArray();
+            $user_roles = $user->cooperative_roles->pluck('id')->toArray();
+            $module_user_role = array_values(array_intersect($user_roles, $module_roles));
+
+            if (empty($module_user_role)) {
+                return false;
+            }
+
+            $rolePermission = \App\InternalRolePermission::select('internal_role_permissions.' . $operation)
+                ->where('internal_role_permissions.' . $operation, 1)
+                ->whereIn('internal_role_id', $module_user_role)
+                ->get();
+
+            if (count($rolePermission) > 0) {
+                return true;
+            }
+            return false;
+        }
         return false;
     }
 }
@@ -648,10 +641,10 @@ if (!function_exists('get_location_details')) {
             $place_id = str_replace('place_', '', $id);
 
             $url = env('MAPS_API') . '/place/details/json?' . http_build_query([
-                    'fields' => 'name,geometry,place_id',
-                    'place_id' => $place_id,
-                    'key' => env('MAPS_API_KEY'),
-                ]);
+                'fields' => 'name,geometry,place_id',
+                'place_id' => $place_id,
+                'key' => env('MAPS_API_KEY'),
+            ]);
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -690,11 +683,11 @@ if (!function_exists('calculate_distance_maps_api')) {
     function calculate_distance_maps_api($origin, $destination)
     {
         $url = env('MAPS_API') . '/distancematrix/json?' . http_build_query([
-                'origins' => 'place_id:' . $origin,
-                'destinations' => 'place_id:' . $destination,
-                'units' => 'metrics',
-                'key' => env('MAPS_API_KEY'),
-            ]);
+            'origins' => 'place_id:' . $origin,
+            'destinations' => 'place_id:' . $destination,
+            'units' => 'metrics',
+            'key' => env('MAPS_API_KEY'),
+        ]);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -715,11 +708,11 @@ if (!function_exists('location_search_maps_api')) {
     {
         $locations = [];
         $url = env('MAPS_API') . '/place/queryautocomplete/json?' . http_build_query([
-                'input' => $query,
-                'location' => env('MAPS_LOCATION'),
-                'radius' => env('MAPS_LOCATION_RADIUS'),
-                'key' => env('MAPS_API_KEY'),
-            ]);
+            'input' => $query,
+            'location' => env('MAPS_LOCATION'),
+            'radius' => env('MAPS_LOCATION_RADIUS'),
+            'key' => env('MAPS_API_KEY'),
+        ]);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -777,7 +770,6 @@ if (!function_exists('update_wallet')) {
                 //update current balance
                 if ($withdraw) {
                     $farmer_wallet->current_balance += ($amount);
-
                 } else {
                     $farmer_wallet->current_balance -= ($request->amount);
                 }
@@ -910,7 +902,6 @@ if (!function_exists('tag_name_already_exists')) {
     function tag_name_already_exists($tag_name, $cooperative_id, $count): bool
     {
         return \App\Cow::where('cooperative_id', $cooperative_id)->where('tag_name', $tag_name)->count() > $count;
-
     }
 }
 if (!function_exists('default_wallet')) {
@@ -1004,8 +995,10 @@ if (!function_exists('complete_sale_payment')) {
             Log::warning("Sale id {$sale->id} via {$mode} Failed");
         }
         $description = "Completed sale payment of {$invoicePayment->amount} via {$mode}  for invoice id {$invoice->id}";
-        $audit_trail_data = ['user_id' => $user->id, 'activity' => $description,
-            'cooperative_id' => $user->cooperative_id];
+        $audit_trail_data = [
+            'user_id' => $user->id, 'activity' => $description,
+            'cooperative_id' => $user->cooperative_id
+        ];
         event(new AuditTrailEvent($audit_trail_data));
 
         return $ledgers_updated;
@@ -1038,7 +1031,6 @@ if (!function_exists('update_stock')) {
                             $collection_to_update->available_quantity = $quantity_in_db - $requested_quantity;
                             $collection_to_update->save();
                             $requested_quantity = 0;
-
                         } else {
                             $collection_to_update = Collection::find($record_id);
                             $collection_to_update->available_quantity = 0;
@@ -1047,13 +1039,11 @@ if (!function_exists('update_stock')) {
                         }
                         $i++;
                     }
-
                 } else {
                     Log::warning('Quantity available is not enough. Available: ' . $all_products_quantity_in_collection_sum . ' Sale id ' . $sale->id);
                     toastr()->error('Quantity available is not enough. Available: ' . $all_products_quantity_in_collection_sum);
                     return false;
                 }
-
             } else if ($sale_item->manufactured_product_id) {
                 $production = Production::find($sale_item->manufactured_product_id);
                 if ($production['available_quantity'] >= $sale_item->quantity) {
@@ -1088,7 +1078,6 @@ if (!function_exists('split_dates')) {
             "from" => $from,
             "to" => $to
         ];
-
     }
 }
 
@@ -1137,7 +1126,6 @@ if (!function_exists('sales_base_query')) {
                 if ($statusCheck) {
                     $q->where('status', "=", $status);
                 }
-
             });
         } else {
             $sales = $sales->with('invoices');
@@ -1211,7 +1199,6 @@ if (!function_exists('returned_items_data')) {
             $items = $items->whereHas('sale', function ($q) use ($customers) {
                 $q->whereIn('customer_id', $customers);
             });
-
         }
 
         if ($request->farmer) {
@@ -1281,7 +1268,6 @@ if (!function_exists('get_paye')) {
                     $total_tax += (TAXABLE_BAND_2_NEXT_467667_RATE * $remaining_amount);
                     Log::info("Last Band is on 30%  on $remaining_amount, total tax is $total_tax");
                 }
-
             } else {
                 $total_tax += (TAXABLE_BAND_1_NEXT_8333_RATE * $remaining_amount);
                 Log::info("Last Band is on 25%  on $remaining_amount, total tax is $total_tax");
@@ -1294,7 +1280,7 @@ if (!function_exists('get_paye')) {
     }
 }
 
-if(!function_exists('get_nssf')) {
+if (!function_exists('get_nssf')) {
     function get_nssf($amount)
     {
         $remaining_amount = $amount;
@@ -1333,8 +1319,9 @@ if (!function_exists('get_years_from_start')) {
 }
 
 
-if (!function_exists('perform_transaction')){
-    function perform_transaction(Transaction $transaction) {
+if (!function_exists('perform_transaction')) {
+    function perform_transaction(Transaction $transaction)
+    {
         $sender_acc = Account::find($transaction->sender_acc_id);
         $recipient_acc = Account::find($transaction->recipient_acc_id);
 
@@ -1343,21 +1330,58 @@ if (!function_exists('perform_transaction')){
 
         $recipient_acc->balance += $transaction->amount;
         $recipient_acc->save();
-        
+
         $transaction->status = 'COMPLETE';
 
         # todo: generate stored receipt
+        $now = Carbon::now();
+        $receiptNumber = "RPT";
+        $receiptNumber .= $now->format('Ymd');
+
+        // count today's inventories
+        $todaysReceipts = Receipt::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
+        $receiptNumber .= str_pad($todaysReceipts + 1, 3, '0', STR_PAD_LEFT);
+
+        // todo: add customer type
+        // create receipt
+        $receipt = new Receipt();
+        $receipt->receipt_number = $receiptNumber;
+        $receipt->user_id = Auth::id();
+        $receipt->published_at = $now;
+        $receipt->save();
+
+        // create receipt items
+        if($transaction->subject_type == 'INVOICE') {
+            $invoice = NewInvoice::find($transaction->subject_id);
+            $invoice_items = $invoice->items;
+            foreach($invoice_items as $item) {
+                $receiptItem = new ReceiptItem();
+                $receiptItem->receipt_id = $receipt->id;
+                $receiptItem->item_id = $item->id;
+                $receiptItem->item_type = $item->item_type;
+                $receiptItem->price = $item->price;
+                $receiptItem->quantity = $item->quantity;
+                $receiptItem->save();
+            }
+        } else {
+            $lots = $transaction->lots;
+            $lotPricing = $transaction->pricing;
+            foreach ($lots as $item) {
+                $receiptItem = new ReceiptItem();
+                $receiptItem->receipt_id = $receipt->id;
+                $receiptItem->item_id = $item->lot_number;
+                $receiptItem->item_type = 'LOT';
+                $receiptItem->price = $item->quantity * $lotPricing;
+                $receiptItem->quantity = $item->quantity;
+                $receiptItem->save();
+            }
+        }
+
         # receipt number
-        $x = Transaction::whereNotNull('receipt_number')->count();
-        $receiptNumber = 'R';
-        $receiptNumber .= str_pad($x + 1, 6, '0', STR_PAD_LEFT);
-        $transaction->receipt_number = $receiptNumber;
+        $transaction->receipt_id = $receipt->id;
 
         $transaction->completed_at = Carbon::now();
 
         $transaction->save();
     }
 }
-
-
-?>

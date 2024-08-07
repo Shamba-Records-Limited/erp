@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between align-items-end">
 
         <div class="card-title">Transactions</div>
-        <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Add</a>
+        <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Add Cooperative Payment</a>
         </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt">
@@ -52,8 +52,8 @@
                                     <a class="text-primary dropdown-item" href="{{route('miller-admin.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i>View Details
                                     </a>
-                                    @if($transaction->status == 'COMPLETE')
-                                    <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
+                                    @if($transaction->status == 'COMPLETE' && !empty($transaction->receipt_id))
+                                    <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->receipt_id}}')">
                                         <i class="fa fa-edit"></i> Print Receipt
                                     </button>
                                     @endif
@@ -73,9 +73,9 @@
 
 @push('custom-scripts')
 <script>
-    function printReceipt(invoiceId){
+    function printReceipt(receiptId){
         $.ajax({
-            url: `/invoices/${invoiceId}/print`,
+            url: `/receipts/${receiptId}/print`,
             method: 'GET',
             success: function(resp) {
                 // alert(resp);

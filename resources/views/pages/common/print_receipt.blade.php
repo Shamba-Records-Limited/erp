@@ -19,7 +19,7 @@
             @foreach($receipt->items as $key=>$item)
             <tr>
                 <td>
-                    $key
+                    {{$item->number}}
                     <!-- <div class="font-weight-bold item_number">{{$item->number}}</div> -->
                     <!-- <div>Nescafe 10 Kgs</div> -->
                 </td>

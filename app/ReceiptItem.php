@@ -31,6 +31,9 @@ class ReceiptItem extends Model
         if ($this->item_type == 'Final Product'){
             return $this->belongsTo(FinalProduct::class, 'item_id', 'id');
         }
+        else if($this->item_type == 'LOT') {
+            return $this->belongsTo(Lot::class, 'item_id', 'lot_number');
+        }
 
         return $this->belongsTo(MilledInventory::class, 'item_id', 'id');
     }
@@ -38,6 +41,9 @@ class ReceiptItem extends Model
     public function getNumberAttribute(){
         if ($this->item_type == 'Final Product'){
             return $this->subject->product_number;
+        }
+        else if($this->item_type == 'LOT') {
+            return $this->subject->lot_number;
         }
         return $this->subject->inventory_number;
     }

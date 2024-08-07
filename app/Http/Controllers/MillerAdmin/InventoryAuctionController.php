@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MillerAdmin;
 
+use App\Account;
 use App\Customer;
 use App\FinalProduct;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use App\QuotationItem;
 use App\Receipt;
 use App\ReceiptItem;
 use App\Sale;
+use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -208,7 +210,7 @@ class InventoryAuctionController extends Controller
                 $draftQuotation = Quotation::where("user_id", $user_id)->where("miller_id", $miller_id)->where("published_at", null)->firstOrFail();
             }
         }
-        if(!empty($viewingQuotationId)) {
+        if (!empty($viewingQuotationId)) {
             $customers = Customer::where("miller_id", $miller_id)->whereNotNull("published_at")->get();
 
             $finalProducts = FinalProduct::where("miller_id", $miller_id)->get();
@@ -402,6 +404,7 @@ class InventoryAuctionController extends Controller
 
 
         $isAddingInvoice = $request->query("is_adding_invoice", "0");
+        $viewingInvoiceId = $request->query("viewing_invoice_id", "");
 
         $draftInvoice = null;
         $customers = [];
@@ -434,9 +437,19 @@ class InventoryAuctionController extends Controller
             }
         }
 
+        if (!empty($viewingInvoiceId)) {
+            $customers = Customer::where("miller_id", $miller_id)->whereNotNull("published_at")->get();
+
+            $finalProducts = FinalProduct::where("miller_id", $miller_id)->get();
+
+            $milledInventories = MilledInventory::where("miller_id", $miller_id)->get();
+
+            $draftInvoice = NewInvoice::find($viewingInvoiceId);
+        }
+
         $invoices = NewInvoice::whereNotNull("published_at")->get();
 
-        return view('pages.miller-admin.inventory-auction.invoice', compact("isAddingInvoice", "draftInvoice", "customers", "finalProducts", "milledInventories", "invoices"));
+        return view('pages.miller-admin.inventory-auction.invoice', compact("isAddingInvoice", "viewingInvoiceId", "draftInvoice", "customers", "finalProducts", "milledInventories", "invoices"));
     }
 
     public function save_Invoice_item(Request $request)
@@ -605,6 +618,94 @@ class InventoryAuctionController extends Controller
             toastr()->error($th->getMessage());
             return redirect()->back();
         }
+    }
+
+    public function mark_invoice_as_paid($id)
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+        // $user_id = Auth::id();
+
+        $invoice = NewInvoice::find($id);
+
+        $customer_id = $invoice->customer_id;
+
+        DB::beginTransaction();
+        try {
+            $transaction = new Transaction();
+            $transaction->created_by = $user->id;
+
+            // get or create customer account
+            $customer_acc = Account::where("owner_type", "CUSTOMER")->where("owner_id", $customer_id)->first();
+            if (is_null($customer_acc)) {
+                $accCount = Account::count();
+                $customer_acc = new Account();
+                $customer_acc->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+                $customer_acc->owner_type = "CUSTOMER";
+                $customer_acc->owner_id = $customer_id;
+
+                $customer_acc->credit_or_debit = "CREDIT";
+                $customer_acc->save();
+            }
+
+            $transaction->sender_type = 'CUSTOMER';
+            $transaction->sender_id = $customer_id;
+            $transaction->sender_acc_id = $customer_acc->id;
+
+
+            // get or create miller account
+            $miller_acc = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->first();
+            if (is_null($miller_acc)) {
+                $accCount = Account::count();
+                $miller_acc = new Account();
+                $miller_acc->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+                $miller_acc->owner_type = "MILLER";
+                $miller_acc->owner_id = $miller_id;
+
+                $miller_acc->credit_or_debit = "CREDIT";
+                $miller_acc->save();
+            }
+
+            $transaction->recipient_type = 'MILLER';
+            $transaction->recipient_id = $miller_id;
+            $transaction->recipient_acc_id = $miller_acc->id;
+
+            // get transaction number
+            $now = Carbon::now();
+            $transactionNumber = "T";
+            $transactionNumber .= $now->format('Ymd');
+            // count today's transactions
+            $todaysTransactions = Transaction::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
+            $transactionNumber .= str_pad($todaysTransactions + 1, 3, '0', STR_PAD_LEFT);
+
+            $transaction->transaction_number = $transactionNumber;
+
+            // amount source
+            $transaction->amount_source = "SELF";
+            $transaction->amount = $invoice->total_price;
+            $transaction->description = "Invoice payment";
+            $transaction->type = 'INVOICE_PAYMENT';
+            $transaction->status = 'PENDING';
+
+            $transaction->subject_type = 'INVOICE';
+            $transaction->subject_id = $invoice->id;
+
+            $transaction->save();
+
+            perform_transaction($transaction);
+
+            DB::commit();
+            toastr()->success('Invoice Marked As Paid');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollback();
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back()->withInput();       }
     }
 
     public function list_receipts()

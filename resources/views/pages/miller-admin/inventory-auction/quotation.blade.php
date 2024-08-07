@@ -24,11 +24,13 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    @if(!empty($viewingQuotationId))
                     <div class="d-flex justify-content-end">
                         <button class="btn btn-primary" onclick="printQuotation('{{$draftQuotation->id}}')">
                             <i class="fa fa-pdf"></i> Print Quotation
                         </button>
                     </div>
+                    @endif
                     <h5 class="">Quotation Number: <span class="font-weight-bold">{{$draftQuotation->quotation_number}}</span></h5>
                     <form action="{{route('miller-admin.inventory-auction.quotations.save-basic_details')}}" method="post" id="save_basic_details_form">
                         @csrf
@@ -266,7 +268,7 @@
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a> -->
                                         <!-- <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}"> -->
-                                        <a class="text-info dropdown-item" href="?viewing_quotation_id={{$quotation->id}}" onclick="">
+                                        <a class="text-dark dropdown-item" href="?viewing_quotation_id={{$quotation->id}}" onclick="">
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a>
                                         <button class="text-info dropdown-item" onclick="printQuotation('{{$quotation->id}}')">

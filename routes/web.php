@@ -571,8 +571,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.invoices.delete-invoice-item");
     Route::get("/inventory-auction/invoices/publish-invoice", "MillerAdmin\InventoryAuctionController@publish_invoice")
         ->name("miller-admin.inventory-auction.invoices.publish-invoice");
-    Route::get("/inventory-auction/invoices/create-receipt/{id}", "MillerAdmin\InventoryAuctionController@create_receipt_from_invoice")
-        ->name("miller-admin.inventory-auction.invoices.create-receipt");
+    Route::get("/inventory-auction/invoices/mark-as-paid/{id}", "MillerAdmin\InventoryAuctionController@mark_invoice_as_paid")
+        ->name("miller-admin.inventory-auction.invoices.mark-as-paid");
     Route::get("/inventory-auction/invoices/export/{id}", "MillerAdmin\InventoryAuctionController@export_invoice")
         ->name("miller-admin.inventory-auction.invoices.export-invoice");
 
@@ -597,6 +597,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.transactions.view-add");
     Route::get("/transactions/add/miller-selector/{id}", "MillerAdmin\TransactionController@view_add_lot_selector")
         ->name("miller-admin.transactions.view-add-lot-selector");
+    Route::post("/transactions/add/retrieve-lot-weights", "MillerAdmin\TransactionController@retrieve_lot_weights")
+        ->name("miller-admin.transactions.retrieve-lot-weights");
     Route::post("/transactions/add", "MillerAdmin\TransactionController@add")
         ->name("miller-admin.transactions.add");
     Route::get("/transactions/{id}", "MillerAdmin\TransactionController@detail")

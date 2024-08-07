@@ -5,7 +5,7 @@
 
 
 @section('topItem')
-@if($isAddingInvoice == '1')
+@if($isAddingInvoice == '1' || !empty($viewingInvoiceId))
 <div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; height: 100vh;">
     <div class="container-fluid h-100 w-100">
         <div class="row h-100">
@@ -16,17 +16,28 @@
                         <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?">
                             <i class="mdi mdi-close"></i>
                         </a>
+                        @if($isAddingInvoice == '1')
                         <h4 class="text-center">Add Invoice</h4>
+                        @else
+                        <h4 class="text-center">View Invoice</h4>
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">
+                    @if(!empty($viewingInvoiceId))
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-primary" onclick="printInvoice('{{$draftInvoice->id}}')">
+                            <i class="fa fa-pdf"></i> Print Invoice
+                        </button>
+                    </div>
+                    @endif
                     <h5 class="">Invoice Number: <span class="font-weight-bold">{{$draftInvoice->invoice_number}}</span></h5>
                     <form action="{{route('miller-admin.inventory-auction.invoices.save-basic-details')}}" method="post">
                         @csrf
                         <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
                         <div class="form-group">
                             <label for="">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}">
+                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
                                 <option value="">-- Select Customer --</option>
                                 @foreach($customers as $customer)
                                 <option value="{{$customer->id}}" @if(old('customer_id',$draftInvoice->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>
@@ -35,21 +46,27 @@
                         </div>
                         <div class="form-group">
                             <label for="expires_at">Valid To</label>
-                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftInvoice->expires_at) }}">
+                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftInvoice->expires_at) }}" @if(!empty($viewingInvoiceId)) disabled @endif>
                             <span class="help-block text-danger" id="expires_at_error">
                                 <strong>{{ $errors->first('expires_at') }}</strong>
                             </span>
+                            @if($isAddingInvoice == '1')
                             <div>
                                 <button class="btn btn-light" type="button" onclick="setNeverExpires()">Never</button>
                                 <button class="btn btn-light" type="button" onclick="setExpiresInAMonth()">In a month</button>
                             </div>
+                            @endif
                         </div>
+                        @if($isAddingInvoice == '1')
                         <button class="btn btn-primary">Save Basic Details</button>
+                        @endif
                     </form>
                     <hr />
                     <div class="d-flex justify-content-between">
                         <h5>Invoice Items</h5>
+                        @if($isAddingInvoice == '1')
                         <button class="btn btn-primary" data-toggle="collapse" href="#addInvoiceItem">Add Invoice Item</button>
+                        @endif
                     </div>
                     <div class="collapse border rounded p-2" id="addInvoiceItem">
                         <form action="{{route('miller-admin.inventory-auction.invoices.save-invoice-item')}}" method="post">
@@ -144,6 +161,9 @@
                                     <button class="btn btn-danger">Remove</button>
                                 </td>
                             </tr> -->
+                            @php
+                            $total = 0;
+                            @endphp
                             @foreach($draftInvoice->items as $item)
                             <tr>
                                 <td>
@@ -152,13 +172,19 @@
                                 </td>
                                 <td>KES {{$item->price}}</td>
                                 <td>{{$item->quantity}}</td>
-                                <td>KES {{$item->price * $item->quantity}}</td>
+                                @php
+                                $subTotal = $item->price * $item->quantity;
+                                $total += $subTotal
+                                @endphp
+                                <td>KES {{$subTotal}}</td>
                                 <td>
+                                    @if($isAddingInvoice == '1')
                                     <form action="{{route('miller-admin.inventory-auction.invoices.delete-invoice-item', $item->id)}}" method="post">
                                         @csrf
                                         @method("DELETE")
                                         <button class="btn btn-danger" type="submit">Remove</button>
                                     </form>
+                                    @endif
 
                                 </td>
                             </tr>
@@ -166,9 +192,21 @@
                         </tbody>
                     </table>
 
+                    <div class="d-flex justify-content-end p-2">
+                        Total:&nbsp;<span class="font-weight-bold text-success">KES. {{$total}}</span>
+                    </div>
+
+                    @if($isAddingInvoice == '1')
                     <div class="mt-2">
                         <a href="{{route('miller-admin.inventory-auction.invoices.publish-invoice')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish invoice?')">Publish</a>
                     </div>
+                    @endif
+
+                    @if(!empty($viewingInvoiceId))
+                    <div style="text-align: center;">
+                        {{ QrCode::size(70)->generate(route('common.view-invoice', $draftInvoice->id)) }}
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -228,6 +266,9 @@
                                         <!-- <a class="text-info dropdown-item" href="{{route('common.view-invoice', $invoice->id)}}">
                                             <i class="fa fa-pdf"></i> View Invoice
                                         </a> -->
+                                        <a class="text-dark dropdown-item" href="?viewing_invoice_id={{$invoice->id}}" onclick="">
+                                            <i class="fa fa-pdf"></i> View Invoice
+                                        </a>
                                         <button class="text-info dropdown-item" onclick="printInvoice('{{$invoice->id}}')">
                                             <i class="fa fa-pdf"></i> Print Invoice
                                         </button>
@@ -236,12 +277,12 @@
                                             <i class="fa fa-pdf"></i> Regenerate Invoice
                                         </a>
                                         @elseif($status == 'Complete')
-                                        <a class="text-primary dropdown-item" href="#" onclick="printReceipt('{{$invoice->receipt->id}}')">
+                                        <a class="text-primary dropdown-item" href="#" onclick="printReceipt('{{$invoice->transaction->receipt->id}}')">
                                             <i class="fa fa-pdf"></i> Print Receipt
                                         </a>
                                         @elseif($invoice->has_receipt == false)
-                                        <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
-                                            <i class="fa fa-edit"></i>Create Receipt From Invoice
+                                        <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.mark-as-paid', $invoice->id) }}">
+                                            <i class="fa fa-edit"></i>Mark As Paid
                                         </a>
                                         @endif
                                     </div>

@@ -27,6 +27,10 @@ class Transaction extends Model
         });
     }
 
+    public function receipt() {
+        return $this->belongsTo(Receipt::class, 'receipt_id', 'id');
+    }
+
     public function getLotsAttribute(){
         $lots = [];
         if($this->subject_type == 'LOT'){
@@ -47,5 +51,20 @@ class Transaction extends Model
             $subject = LotGroup::find($this->subject_id)->group_number;
         }
         return $subject;
+    }
+
+    public function getPricingAttribute(){
+        $lots = $this->lots;
+        $qty = 0;
+        foreach($lots as $lot){
+            $qty += $lot->quantity;
+        }
+
+        $amount = $this->amount;
+        if($qty == 0 || $amount == 0) {
+            return 0;
+        }
+
+        return $amount/$qty;
     }
 }

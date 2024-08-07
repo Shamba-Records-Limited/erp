@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\MillerAdmin;
 
 use App\Account;
+use App\Cooperative;
 use App\Http\Controllers\Controller;
+use App\Lot;
 use App\LotGroup;
 use App\LotGroupItem;
 use App\Transaction;
@@ -73,14 +75,12 @@ class TransactionController extends Controller
     public function view_add_lot_selector($id)
     {
         // todo: add id filter
-        $lots = DB::select(DB::raw("
-            SELECT l.lot_number FROM lots l WHERE l.cooperative_id = :id
-        "), ["id" => $id]);
+        $lots = Lot::where("cooperative_id", $id)->get();
 
         $lotOptions = "<option value=''>--SELECT LOT--</option>
         ";
         foreach ($lots as $lot) {
-            $lotOptions .= "<option value='$lot->lot_number'>$lot->lot_number</option>
+            $lotOptions .= "<option value='$lot->lot_number'>$lot->lot_number - $lot->quantity KG</option>
             ";
         }
 
@@ -211,5 +211,20 @@ class TransactionController extends Controller
         $lots = $transaction->lots;
 
         return view("pages.miller-admin.transactions.detail", compact('transaction', 'lots'));
+    }
+
+    public function retrieve_lot_weights(Request $request) {
+        $request->validate([
+            "selectedLots" => "required"
+        ]);
+
+        $totalWeight = 0;
+        $lotNumbers = $request->selectedLots;
+        foreach($lotNumbers as $lotNumber) {
+            $lot = Lot::where("lot_number", $lotNumber)->firstOrFail();
+            $totalWeight += $lot->quantity;
+        }
+
+        return response()->json(["lot_weights" => $totalWeight]);
     }
 }
