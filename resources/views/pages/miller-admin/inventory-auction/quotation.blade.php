@@ -230,17 +230,18 @@
                                         <!-- <a class="text-info dropdown-item" href="{{route('common.view-quotation', $quotation->id)}}">
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a> -->
-                                        <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}">
+                                        <!-- <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}"> -->
+                                        <button class="text-info dropdown-item" onclick="printQuotation('{{$quotation->id}}')">
                                             <i class="fa fa-pdf"></i> Print Quotation
-                                        </a>
+                                        </button>
                                         @if($status == 'Expired')
                                         <a class="text-primary dropdown-item" href="#">
                                             <i class="fa fa-pdf"></i> Regenerate Quotation
                                         </a>
                                         @elseif($status == 'Complete')
-                                        <a class="text-primary dropdown-item" href="#">
+                                        <button class="text-primary dropdown-item" onclick="printInvoice('{{$quotation->invoice->id}}')">
                                             <i class="md md-edit"></i> Print Invoice
-                                        </a>
+                                        </button>
                                         @elseif($quotation->no_invoice)
                                         <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
                                             <i class="md md-edit"></i>Create Invoice From Quotation
@@ -342,5 +343,33 @@
             }
         }
     });
+
+    function printQuotation(quotationId) {
+        $.ajax({
+            url: `/quotations/${quotationId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
+
+    function printInvoice(invoiceId) {
+        $.ajax({
+            url: `/invoices/${invoiceId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
 </script>
 @endpush

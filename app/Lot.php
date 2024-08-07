@@ -29,4 +29,15 @@ class Lot extends Model
         return $first_collection->unit;
     }
 
+    public function getQuantityAttribute()
+    {
+        $qty = 0;
+        $collections = $this->collections;
+        foreach($collections as $collection){
+            $qty += $collection->quantity;
+        }
+
+        return $qty;
+    }
+
 }

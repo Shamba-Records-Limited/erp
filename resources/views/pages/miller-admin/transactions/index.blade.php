@@ -28,12 +28,37 @@
                     @foreach($transactions as $transaction)
                     <tr>
                         <td>{{$transaction->transaction_number}}</td>
-                        <td></td>
-                        <td>Me</td>
-                        <td>{{$transaction->dest}}</td>
+                        <td>{{$transaction->subject}}</td>
+                        <td>{{$transaction->sender}}</td>
+                        <td>{{$transaction->recipient}}</td>
                         <td>KES {{$transaction->amount}}</td>
-                        <td>{{$transaction->status}}</td>
+                        @php
+                        $statusCls = 'text-warning';
+                        if($transaction->status == 'COMPLETE'){
+                        $statusCls = 'text-success';
+                        }
+                        @endphp
                         <td>
+                            <div class="{{$statusCls}}">
+                                {{$transaction->status}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="text-primary dropdown-item" href="{{route('miller-admin.transactions.detail', $transaction->id )}}">
+                                        <i class="fa fa-edit"></i>View Details
+                                    </a>
+                                    @if($transaction->status == 'COMPLETE')
+                                    <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
+                                        <i class="fa fa-edit"></i> Print Receipt
+                                    </button>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -47,4 +72,19 @@
 @endpush
 
 @push('custom-scripts')
+<script>
+    function printReceipt(invoiceId){
+        $.ajax({
+            url: `/invoices/${invoiceId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
+</script>
 @endpush

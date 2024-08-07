@@ -24,6 +24,12 @@ class TrackingTreeController extends Controller
         return view("pages.miller-admin.tracking-tree", compact('lots'));
     }
 
+    public function root_details(Request $request)
+    {
+           
+        return response($elem, 200)->header('Content-Type', 'text/html');
+    }
+
     public function root_identifier($root_type)
     {
         $user = Auth::user();

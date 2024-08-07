@@ -46,10 +46,20 @@ Auth::routes(
 // view quotation
 Route::get("/quotations/{id}", "Common\CommonController@view_quotation")
     ->name("common.view-quotation");
+Route::get("/quotations/{id}/print", "Common\CommonController@print_quotation")
+    ->name("common.print-quotation");
 Route::get("/invoices/{id}", "Common\CommonController@view_invoice")
     ->name("common.view-invoice");
+Route::get("/invoices/{id}/print", "Common\CommonController@print_invoice")
+    ->name("common.print-invoice");
 Route::get("/receipts/{id}", "Common\CommonController@view_receipt")
     ->name("common.view-receipt");
+Route::get("/transaction-receipts/{id}", "Common\CommonController@print_transaction_receipt")
+    ->name("common.view-transaction-receipt");
+Route::get("/transaction-receipts/{id}/print", "Common\CommonController@print_transaction_receipt")
+    ->name("common.print-transaction-receipt");
+Route::get("/receipts/{id}/print", "Common\CommonController@print_receipt")
+    ->name("common.print-receipt");
 
 //load countries
 Route::get("/countries/data", "FirstTimeConfig@save_country_details")
@@ -87,6 +97,9 @@ Route::post('/update-password', 'UserManagementController@update_password')->nam
 Route::get('/common/collection/{collection_id}/unit', 'Common\CommonController@collection_unit')->name('collection.get-collection-unit');
 Route::get('/common/product/{product_id}/unit', 'Common\CommonController@product_unit')->name('collection.get-product-unit');
 
+Route::middleware('auth')->group(function(){
+    Route::get("/wallet-details", 'Common\CommonController@wallet_details')->name('wallet.details');
+});
 
 // superadmin routes
 Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {
@@ -421,6 +434,10 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.transactions.view-add-collection-selector");
     Route::post("/transactions/add", "CooperativeAdmin\TransactionController@add")
         ->name("cooperative-admin.transactions.add");
+    Route::get("/transactions/{id}", "CooperativeAdmin\TransactionController@detail")
+        ->name("cooperative-admin.transactions.detail");
+    Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
+        ->name("cooperative-admin.transactions.complete");
     
 });
 
@@ -582,6 +599,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.transactions.view-add-lot-selector");
     Route::post("/transactions/add", "MillerAdmin\TransactionController@add")
         ->name("miller-admin.transactions.add");
+    Route::get("/transactions/{id}", "MillerAdmin\TransactionController@detail")
+        ->name("miller-admin.transactions.detail");
 
     
     // support

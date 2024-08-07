@@ -29,7 +29,7 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="{{route('miller-admin.inventory-auction.receipts.export-receipt', $receipt->id)}}">
+                                    <a class="text-primary dropdown-item" onclick="printReceipt('{{$receipt->id}}')">
                                         <i class="fa fa-pdf"></i> Print Receipt
                                     </a>
                                 </div>
@@ -47,4 +47,19 @@
 @endpush
 
 @push('custom-scripts')
+<script>
+    function printReceipt(receiptId) {
+        $.ajax({
+            url: `/receipts/${receiptId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
+</script>
 @endpush

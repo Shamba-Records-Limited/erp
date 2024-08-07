@@ -30,13 +30,32 @@ class TransactionController extends Controller
         }
 
         $transactions = DB::select(DB::raw("
-            SELECT t.*, c.name AS dest
+            SELECT t.*, c.name AS dest,
+            (
+                CASE WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_id = :miller_id
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_id = :miller_id1
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS recipient
             FROM transactions t
-            JOIN millers m ON t.sender_id = :miller_id OR t.recipient_id = :miller_id1
+            JOIN millers m ON t.sender_id = :miller_id2 OR t.recipient_id = :miller_id3
             JOIN cooperatives c ON c.id = t.sender_id OR c.id = t.recipient_id
             -- WHERE HAS NO PARENT
             WHERE t.parent_id IS NULL
-        "), ["miller_id" => $miller_id, "miller_id1" => $miller_id]);
+        "), ["miller_id" => $miller_id, "miller_id1" => $miller_id, "miller_id2" => $miller_id, "miller_id3" => $miller_id]);
 
         return view("pages.miller-admin.transactions.index", compact('transactions'));
     }
@@ -184,5 +203,13 @@ class TransactionController extends Controller
             toastr()->error('Oops! Operation failed');
             return redirect()->back()->withInput();
         }
+    }
+
+    public function detail($id){
+        $transaction = Transaction::find($id);
+
+        $lots = $transaction->lots;
+
+        return view("pages.miller-admin.transactions.detail", compact('transaction', 'lots'));
     }
 }

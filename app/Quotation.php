@@ -48,6 +48,10 @@ class Quotation extends Model
        return $totalPrice;
     }
 
+    public function getInvoiceAttribute(){
+        return NewInvoice::where("quotation_id", $this->id)->first(); 
+    }
+
     public function getHasInvoiceAttribute(){
         return NewInvoice::where("quotation_id", $this->id)->exists();
     }

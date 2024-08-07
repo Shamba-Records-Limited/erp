@@ -1,5 +1,6 @@
 <?php
 
+use App\Account;
 use App\AccountingRule;
 use App\Collection;
 use App\Events\AuditTrailEvent;
@@ -22,6 +23,7 @@ use App\CooperativeFinancialPeriod;
 use App\CooperativeProperty;
 use App\CooperativeWallet;
 use App\Location;
+use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -146,8 +148,9 @@ if (!function_exists('store_image')) {
         $name = null;
         if ($request->has($file)) {
             $name = $request_file->store($path, 'public');
-            $resized_image = Image::make(public_path('storage/' . $name))->fit($height, $width);
-            $resized_image->save();
+            // dd(public_path('storage/' . $name));
+            // $resized_image = Image::make(public_path('storage/' . $name))->fit($height, $width);
+            // $resized_image->save();
         }
 
         Log::info("Image {$name} saved");
@@ -169,7 +172,7 @@ if (!function_exists('save_user_image')) {
         $user->profile_picture = $request->has('profile_picture') ?
             store_image($request,
                 "profile_picture",
-                $request->profile_picture,
+                $request->file("profile_picture"),
                 "images/profile",
                 200,
                 200) : $user->profile_picture;
@@ -1330,7 +1333,31 @@ if (!function_exists('get_years_from_start')) {
 }
 
 
+if (!function_exists('perform_transaction')){
+    function perform_transaction(Transaction $transaction) {
+        $sender_acc = Account::find($transaction->sender_acc_id);
+        $recipient_acc = Account::find($transaction->recipient_acc_id);
 
+        $sender_acc->balance -= $transaction->amount;
+        $sender_acc->save();
+
+        $recipient_acc->balance += $transaction->amount;
+        $recipient_acc->save();
+        
+        $transaction->status = 'COMPLETE';
+
+        # todo: generate stored receipt
+        # receipt number
+        $x = Transaction::whereNotNull('receipt_number')->count();
+        $receiptNumber = 'R';
+        $receiptNumber .= str_pad($x + 1, 6, '0', STR_PAD_LEFT);
+        $transaction->receipt_number = $receiptNumber;
+
+        $transaction->completed_at = Carbon::now();
+
+        $transaction->save();
+    }
+}
 
 
 ?>

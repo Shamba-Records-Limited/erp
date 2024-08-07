@@ -205,23 +205,19 @@
                         @php
                         $status = 'Pending Payment';
                         if($invoice->expires_at != ''){
-                            $now = now();
-                            
-                            if($invoice->expires_at < $now) {
-                                $status='Expired' ;
-                            }
-                        }
-                        if($invoice->has_receipt){
+                        $now = now();
+
+                        if($invoice->expires_at < $now) { $status='Expired' ; } } if($invoice->has_receipt){
                             $status = 'Complete';
-                        }
-                        @endphp <td>
-                            @if($status == 'Pending Payment')
-                            <div class="badge badge-warning">{{$status}}</div>
-                            @elseif($status == 'Expired')
-                            <div class="badge badge-danger">{{$status}}</div>
-                            @elseif($status == 'Complete')
-                            <div class="badge badge-success">{{$status}}</div>
-                            @endif
+                            }
+                            @endphp <td>
+                                @if($status == 'Pending Payment')
+                                <div class="badge badge-warning">{{$status}}</div>
+                                @elseif($status == 'Expired')
+                                <div class="badge badge-danger">{{$status}}</div>
+                                @elseif($status == 'Complete')
+                                <div class="badge badge-success">{{$status}}</div>
+                                @endif
                             </td>
                             <td>
                                 <div class="btn-group dropdown">
@@ -232,15 +228,15 @@
                                         <!-- <a class="text-info dropdown-item" href="{{route('common.view-invoice', $invoice->id)}}">
                                             <i class="fa fa-pdf"></i> View Invoice
                                         </a> -->
-                                        <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.invoices.export-invoice', $invoice->id)}}">
+                                        <button class="text-info dropdown-item" onclick="printInvoice('{{$invoice->id}}')">
                                             <i class="fa fa-pdf"></i> Print Invoice
-                                        </a>
+                                        </button>
                                         @if($status == 'Expired')
                                         <a class="text-primary dropdown-item" href="#">
                                             <i class="fa fa-pdf"></i> Regenerate Invoice
                                         </a>
                                         @elseif($status == 'Complete')
-                                        <a class="text-primary dropdown-item" href="#">
+                                        <a class="text-primary dropdown-item" href="#" onclick="printReceipt('{{$invoice->receipt->id}}')">
                                             <i class="fa fa-pdf"></i> Print Receipt
                                         </a>
                                         @elseif($invoice->has_receipt == false)
@@ -316,5 +312,33 @@
             }
         }
     });
+
+    function printInvoice(invoiceId) {
+        $.ajax({
+            url: `/invoices/${invoiceId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
+
+    function printReceipt(receiptId) {
+        $.ajax({
+            url: `/receipts/${receiptId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
 </script>
 @endpush

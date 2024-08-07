@@ -8,8 +8,8 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-end">
 
-        <div class="card-title">Transactions</div>
-        <a class="btn btn-primary" href="{{route('cooperative-admin.transactions.view-add')}}">Add</a>
+            <div class="card-title">Transactions</div>
+            <a class="btn btn-primary" href="{{route('cooperative-admin.transactions.view-add')}}">Add</a>
         </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt">
@@ -28,12 +28,42 @@
                     @foreach($transactions as $transaction)
                     <tr>
                         <td>{{$transaction->transaction_number}}</td>
-                        <td></td>
-                        <td>Me</td>
-                        <td>{{$transaction->dest}}</td>
+                        <td>{{$transaction->subject}}</td>
+                        <td>{{$transaction->sender}}</td>
+                        <td>{{$transaction->recipient}}</td>
                         <td>KES {{$transaction->amount}}</td>
-                        <td>{{$transaction->status}}</td>
+                        @php
+                        $statusCls = 'text-warning';
+                        if($transaction->status == 'COMPLETE'){
+                        $statusCls = 'text-success';
+                        }
+                        @endphp
                         <td>
+                            <div class="{{$statusCls}}">
+                                {{$transaction->status}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="btn-group dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="text-primary dropdown-item" href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
+                                        <i class="fa fa-edit"></i> View Details
+                                    </a>
+                                    @if($transaction->recipient == 'Me' && $transaction->status == 'PENDING')
+                                    <a class="text-success dropdown-item" href="{{route('cooperative-admin.transactions.complete', $transaction->id )}}">
+                                        <i class="fa fa-edit"></i> Complete
+                                    </a>
+                                    @endif
+                                    @if($transaction->status == 'COMPLETE')
+                                    <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
+                                        <i class="fa fa-edit"></i> Print Receipt
+                                    </button>
+                                    @endif
+                                </div>
+                            </div>
                         </td>
                     </tr>
                     @endforeach
@@ -47,4 +77,19 @@
 @endpush
 
 @push('custom-scripts')
+<script>
+    function printReceipt(transactionId){
+        $.ajax({
+            url: `/transaction-receipts/${transactionId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
+</script>
 @endpush
