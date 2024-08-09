@@ -28,32 +28,41 @@ class TransactionController extends Controller
         $coop_id = $user->cooperative->id;
 
         $transactions = DB::select(DB::raw("
-            SELECT t.*, m.name AS dest,
+            SELECT t.*,
             (
                 CASE WHEN t.subject_type = 'LOT'
                     THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
                 WHEN t.subject_type = 'LOT_GROUP'
                     THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                WHEN t.subject_type = 'COLLECTION'
+                    THEN (SELECT c.collection_number FROM collections c WHERE c.id = t.subject_id)
+                WHEN t.subject_type = 'COLLECTION_GROUP'
+                    THEN (SELECT cg.group_number FROM collection_groups cg WHERE cg.id = t.subject_id)
                 END
             ) AS subject,
             (
                 CASE WHEN t.sender_id = :coop_id
                     THEN 'Me'
-                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                WHEN t.sender_type = 'MILLER' THEN
+                    CONCAT(t.sender_type, ' - ',(SELECT m.name FROM millers m WHERE m.id = t.sender_id))
+                ELSE 'OTHER'
                 END
             ) AS sender,
             (
                 CASE WHEN t.recipient_id = :coop_id1
                     THEN 'Me'
-                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                WHEN t.recipient_type = 'MILLER' THEN
+                    CONCAT(t.recipient_type, ' - ',(SELECT m.name FROM millers m WHERE m.id = t.recipient_id))
+                WHEN t.recipient_type = 'FARMER' THEN
+                    CONCAT(t.recipient_type, ' - ',(SELECT u.username FROM farmers f JOIN users u ON u.id = f.user_id WHERE f.id = t.recipient_id))
+                ELSE 'Other'
                 END
             ) AS recipient
 
             FROM transactions t
-            JOIN cooperatives c ON t.sender_id = :coop_id2 OR t.recipient_id = :coop_id3
-            JOIN millers m ON m.id = t.sender_id OR m.id = t.recipient_id
             -- WHERE HAS NO PARENT
-            WHERE t.parent_id IS NULL
+            WHERE t.parent_id IS NULL AND
+                (t.sender_id = :coop_id2 OR t.recipient_id = :coop_id3)
         "), ["coop_id" => $coop_id, "coop_id1" => $coop_id, "coop_id2" => $coop_id, "coop_id3" => $coop_id]);
 
         return view("pages.cooperative-admin.transactions.index", compact('transactions'));
