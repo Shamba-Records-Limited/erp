@@ -280,6 +280,7 @@ $countries = get_countries();
                                 <th>Gender</th>
                                 <th>County</th>
                                 <th>Sub County</th>
+                                <th>Total Collections</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -293,6 +294,7 @@ $countries = get_countries();
                                 <td>{{$farmer->gender}}</td>
                                 <td>{{$farmer->county_name}}</td>
                                 <td>{{$farmer->sub_county_name}}</td>
+                                <td>{{$farmer->total_collection_quantity}} KG</td>
                                 <td></td>
                             </tr>
                             @endforeach

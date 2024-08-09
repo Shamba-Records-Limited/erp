@@ -10,6 +10,7 @@
         <div class="card-title">Farmer Details</div>
         <div class="row">
             <div class="col-3 border m-2 rounded">Username: {{$farmer->username}}</div>
+            <div class="col-3 border m-2 rounded">Name: {{$farmer->first_name}} {{$farmer->other_names}}</div>
             <div class="col-3 border m-2 rounded">Email: {{$farmer->email}}</div>
             <div class="col-3 border m-2 rounded">Phone: {{$farmer->phone_no}}</div>
             <div class="col-3 border m-2 rounded">Country: {{$farmer->country_code}}</div>
@@ -18,6 +19,12 @@
             <div class="col-3 border m-2 rounded">Id Number: {{$farmer->id_no}}</div>
             <div class="col-3 border m-2 rounded">Member Number: {{$farmer->member_no}}</div>
             <div class="col-3 border m-2 rounded">Gender: {{$farmer->gender}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-12 border rounded m-2">
+                <div>Total Collection Quantity</div>
+                <div class="font-weight-bold">{{$farmer->total_collection_quantity}} KG</div>
+            </div>
         </div>
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -33,6 +40,7 @@
                         <th>Collection Number</th>
                         <th>Lot Number</th>
                         <th>Name</th>
+                        <th>Quantity</th>
                         <th>Collection Date</th>
                         <th></th>
                     </tr>
@@ -44,6 +52,7 @@
                         <td>{{$collection->collection_number}}</td>
                         <td>{{$collection->lot_number}}</td>
                         <td>{{$collection->name}}</td>
+                        <td>{{$collection->quantity}} KG</td>
                         <td>{{$collection->date_collected}}</td>
                         <td></td>
                     </tr>

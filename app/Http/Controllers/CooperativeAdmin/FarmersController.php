@@ -300,7 +300,8 @@ class FarmersController extends Controller
                     u.first_name,
                     u.other_names,
                     county.name as county_name,
-                    sub_county.name as sub_county_name
+                    sub_county.name as sub_county_name,
+                    (SELECT SUM(c.quantity) FROM collections c WHERE c.farmer_id=f.id) AS total_collection_quantity
                 FROM farmers f
                 JOIN users u ON f.user_id = u.id
                 LEFT JOIN counties county ON county.id = f.county_id
@@ -501,7 +502,8 @@ class FarmersController extends Controller
                 f.*,
                 u.*,
                 county.name as county_name,
-                sub_county.name as sub_county_name
+                sub_county.name as sub_county_name,
+                (SELECT SUM(c.quantity) FROM collections c WHERE c.farmer_id=f.id) AS total_collection_quantity
             FROM farmers f
             JOIN users u ON f.user_id = u.id
             LEFT JOIN counties county ON county.id = f.county_id
