@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CooperativeAdmin;
 use App\Http\Controllers\Controller;
 use App\Lot;
 use App\LotGradeDistribution;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Log;
@@ -18,9 +19,17 @@ class LotsController extends Controller
 
     public function index(Request $request)
     {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
         $lots = DB::select(DB::raw("
-            SELECT l.* FROM lots l
-        "));
+            SELECT l.*,
+                (SELECT SUM(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as quantity,
+                (SELECT COUNT(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as collections_count,
+                (SELECT SUM(d.quantity) FROM lot_grade_distributions d WHERE d.lot_number = l.lot_number) as graded
+            FROM lots l
+            WHERE l.cooperative_id = :coop_id
+            ORDER BY l.created_at DESC
+        "), ["coop_id" => $coop_id]);
 
         return view('pages.cooperative-admin.lots.index', compact("lots"));
     }

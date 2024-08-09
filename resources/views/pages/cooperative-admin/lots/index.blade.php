@@ -14,6 +14,9 @@
                     <tr>
                         <th>#</th>
                         <th>Lot No</th>
+                        <th>Quantity</th>
+                        <th>Number of Collections</th>
+                        <th>Ungraded</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -22,6 +25,9 @@
                     <tr>
                         <td>{{++$key }}</td>
                         <td><a href="{{route('cooperative-admin.lots.detail', $lot->lot_number)}}">{{$lot->lot_number}}</a></td>
+                        <td>{{$lot->quantity}} KG</td>
+                        <td>{{$lot->collections_count}}</td>
+                        <td>{{$lot->quantity - ($lot->graded ?? 0)}} KG</td>
                         <td></td>
                     </tr>
                     @endforeach

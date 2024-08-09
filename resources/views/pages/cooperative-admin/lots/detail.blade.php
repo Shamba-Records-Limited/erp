@@ -82,7 +82,7 @@
             </div>
             <div class="col-md-4 col-12 border rounded m-2">
                 <div>Graded</div>
-                <div><span class="font-weight-bold">{{$lot->total_graded_quantity}} {{$lot_unit}}</span> OF <span class="font-weight-bold">{{$lot->total_collection_quantity}} {{$lot_unit}}</span></div>
+                <div><span class="font-weight-bold">{{$lot->total_graded_quantity ?? 0}} {{$lot_unit}}</span> OF <span class="font-weight-bold">{{$lot->total_collection_quantity}} {{$lot_unit}}</span></div>
             </div>
         </div>
         <ul class="nav nav-tabs">
