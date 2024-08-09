@@ -297,6 +297,8 @@ class FarmersController extends Controller
                     f.id,
                     f.gender,
                     u.username,
+                    u.first_name,
+                    u.other_names,
                     county.name as county_name,
                     sub_county.name as sub_county_name
                 FROM farmers f

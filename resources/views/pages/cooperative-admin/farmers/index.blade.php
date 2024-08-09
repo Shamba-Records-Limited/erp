@@ -288,7 +288,7 @@ $countries = get_countries();
                             <tr>
                                 <td>{{++$key }}</td>
                                 <td>
-                                    <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$farmer->username}}</a>
+                                    <a href="{{route('cooperative-admin.farmers.detail', $farmer->id)}}">{{$farmer->first_name}} {{$farmer->other_names}}</a>
                                 </td>
                                 <td>{{$farmer->gender}}</td>
                                 <td>{{$farmer->county_name}}</td>
