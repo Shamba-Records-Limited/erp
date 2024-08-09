@@ -12,6 +12,7 @@ use DB;
 use Hash;
 use Illuminate\Http\Request;
 use Log;
+use Spatie\Permission\Models\Role;
 
 class FarmersController extends Controller
 {
@@ -83,6 +84,11 @@ class FarmersController extends Controller
             $farmer->gender = $request->gender[0];
             $farmer->phone_no = $request->phone_no;
             $farmer->save();
+
+            //get roles
+            $role = Role::select('id', 'name')->where('name', '=', 'farmer')->first();
+            $new_user = $user->refresh();
+            $new_user->assignRole($role->name);
 
             $data = [
                 "name" => ucwords(strtolower($request->first_name)) . ' ' . ucwords(strtolower($request->other_names)),
