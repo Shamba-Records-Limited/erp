@@ -27,15 +27,17 @@ class Transaction extends Model
         });
     }
 
-    public function receipt() {
+    public function receipt()
+    {
         return $this->belongsTo(Receipt::class, 'receipt_id', 'id');
     }
 
-    public function getLotsAttribute(){
+    public function getLotsAttribute()
+    {
         $lots = [];
-        if($this->subject_type == 'LOT'){
+        if ($this->subject_type == 'LOT') {
             $lots[] = Lot::find($this->subject_id);
-        } else if($this->subject_type == 'LOT_GROUP'){
+        } else if ($this->subject_type == 'LOT_GROUP') {
             $lotGroup = LotGroup::find($this->subject_id);
             $lots = $lotGroup->lots;
         }
@@ -43,28 +45,52 @@ class Transaction extends Model
         return $lots;
     }
 
-    public function getSubjectAttribute(){
+    public function getCollectionsAttribute()
+    {
+        $collections = [];
+        if ($this->subject_type == 'COLLECTION') {
+            $collections[] = Collection::find($this->subject_id);
+        } else if ($this->subject_type == 'COLLECTION_GROUP') {
+            $collectionGroup = CollectionGroup::find($this->subject_id);
+            $collections = $collectionGroup->collections;
+        }
+
+        return $collections;
+    }
+
+    public function getSubjectAttribute()
+    {
         $subject = "";
-        if($this->subject_type == 'LOT'){
+        if ($this->subject_type == 'LOT') {
             $subject = Lot::find($this->subject_id)->lot_number;
-        } else if($this->subject_type == 'LOT_GROUP'){
+        } else if ($this->subject_type == 'LOT_GROUP') {
             $subject = LotGroup::find($this->subject_id)->group_number;
         }
         return $subject;
     }
 
-    public function getPricingAttribute(){
-        $lots = $this->lots;
+    public function getPricingAttribute()
+    {
         $qty = 0;
-        foreach($lots as $lot){
-            $qty += $lot->quantity;
+        $amount = $this->amount;
+        
+
+        if ($this->subject_type == 'LOT' || $this->subject_type == 'LOT_GROUP') {
+            $lots = $this->lots;
+            foreach ($lots as $lot) {
+                $qty += $lot->quantity;
+            }
+        } else if ($this->subject_type == 'COLLECTION' || $this->subject_type == 'COLLECTION_GROUP') {
+            $collections = $this->collections;
+            foreach ($collections as $collection) {
+                $qty += $collection->quantity;
+            }
         }
 
-        $amount = $this->amount;
-        if($qty == 0 || $amount == 0) {
+        if ($qty == 0 || $amount == 0) {
             return 0;
         }
 
-        return $amount/$qty;
+        return $amount / $qty;
     }
 }

@@ -12,9 +12,9 @@
                 <div>
                     <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addCollectionForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Add Warehouse
                     </button>
-                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.warehouses.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
                     </a>
-                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('cooperative-admin.collections.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.warehouses.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
                     </a>
                 </div>
 

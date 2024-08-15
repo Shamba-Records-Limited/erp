@@ -70,17 +70,6 @@
         </div>
     </div>
 
-    @if($user->hasRole('cooperative admin|employee'))
-        @include('dashboard-section.admin.top_cards')
-        @include('dashboard-section.admin.sales_chart')
-        @include('dashboard-section.admin.mid_cards')
-        @include('dashboard-section.admin.products_chart')
-
-    @elseif($user->hasRole('farmer'))
-        @include('dashboard-section.farmer.top_cards')
-        @include('dashboard-section.farmer.mid_cards')
-        @include('dashboard-section.farmer.products_chart')
-    @endif
 
 @endsection
 

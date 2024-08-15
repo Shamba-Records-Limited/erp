@@ -296,7 +296,7 @@ $cooperative = null;
                 <span class="menu-title">Products</span>
             </a>
         </li>
-        
+
         <li class="nav-item {{ active_class(['cooperative-admin/transactions*']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
@@ -671,6 +671,13 @@ $cooperative = null;
         @endif
 
         @if($user && $user->hasRole('miller admin'))
+        <!-- <li class="nav-item {{ active_class(['miller-admin/dashboard']) }}">
+            <a class="nav-link" href="{{ route('miller-admin.dashboard') }}">
+                <i class="menu-icon mdi mdi-television"></i>
+                <span class="menu-title">Dashboard</span>
+            </a>
+        </li> -->
+
         <li class="nav-item {{ active_class(['miller-admin/warehouses*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.warehouses.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -782,175 +789,27 @@ $cooperative = null;
         </li>
         @endif
 
-        {{-- farmer menu --}}
+
         @if($user && $user->hasRole('farmer'))
-        <li class="nav-item {{ active_class(['dashboard']) }}">
-            <a class="nav-link" href="{{ url('dashboard') }}">
+        <li class="nav-item {{ active_class(['farmer/dashboard']) }}">
+            <a class="nav-link" href="{{ route('farmer.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
-        <li class="nav-item {!!  active_class(['farmer/collections*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerCollectionsManagement" aria-expanded="{!!  is_active_route(['farmer/collections*'])  !!}" aria-controls="FarmerCollectionsManagement">
-                <i class="menu-icon mdi mdi-chemical-weapon"></i>
+
+        <li class="nav-item {{ active_class(['farmer/collections*']) }}">
+            <a class="nav-link" href="{{ route('farmer.collections.show') }}">
+                <i class="menu-icon mdi mdi-cogs"></i>
                 <span class="menu-title">Collections</span>
-                <i class="menu-arrow"></i>
             </a>
-            <div class="collapse {{ show_class(['farmer/collections*']) }}" id="FarmerCollectionsManagement">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['farmer/collections/reports']) }}">
-                        <a class="nav-link" href="{{ route('farmer.collections.reports') }}">Reports</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/collections']) }}">
-                        <a class="nav-link" href="{{ route('farmer.collections') }}">Collect</a>
-                    </li>
-                </ul>
-            </div>
         </li>
 
-        <li class="nav-item {!!  active_class(['farmer/farm/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerFarmManagement" aria-expanded="{!!  is_active_route(['/farmer/farm/*'])  !!}" aria-controls="FarmerFarmManagement">
-                <i class="menu-icon mdi mdi-cow"></i>
-                <span class="menu-title">Farm Management</span>
-                <i class="menu-arrow"></i>
+        <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
+            <a class="nav-link" href="{{ route('farmer.transactions.show') }}">
+                <i class="menu-icon mdi mdi-help-circle-outline"></i>
+                <span class="menu-title">Transactions</span>
             </a>
-            <div class="collapse {{ show_class(['farmer/farm/*']) }}" id="FarmerFarmManagement">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['farmer/farm/breeds']) }}">
-                        <a class="nav-link" href="{{ route('farm.breeds') }}">Breeds</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/livestock']) }}">
-                        <a class="nav-link" href="{{ route('farm.livestock') }}">Livestock/Poultry</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/farm-units']) }}">
-                        <a class="nav-link" href="{{ route('farm.farm-units') }}">Farm Units</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/crops']) }}">
-                        <a class="nav-link" href="{{ route('farm.crops') }}">Supported Crops</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/crop-calendar-stages']) }}">
-                        <a class="nav-link" href="{{ route('farm.crop-calendar-stages') }}">Crop
-                            Calendar Stages</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/crop-stages*']) }}">
-                        <a class="nav-link" href="{{ route('farm.crop-stages') }}">Crop
-                            Stages</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/expected-yields']) }}">
-                        <a class="nav-link" href="{{ route('farm.expected-yields') }}">Yield
-                            Expectations</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/farm/my-yields']) }}">
-                        <a class="nav-link" href="{{ route('farm.yields') }}">My Yields</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-        <li class="nav-item {!!  active_class(['farmer/disease*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerDiseaseManagement" aria-expanded="{!!  is_active_route(['farmer/disease*'])  !!}" aria-controls="FarmerDiseaseManagement">
-                <i class="menu-icon mdi mdi-alert-outline"></i>
-                <span class="menu-title">Disease Management</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['farmer/disease*']) }}" id="FarmerDiseaseManagement">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['farmer/disease/mini-dashboard']) }}">
-                        <a class="nav-link" href="{{ route('disease.mini-dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/disease/categories']) }}">
-                        <a class="nav-link" href="{{ route('disease.categories') }}">Categories</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/disease']) }}">
-                        <a class="nav-link" href="{{ route('diseases') }}">Diseases</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/disease/case*']) }}">
-                        <a class="nav-link" href="{{ route('disease.cases') }}">Reported
-                            Cases</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-        <li class="nav-item {!!  active_class(['farmer/vet*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerVetManagement" aria-expanded="{!!  is_active_route(['farmer/vet*'])  !!}" aria-controls="FarmerVetManagement">
-                <i class="menu-icon mdi mdi-stethoscope"></i>
-                <span class="menu-title">Vet Services</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['farmer/vet*']) }}" id="FarmerVetManagement">
-                <ul class="nav flex-column sub-menu">
-
-                    <li class="nav-item {{ active_class(['farmer/vet/my-bookings/show']) }}">
-                        <a class="nav-link" href="{{ route('farmer.vet.my-bookings.show') }}">Bookings</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="nav-item {!!  active_class(['farmer/wallet/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerWallet" aria-expanded="{!!  is_active_route(['farmer/wallet/*'])  !!}" aria-controls="FarmerWallet">
-                <i class="menu-icon mdi mdi mdi-wallet"></i>
-                <span class="menu-title">Wallet</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['farmer/wallet/*']) }}" id="FarmerWallet">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['farmer/wallet/dashboard']) }}">
-                        <a class="nav-link" href="{{ route('farmer.wallet.dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/wallet/transactions']) }}">
-                        <a class="nav-link" href="{{ route('farmer.wallet.transactions') }}">Transactions</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/wallet/loans']) }}">
-                        <a class="nav-link" href="{{ route('farmer.wallet.loans') }}">Loans</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/wallet/savings']) }}">
-                        <a class="nav-link" href="{{ route('farmer.wallet.savings') }}">Savings</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-        <li class="nav-item {!!  active_class(['farmer/insurance/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#FarmerInsurance" aria-expanded="{!!  is_active_route(['farmer/insurance/*'])  !!}" aria-controls="FarmerInsurance">
-                <i class="menu-icon mdi mdi mdi-security"></i>
-                <span class="menu-title">Insurance</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['farmer/insurance/*']) }}" id="FarmerInsurance">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item {{ active_class(['farmer/insurance/payment-mode-adjustments']) }}">
-                        <a class="nav-link" href="{{ route('insurance.payment-mode-adjustments') }}">Premium
-                            Adjustments
-                        </a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/product-benefits']) }}">
-                        <a class="nav-link" href="{{ route('insurance.product-benefits') }}">Product
-                            Benefits</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/products']) }}">
-                        <a class="nav-link" href="{{ route('insurance.products') }}">Product
-                            Premiums</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/my-valuations']) }}">
-                        <a class="nav-link" href="{{ route('insurance.valuations') }}">Valuations</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/subscriptions']) }}">
-                        <a class="nav-link" href="{{ route('insurance.subscriptions') }}">Insurance
-                            Subscriptions</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/products-limit']) }}">
-                        <a class="nav-link" href="{{ route('insurance.products-limit') }}">Product
-                            Limit</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/claims']) }}">
-                        <a class="nav-link" href="{{ route('insurance.claims') }}">Claims</a>
-                    </li>
-                    <li class="nav-item {{ active_class(['farmer/insurance/transaction-history']) }}">
-                        <a class="nav-link" href="{{ route('insurance.transaction-history') }}">Report</a>
-                    </li>
-                </ul>
-            </div>
         </li>
         @endif
 

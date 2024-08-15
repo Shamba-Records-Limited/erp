@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\MillerAdmin;
 
+use App\Exports\WarehouseExport;
 use App\Http\Controllers\Controller;
 use App\MillerWarehouse;
 use App\MillerWarehouseAdmin;
 use App\User;
+use Excel;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -101,6 +103,43 @@ class WarehousesController extends Controller
             DB::rollback();
             toastr()->error('Oops! Operation failed');
             return redirect()->back()->withInput();
+        }
+    }
+
+    public function export_warehouses($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+
+        // if ($request->request_data == '[]') {
+        //     $request = null;
+        // } else {
+        //     $request = json_decode($request->request_data);
+        // }
+
+        $warehouses = collect(MillerWarehouse::where("miller_id", $miller_id)->get());
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('warehouses_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new WarehouseExport($warehouses), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Name', 'key' => "name"],
+                ['name' => 'Location', 'key' => "location"],
+            ];
+
+            $data = [
+                'title' => 'Warehouses',
+                'pdf_view' => 'warehouses',
+                'records' => $warehouses,
+                'filename' => strtolower('warehouses_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
         }
     }
 }

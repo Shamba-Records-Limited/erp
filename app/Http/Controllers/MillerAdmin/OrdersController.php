@@ -4,10 +4,12 @@ namespace App\Http\Controllers\MillerAdmin;
 
 use App\AuctionOrderDelivery;
 use App\Cooperative;
+use App\Exports\OrderExport;
 use App\Http\Controllers\Controller;
 use App\MillerAuctionOrder;
 use App\MillerAuctionOrderItem;
 use App\PreMilledInventory;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -236,7 +238,7 @@ class OrdersController extends Controller
                 $pre_milled_inventory->quantity = $delivery_item->quantity;
                 $pre_milled_inventory->unit = $delivery_item->unit;
                 $pre_milled_inventory->save();
-            }            
+            }
 
             DB::commit();
             toastr()->success('Delivery approved');
@@ -246,6 +248,67 @@ class OrdersController extends Controller
             DB::rollBack();
             toastr()->error('Unable to initialize cart');
             return redirect()->back();
+        }
+    }
+
+    public function export_orders($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+
+        // if ($request->request_data == '[]') {
+        //     $request = null;
+        // } else {
+        //     $request = json_decode($request->request_data);
+        // }
+
+        $rawOrders = MillerAuctionOrder::where("miller_id", $miller_id)->get();
+
+        $orders = [];
+        // todo: format data
+        foreach ($rawOrders as $rawOrder) {
+            if ($rawOrder->deliveredQuantity == 0 || $rawOrder->quantity == 0) {
+                $percentage = 0;
+            } else {
+                $percentage = ($rawOrder->deliveredQuantity / $rawOrder->quantity) * 100;
+            }
+
+            $delivery = "($percentage %) $rawOrder->deliveredQuantity / $rawOrder->quantity KGs";
+            
+            $status = $rawOrder->deliveredQuantity == 0 ? 'Pending' : ($rawOrder->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+
+            $orders[] = [
+                "batch_number" => $rawOrder->batch_number,
+                "coop_name" => $rawOrder->cooperative->name,
+                "delivery" => $delivery,
+                "status" => $status,
+            ];
+        }
+
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('orders_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new OrderExport($orders), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Batch No', 'key' => "batch_number"],
+                ['name' => 'Cooperative', 'key' => "coop_name"], // to generate
+                ['name' => 'Delivery', 'key' => "delivery"], // to generate
+                ['name' => 'Status', 'key' => "status"],
+            ];
+
+            $data = [
+                'title' => 'Orders',
+                'pdf_view' => 'orders',
+                'records' => $orders,
+                'filename' => strtolower('orders_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
         }
     }
 }

@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use EloquentBuilder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CollectionController extends Controller
 {
@@ -21,113 +22,25 @@ class CollectionController extends Controller
         $this->middleware('auth');
     }
 
-    //farmer view
-    public function farmerIndex()
-    {
-        $farmer = Auth::user()->farmer->id;
-        $collections = EloquentBuilder::to(Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED), request()->all())->latest()->get();
-        $products = Product::with(['unit'])->latest()->get();
-        return view('pages.cooperative.collections.farmer.index', compact('collections', 'products'));
-    }
-
-    ///get farmer report data
-    public function getFarmerReports()
-    {
-        $farmer = Auth::user()->farmer->id;
-        $latest_collections = Collection::where('farmer_id', $farmer)->with(['farmer', 'product', 'agent'])
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '>=', now()->subMonth(1))->latest()->get();
-        $collection_count = Collection::where('farmer_id', $farmer)->with(['farmer', 'product', 'agent'])
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '>=', now()->subMonth(1))->latest()->count();
-
-        $label1 = now()->subDays(7)->format('D d');
-        $label2 = now()->subDays(6)->format('D d');
-        $label3 = now()->subDays(5)->format('D d');
-        $label4 = now()->subDays(4)->format('D d');
-        $label5 = now()->subDays(3)->format('D d');
-        $label6 = now()->subDays(2)->format('D d');
-        $label7 = now()->subDays(1)->format('D d');
-
-        $day1 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(6))->count();
-        $day2 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(5))->count();
-        $day3 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(4))->count();
-        $day4 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(3))->count();
-        $day5 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(2))->count();
-        $day6 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now()->subDays(1))->count();
-        $day7 = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->whereDate('created_at', '=', now())->count();
-        //products
-        $collection_products = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->with(['product'])->whereDate('created_at', '>=', now()->subMonth(1))->latest()->take(10)->get();
-        $collection_farmers = Collection::where('farmer_id', $farmer)
-            ->where('submission_status', Collection::SUBMISSION_STATUS_APPROVED)->with(['farmer'])->whereDate('created_at', '>=', now()->subMonth(1))->latest()->take(10)->get();
-
-        $data = [
-            'latest' => $latest_collections,
-            'count_collections' => $collection_count,
-            'products' => $collection_products,
-            'farmers' => $collection_farmers,
-        ];
-        $borderColors = ["#72a014", "#72a014", "#72a014", "#72a014", "#72a014", "#72a014", "#72a014", "#72a014"];
-        $fillColors = ["#2bb930", "#2bb930", "#2bb930", "#2bb930", "#2bb930", "#2bb930", "#2bb930", "#2bb930"];
-        $collections_chart = new CollectionsChart();
-        $collections_chart->minimalist(false);
-        $collections_chart->labels([$label1, $label2, $label3, $label4, $label5, $label6, $label7]);
-        $collections_chart->dataset('Done Last 1 Week', 'bar', [$day1, $day2, $day3, $day4, $day5, $day6, $day7])
-            ->color($borderColors)
-            ->backgroundcolor($fillColors);
-
-        return view('pages.cooperative.collections.farmer.report', compact('data', 'collections_chart'));
-    }
-
-    public function collections()
+    public function index()
     {
         $user = Auth::user();
-        $collections = Collection::where('farmer_id', $user->farmer->id)->get();
-        $products = Product::select('products.id', 'products.name', 'units.name as unit')
-            ->join('farmers_products', 'farmers_products.product_id', '=', 'products.id')
-            ->join('units', 'units.id', '=', 'products.unit_id')
-            ->where('farmer_id', $user->id)->get();
-        $quality_standards = CollectionQualityStandard::getStandardQualities($user->cooperative_id);
-        return view('pages.as-farmer.collections.index', compact('collections', 'products', 'quality_standards'));
-    }
+        $farmer_id = $user->farmer->id;
 
-    public function addCollection(Request $request)
-    {
-        $request->validate([
-            'product' => 'required',
-            'quantity' => 'required|numeric',
-            'standard_id' => 'required'
-        ],
-            [
-                'standard_id.required' => 'Quality standard is required'
-            ]);
-        $user = Auth::user();
-        $batch = Carbon::now()->format('DyMds');
-        $collection = new Collection();
-        $request = [
-            "farmerId" => $user->farmer->id,
-            "productId" => $request->product,
-            "availableQuantity" => $request->quantity,
-            "batchNo" => strtoupper($batch),
-            "agentId" => $user->id,
-            "cooperative" => $user->cooperative_id,
-            "quality" => $request->standard_id,
-            "comments" => $request->comments,
-            "submission_status" => Collection::SUBMISSION_STATUS_PENDING
-        ];
-        $collection = $collection->saveCollection($request);
-        $audit_trail_data = ['user_id' => $user->id, 'activity' => 'Submitted collection of product batch # ' . $collection->batch_no . ' from farmer #' . $user->id,
-            'cooperative_id' => $user->cooperative_id];
-        event(new AuditTrailEvent($audit_trail_data));
-        toastr()->success('Collection Submitted successfully');
-        return redirect()->back();
-    }
 
+        $collections = DB::select(DB::raw("
+            SELECT p.name as product_name, quantity, c.*, pc.unit,
+                f.id as farmer_id, f.member_no, coop.name as coop_name
+            FROM collections c
+            JOIN farmers f ON f.id = c.farmer_id
+            JOIN products p ON p.id = c.product_id
+            JOIN product_categories pc ON pc.id = p.category_id
+            JOIN cooperatives coop ON coop.id = c.cooperative_id
+            WHERE c.farmer_id = :id
+            ORDER BY c.created_at DESC;
+        "), ["id" => $farmer_id]);
+
+
+        return view('pages.farmer.collections', compact('collections'));
+    }
 }

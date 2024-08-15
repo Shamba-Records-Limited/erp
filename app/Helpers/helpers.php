@@ -738,7 +738,7 @@ if (!function_exists('location_search_maps_api')) {
 }
 
 if (!function_exists('download_pdf')) {
-    function download_pdf($data)
+    function download_pdf($columns, $data)
     {
         $pdf_view = $data['pdf_view'];
         $title = $data['title'];
@@ -746,7 +746,7 @@ if (!function_exists('download_pdf')) {
         $records = $data['records'];
         $pdf = app('dompdf.wrapper');
         $pdf->setPaper('letter', $data['orientation']);
-        $pdf->loadView('pages.cooperative.pdf_views.' . $pdf_view, compact('title', 'period', 'records'));
+        $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns'));
         $file_name = $data['filename'];
         return $pdf->download($file_name . '.pdf');
     }

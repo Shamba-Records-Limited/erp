@@ -9,6 +9,13 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Orders</div>
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.orders.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+            </a>
+            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.orders.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+            </a>
+
+        </div>
         <div class="table-responsive">
             <table class="table table-hover dt clickable">
                 <thead>
@@ -16,6 +23,7 @@
                         <th>#</th>
                         <th>Batch No</th>
                         <th>Cooperative</th>
+                        <th>Delivery</th>
                         <th>Status</th>
                         <th></th>
                     </tr>
@@ -27,9 +35,16 @@
                         <td><a href="{{route('miller-admin.orders.detail', $order->id)}}">{{$order->batch_number}}</a></td>
                         <td>{{$order->cooperative->name}}</td>
                         @php
+                        if($order->deliveredQuantity == 0 || $order->quantity == 0) {
+                            $percentage = 0;
+                        } else {
+                            $percentage = ($order->deliveredQuantity/$order->quantity) * 100;
+                        }
+                        
                         $orderStatus = $order->deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
                         $statusClass = $order->deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
                         @endphp
+                        <td>(<span class="text-{{$statusClass}}">{{$percentage}} %</span>) {{$order->deliveredQuantity}} / {{$order->quantity}} KGs </td>
                         <td class="text-{{$statusClass}}">{{$orderStatus}}</td>
                         <td></td>
                     </tr>

@@ -442,11 +442,17 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
 });
 
 Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
+    // dashboard
+    Route::get("/dashboard", "MillerAdmin\DashboardController@index")
+        ->name("miller-admin.dashboard");
+
     // warehouses
     Route::get("/warehouses", "MillerAdmin\WarehousesController@index")
         ->name("miller-admin.warehouses.show");
     Route::post('/warehouses/add', 'MillerAdmin\WarehousesController@store')
         ->name('miller-admin.warehouses.store');
+    Route::get('/warehouses/download/{type}', 'MillerAdmin\WarehousesController@export_warehouses')
+        ->name("miller-admin.warehouses.export");
 
     // market/auction
     Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")
@@ -476,6 +482,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // orders
     Route::get("/orders", "MillerAdmin\OrdersController@index")
         ->name("miller-admin.orders.show");
+    Route::get('/orders/download/{type}', 'MillerAdmin\OrdersController@export_orders')
+        ->name("miller-admin.orders.export");
     
     // order object
     Route::get("/orders/create-order/{coop_id}", "MillerAdmin\OrdersController@view_create_order")
@@ -2115,114 +2123,126 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
 });
 
 
-//farmer routes
 Route::middleware('role:farmer')->prefix('farmer')->group(function () {
+    Route::get('/dashboard', 'Farmer\DashboardController@index')->name('farmer.dashboard');
 
-    /****************
-     * Collections
-     *****************/
-    Route::prefix('/collections')->group(function () {
-        Route::get('/show', 'Farmer\CollectionController@farmerIndex')->name('farmer.collections.show');
-        Route::get('/', 'Farmer\CollectionController@collections')->name('farmer.collections');
-        Route::post('/', 'Farmer\CollectionController@addCollection')->name('farmer.collection.add');
-        Route::get('/reports', 'Farmer\CollectionController@getFarmerReports')->name('farmer.collections.reports');
-    });
-
-
-    /****************
-     * Farm Management
-     *****************/
-    Route::prefix('/farm')->group(function () {
-        Route::get('/livestock', 'Farmer\FarmController@cows')->name('farm.livestock');
-        Route::post('/livestock', 'Farmer\FarmController@add_livestock')->name('farm.livestock.add');
-        Route::get('/breeds', 'Farmer\FarmController@breeds')->name('farm.breeds');
-        Route::get('/farm-units', 'Farmer\FarmController@farm_units')->name('farm.farm-units');
-        Route::get('/crops', 'Farmer\FarmController@crops')->name('farm.crops');
-        Route::get('/crop-calendar-stages', 'Farmer\FarmController@crop_calendar_stages')->name('farm.crop-calendar-stages');
-        Route::get('/crop-stages', 'Farmer\FarmController@farmer_crops')->name('farm.crop-stages');
-        Route::post('/crop-stage', 'Farmer\FarmController@add_farmer_crop')->name('farm.crop-stages.add');
-        Route::post('/crop-stage/{id}/tracker/add', 'Farmer\FarmController@add_farmer_crop_stages')->name('farm.crop-stages.tracker.add');
-        Route::get('/crop-stages/tracker/{id}/cost_breakdown', 'Farmer\FarmController@get_cost_break_down')->name('farm.crop-stages.tracker.cost_breakdown');
-        Route::post('/crop-stages/tracker/cost-break-down/{id}/edit', 'Farmer\FarmController@edit_cost_break_down')->name('farmer.farm.tracker.cost-break-down.edit');
-        Route::post('/crop-stages/tracker/cost-break-down/{id}/add', 'Farmer\FarmController@add_new_cost')->name('farmer.farm.tracker.cost-break-down.add');
-        Route::post('/crop-stages/tracker/cost-break-down/{id}/delete', 'Farmer\FarmController@delete_cost_break_down')->name('farmer.farm.tracker.cost-break-down.delete');
-
-        Route::get('/crop-stages/farmer-crop/{id}/trackers/{type}', 'Farmer\FarmController@farmer_crop_stages')->name('farm.farmer-crop.trackers');
-        Route::post('/farmer-crop/{id}/calendar-data', 'Farmer\FarmController@get_farmer_crop_calendar')->name('farm.crop-stages-calendar-data');
-        Route::get('/expected-yields', 'Farmer\FarmController@expected_yields')->name('farm.expected-yields');
-        Route::get('/my-yields', 'Farmer\FarmController@yields')->name('farm.yields');
-    });
-
-    /****************
-     * Disease Management
-     *****************/
-    Route::prefix('/disease')->group(function () {
-        Route::get('/mini-dashboard', 'Farmer\DiseaseController@dashboard_data')->name('disease.mini-dashboard');
-        Route::post('/mini-dashboard/stats', 'Farmer\DiseaseController@stats')->name('disease.mini-dashboard.stats');
-        Route::post('/mini-dashboard/disease_map_data', 'Farmer\DiseaseController@disease_map_data')->name('disease.mini-dashboard.disease_map_data');
-        Route::get('/categories', 'Farmer\DiseaseController@categories')->name('disease.categories');
-        Route::get('', 'Farmer\DiseaseController@disease')->name('diseases');
-        Route::get('/cases', 'Farmer\DiseaseController@cases')->name('disease.cases');
-        Route::post('/case/add', 'Farmer\DiseaseController@add_case')->name('disease.case.add');
-        Route::post('/case/{id}/edit', 'Farmer\DiseaseController@edit_case')->name('disease.case.edit');
-        Route::get('/case/{id}/bookings', 'Farmer\DiseaseController@case_bookings')->name('disease.case.bookings');
-        Route::post('/case/{id}/book-vet', 'Farmer\DiseaseController@book')->name('disease.case.book-vet');
-    });
-
-    /****************
-     * Vet Management
-     *****************/
-    Route::prefix('/vet')->group(function () {
-        Route::get('/my-bookings/show', 'Farmer\VetController@index')->name('farmer.vet.my-bookings.show');
-        Route::get('/bookings/fetch', 'Farmer\VetController@get_farmer_bookings')->name('farmer.vet.my-bookings.fetch');
-        Route::post('/bookings/add', 'Farmer\VetController@add_booking')->name('farmer.vet.my-booking.add');
-        Route::post('/bookings/{id}/edit', 'Farmer\VetController@edit_bookings')->name('farmer.vet.my-booking.edit');
-        Route::post('/bookings/{id}/edit/status', 'Farmer\VetController@edit_booking_status')->name('farmer.vet.my-booking.edit.status');
-    });
-
-    /*************
-     * WALLET
-     *************/
-    Route::prefix('/wallet')->group(function () {
-        Route::get('/dashboard', 'Farmer\WalletController@index')->name('farmer.wallet.dashboard');
-        Route::get('/transactions', 'Farmer\WalletController@transactions')->name('farmer.wallet.transactions');
-        Route::post('/transactions/withdraw', 'MpesaController@b2cInit')->name('farmer.wallet.transactions.withdraw');
-        Route::post('/transactions/deposit', 'MpesaController@lnmStkPush')->name('farmer.wallet.transactions.deposit');
-
-        Route::get('/loans', 'Farmer\LoansController@index')->name('farmer.wallet.loans');
-        Route::get('/loans/{loan_id}/details', 'Farmer\LoansController@details')->name('farmer.wallet.loans.details');
-        Route::post('/loans/request', 'Farmer\LoansController@requestLoan')->name('farmer.wallet.loans.request');
-        Route::get('/loan/{id}/installments', 'Farmer\LoansController@loan_installments')->name('farmer.loan.installments');
-        Route::post('/loan/{id}/repay', 'Farmer\LoansController@repay_loan')->name('farmer.loan.installment.repay');
-
-        Route::get('/savings', 'Farmer\SavingsController@index')->name('farmer.wallet.savings');
-        Route::get('/saving/{id}/installments', 'Farmer\SavingsController@installments')->name('farmer.wallet.saving.installments');
-        Route::post('/savings/add', 'Farmer\SavingsController@create_saving_account')->name('farmer.wallet.savings.add');
-        Route::post('/savings/withdraw', 'Farmer\SavingsController@withdraw_from_saving_account')
-            ->name('farmer.wallet.savings.withdraw');
-        Route::post('/barchart-doughnutChart', 'Farmer\WalletController@bar_chart_data')->name('farmer.wallet.dashboard.barchart');
-    });
-
-    /*************
-     * INSURANCE
-     *************/
-    Route::prefix('/insurance')->group(function () {
-        Route::get('/payment-mode-adjustments', 'Farmer\InsuranceController@paymentModeAdjustments')->name('insurance.payment-mode-adjustments');
-        Route::get('/product-benefits', 'Farmer\InsuranceController@benefits')->name('insurance.product-benefits');
-        Route::get('/products', 'Farmer\InsuranceController@products')->name('insurance.products');
-        Route::get('/my-valuations', 'Farmer\InsuranceController@valuations')->name('insurance.valuations');
-        Route::get('/subscriptions', 'Farmer\InsuranceController@subscriptions')->name('insurance.subscriptions');
-        Route::post('/subscription', 'Farmer\InsuranceController@newSubscription')->name('insurance.subscription');
-        Route::get('/subscription/{id}/installments', 'Farmer\InsuranceController@insuranceInstallments')->name('insurance.subscription.installments');
-        Route::post('/subscription/installment/{id}/pay', 'Farmer\InsuranceController@pay_installments')->name('insurance.subscription.installment.pay');
-        Route::get('/products-limit', 'Farmer\InsuranceController@claimLimits')->name('insurance.products-limit');
-        Route::get('/claims', 'Farmer\InsuranceController@claims')->name('insurance.claims');
-        Route::post('/claim', 'Farmer\InsuranceController@addClaim')->name('insurance.claim.add');
-        Route::post('/claim/{id}/edit', 'Farmer\InsuranceController@editClaim')->name('insurance.claim.edit');
-        Route::get('/claim/{id}/status-transitions', 'Farmer\InsuranceController@claim_status_transition')->name('insurance.status-transitions');
-        Route::get('/transaction-history', 'Farmer\InsuranceController@insurance_transaction_history')->name('insurance.transaction-history');
-    });
+    Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
+    
+    Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
+    Route::get("/transactions/{id}", "Farmer\TransactionController@detail")
+        ->name("farmer.transactions.detail");
+    Route::get("/transactions/{id}/complete", "Farmer\TransactionController@complete")
+        ->name("farmer.transactions.complete");
 });
+
+//farmer routes
+// Route::middleware('role:farmer')->prefix('farmer')->group(function () {
+
+//     /****************
+//      * Collections
+//      *****************/
+//     Route::prefix('/collections')->group(function () {
+//         Route::get('/show', 'Farmer\CollectionController@farmerIndex')->name('farmer.collections.show');
+//         Route::get('/', 'Farmer\CollectionController@collections')->name('farmer.collections');
+//         Route::post('/', 'Farmer\CollectionController@addCollection')->name('farmer.collection.add');
+//         Route::get('/reports', 'Farmer\CollectionController@getFarmerReports')->name('farmer.collections.reports');
+//     });
+
+
+//     /****************
+//      * Farm Management
+//      *****************/
+//     Route::prefix('/farm')->group(function () {
+//         Route::get('/livestock', 'Farmer\FarmController@cows')->name('farm.livestock');
+//         Route::post('/livestock', 'Farmer\FarmController@add_livestock')->name('farm.livestock.add');
+//         Route::get('/breeds', 'Farmer\FarmController@breeds')->name('farm.breeds');
+//         Route::get('/farm-units', 'Farmer\FarmController@farm_units')->name('farm.farm-units');
+//         Route::get('/crops', 'Farmer\FarmController@crops')->name('farm.crops');
+//         Route::get('/crop-calendar-stages', 'Farmer\FarmController@crop_calendar_stages')->name('farm.crop-calendar-stages');
+//         Route::get('/crop-stages', 'Farmer\FarmController@farmer_crops')->name('farm.crop-stages');
+//         Route::post('/crop-stage', 'Farmer\FarmController@add_farmer_crop')->name('farm.crop-stages.add');
+//         Route::post('/crop-stage/{id}/tracker/add', 'Farmer\FarmController@add_farmer_crop_stages')->name('farm.crop-stages.tracker.add');
+//         Route::get('/crop-stages/tracker/{id}/cost_breakdown', 'Farmer\FarmController@get_cost_break_down')->name('farm.crop-stages.tracker.cost_breakdown');
+//         Route::post('/crop-stages/tracker/cost-break-down/{id}/edit', 'Farmer\FarmController@edit_cost_break_down')->name('farmer.farm.tracker.cost-break-down.edit');
+//         Route::post('/crop-stages/tracker/cost-break-down/{id}/add', 'Farmer\FarmController@add_new_cost')->name('farmer.farm.tracker.cost-break-down.add');
+//         Route::post('/crop-stages/tracker/cost-break-down/{id}/delete', 'Farmer\FarmController@delete_cost_break_down')->name('farmer.farm.tracker.cost-break-down.delete');
+
+//         Route::get('/crop-stages/farmer-crop/{id}/trackers/{type}', 'Farmer\FarmController@farmer_crop_stages')->name('farm.farmer-crop.trackers');
+//         Route::post('/farmer-crop/{id}/calendar-data', 'Farmer\FarmController@get_farmer_crop_calendar')->name('farm.crop-stages-calendar-data');
+//         Route::get('/expected-yields', 'Farmer\FarmController@expected_yields')->name('farm.expected-yields');
+//         Route::get('/my-yields', 'Farmer\FarmController@yields')->name('farm.yields');
+//     });
+
+//     /****************
+//      * Disease Management
+//      *****************/
+//     Route::prefix('/disease')->group(function () {
+//         Route::get('/mini-dashboard', 'Farmer\DiseaseController@dashboard_data')->name('disease.mini-dashboard');
+//         Route::post('/mini-dashboard/stats', 'Farmer\DiseaseController@stats')->name('disease.mini-dashboard.stats');
+//         Route::post('/mini-dashboard/disease_map_data', 'Farmer\DiseaseController@disease_map_data')->name('disease.mini-dashboard.disease_map_data');
+//         Route::get('/categories', 'Farmer\DiseaseController@categories')->name('disease.categories');
+//         Route::get('', 'Farmer\DiseaseController@disease')->name('diseases');
+//         Route::get('/cases', 'Farmer\DiseaseController@cases')->name('disease.cases');
+//         Route::post('/case/add', 'Farmer\DiseaseController@add_case')->name('disease.case.add');
+//         Route::post('/case/{id}/edit', 'Farmer\DiseaseController@edit_case')->name('disease.case.edit');
+//         Route::get('/case/{id}/bookings', 'Farmer\DiseaseController@case_bookings')->name('disease.case.bookings');
+//         Route::post('/case/{id}/book-vet', 'Farmer\DiseaseController@book')->name('disease.case.book-vet');
+//     });
+
+//     /****************
+//      * Vet Management
+//      *****************/
+//     Route::prefix('/vet')->group(function () {
+//         Route::get('/my-bookings/show', 'Farmer\VetController@index')->name('farmer.vet.my-bookings.show');
+//         Route::get('/bookings/fetch', 'Farmer\VetController@get_farmer_bookings')->name('farmer.vet.my-bookings.fetch');
+//         Route::post('/bookings/add', 'Farmer\VetController@add_booking')->name('farmer.vet.my-booking.add');
+//         Route::post('/bookings/{id}/edit', 'Farmer\VetController@edit_bookings')->name('farmer.vet.my-booking.edit');
+//         Route::post('/bookings/{id}/edit/status', 'Farmer\VetController@edit_booking_status')->name('farmer.vet.my-booking.edit.status');
+//     });
+
+//     /*************
+//      * WALLET
+//      *************/
+//     Route::prefix('/wallet')->group(function () {
+//         Route::get('/dashboard', 'Farmer\WalletController@index')->name('farmer.wallet.dashboard');
+//         Route::get('/transactions', 'Farmer\WalletController@transactions')->name('farmer.wallet.transactions');
+//         Route::post('/transactions/withdraw', 'MpesaController@b2cInit')->name('farmer.wallet.transactions.withdraw');
+//         Route::post('/transactions/deposit', 'MpesaController@lnmStkPush')->name('farmer.wallet.transactions.deposit');
+
+//         Route::get('/loans', 'Farmer\LoansController@index')->name('farmer.wallet.loans');
+//         Route::get('/loans/{loan_id}/details', 'Farmer\LoansController@details')->name('farmer.wallet.loans.details');
+//         Route::post('/loans/request', 'Farmer\LoansController@requestLoan')->name('farmer.wallet.loans.request');
+//         Route::get('/loan/{id}/installments', 'Farmer\LoansController@loan_installments')->name('farmer.loan.installments');
+//         Route::post('/loan/{id}/repay', 'Farmer\LoansController@repay_loan')->name('farmer.loan.installment.repay');
+
+//         Route::get('/savings', 'Farmer\SavingsController@index')->name('farmer.wallet.savings');
+//         Route::get('/saving/{id}/installments', 'Farmer\SavingsController@installments')->name('farmer.wallet.saving.installments');
+//         Route::post('/savings/add', 'Farmer\SavingsController@create_saving_account')->name('farmer.wallet.savings.add');
+//         Route::post('/savings/withdraw', 'Farmer\SavingsController@withdraw_from_saving_account')
+//             ->name('farmer.wallet.savings.withdraw');
+//         Route::post('/barchart-doughnutChart', 'Farmer\WalletController@bar_chart_data')->name('farmer.wallet.dashboard.barchart');
+//     });
+
+//     /*************
+//      * INSURANCE
+//      *************/
+//     Route::prefix('/insurance')->group(function () {
+//         Route::get('/payment-mode-adjustments', 'Farmer\InsuranceController@paymentModeAdjustments')->name('insurance.payment-mode-adjustments');
+//         Route::get('/product-benefits', 'Farmer\InsuranceController@benefits')->name('insurance.product-benefits');
+//         Route::get('/products', 'Farmer\InsuranceController@products')->name('insurance.products');
+//         Route::get('/my-valuations', 'Farmer\InsuranceController@valuations')->name('insurance.valuations');
+//         Route::get('/subscriptions', 'Farmer\InsuranceController@subscriptions')->name('insurance.subscriptions');
+//         Route::post('/subscription', 'Farmer\InsuranceController@newSubscription')->name('insurance.subscription');
+//         Route::get('/subscription/{id}/installments', 'Farmer\InsuranceController@insuranceInstallments')->name('insurance.subscription.installments');
+//         Route::post('/subscription/installment/{id}/pay', 'Farmer\InsuranceController@pay_installments')->name('insurance.subscription.installment.pay');
+//         Route::get('/products-limit', 'Farmer\InsuranceController@claimLimits')->name('insurance.products-limit');
+//         Route::get('/claims', 'Farmer\InsuranceController@claims')->name('insurance.claims');
+//         Route::post('/claim', 'Farmer\InsuranceController@addClaim')->name('insurance.claim.add');
+//         Route::post('/claim/{id}/edit', 'Farmer\InsuranceController@editClaim')->name('insurance.claim.edit');
+//         Route::get('/claim/{id}/status-transitions', 'Farmer\InsuranceController@claim_status_transition')->name('insurance.status-transitions');
+//         Route::get('/transaction-history', 'Farmer\InsuranceController@insurance_transaction_history')->name('insurance.transaction-history');
+//     });
+// });
 
 
 //vets routes

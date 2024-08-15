@@ -49,7 +49,7 @@
                     <tr>
                         <td>{{++$key }}</td>
                         <td>{{$lot->lot_number}}</td>
-                        <td>{{$lot->available_quantity}} unit_here</td>
+                        <td>{{$lot->available_quantity}} KG</td>
                         <td class="text-right">
                             @if ($lot->qty <= 0)
                             <a href="{{route('miller-admin.market-auction.add-to-cart', [$cooperative->id, $lot->lot_number])}}" class="btn btn-outline-primary">Add to Cart</a>
