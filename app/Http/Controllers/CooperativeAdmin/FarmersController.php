@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Log;
 use Maatwebsite\Excel\Facades\Excel;
+use Spatie\Permission\Models\Role;
 
 class FarmersController extends Controller
 {
@@ -448,6 +449,10 @@ class FarmersController extends Controller
             $user->password = Hash::make($password);
             save_user_image($user, $request);
             $user->save();
+
+            // assign user to farmers group
+            $role = Role::select('id', 'name')->where('name', '=', 'farmer')->first();
+            $user->assignRole($role->name);
 
             // farmer
             $farmer = new Farmer();
