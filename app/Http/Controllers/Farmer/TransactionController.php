@@ -9,6 +9,7 @@ use App\Lot;
 use App\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Log;
 
 class TransactionController extends Controller
 {
@@ -94,5 +95,24 @@ class TransactionController extends Controller
         }
 
         return view("pages.farmer.transactions.detail", compact('transaction', 'subjectItems'));
+    }
+
+    public function complete($id){
+        $transaction = Transaction::find($id);
+
+        DB::beginTransaction();
+        try {
+            perform_transaction($transaction);
+            DB::commit();
+            toastr()->success('Transaction Completed Successfully');
+            return redirect()->route('farmer.transactions.show')->withInput();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollback();
+            toastr()->error('Oops! Operation failed');
+            return redirect()->back()->withInput();
+        }
+
+
     }
 }

@@ -10,10 +10,14 @@ use App\LotGroup;
 use App\LotGroupItem;
 use App\Transaction;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class TransactionController extends Controller
 {
@@ -21,8 +25,10 @@ class TransactionController extends Controller
     {
         return $this->middleware('auth');
     }
-
-    public function index()
+    /**
+     * @return View|Factory
+     */
+    public function index(): View
     {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
@@ -63,12 +69,15 @@ class TransactionController extends Controller
             -- WHERE HAS NO PARENT
             WHERE t.parent_id IS NULL AND
                 (t.sender_id = :coop_id2 OR t.recipient_id = :coop_id3)
+            ORDER BY t.created_at DESC;
         "), ["coop_id" => $coop_id, "coop_id1" => $coop_id, "coop_id2" => $coop_id, "coop_id3" => $coop_id]);
 
         return view("pages.cooperative-admin.transactions.index", compact('transactions'));
     }
-
-    public function view_add()
+    /**
+     * @return View|Factory
+     */
+    public function view_add(): View
     {
         // add a filter for cooperatives with deliveries
         $farmers = DB::select(DB::raw("
@@ -78,8 +87,11 @@ class TransactionController extends Controller
 
         return view("pages.cooperative-admin.transactions.add", compact("farmers"));
     }
-
-    public function view_add_collection_selector($id)
+    /**
+     * @param mixed $id
+     * @return Response
+     */
+    public function view_add_collection_selector($id): Response
     {
         // todo: add id filter
         $collections = DB::select(DB::raw("
@@ -95,8 +107,10 @@ class TransactionController extends Controller
 
         return response($collectionOptions, 200)->header('Content-Type', 'text/html');
     }
-
-    public function add(Request $request)
+    /**
+     * @return RedirectResponse
+     */
+    public function add(Request $request): RedirectResponse
     {
         $request->validate([
             "farmer_id" => "required|exists:farmers,id",
@@ -163,7 +177,7 @@ class TransactionController extends Controller
             $transaction->type = 'FARMER_PAYMENT';
             $transaction->status = 'PENDING';
 
-            
+
             if(count($request->collection_ids) == 1){
                 $transaction->subject_type = 'COLLECTION';
                 $transaction->subject_id = $request->collection_ids[0];
@@ -187,7 +201,7 @@ class TransactionController extends Controller
                 $transaction->subject_type = 'COLLECTION_GROUP';
                 $transaction->subject_id = $collectionGroup->id;
             }
-            
+
 
             $transaction->save();
 
@@ -201,7 +215,10 @@ class TransactionController extends Controller
             return redirect()->back()->withInput();
         }
     }
-
+    /**
+     * @param mixed $id
+     * @return View|Factory
+     */
     public function detail($id){
         $transaction = Transaction::find($id);
 
@@ -209,8 +226,11 @@ class TransactionController extends Controller
 
         return view("pages.cooperative-admin.transactions.detail", compact('transaction', 'lots'));
     }
-
-    public function complete($id){
+    /**
+     * @param mixed $id
+     * @return RedirectResponse
+     */
+    public function complete($id): RedirectResponse{
         $transaction = Transaction::find($id);
 
         DB::beginTransaction();
@@ -226,6 +246,6 @@ class TransactionController extends Controller
             return redirect()->back()->withInput();
         }
 
-        
+
     }
 }
