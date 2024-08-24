@@ -135,7 +135,7 @@ $units = config('enums.units')
                                     <div class="form-group">
                                         <label for="milled_inventory_id">Select Inventory</label>
                                         <select name="milled_inventory_id" id="milled_inventory_id" class="form-control select2bs4 {{ $errors->has('milled_inventory_id') ? ' is-invalid' : '' }}" value="{{old('milled_inventory_id', '')}}">
-                                        <option value="">-- Select Inventory --</option>    
+                                            <option value="">-- Select Inventory --</option>
                                             @foreach($milledInventories as $milledInventory)
                                             <option value="{{$milledInventory->id}}">{{$milledInventory->inventory_number}}</option>
                                             @endforeach
@@ -147,7 +147,7 @@ $units = config('enums.units')
                                         </span>
                                         @endif
                                     </div>
-                                    
+
 
                                     <div class="row">
                                         <div class="col">
@@ -241,7 +241,13 @@ $units = config('enums.units')
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-end">
             <div class="card-title">Final Products</div>
-            <a href="?is_creating_final_product=1" class="btn btn-primary">Create Final Product</a>
+            <div>
+                <a href="?is_creating_final_product=1" class="btn btn-primary">Create Final Product</a>
+                <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.final-products.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+                </a>
+                <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.final-products.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+                </a>
+            </div>
         </div>
     </div>
     <div class="table-responsive p-2">
@@ -251,6 +257,7 @@ $units = config('enums.units')
                     <th>#</th>
                     <th>Product Number</th>
                     <th>Product</th>
+                    <th>Pricing</th>
                     <th>Count</th>
                     <th></th>
                 </tr>
@@ -261,6 +268,7 @@ $units = config('enums.units')
                     <td>{{$key+1}}</td>
                     <td>{{$product->product_number}}</td>
                     <td>{{$product->name}} {{$product->quantity}} {{$product->unit}}</td>
+                    <td>KES {{$product->selling_price}} / KG</td>
                     <td>{{$product->count}}</td>
                     <td></td>
                 </tr>

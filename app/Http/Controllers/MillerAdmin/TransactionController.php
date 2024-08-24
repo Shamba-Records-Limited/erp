@@ -4,12 +4,14 @@ namespace App\Http\Controllers\MillerAdmin;
 
 use App\Account;
 use App\Cooperative;
+use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
 use App\Lot;
 use App\LotGroup;
 use App\LotGroupItem;
 use App\Transaction;
 use Carbon\Carbon;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +62,87 @@ class TransactionController extends Controller
         "), ["miller_id" => $miller_id, "miller_id1" => $miller_id, "miller_id2" => $miller_id, "miller_id3" => $miller_id]);
 
         return view("pages.miller-admin.transactions.index", compact('transactions'));
+    }
+
+    public function export_many_transactions(Request $request, $type)
+    {
+
+        $export_status = $request->query("export_status", "all");
+        $start_date = $request->query("start_date");
+        $end_date = $request->query("end_date");
+
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        $rawTransactions = DB::select(DB::raw("
+            SELECT t.*, c.name AS dest,
+            (
+                CASE WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_id = :miller_id
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_id = :miller_id1
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS recipient
+            FROM transactions t
+            JOIN millers m ON t.sender_id = :miller_id2 OR t.recipient_id = :miller_id3
+            JOIN cooperatives c ON c.id = t.sender_id OR c.id = t.recipient_id
+            -- WHERE HAS NO PARENT
+            WHERE t.parent_id IS NULL
+        "), ["miller_id" => $miller_id, "miller_id1" => $miller_id, "miller_id2" => $miller_id, "miller_id3" => $miller_id]);
+
+        $transactions = [];
+
+        foreach ($rawTransactions as $transaction) {
+            $status = 'Pending';
+            if ($transaction->status == 'COMPLETE') {
+                $status = 'Complete';
+            }
+            $transactions[] = [
+                'transaction_number' => $transaction->transaction_number,
+                'subject' => $transaction->subject,
+                'sender' => $transaction->sender,
+                'recipient' => $transaction->recipient,
+                'amount' => $transaction->amount,
+                'status' => $status,
+            ];
+        }
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('transactions_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new TransactionExport($transactions), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Transaction Number', 'key' => "transaction_number"],
+                ['name' => 'Subject', 'key' => "subject"],
+                ['name' => 'Sender', 'key' => "sender"],
+                ['name' => 'Recipient', 'key' => "recipient"],
+                ['name' => 'Amount', 'key' => "amount"],
+                ['name' => 'Status', 'key' => "status"],
+            ];
+            $data = [
+                'title' => 'Transactions',
+                'pdf_view' => 'transactions',
+                'records' => $transactions,
+                'filename' => strtolower('transactions_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function view_add()
@@ -120,7 +203,7 @@ class TransactionController extends Controller
             if (is_null($miller_acc)) {
                 $accCount = Account::count();
                 $miller_acc = new Account();
-                $miller_acc->acc_number = "A".str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+                $miller_acc->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
                 $miller_acc->owner_type = "MILLER";
                 $miller_acc->owner_id = $miller_id;
 
@@ -137,7 +220,7 @@ class TransactionController extends Controller
             if (is_null($cooperative_acc)) {
                 $accCount = Account::count();
                 $cooperative_acc = new Account();
-                $cooperative_acc->acc_number = "A".str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+                $cooperative_acc->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
                 $cooperative_acc->owner_type = "COOPERATIVE";
                 $cooperative_acc->owner_id = $request->cooperative_id;
 
@@ -166,8 +249,8 @@ class TransactionController extends Controller
             $transaction->type = 'COOPERATIVE_PAYMENT';
             $transaction->status = 'PENDING';
 
-            
-            if(count($request->lot_ids) == 1){
+
+            if (count($request->lot_ids) == 1) {
                 $transaction->subject_type = 'LOT';
                 $transaction->subject_id = $request->lot_ids[0];
             } else {
@@ -180,7 +263,7 @@ class TransactionController extends Controller
                 $lotGroup->save();
 
                 # save corresponding lot group items
-                foreach($request->lot_ids as $lot_id) {
+                foreach ($request->lot_ids as $lot_id) {
                     $lotGroupItem = new LotGroupItem();
                     $lotGroupItem->lot_group_id = $lotGroup->id;
                     $lotGroupItem->lot_number = $lot_id;
@@ -190,7 +273,7 @@ class TransactionController extends Controller
                 $transaction->subject_type = 'LOT_GROUP';
                 $transaction->subject_id = $lotGroup->id;
             }
-            
+
 
             $transaction->save();
 
@@ -205,7 +288,8 @@ class TransactionController extends Controller
         }
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         $transaction = Transaction::find($id);
 
         $lots = $transaction->lots;
@@ -213,18 +297,134 @@ class TransactionController extends Controller
         return view("pages.miller-admin.transactions.detail", compact('transaction', 'lots'));
     }
 
-    public function retrieve_lot_weights(Request $request) {
+    public function retrieve_lot_weights(Request $request)
+    {
         $request->validate([
             "selectedLots" => "required"
         ]);
 
         $totalWeight = 0;
         $lotNumbers = $request->selectedLots;
-        foreach($lotNumbers as $lotNumber) {
+        foreach ($lotNumbers as $lotNumber) {
             $lot = Lot::where("lot_number", $lotNumber)->firstOrFail();
             $totalWeight += $lot->quantity;
         }
 
         return response()->json(["lot_weights" => $totalWeight]);
+    }
+
+    public function view_deposit()
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+        // get or create miller account
+        $account = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->first();
+        if (is_null($account)) {
+            $accCount = Account::count();
+            $account = new Account();
+            $account->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+            $account->owner_type = "MILLER";
+            $account->owner_id = $miller_id;
+
+            $account->credit_or_debit = "CREDIT";
+            $account->save();
+        }
+
+        return view('pages.miller-admin.transactions.deposit', compact('account'));
+    }
+
+    public function deposit(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+        $request->validate([
+            "deposit_id" => "required|exists:accounts,id",
+            "amount" => "required|numeric",
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $account = Account::find($request->deposit_id);
+            $account->credit_or_debit = "CREDIT";
+            $account->amount = $request->amount;
+            $account->save();
+
+            DB::commit();
+            toastr()->success('Deposit saved successfully');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            toastr()->error($th->getMessage());
+            return redirect()->back();
+        }
+    }
+
+    public function view_withdraw()
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+        // get or create miller account
+        $account = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->first();
+        if (is_null($account)) {
+            $accCount = Account::count();
+            $account = new Account();
+            $account->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+            $account->owner_type = "MILLER";
+            $account->owner_id = $miller_id;
+
+            $account->credit_or_debit = "CREDIT";
+            $account->save();
+        }
+
+
+        return view('pages.miller-admin.transactions.withdraw', compact('account'));
+    }
+
+    public function withdraw(Request $request)
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+        $request->validate([
+            "withdraw_id" => "required|exists:accounts,id",
+            "amount" => "required|numeric",
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $account = Account::find($request->withdraw_id);
+            $account->credit_or_debit = "DEBIT";
+            $account->amount = $request->amount;
+            $account->save();
+
+            DB::commit();
+            toastr()->success('Withdraw saved successfully');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            toastr()->error($th->getMessage());
+            return redirect()->back();
+        }
     }
 }

@@ -805,6 +805,14 @@ $cooperative = null;
             </a>
         </li>
 
+        <!-- todo: rename to wallet management -->
+         <!-- todo: add dashboard -->
+          <!-- todo: dashboard: payments made vs payments received -->
+          <!-- todo: dashboard: actual balance -->
+            <!-- todo: dashboard: deposits made vs withdrawals made -->
+          <!-- todo: separate transactions into account receivable(expected amount to be received) and account payable(expected amount to be paid) -->
+            <!-- todo: income and expenses -->
+
         <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
             <a class="nav-link" href="{{ route('farmer.transactions.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\MillerAdmin;
 
 use App\AuctionOrderDeliveryItem;
+use App\Exports\FinalProductExport;
+use App\Exports\MilledInventoryExport;
+use App\Exports\PreMilledInventoryExport;
 use App\FinalProduct;
 use App\FinalProductRawMaterial;
 use App\Http\Controllers\Controller;
@@ -13,6 +16,7 @@ use App\MilledInventoryGrade;
 use App\PreMilledInventory;
 use App\ProductGrade;
 use Carbon\Carbon;
+use Excel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -50,7 +54,7 @@ class InventoryController extends Controller
         "), ["miller_id" => $miller_id]);
 
         $millingQty = 0;
-        if($isMilling == "1") {
+        if ($isMilling == "1") {
             if ($preMilledInventoryId) {
                 $preMilledInventory = PreMilledInventory::find($preMilledInventoryId);
                 $millingQty = $preMilledInventory->quantity;
@@ -59,6 +63,65 @@ class InventoryController extends Controller
 
 
         return view('pages.miller-admin.inventory.pre_milled', compact('preMilledInventories', 'isMilling', 'preMilledInventoryId', 'millingQty'));
+    }
+
+    public function export_pre_milled_inventories($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        $preMilledInventories = DB::select(DB::raw("
+            SELECT inv.*, delivery_item.quantity, a_order.batch_number, order_item.lot_number as l_num
+            FROM pre_milled_inventories inv
+            JOIN auction_order_delivery_item delivery_item ON delivery_item.id = inv.delivery_item_id
+            JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
+            JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
+            WHERE a_order.miller_id = :miller_id
+        "), ["miller_id" => $miller_id]);
+
+
+        // if ($request->request_data == '[]') {
+        //     $request = null;
+        // } else {
+        //     $request = json_decode($request->request_data);
+        // }
+
+        $inventories = [];
+        // todo: format data
+        foreach ($preMilledInventories as $inventory) {
+
+            $inventories[] = [
+                "inventory_number" => $inventory->inventory_number,
+                "batch_number" => $inventory->batch_number,
+                "lot_number" => $inventory->l_num,
+                "quantity" => $inventory->quantity . " KGs",
+            ];
+        }
+
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('orders_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new PreMilledInventoryExport($inventories), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Inventory No', 'key' => "inventory_number"],
+                ['name' => 'Batch No', 'key' => "batch_number"], // to generate
+                ['name' => 'Lot No', 'key' => "lot_number"], // to generate
+                ['name' => 'Quantity', 'key' => "quantity"],
+            ];
+
+            $data = [
+                'title' => 'Pre Milled Inventories',
+                'pdf_view' => 'pre_milled_inventories',
+                'records' => $inventories,
+                'filename' => strtolower('pre_milled_inventories_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
 
@@ -88,12 +151,75 @@ class InventoryController extends Controller
 
         $gradings = [];
         if ($isGrading == "1") {
-
         }
 
 
 
         return view('pages.miller-admin.inventory.milled.index', compact('milledInventories', 'isGrading', 'gradings'));
+    }
+
+    public function export_milled_inventories($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        $milledInventories = DB::select(DB::raw("
+            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num
+            FROM milled_inventories inv
+            JOIN pre_milled_inventories pre_inv ON pre_inv.id = inv.pre_milled_inventory_id
+            JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
+            JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
+            JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
+            WHERE inv.miller_id = :miller_id
+        "), ["miller_id" => $miller_id]);
+
+
+        // if ($request->request_data == '[]') {
+        //     $request = null;
+        // } else {
+        //     $request = json_decode($request->request_data);
+        // }
+
+        $inventories = [];
+        // todo: format data
+        foreach ($milledInventories as $inventory) {
+
+            $quantity = $inventory->milled_quantity + $inventory->waste_quantity;
+
+            $inventories[] = [
+                "batch_number" => $inventory->batch_number,
+                "lot_number" => $inventory->l_num,
+                "quantity" => $quantity . " KGs",
+                "milled_quantity" => $inventory->milled_quantity . " KGs",
+                "waste_quantity" => $inventory->waste_quantity . " KGs",
+            ];
+        }
+
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('orders_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new MilledInventoryExport($inventories), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Batch No', 'key' => "batch_number"],
+                ['name' => 'Lot No', 'key' => "lot_number"],
+                ['name' => 'Quantity', 'key' => "quantity"],
+                ['name' => 'Milled Quantity', 'key' => "milled_quantity"],
+                ['name' => 'Waste Quantity', 'key' => "waste_quantity"],
+            ];
+
+            $data = [
+                'title' => 'Milled Inventories',
+                'pdf_view' => 'milled_inventories',
+                'records' => $inventories,
+                'filename' => strtolower('milled_inventories_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function milled_details(Request $request, $id)
@@ -179,7 +305,7 @@ class InventoryController extends Controller
             "milled_inventory_id" => "required|exists:milled_inventories,id",
             "product_grade_id" => "required|exists:product_grades,id",
             "quantity" => "required|numeric",
-            "unit"=> "required",
+            "unit" => "required",
         ]);
 
         DB::beginTransaction();
@@ -268,7 +394,7 @@ class InventoryController extends Controller
                     $newDraftProduct->miller_id = $miller_id;
                     $newDraftProduct->user_id = $user_id;
                     $newDraftProduct->is_wholesale = 0;
-                    $newDraftProduct->is_retail=0;
+                    $newDraftProduct->is_retail = 0;
                     $newDraftProduct->save();
                 } catch (\Throwable $th) {
                     throw $th;
@@ -308,6 +434,51 @@ class InventoryController extends Controller
 
 
         return view("pages.miller-admin.inventory.final_products.index", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
+    }
+
+    public function export_final_products($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        $rawFinalProducts = FinalProduct::whereNotNull("published_at")->where("miller_id", $miller_id)->get();
+
+        $finalProducts = [];
+        // todo: format data
+        foreach ($rawFinalProducts as $finalProduct) {
+
+            $finalProducts[] = [
+                "product_number" => $finalProduct->product_number,
+                "name" => $finalProduct->name,
+                "quantity" => $finalProduct->quantity . " " . $finalProduct->unit,
+                "selling_price" => $finalProduct->selling_price,
+                "count" => $finalProduct->count,
+            ];
+        }
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('final_products_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new FinalProductExport($finalProducts), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Product Number', 'key' => "product_number"],
+                ['name' => 'Product', 'key' => "name"],
+                ['name' => 'Quantity', 'key' => "quantity"],
+                ['name' => 'Pricing', 'key' => "selling_price"],
+                ['name' => 'Count', 'key' => "count"],
+            ];
+            $data = [
+                'title' => 'Final Products',
+                'pdf_view' => 'final_products',
+                'records' => $finalProducts,
+                'filename' => strtolower('final_products_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function save_final_product_details(Request $request)
@@ -443,18 +614,18 @@ class InventoryController extends Controller
 
         try {
             $finalProduct = FinalProduct::where('miller_id', $miller_id)
-                                ->where('user_id', $user_id)
-                                ->where('published_at', null)
-                                ->firstOrFail();
+                ->where('user_id', $user_id)
+                ->where('published_at', null)
+                ->firstOrFail();
 
-            if (is_null($finalProduct->name) || $finalProduct->name == ""){
+            if (is_null($finalProduct->name) || $finalProduct->name == "") {
                 toastr()->error("Save product details first");
                 return redirect()->back();
             }
 
             $finalProduct->published_at = Carbon::now();
             $finalProduct->save();
-            
+
             toastr()->success("Product published successfully");
             return redirect()->route("miller-admin.final-products.show");
         } catch (\Throwable $th) {
@@ -462,7 +633,6 @@ class InventoryController extends Controller
             toastr()->error($th->getMessage());
             return redirect()->back();
         }
-
     }
 
     public function index(Request $request)

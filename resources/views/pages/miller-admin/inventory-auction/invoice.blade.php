@@ -221,6 +221,16 @@
         <div class="card-title">Invoices</div>
         <div class="d-flex justify-content-end">
             <a href="?is_adding_invoice=1" class="btn btn-primary">Add Invoice</a>
+            <div class="dropdown ml-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Export
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item" id="exportAllInvoices">Export All</button>
+                    <button class="dropdown-item" id="exportCompletedInvoices">Export Completed</button>
+                    <button class="dropdown-item" id="exportPendingInvoices">Export Pending</button>
+                </div>
+            </div>
         </div>
 
         <div class="table-responsive p-2">
@@ -381,5 +391,30 @@
             }
         })
     }
+
+    let exportStatus = 'all';
+    $('#exportAllInvoices').on('click', function() {
+        exportStatus = 'all';
+        showExportDialog('Export All Invoices');
+    });
+
+    $('#exportCompletedInvoices').on('click', function() {
+        exportStatus = 'Complete';
+        showExportDialog('Export Completed Invoices');
+    });
+
+    $('#exportPendingInvoices').on('click', function() {
+        exportStatus = 'Pending';
+        showExportDialog('Export Pending Invoices');
+    });
+
+    $("#doExport").on('click', function() {
+        let exportType = $("[name='exportType']:checked").val();
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+        window.location.href = `/miller-admin/inventory-auction/invoices/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
+
+        dismissExportDialog();
+    })
 </script>
 @endpush

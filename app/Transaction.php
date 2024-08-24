@@ -93,4 +93,8 @@ class Transaction extends Model
 
         return $amount / $qty;
     }
+    
+    public function getFormattedAmountAttribute()
+    {
+    }
 }

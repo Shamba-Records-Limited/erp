@@ -7,9 +7,23 @@
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-end">
-
-        <div class="card-title">Transactions</div>
-        <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Add Cooperative Payment</a>
+            <div class="card-title">Transactions</div>
+            <div class="d-flex">
+                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Payment</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Bulk Payment</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-deposit')}}">Deposit Funds</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-withdraw')}}">Withdraw Funds</a>
+                <div class="dropdown ml-2">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Export
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <button class="dropdown-item" id="exportAllTransactions">Export All</button>
+                        <button class="dropdown-item" id="exportCompletedTransactions">Export Completed</button>
+                        <button class="dropdown-item" id="exportPendingTransactions">Export Pending</button>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt">
@@ -31,6 +45,7 @@
                         <td>{{$transaction->subject}}</td>
                         <td>{{$transaction->sender}}</td>
                         <td>{{$transaction->recipient}}</td>
+                        <!-- add comma to amount -->
                         <td>KES {{$transaction->amount}}</td>
                         @php
                         $statusCls = 'text-warning';
@@ -73,7 +88,7 @@
 
 @push('custom-scripts')
 <script>
-    function printReceipt(receiptId){
+    function printReceipt(receiptId) {
         $.ajax({
             url: `/receipts/${receiptId}/print`,
             method: 'GET',
@@ -86,5 +101,30 @@
             }
         })
     }
+
+    let exportStatus = 'all';
+    $('#exportAllTransactions').on('click', function() {
+        exportStatus = 'all';
+        showExportDialog('Export All Transactions');
+    });
+
+    $('#exportCompletedTransactions').on('click', function() {
+        exportStatus = 'Complete';
+        showExportDialog('Export Completed Transactions');
+    });
+
+    $('#exportPendingTransactions').on('click', function() {
+        exportStatus = 'Pending';
+        showExportDialog('Export Pending Transactions');
+    });
+
+    $("#doExport").on('click', function() {
+        let exportType = $("[name='exportType']:checked").val();
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+        window.location.href = `/miller-admin/inventory-auction/transactions/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
+
+        dismissExportDialog();
+    })
 </script>
 @endpush

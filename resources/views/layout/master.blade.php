@@ -40,6 +40,7 @@
   <div class="container-scroller" id="app">
     @yield('topItem')
     @include('layout.header')
+    @include('layout.export-dialog')
     <div class="container-fluid page-body-wrapper">
       @include('layout.sidebar')
       <div class="main-panel">
@@ -304,6 +305,62 @@
       // Restore the original content after printing
       document.body.innerHTML = originalContent;
     }
+
+    // export dialog script
+    function updateStartAndEndDate() {
+      let range = $('#dateRange').val();
+
+      if (range == 'custom') {
+        $('#startDate').prop('readonly', false);
+        $('#endDate').prop('readonly', false);
+      } else {
+        $('#startDate').prop('readonly', true);
+        $('#endDate').prop('readonly', true);
+      }
+
+      let today = new Date();
+      if (range == 'today') {
+        $('#startDate').val(new Date().toISOString().split('T')[0]);
+        $('#endDate').val(new Date().toISOString().split('T')[0]);
+      } else if (range == 'yesterday') {
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        $('#startDate').val(yesterday.toISOString().split('T')[0]);
+        $('#endDate').val(today.toISOString().split('T')[0]);
+      } else if (range == 'last7days') {
+        let last7days = new Date();
+        last7days.setDate(last7days.getDate() - 7);
+        $('#startDate').val(last7days.toISOString().split('T')[0]);
+        $('#endDate').val(today.toISOString().split('T')[0]);
+      } else if (range == 'last30days') {
+        let last30days = new Date();
+        last30days.setDate(last30days.getDate() - 30);
+        $('#startDate').val(last30days.toISOString().split('T')[0]);
+        $('#endDate').val(today.toISOString().split('T')[0]);
+      } else if (range == 'last60days') {
+        let last60days = new Date();
+        last60days.setDate(last60days.getDate() - 60);
+        $('#startDate').val(last60days.toISOString().split('T')[0]);
+        $('#endDate').val(today.toISOString().split('T')[0]);
+      }
+    }
+
+    function showExportDialog(title = 'Export Data') {
+      $('#exportModalLabel').text(title);
+      $('#exportModal').modal('show');
+    }
+
+    function dismissExportDialog() {
+      $('#exportModal').modal('hide');
+    }
+
+    $(document).ready(function() {
+      updateStartAndEndDate();
+    });
+
+    $('#dateRange').change(function() {
+      updateStartAndEndDate();
+    });
   </script>
   @stack('custom-scripts')
 </body>

@@ -504,10 +504,14 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory
     Route::get("/inventory/pre-milled", "MillerAdmin\InventoryController@pre_milled")
         ->name("miller-admin.pre-milled-inventory.show");
+    Route::get('/inventory/pre-milled/export/{type}', 'MillerAdmin\InventoryController@export_pre_milled_inventories')
+        ->name("miller-admin.pre-milled-inventory.export");
     Route::post("/inventory/save-milling", "MillerAdmin\InventoryController@save_milling")
         ->name("miller-admin.milling.save");
     Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
         ->name("miller-admin.milled-inventory.show");
+    Route::get('/inventory/milled/export/{type}', 'MillerAdmin\InventoryController@export_milled_inventories')
+        ->name("miller-admin.milled-inventory.export");
     Route::get("/inventory/milled/{id}", "MillerAdmin\InventoryController@milled_details")
         ->name("miller-admin.milled-inventory.detail");
     Route::post("/inventory/milled/store-grade", "MillerAdmin\InventoryController@store_milled_inventory_grade")
@@ -516,6 +520,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.milled-inventory.delete-grade");
     Route::get("/inventory/final-products", "MillerAdmin\InventoryController@final_products")
         ->name("miller-admin.final-products.show");
+    Route::get('/inventory/final-products/export/{type}', 'MillerAdmin\InventoryController@export_final_products')
+        ->name("miller-admin.final-products.export");
     Route::post("/inventory/final-products/save-details", "MillerAdmin\InventoryController@save_final_product_details")
         ->name("miller-admin.final-product.save-details");
     Route::post("/inventory/final-products/save-raw-material", "MillerAdmin\InventoryController@save_final_product_raw_material")
@@ -555,6 +561,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: quotations
     Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
         ->name("miller-admin.inventory-auction.list-quotations");
+    Route::get("/inventory-auction/quotations/export-many/{type}", "MillerAdmin\InventoryAuctionController@export_many_quotations")
+        ->name("miller-admin.inventory-auction.quotations.export-many");
     Route::post("/inventory-auction/quotations/save-basic-details", "MillerAdmin\InventoryAuctionController@save_quotation_basic_details")
         ->name("miller-admin.inventory-auction.quotations.save-basic_details");
     Route::post("/inventory-auction/quotations/save-quotation-item", "MillerAdmin\InventoryAuctionController@save_quotation_item")
@@ -583,6 +591,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.invoices.mark-as-paid");
     Route::get("/inventory-auction/invoices/export/{id}", "MillerAdmin\InventoryAuctionController@export_invoice")
         ->name("miller-admin.inventory-auction.invoices.export-invoice");
+    Route::get("/inventory-auction/invoices/export-many/{type}", "MillerAdmin\InventoryAuctionController@export_many_invoices")
+        ->name("miller-admin.inventory-auction.invoices.export-many");
 
     // inventory auction: receipts
     Route::get("/inventory-auction/receipts", "MillerAdmin\InventoryAuctionController@list_receipts")
@@ -609,10 +619,22 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.transactions.retrieve-lot-weights");
     Route::post("/transactions/add", "MillerAdmin\TransactionController@add")
         ->name("miller-admin.transactions.add");
+
+    // deposit n withdraw
+    Route::get("/transactions/deposit", "MillerAdmin\TransactionController@view_deposit")
+        ->name("miller-admin.transactions.view-deposit");
+    Route::post("/transactions/deposit", "MillerAdmin\TransactionController@deposit")
+        ->name("miller-admin.transactions.deposit");
+    Route::get("/transactions/withdraw", "MillerAdmin\TransactionController@view_withdraw")
+        ->name("miller-admin.transactions.view-withdraw");
+    Route::post("/transactions/withdraw", "MillerAdmin\TransactionController@withdraw")
+        ->name("miller-admin.transactions.withdraw");
+
+    // transactions detail
     Route::get("/transactions/{id}", "MillerAdmin\TransactionController@detail")
         ->name("miller-admin.transactions.detail");
 
-    
+        
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")
         ->name("miller-admin.support.show");

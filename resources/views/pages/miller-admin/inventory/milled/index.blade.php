@@ -57,6 +57,13 @@ $units = config('enums.units')
     <div class="card-body">
         <div class="card-title">Milled Inventory</div>
 
+        <div class="d-flex justify-content-end">
+            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.milled-inventory.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+            </a>
+            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.milled-inventory.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+            </a>
+        </div>
+
         <div class="table-responsive p-2">
             <table class="table table-hover dt clickable">
                 <thead>

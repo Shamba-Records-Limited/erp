@@ -4,6 +4,8 @@ namespace App\Http\Controllers\MillerAdmin;
 
 use App\Account;
 use App\Customer;
+use App\Exports\InvoiceExport;
+use App\Exports\QuotationExport;
 use App\FinalProduct;
 use App\Http\Controllers\Controller;
 use App\MilledInventory;
@@ -23,6 +25,8 @@ use Illuminate\Validation\Rule;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
 use Log;
 use Barryvdh\DomPDF\Facade as PDF;
+use Excel;
+use Invoice;
 
 class InventoryAuctionController extends Controller
 {
@@ -222,6 +226,76 @@ class InventoryAuctionController extends Controller
         $quotations = Quotation::whereNotNull("published_at")->get();
 
         return view('pages.miller-admin.inventory-auction.quotation', compact("isAddingQuotation", "viewingQuotationId", "draftQuotation", "customers", "finalProducts", "milledInventories", "quotations"));
+    }
+
+    public function export_many_quotations(Request $request, $type)
+    {
+
+        $export_status = $request->query("export_status", "all");
+        $start_date = $request->query("start_date");
+        $end_date = $request->query("end_date");
+
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        // $rawQuotations = Quotation::whereNotNull("published_at")->where("miller_id", $miller_id)->get();
+        $rawQuotations = Quotation::where("created_at", ">=", $start_date)->where("created_at", "<=", $end_date)->get();
+
+        $quotations = [];
+        // todo: format data
+        foreach ($rawQuotations as $quotation) {
+
+            $status = 'Invoice Pending';
+            if ($quotation->has_invoice) {
+                $status = 'Complete';
+            } else if ($quotation->expires_at != '' && $quotation->expires_at < now()) {
+                $status = 'Expired';
+            }
+
+            if ($export_status) {
+                if ($status != $export_status && $export_status != 'all') {
+                    continue;
+                }
+            }
+
+
+            $quotations[] = [
+                "quotation_number" => $quotation->quotation_number,
+                "customer_name" => $quotation->customer->name,
+                "customer_email" => $quotation->customer->email,
+                "items_count" => $quotation->items_count,
+                "total_price" => $quotation->total_price,
+                "status" => $status,
+                "created_at" => $quotation->created_at,
+            ];
+        }
+
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('final_products_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new QuotationExport($quotations), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Quotation Number', 'key' => "quotation_number"],
+                ['name' => 'Customer Name', 'key' => "customer_name"],
+                ['name' => 'Customer Email', 'key' => "customer_email"],
+                ['name' => 'Items Count', 'key' => "items_count"],
+                ['name' => 'Total Price', 'key' => "total_price"],
+                ['name' => 'Status', 'key' => "status"],
+                ['name' => 'Created At', 'key' => "created_at"],
+            ];
+            $data = [
+                'title' => 'Quotations',
+                'pdf_view' => 'quotations',
+                'records' => $quotations,
+                'filename' => strtolower('quotations_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function save_quotation_item(Request $request)
@@ -450,6 +524,83 @@ class InventoryAuctionController extends Controller
         $invoices = NewInvoice::whereNotNull("published_at")->get();
 
         return view('pages.miller-admin.inventory-auction.invoice', compact("isAddingInvoice", "viewingInvoiceId", "draftInvoice", "customers", "finalProducts", "milledInventories", "invoices"));
+    }
+
+    public function export_many_invoices(Request $request, $type)
+    {
+
+        $export_status = $request->query("export_status", "all");
+        $start_date = $request->query("start_date");
+        $end_date = $request->query("end_date");
+
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+
+        $rawInvoices = NewInvoice::where("created_at", ">=", $start_date)->where("created_at", "<=", $end_date)->get();
+
+        $invoices = [];
+        // todo: format data
+        foreach ($rawInvoices as $invoice) {
+
+            $status = 'Pending';
+            if ($invoice->has_receipt) {
+                $status = 'Complete';
+            } else if ($invoice->expires_at != '' && $invoice->expires_at < now()) {
+                $status = 'Expired';
+            }
+
+            if ($export_status) {
+                if ($status != $export_status && $export_status != 'all') {
+                    dd("skip: $status != $export_status && $export_status != 'all'");
+                    continue;
+                }
+            }
+
+            $customer_name = "";
+            $customer_email = "";
+
+            if ($invoice->customer) {
+                $customer_name = $invoice->customer->name;
+                $customer_email = $invoice->customer->email;
+            }
+
+
+            $invoices[] = [
+                "invoice_number" => $invoice->invoice_number,
+                "customer_name" => $customer_name,
+                "customer_email" => $customer_email,
+                "items_count" => $invoice->items_count,
+                "total_price" => $invoice->total_price,
+                "status" => $status,
+                "created_at" => $invoice->created_at,
+            ];
+        }
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('invoices_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new InvoiceExport($invoices), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Invoice Number', 'key' => "invoice_number"],
+                ['name' => 'Customer Name', 'key' => "customer_name"],
+                ['name' => 'Customer Email', 'key' => "customer_email"],
+                ['name' => 'Items Count', 'key' => "items_count"],
+                ['name' => 'Total Price', 'key' => "total_price"],
+                ['name' => 'Status', 'key' => "status"],
+                ['name' => 'Created At', 'key' => "created_at"],
+            ];
+            $data = [
+                'title' => 'Invoices',
+                'pdf_view' => 'invoices',
+                'records' => $invoices,
+                'filename' => strtolower('invoices_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function save_Invoice_item(Request $request)

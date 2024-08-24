@@ -221,6 +221,17 @@
         <div class="card-title">Quotations</div>
         <div class="d-flex justify-content-end">
             <a href="?is_adding_quotation=1" class="btn btn-primary">Add Quotation</a>
+            <div class="dropdown ml-2">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Export
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button class="dropdown-item" id="exportAllQuotations">Export All</button>
+                    <button class="dropdown-item" id="exportCompletedQuotations">Export Completed</button>
+                    <button class="dropdown-item" id="exportPendingQuotations">Export Pending</button>
+                    <button class="dropdown-item" id="exportExpiredQuotations">Export Expired</button>
+                </div>
+            </div>
         </div>
 
         <div class="table-responsive p-2">
@@ -411,5 +422,35 @@
             }
         })
     }
+
+    let exportStatus = 'all';
+    $('#exportAllQuotations').on('click', function() {
+        exportStatus = 'all';
+        showExportDialog('Export All Quotations');
+    });
+
+    $('#exportCompletedQuotations').on('click', function() {
+        exportStatus = 'Complete';
+        showExportDialog('Export Completed Quotations');
+    });
+
+    $('#exportPendingQuotations').on('click', function() {
+        exportStatus = 'Invoice Pending';
+        showExportDialog('Export Pending Quotations');
+    });
+
+    $('#exportExpiredQuotations').on('click', function() {
+        exportStatus = 'Expired';
+        showExportDialog('Export Expired Quotations');
+    });
+
+    $("#doExport").on('click', function() {
+        let exportType = $("[name='exportType']:checked").val();
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+        window.location.href = `/miller-admin/inventory-auction/quotations/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
+
+        dismissExportDialog();
+    })
 </script>
 @endpush
