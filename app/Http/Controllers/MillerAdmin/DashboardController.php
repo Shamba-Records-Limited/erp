@@ -45,6 +45,7 @@ class DashboardController extends Controller
             $to_date_prev = date("Y-m-d", strtotime("-365 days"));
         }
 
+        
         $data = [];
 
         return view('pages.miller-admin.dashboard', compact("data", "date_range", "from_date", "to_date"));

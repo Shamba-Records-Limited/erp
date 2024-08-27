@@ -73,8 +73,6 @@ $total_gender_distribution = 0;
         <button class="btn btn-warning mt-1 ml-2" href="{{route('cooperative-admin.dashboard.export')}}" onclick="exportChart()">Export</button>
     </div>
 
-
-
 </div>
 
 <!-- dashgrid -->

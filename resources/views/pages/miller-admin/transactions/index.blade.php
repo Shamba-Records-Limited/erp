@@ -9,8 +9,8 @@
         <div class="d-flex justify-content-between align-items-end">
             <div class="card-title">Transactions</div>
             <div class="d-flex">
-                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Payment</a>
-                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Bulk Payment</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.wallet-management.view-make-payment')}}">Make Payment</a>
+                <a class="btn btn-primary" href="#">Make Bulk Payment</a>
                 <a class="btn btn-primary" href="{{route('miller-admin.wallet-management.view-deposit')}}">Deposit Funds</a>
                 <a class="btn btn-primary" href="{{route('miller-admin.wallet-management.view-withdraw')}}">Withdraw Funds</a>
                 <div class="dropdown ml-2">

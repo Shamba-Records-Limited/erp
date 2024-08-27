@@ -506,7 +506,7 @@ class WalletManagementController extends Controller
         }
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $user = Auth::user();
         try {
@@ -515,10 +515,114 @@ class WalletManagementController extends Controller
             $miller_id = null;
         }
 
-        $accountReceivable = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->where("credit_or_debit", "DEBIT")->sum("amount");
-        $accountPayable = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->where("credit_or_debit", "CREDIT")->sum("amount");
+        $date_range = $request->query("date_range", "week");
+        $from_date = $request->query("from_date", "");
+        $to_date = $request->query("to_date", "");
 
-        return view("pages.miller-admin.wallet-management.dashboard", compact('accountReceivable', 'accountPayable'));
+        $from_date_prev = "";
+        $to_date_prev = "";
+
+        if ($date_range == "custom") {
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+        } else if ($date_range == "week") {
+            $from_date = date("Y-m-d", strtotime("-7 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Week";
+            $from_date_prev = date("Y-m-d", strtotime("-14 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-7 days"));
+        } else if ($date_range == "month") {
+            $from_date = date("Y-m-d", strtotime("-30 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Month";
+            $from_date_prev = date("Y-m-d", strtotime("-60 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-30 days"));
+        } else if ($date_range == "year") {
+            $from_date = date("Y-m-d", strtotime("-365 days"));
+            $to_date = date("Y-m-d");
+            $prev_range = "Last Year";
+            $from_date_prev = date("Y-m-d", strtotime("-730 days"));
+            $to_date_prev = date("Y-m-d", strtotime("-365 days"));
+        }
+
+        $suggested_chart_mode = "daily";
+        // to 60 days
+        if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
+            $suggested_chart_mode = "daily";
+        }
+        // to 4 months
+        else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
+            $suggested_chart_mode = "weekly";
+        }
+        // to 3 years
+        else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
+            $suggested_chart_mode = "monthly";
+        } else {
+            $suggested_chart_mode = "yearly";
+        }
+
+        $income = [];
+        $expenses = [];
+        if ($suggested_chart_mode == "daily") {
+            $incomeDailyQuery = "
+                WITH RECURSIVE date_series AS (
+                    SELECT :from_date AS date
+                    UNION ALL
+                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                    FROM date_series
+                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
+                )
+                SELECT date_series.date AS x,
+                    (
+                        SELECT IFNULL(SUM(t.amount), 0)
+                        FROM transactions t
+                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
+                            t.recipient_id = :miller_id
+                    ) AS y
+                FROM date_series
+                GROUP BY date_series.date;";
+
+            $income = DB::select(DB::raw($incomeDailyQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id,
+            ]);
+
+            $expensesDailyQuery = "
+                WITH RECURSIVE date_series AS (
+                    SELECT :from_date AS date
+                    UNION ALL
+                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                    FROM date_series
+                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
+                )
+                SELECT date_series.date AS x,
+                    (
+                        SELECT IFNULL(SUM(t.amount), 0)
+                        FROM transactions t
+                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
+                            t.sender_id = :miller_id
+                    ) AS y
+                FROM date_series
+                GROUP BY date_series.date;";
+
+            $expenses = DB::select(DB::raw($expensesDailyQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id,
+            ]);
+        }
+
+
+
+        $data = [
+            "income" => $income,
+            "expenses" => $expenses
+        ];
+
+
+
+        return view("pages.miller-admin.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
     }
 
     public function account_receivables()

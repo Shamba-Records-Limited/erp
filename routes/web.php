@@ -626,7 +626,7 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         Route::get("/transactions", "MillerAdmin\WalletManagementController@list_transactions")
             ->name("miller-admin.transactions.show");
         Route::get("/make_payment", "MillerAdmin\WalletManagementController@view_make_payment")
-            ->name("miller-admin.transactions.view-make-payment");
+            ->name("miller-admin.wallet-management.view-make-payment");
         Route::get("/transactions/add/miller-selector/{id}", "MillerAdmin\WalletManagementController@view_add_lot_selector")
             ->name("miller-admin.transactions.view-add-lot-selector");
         Route::post("/transactions/add/retrieve-lot-weights", "MillerAdmin\WalletManagementController@retrieve_lot_weights")

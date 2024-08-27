@@ -13,7 +13,7 @@
                     Make Payment
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" id="makePayment" href="{{route('miller-admin.transactions.view-make-payment')}}">Make Payment</a>
+                    <a class="dropdown-item" id="makePayment" href="{{route('miller-admin.wallet-management.view-make-payment')}}">Make Payment</a>
                 </div>
             </div>
         </div>
