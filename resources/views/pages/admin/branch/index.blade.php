@@ -21,6 +21,7 @@
 
                     <form action="{{ route('branches.add') }}" method="post">
                         @csrf
+                        {{ $errors }}
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="cooperative_id">Cooperative</label>
@@ -79,6 +80,36 @@
                                     <strong>{{ $errors->first('main_product_id')  }}</strong>
                                 </span>
                                 @endif
+                            </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="county_id">Select County</label>
+                                <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                    <option value=""> -Select County-</option>
+                                    @foreach($counties as $county)
+                                    <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id')==$county->id) selected @endif> {{ $county->name }}</option>
+                                    @endforeach
+
+                                    @if ($errors->has('county_id'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('county_id')  }}</strong>
+                                        County Error
+                                    </span>
+                                    @endif
+                                </select>
+                            </div>
+
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="sub_county">Select Sub County</label>
+                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                    <option value=""> -Select Sub County-</option>
+
+                                    @if ($errors->has('sub_county_id'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('sub_county_id')  }}</strong>
+                                    </span>
+                                    @endif
+                                </select>
                             </div>
 
                         </div>
@@ -168,5 +199,21 @@
 
         window.location = "/branches/delete/" + id
     }
+    $("#county_id").change(function(e) {
+        $("#sub_county_id").value = "";
+        $("#sub_county_id").empty();
+
+        $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
+
+        let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
+        let filteredSubCounties = []
+        for (let subCounty of subCounties) {
+            console.log(subCounty)
+            if (subCounty.county_id == e.target.value) {
+                elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
+                $("#sub_county_id").append(elem)
+            }
+        }
+    });
 </script>
 @endpush
