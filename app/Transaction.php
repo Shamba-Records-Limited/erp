@@ -65,6 +65,9 @@ class Transaction extends Model
             $subject = Lot::find($this->subject_id)->lot_number;
         } else if ($this->subject_type == 'LOT_GROUP') {
             $subject = LotGroup::find($this->subject_id)->group_number;
+        } else if ($this->subject_type == 'INVOICE') {
+            $invoice = Invoice::find($this->subject_id);
+            $subject = $invoice->invoice_number;
         }
         return $subject;
     }
@@ -92,6 +95,25 @@ class Transaction extends Model
         }
 
         return $amount / $qty;
+    }
+
+    public function getSenderAttribute()
+    {
+        if ($this->sender_type == 'COOPERATIVE') {
+            $coop = Cooperative::find($this->sender_id);
+            return $coop->name;
+        } else if ($this->sender_type == 'MILLER') {
+            $miller = Miller::find($this->sender_id);
+            return $miller->name;
+        } else if ($this->sender_type == 'CUSTOMER') {
+            $customer = Customer::find($this->sender_id);
+            return $customer->name;
+        }
+    }
+
+    public function getRecipientAttribute()
+    {
+        return $this->recipient->name;
     }
     
     public function getFormattedAmountAttribute()

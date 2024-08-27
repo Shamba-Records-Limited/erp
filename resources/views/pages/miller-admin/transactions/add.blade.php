@@ -58,7 +58,7 @@
         let cooperative_id = $("#cooperative_id").val();
 
         $.ajax({
-            url: `/miller-admin/transactions/add/miller-selector/${cooperative_id}`,
+            url: `/miller-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
             type: "GET",
             success: function(data) {
                 let my_elem = $('#lot_ids').first();
@@ -78,7 +78,7 @@
         var selectedLots = $("#lot_ids").val()
 
         $.ajax({
-            url: `/miller-admin/transactions/add/retrieve-lot-weights`,
+            url: `/miller-admin/wallet-management/transactions/add/retrieve-lot-weights`,
             type: "POST",
             data: {
                 _token: "{{csrf_token()}}",
@@ -98,8 +98,6 @@
     function calculateAmount() {
         var qty = parseFloat($("#lot_weight").text())
         var price = parseFloat($("#pricing").val())
-
-        alert("calculating...")
 
         if (qty == 0 || price == 0) {
             $("#amount").val(0)

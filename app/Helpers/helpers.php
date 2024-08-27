@@ -1350,8 +1350,14 @@ if (!function_exists('perform_transaction')) {
         $receipt->published_at = $now;
         $receipt->save();
 
-        // create receipt items
-        if($transaction->subject_type == 'INVOICE') {
+        if ($transaction->type != 'DEPOSIT' && $transaction->type != 'WITHDRAWAL') {
+            $receiptItem = new ReceiptItem();
+            $receiptItem->item_type = $transaction->type;
+            $receiptItem->price = $transaction->amount;
+            $receiptItem->quantity = 1;
+            $receiptItem->save();
+        }        // create receipt items
+        else if($transaction->subject_type == 'INVOICE') {
             $invoice = NewInvoice::find($transaction->subject_id);
             $invoice_items = $invoice->items;
             foreach($invoice_items as $item) {

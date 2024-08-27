@@ -760,6 +760,60 @@ $cooperative = null;
             </div>
         </li>
 
+        <!-- todo: rename to wallet management -->
+        <!-- todo: add dashboard -->
+        <!-- todo: dashboard: payments made vs payments received -->
+        <!-- todo: dashboard: actual balance -->
+        <!-- todo: dashboard: deposits made vs withdrawals made -->
+        <!-- todo: separate transactions into account receivable(expected amount to be received) and account payable(expected amount to be paid) -->
+        <!-- todo: income and expenses -->
+        <li class="nav-item {!!  active_class(['miller-admin/wallet-management/*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#walletManagement" aria-expanded="{!!  is_active_route(['miller-admin/wallet-management/*'])  !!}" aria-controls="walletManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Wallet Management</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['miller-admin/wallet-management/*']) }}" id="walletManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/dashboard']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.dashboard') }}">
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/account-receivables']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.account-receivables') }}">
+                            <span class="menu-title">Account Receivables</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/account-payables']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.account-payables') }}">
+                            <span class="menu-title">Account Payables</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-made']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-made') }}">
+                            <span class="menu-title">Payments Made</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-received']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-received') }}">
+                            <span class="menu-title">Payments Received</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/deposits*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.deposits') }}">
+                            <span class="menu-title">Deposits</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/withdrawals*']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.withdrawals') }}">
+                            <span class="menu-title">Withdrawals</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item {{ active_class(['miller-admin/transactions*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.transactions.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
@@ -804,14 +858,6 @@ $cooperative = null;
                 <span class="menu-title">Collections</span>
             </a>
         </li>
-
-        <!-- todo: rename to wallet management -->
-         <!-- todo: add dashboard -->
-          <!-- todo: dashboard: payments made vs payments received -->
-          <!-- todo: dashboard: actual balance -->
-            <!-- todo: dashboard: deposits made vs withdrawals made -->
-          <!-- todo: separate transactions into account receivable(expected amount to be received) and account payable(expected amount to be paid) -->
-            <!-- todo: income and expenses -->
 
         <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
             <a class="nav-link" href="{{ route('farmer.transactions.show') }}">

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\CoopBranch;
 use App\Cooperative;
+use App\County;
 use App\Events\AuditTrailEvent;
 use App\Product;
+use App\SubCounty;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Log;
@@ -39,7 +41,11 @@ class CoopBranchController extends Controller
 
         $products = Product::all();
 
-        return view('pages.admin.branch.index', compact('branches', 'cooperatives', 'products'));
+        $counties = County::all();
+        $sub_counties = SubCounty::all();
+
+
+        return view('pages.admin.branch.index', compact('branches', 'cooperatives', 'products', 'counties', 'sub_counties'));
     }
 
     public function edit($id)
@@ -67,7 +73,9 @@ class CoopBranchController extends Controller
             'cooperative_id' => 'required|exists:cooperatives,id',
             'name' => 'required|string',
             'location' => 'required|string',
-            'main_product_id' => 'required|exists:products,id'
+            'main_product_id' => 'required|exists:products,id',
+            "county_id" => "required|exists:counties,id",
+            "sub_county_id" => "required|exists:sub_counties,id",
         ]);
         try {
             DB::beginTransaction();
@@ -81,7 +89,9 @@ class CoopBranchController extends Controller
             $branch->location = $request->location;
             $branch->code = $request->code;
             $branch->cooperative_id = $coop_id;
-            $branch->main_product_id = $request->main_product_id;
+            $branch->product_id = $request->main_product_id;
+            $branch->county_id = $request->county_id;
+            $branch->sub_county_id = $request->sub_county_id;
             $branch->save();
 
             //audit trail log

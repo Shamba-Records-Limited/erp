@@ -97,15 +97,14 @@ Route::post('/update-password', 'UserManagementController@update_password')->nam
 Route::get('/common/collection/{collection_id}/unit', 'Common\CommonController@collection_unit')->name('collection.get-collection-unit');
 Route::get('/common/product/{product_id}/unit', 'Common\CommonController@product_unit')->name('collection.get-product-unit');
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get("/wallet-details", 'Common\CommonController@wallet_details')->name('wallet.details');
 });
 
 // superadmin routes
-Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {
-});
+Route::middleware('role:super-admin')->prefix("super-admin")->group(function () {});
 
-Route::prefix("chat")->group(function() {
+Route::prefix("chat")->group(function () {
     Route::get("/", 'ChatController@index')->name('chat.index');
     Route::post("/add-group", 'ChatController@add_group')->name('chat.add-group');
     Route::post("/send-message", 'ChatController@send_message')->name('chat.send-message');
@@ -181,7 +180,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.users.make-county-govt-official');
     Route::get('/users/edit/{id}', 'Admin\UsersController@edit')
         ->name('admin.users.edit');
-    Route::post('/users/edit', 'Admin\UsersController@update')
+    Route::post('/users/edit/{id}', 'Admin\UsersController@update')
         ->name('admin.users.update');
     // todo: implement activate/deactivate
     // todo: implement delete
@@ -189,7 +188,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     // employees
     Route::get('/employees', 'Admin\EmployeesController@index')
         ->name('admin.employees.show');
-    
+
 
     // county govt officials
     route::get('/county-govt-officials', 'Admin\CountyGovtOfficialsController@index')
@@ -283,13 +282,12 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name("admin.support.view-ticket");
     Route::get("/support/resolve-ticket/{ticket_number}", "Admin\SupportController@resolve_ticket")
         ->name("admin.support.resolve-ticket");
-
 });
 
 
 Route::middleware('role:county govt official')->prefix('county-govt')->group(function () {
     Route::get('/dashboard', 'GovtOfficial\DashboardController@index')->name('govt-official.dashboard');
-    
+
     route::get('/cooperatives', 'GovtOfficial\CooperativesController@index')
         ->name('govt-official.cooperatives.show');
     route::get('/cooperatives/{id}', 'GovtOfficial\CooperativesController@details')
@@ -300,15 +298,15 @@ Route::middleware('role:county govt official')->prefix('county-govt')->group(fun
     route::get('/farmers/{id}', 'GovtOfficial\FarmersController@details')
         ->name('govt-official.farmers.details');
 
-    
+
     route::get('/millers', 'GovtOfficial\MillersController@index')
         ->name('govt-official.millers.show');
 
-    
+
     route::get('/collections', 'GovtOfficial\CollectionsController@index')
         ->name('govt-official.collections.show');
 
-    
+
     route::get('/sales', 'GovtOfficial\SalesController@index')
         ->name('govt-official.sales.show');
 });
@@ -334,7 +332,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     Route::get('/products/{id}', 'CooperativeAdmin\ProductsController@detail')
         ->name('cooperative-admin.products.detail');
 
-    
+
     Route::post('/products/product-pricing', 'CooperativeAdmin\ProductsController@store_product_pricing')
         ->name('cooperative-admin.products.store_product_pricing');
 
@@ -358,7 +356,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     })->name('cooperative-admin.download-upload-farmers-template');
     Route::post('/farmers/import-bulk', 'CooperativeAdmin\FarmersController@import_bulk')
         ->name('cooperative-admin.farmers.import-bulk');
-    
+
 
     // lots
     Route::get('/lots', 'CooperativeAdmin\LotsController@index')
@@ -438,7 +436,6 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.transactions.detail");
     Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
         ->name("cooperative-admin.transactions.complete");
-    
 });
 
 Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
@@ -470,7 +467,7 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::post("/market-auction/{coop_id}/checkout-cart", "MillerAdmin\MarketAuctionController@checkout_cart")
         ->name("miller-admin.market-auction.checkout-cart");
 
-    
+
     // Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
     //     ->name("miller-admin.market-auction.increase-quantity-in-cart");
     // Route::put("/market-auction/{coop_id}/set_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@set_quantity_in_cart")
@@ -478,13 +475,13 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // Route::get("/market-auction/{coop_id}/decrease_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@decrease_quantity_in_cart")
     //     ->name("miller-admin.market-auction.decrease-quantity-in-cart");
 
-        
+
     // orders
     Route::get("/orders", "MillerAdmin\OrdersController@index")
         ->name("miller-admin.orders.show");
     Route::get('/orders/download/{type}', 'MillerAdmin\OrdersController@export_orders')
         ->name("miller-admin.orders.export");
-    
+
     // order object
     Route::get("/orders/create-order/{coop_id}", "MillerAdmin\OrdersController@view_create_order")
         ->name("miller-admin.market-auction.coop-collections.view-create-order");
@@ -608,33 +605,50 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::get("/inventory-auction/sales/save-details/{id}", "MillerAdmin\InventoryAuctionController@view_update_sale")
         ->name("miller-admin.inventory-auction.view-update-sale");
 
-    // transactions
-    Route::get("/transactions", "MillerAdmin\TransactionController@index")
-        ->name("miller-admin.transactions.show");
-    Route::get("/transactions/add", "MillerAdmin\TransactionController@view_add")
-        ->name("miller-admin.transactions.view-add");
-    Route::get("/transactions/add/miller-selector/{id}", "MillerAdmin\TransactionController@view_add_lot_selector")
-        ->name("miller-admin.transactions.view-add-lot-selector");
-    Route::post("/transactions/add/retrieve-lot-weights", "MillerAdmin\TransactionController@retrieve_lot_weights")
-        ->name("miller-admin.transactions.retrieve-lot-weights");
-    Route::post("/transactions/add", "MillerAdmin\TransactionController@add")
-        ->name("miller-admin.transactions.add");
+    Route::prefix('/wallet-management')->group(function () {
+        // dashboard
+        Route::get("/dashboard", "MillerAdmin\WalletManagementController@dashboard")
+            ->name("miller-admin.wallet-management.dashboard");
+        Route::get("/account-receivables", "MillerAdmin\WalletManagementController@account_receivables")
+            ->name("miller-admin.wallet-management.account-receivables");
+        Route::get("/account-payables", "MillerAdmin\WalletManagementController@account_payables")
+            ->name("miller-admin.wallet-management.account-payables");
+        Route::get("/payments-made", "MillerAdmin\WalletManagementController@payments_made")
+            ->name("miller-admin.wallet-management.payments-made");
+        Route::get("/payments-received", "MillerAdmin\WalletManagementController@payments_received")
+            ->name("miller-admin.wallet-management.payments-received");
+        Route::get("/deposits", "MillerAdmin\WalletManagementController@list_deposits")
+            ->name("miller-admin.wallet-management.deposits");
+        Route::get("/withdrawals", "MillerAdmin\WalletManagementController@list_withdrawals")
+            ->name("miller-admin.wallet-management.withdrawals");
 
-    // deposit n withdraw
-    Route::get("/transactions/deposit", "MillerAdmin\TransactionController@view_deposit")
-        ->name("miller-admin.transactions.view-deposit");
-    Route::post("/transactions/deposit", "MillerAdmin\TransactionController@deposit")
-        ->name("miller-admin.transactions.deposit");
-    Route::get("/transactions/withdraw", "MillerAdmin\TransactionController@view_withdraw")
-        ->name("miller-admin.transactions.view-withdraw");
-    Route::post("/transactions/withdraw", "MillerAdmin\TransactionController@withdraw")
-        ->name("miller-admin.transactions.withdraw");
+        // transactions
+        Route::get("/transactions", "MillerAdmin\WalletManagementController@list_transactions")
+            ->name("miller-admin.transactions.show");
+        Route::get("/make_payment", "MillerAdmin\WalletManagementController@view_make_payment")
+            ->name("miller-admin.transactions.view-make-payment");
+        Route::get("/transactions/add/miller-selector/{id}", "MillerAdmin\WalletManagementController@view_add_lot_selector")
+            ->name("miller-admin.transactions.view-add-lot-selector");
+        Route::post("/transactions/add/retrieve-lot-weights", "MillerAdmin\WalletManagementController@retrieve_lot_weights")
+            ->name("miller-admin.transactions.retrieve-lot-weights");
+        Route::post("/transactions/add", "MillerAdmin\WalletManagementController@add_transaction")
+            ->name("miller-admin.transactions.add");
 
-    // transactions detail
-    Route::get("/transactions/{id}", "MillerAdmin\TransactionController@detail")
-        ->name("miller-admin.transactions.detail");
+        // deposit n withdraw
+        Route::get("/deposits/add", "MillerAdmin\WalletManagementController@view_deposit")
+            ->name("miller-admin.wallet-management.view-deposit");
+        Route::post("/transactions/deposit", "MillerAdmin\WalletManagementController@deposit")
+            ->name("miller-admin.wallet-management.deposit");
+        Route::get("/withdrawals/add", "MillerAdmin\WalletManagementController@view_withdraw")
+            ->name("miller-admin.wallet-management.view-withdraw");
+        Route::post("/transactions/withdraw", "MillerAdmin\WalletManagementController@withdraw")
+            ->name("miller-admin.wallet-management.withdraw");
 
-        
+        // transactions detail
+        Route::get("/transactions/{id}", "MillerAdmin\TransactionController@transaction_detail")
+            ->name("miller-admin.transactions.detail");
+    });
+
     // support
     Route::get("/support", "MillerAdmin\SupportController@index")
         ->name("miller-admin.support.show");
@@ -662,7 +676,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.tracking-tree.root_details");
     Route::post("/tracking-tree/node-children", "MillerAdmin\TrackingTreeController@node_children")
         ->name("miller-admin.tracking-tree.node-children");
-
 });
 
 Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->group(function () {
@@ -2149,7 +2162,7 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
     Route::get('/dashboard', 'Farmer\DashboardController@index')->name('farmer.dashboard');
 
     Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
-    
+
     Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
     Route::get("/transactions/{id}", "Farmer\TransactionController@detail")
         ->name("farmer.transactions.detail");

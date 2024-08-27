@@ -52,7 +52,7 @@
                                     <a class="text-primary dropdown-item" href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> View Details
                                     </a>
-                                    @if($transaction->recipient == 'Me' && $transaction->status == 'PENDING')
+                                    @if($transaction->status == 'PENDING')
                                     <a class="text-success dropdown-item" href="{{route('cooperative-admin.transactions.complete', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> Complete
                                     </a>

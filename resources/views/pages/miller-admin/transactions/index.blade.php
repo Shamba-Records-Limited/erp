@@ -11,8 +11,8 @@
             <div class="d-flex">
                 <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Payment</a>
                 <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-add')}}">Make Bulk Payment</a>
-                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-deposit')}}">Deposit Funds</a>
-                <a class="btn btn-primary" href="{{route('miller-admin.transactions.view-withdraw')}}">Withdraw Funds</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.wallet-management.view-deposit')}}">Deposit Funds</a>
+                <a class="btn btn-primary" href="{{route('miller-admin.wallet-management.view-withdraw')}}">Withdraw Funds</a>
                 <div class="dropdown ml-2">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Export
@@ -67,7 +67,7 @@
                                     <a class="text-primary dropdown-item" href="{{route('miller-admin.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i>View Details
                                     </a>
-                                    @if($transaction->status == 'COMPLETE' && !empty($transaction->receipt_id))
+                                    @if(!empty($transaction->receipt_id))
                                     <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->receipt_id}}')">
                                         <i class="fa fa-edit"></i> Print Receipt
                                     </button>

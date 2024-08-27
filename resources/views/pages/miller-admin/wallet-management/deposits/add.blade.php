@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Deposit Funds</div>
-        <form action="{{route('miller-admin.transactions.deposit')}}" method="post">
+        <form action="{{route('miller-admin.wallet-management.deposit')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div>
                 <div>Account</div>
@@ -40,7 +40,7 @@
 
             <div class="d-flex justify-content-start">
                 <button type="submit" class="btn btn-primary">Deposit</button>
-                <a href="{{route('miller-admin.transactions.view-deposit')}}" class="btn btn-primary ml-2">Cancel</a>
+                <a href="{{route('miller-admin.wallet-management.view-deposit')}}" class="btn btn-primary ml-2">Cancel</a>
             </div>
         </form>
     </div>

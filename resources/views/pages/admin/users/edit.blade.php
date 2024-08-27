@@ -18,7 +18,7 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.users.update') }}" method="post">
+                    <form action="{{ route('admin.users.update', ['id' => $user->id]) }}" method="post">
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">

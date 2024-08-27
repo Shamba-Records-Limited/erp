@@ -134,6 +134,22 @@ class UsersController extends Controller
         return view('pages.admin.users.detail', compact('user'));
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'first_name' => 'required',
+            'other_names' => 'required',
+        ]);
+
+        $user = User::find($id);
+        $user->username = $request->name;
+        $user->first_name = $request->first_name;
+        $user->other_names = $request->other_names;
+        $user->save();
+        return redirect()->route('admin.users.show');
+    }
+
     public function viewMakeEmployee($id)
     {
         $results =  DB::select(DB::raw("
