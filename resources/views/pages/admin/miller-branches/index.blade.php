@@ -32,7 +32,7 @@
                                 <select name="miller_id" id="miller_id" class="form-control select2bs4 {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -- Select Miller --</option>
                                     @foreach($millers as $miller)
-                                    <option value="{{$miller->id}}">{{$miller->name}}</option>
+                                    <option value="{{$miller->id}}" @if(!empty(old('miller_id')) && old('miller_id') == $miller->id) selected @endif>{{$miller->name}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('miller_id'))
@@ -43,12 +43,12 @@
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="miller_name">Name</label>
-                                <input type="text" name="miller_name" class="form-control {{ $errors->has('miller_name') ? ' is-invalid' : '' }}" id="miller_name" placeholder="ABC" value="{{ old('miller_name')}}" required>
+                                <label for="name">Name</label>
+                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="ABC" value="{{ old('name')}}" required>
 
-                                @if ($errors->has('miller_name'))
+                                @if ($errors->has('name'))
                                 <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('miller_name')  }}</strong>
+                                    <strong>{{ $errors->first('name')  }}</strong>
                                 </span>
                                 @endif
                             </div>
@@ -89,12 +89,13 @@
                                 <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select County-</option>
                                     @foreach($counties as $county)
-                                    <option value="{{$county->id}}"> {{ $county->name }}</option>
+                                    <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id') == $county->id) selected @endif> {{ $county->name }}</option>
                                     @endforeach
 
                                     @if ($errors->has('county_id'))
                                     <span class="help-block text-danger">
                                         <strong>{{ $errors->first('county_id')  }}</strong>
+                                        County Error
                                     </span>
                                     @endif
                                 </select>
