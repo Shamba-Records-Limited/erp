@@ -14,6 +14,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Log;
 
 class MarketAuctionController extends Controller
@@ -318,7 +319,8 @@ class MarketAuctionController extends Controller
         // commit changes
         DB::commit();
         toastr()->success('Order created successfully');
-
+        // Auto-run private function after DB commit
+    return $this->processBatchAndLots($order, $lotNumbers, $cart);
         // redirect to orders
         return redirect()->route("miller-admin.orders.show");
     }
