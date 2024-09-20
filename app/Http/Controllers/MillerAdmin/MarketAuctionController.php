@@ -14,6 +14,7 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Log;
 
 class MarketAuctionController extends Controller
@@ -318,7 +319,8 @@ class MarketAuctionController extends Controller
         // commit changes
         DB::commit();
         toastr()->success('Order created successfully');
-
+        // Auto-run private function after DB commit
+    return $this->processBatchAndLots($order, $lotNumbers, $cart);
         // redirect to orders
         return redirect()->route("miller-admin.orders.show");
     }
@@ -481,4 +483,218 @@ class MarketAuctionController extends Controller
         toastr()->success('Cart updated successfully');
         return redirect()->back();
     }
+
+     /**
+ * Private function to process batch, lots, and collections after DB commit
+ *
+ * @param MillerAuctionOrder $order
+ * @param array $lotNumbers
+ * @param MillerAuctionCart $cart
+ * @return \Illuminate\Http\JsonResponse
+ */
+private function processBatchAndLots($order, $lotNumbers, $cart)
+{
+    // Extract batch number and lots, query collections
+    $batch_number = $order->batch_number;
+    $lots = [];
+    $productNames = []; // Array to store unique product names
+
+    foreach ($lotNumbers as $lotNumber) {
+        // Query collections based on lot number
+        $collections = Collection::where('lot_number', $lotNumber)
+            ->select('collection_number', 'quantity', 'product_id') // Include product_id in the query
+            ->get();
+
+        // Add lot and its collections to the response array
+        $lots[] = [
+            'lot_number' => $lotNumber,
+            'collections' => $collections->map(function ($collection) use (&$productNames) {
+                // Query the product name for the current collection's product_id
+                $productName = Product::where('id', $collection->product_id)->value('name');
+                
+                // Add the product name to the array if it doesn't already exist
+                if (!in_array($productName, $productNames)) {
+                    $productNames[] = $productName;
+                }
+
+                return [
+                    'collection_number' => $collection->collection_number,
+                    'collection_quantity' => $collection->quantity,
+                ];
+            })->toArray() // Ensure collections is an array
+        ];
+    }
+
+    // Convert product names to a comma-separated string
+    $product_name_string = implode(', ', $productNames);
+
+    // Create final JSON response
+    $response = [
+        "data" => [
+            "batch_number" => $batch_number,
+            "lots" => $lots,
+            "product_name" => $product_name_string
+        ]
+    ];
+
+    // Call saveToBlockchain function
+    $this->saveToBlockchain($response);
+    return redirect()->route('miller-admin.orders.show');
+    
+}
+
+private function saveToBlockchain($response)
+{
+    // Define constants
+    $baseUrl = env('BLOCKCHAIN_API_URL'); // Base URL from .env file
+
+    // Helper function to get the token
+    function getToken()
+    {
+        global $encryptedPrivateKey, $tokenFile;
+        $encryptedPrivateKey = env('ENCRYPTED_PRIVATE_KEY'); // Encrypted private key from .env file
+        $tokenFile = storage_path('token.json'); // Path to store the token
+        
+        // Load URL from .env and ensure it's valid
+        $baseUrl = rtrim(env('BLOCKCHAIN_API_URL'), '/');
+    
+        if (!filter_var($baseUrl, FILTER_VALIDATE_URL)) {
+            Log::error("Invalid BASE URL for blockchain API: $baseUrl");
+            throw new \Exception('Invalid base URL for blockchain API');
+        }
+    
+        // Function to request a new token
+        function requestNewToken($baseUrl, $encryptedPrivateKey)
+        {
+            $response = Http::post("{$baseUrl}/auth/token", [
+                'encrypted_private_key' => $encryptedPrivateKey
+            ]);
+    
+            if ($response->failed()) {
+                Log::error('Failed to fetch new token: ' . $response->body());
+                throw new \Exception('Failed to fetch new token');
+            }
+    
+            $responseData = $response->json();
+            // Normalize keys to lowercase
+            $responseData = array_change_key_case($responseData, CASE_LOWER);
+    
+            // Check if 'data' key exists
+            if (!isset($responseData['data'])) {
+                Log::error('No data key in token response: ' . json_encode($responseData));
+                throw new \Exception('No data key in token response');
+            }
+    
+            $tokenData = $responseData['data'];
+            $tokenData['expires_at'] = time() + $tokenData['expires_in'] - 60; // Refresh before expiration
+    
+            return $tokenData;
+        }
+    
+        // Check if token file exists and is not empty
+        if (file_exists($tokenFile) && filesize($tokenFile) > 0) {
+            $tokenData = json_decode(file_get_contents($tokenFile), true);
+            
+            // Check if the token is expired
+            if (time() > $tokenData['expires_at']) {
+                // Token expired, delete the file and fetch a new token
+                unlink($tokenFile);
+                $tokenData = requestNewToken($baseUrl, $encryptedPrivateKey);
+                file_put_contents($tokenFile, json_encode($tokenData));
+            }
+            
+            return $tokenData['token'];
+        } 
+    
+        // Request a new token if the file doesn't exist or is empty
+        $tokenData = requestNewToken($baseUrl, $encryptedPrivateKey);
+        file_put_contents($tokenFile, json_encode($tokenData));
+    
+        return $tokenData['token'];
+    }
+
+    $token = getToken();
+
+
+
+
+
+    // Prepare the data in the required format
+$formattedData = [
+    'data' => [
+        'batch_number' => $response['data']['batch_number'],
+        'lots' => array_map(function ($lot) {
+            // Remove 'Illuminate\\Support\\Collection' wrapping
+            if (isset($lot['collections']) && isset($lot['collections']['Illuminate\\Support\\Collection'])) {
+                $lot['collections'] = $lot['collections']['Illuminate\\Support\\Collection'];
+            }
+
+            // Ensure that collection_quantity is a float
+            $lot['collections'] = array_map(function ($collection) {
+                if (isset($collection['collection_quantity']) && is_string($collection['collection_quantity'])) {
+                    $collection['collection_quantity'] = (float) $collection['collection_quantity'];
+                }
+                return $collection;
+            }, $lot['collections']);
+
+            return $lot;
+        }, $response['data']['lots']),
+        'product_name' => $response['data']['product_name']
+    ],
+    'file_memo' => 'Farm Collections saved successfully',
+    'file_private_key' => env('ENCRYPTED_PRIVATE_KEY')
+];
+
+   Log::debug("Final data to send:",$formattedData);
+   // Load URL from .env and ensure it's valid
+   $baseUrl = rtrim(env('BLOCKCHAIN_API_URL'), '/');
+    // Send data to blockchain
+    $blockchainResponse = Http::withToken($token)->post("{$baseUrl}/files/create", $formattedData);
+
+    // Handle response or log errors
+    if ($blockchainResponse->failed()) {
+        Log::error('Failed to save to blockchain: ' . $blockchainResponse->body());
+        return;
+    }
+
+    // Extract the file ID from the blockchain response
+    $blockchainData = array_change_key_case($blockchainResponse->json(), CASE_LOWER);
+
+    if (isset($blockchainData['data']['file_id'])) {
+        $fileId = $blockchainData['data']['file_id'];
+    } else {
+        Log::error('No file_id found in blockchain response');
+        $fileId = null; // Handle case where file_id is not found
+    }
+
+    // Append the file ID to the original response
+    $finalResponse = array_merge($response, [
+        'file_id' => $fileId
+    ]);
+    $blockDataFile = storage_path('blockdata.json');
+
+// Check if the file already exists and has content
+if (file_exists($blockDataFile) && filesize($blockDataFile) > 0) {
+    // Read the existing content
+    $existingData = json_decode(file_get_contents($blockDataFile), true);
+
+    // Ensure the existing data is an array
+    if (!is_array($existingData)) {
+        $existingData = [];
+    }
+} else {
+    // If the file does not exist or is empty, initialize an empty array
+    $existingData = [];
+}
+
+// Append the new final response to the existing data
+$existingData[] = $finalResponse;
+
+// Save the updated data back to blockdata.json
+file_put_contents($blockDataFile, json_encode($existingData, JSON_PRETTY_PRINT));
+
+    Log::info('Successfully saved to blockchain and updated blockdata.json');
+    // Redirect the user back to the desired route after saving
+
+}
 }
