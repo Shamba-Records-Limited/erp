@@ -744,9 +744,10 @@ if (!function_exists('download_pdf')) {
         $title = $data['title'];
         $period = Carbon::now()->format('D, d M Y  H:i:s');
         $records = $data['records'];
+        $summation = $data['summation'] ?? null;
         $pdf = app('dompdf.wrapper');
         $pdf->setPaper('letter', $data['orientation']);
-        $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns'));
+        $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns', 'summation'));
         $file_name = $data['filename'];
         return $pdf->download($file_name . '.pdf');
     }
@@ -1350,8 +1351,10 @@ if (!function_exists('perform_transaction')) {
         $receipt->published_at = $now;
         $receipt->save();
 
-        if ($transaction->type != 'DEPOSIT' && $transaction->type != 'WITHDRAWAL') {
+
+        if ($transaction->type == 'DEPOSIT' || $transaction->type == 'WITHDRAWAL') {
             $receiptItem = new ReceiptItem();
+            $receiptItem->item_id = $transaction->id;
             $receiptItem->item_type = $transaction->type;
             $receiptItem->price = $transaction->amount;
             $receiptItem->quantity = 1;

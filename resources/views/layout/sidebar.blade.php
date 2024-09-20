@@ -290,6 +290,53 @@ $cooperative = null;
             </div>
         </li>
 
+        <li class="nav-item {!!  active_class(['cooperative-admin/wallet-management/*']) !!} ">
+            <a class="nav-link" data-toggle="collapse" href="#walletManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/wallet-management/*'])  !!}" aria-controls="walletManagement">
+                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <span class="menu-title">Wallet Management</span>
+                <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse {{ show_class(['cooperative-admin/wallet-management/*']) }}" id="walletManagement">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/dashboard']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
+                            <span class="menu-title">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/account-receivables']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
+                            <span class="menu-title">Account Receivables</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/account-payables']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
+                            <span class="menu-title">Account Payables</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/income']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.income') }}">
+                            <span class="menu-title">Income</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/expenses']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.expenses') }}">
+                            <span class="menu-title">Expenses</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/deposits*']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.deposits') }}">
+                            <span class="menu-title">Deposits</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/withdrawals*']) }}">
+                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
+                            <span class="menu-title">Withdrawals</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
         <li class="nav-item {{ active_class(['cooperative-admin/products']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -300,7 +347,7 @@ $cooperative = null;
         <li class="nav-item {{ active_class(['cooperative-admin/transactions*']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
-                <span class="menu-title">Transactions</span>
+                <span class="menu-title">Transactions Reports</span>
             </a>
         </li>
 
@@ -671,12 +718,12 @@ $cooperative = null;
         @endif
 
         @if($user && $user->hasRole('miller admin'))
-        <!-- <li class="nav-item {{ active_class(['miller-admin/dashboard']) }}">
+        <li class="nav-item {{ active_class(['miller-admin/dashboard']) }}">
             <a class="nav-link" href="{{ route('miller-admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
-        </li> -->
+        </li>
 
         <li class="nav-item {{ active_class(['miller-admin/warehouses*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.warehouses.show') }}">
@@ -712,6 +759,12 @@ $cooperative = null;
                     <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
                             <span class="menu-title">Milled Inventory</span>
+                        </a>
+                    </li>
+                    <!-- todo: implement grades view -->
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                            <span class="menu-title">Inventory Grades</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/inventory/final-products']) }}">
@@ -792,12 +845,12 @@ $cooperative = null;
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-made']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-made') }}">
-                            <span class="menu-title">Payments Made</span>
+                            <span class="menu-title">Expenses</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-received']) }}">
                         <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-received') }}">
-                            <span class="menu-title">Payments Received</span>
+                            <span class="menu-title">Income</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/wallet-management/deposits*']) }}">
@@ -817,7 +870,7 @@ $cooperative = null;
         <li class="nav-item {{ active_class(['miller-admin/transactions*']) }}">
             <a class="nav-link" href="{{ route('miller-admin.transactions.show') }}">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
-                <span class="menu-title">Transactions</span>
+                <span class="menu-title">Transactions Report</span>
             </a>
         </li>
 

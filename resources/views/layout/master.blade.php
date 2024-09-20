@@ -31,6 +31,28 @@
   <!-- summernote -->
   <link rel="stylesheet" href=" {{ asset('assets/plugins/summernote/summernote-bs4.css') }}">
 
+  <!-- htmx -->
+  <style>
+    .skeleton {
+      background-color: #e0e0e0;
+      background-image: linear-gradient(90deg, #e0e0e0, #f0f0f0, #e0e0e0);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+  </style>
+
+  <script src="https://unpkg.com/htmx.org@1.9.3"></script>
 
   @stack('style')
 </head>
@@ -40,14 +62,14 @@
   <div class="container-scroller" id="app">
     @yield('topItem')
     @include('layout.header')
-    @include('layout.export-dialog')
     <div class="container-fluid page-body-wrapper">
       @include('layout.sidebar')
       <div class="main-panel">
-        <div class="d-flex" id='wallet_cont'>
-
-        </div>
+        @include('layout.export-dialog')
         <div class="content-wrapper">
+          <div class="d-flex" id='wallet_cont'>
+
+          </div>
           @yield('content')
         </div>
         @include('layout.footer')
@@ -94,6 +116,10 @@
   @toastr_render
 
   <script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]').content;
+    });
+
     $('.dt').DataTable({
       "paging": true,
       "lengthChange": true,
@@ -279,10 +305,11 @@
       success: function(resp) {
         if (resp.has_wallet) {
           for (let w of resp.wallets) {
+            let balance = Number(w.balance).toLocaleString()
             let elem = `<div class="p-2 border rounded bg-light">`
             elem += `<span class="border p-1">Wallet</span>`
             elem += ` Acc No: <span class="font-weight-bold text-primary">${w.acc_number}</span>&nbsp`
-            elem += ` Bal: <span class="font-weight-bold text-primary">KES${w.balance}</span>`
+            elem += ` Bal: <span class="font-weight-bold text-primary">KES ${balance}</span>`
             elem += `</div>`
             $("#wallet_cont").append(elem)
           }
@@ -361,6 +388,85 @@
     $('#dateRange').change(function() {
       updateStartAndEndDate();
     });
+
+    function createPaginationElem(current_page, last_page, onPageClick) {
+      let onSides = 1;
+      let nav = document.createElement('nav');
+
+      let paginationUl = document.createElement('ul');
+      paginationUl.className = 'pagination';
+      nav.appendChild(paginationUl);
+
+      // Add prev
+      let prevLi = document.createElement('li');
+      prevLi.className = 'page-item';
+      if (current_page == 1) {
+        prevLi.className += ' disabled';
+      }
+      let prevLink = document.createElement('a');
+      prevLink.className = 'page-link';
+      prevLink.href = '#';
+      prevLink.innerHTML = 'Prev';
+      prevLink.onclick = function() {
+        onPageClick(current_page - 1);
+      }
+      prevLi.appendChild(prevLink);
+      paginationUl.appendChild(prevLi);
+
+      // Loop through
+      for (let i = 1; i <= last_page; i++) {
+        // Define offset
+        let offset = (i == 1 || last_page) ? onSides + 1 : onSides;
+        // If added
+        if (i == 1 || (current_page - offset <= i && current_page + offset >= i) ||
+          i == current_page || i == last_page) {
+            let pageLi = document.createElement('li');
+            pageLi.className = 'page-item';
+            if (i == current_page) {
+              pageLi.className += ' active';
+              pageLi.ariaCurrent = 'page';
+            }
+
+            let pageLink = document.createElement('a');
+            pageLink.className = 'page-link';
+            pageLink.href = '#';
+            pageLink.innerHTML = i;
+            pageLink.onclick = function() {
+              onPageClick(i);
+            }
+            pageLi.appendChild(pageLink);
+            paginationUl.appendChild(pageLi);
+        } else if (i == current_page - (offset + 1) || i == current_page + (offset + 1)) {
+          let pageLi = document.createElement('li');
+          pageLi.className = 'page-item';
+
+          let pageLink = document.createElement('a');
+          pageLink.className = 'page-link';
+          pageLink.href = '#';
+          pageLink.innerHTML = '...';
+          pageLi.appendChild(pageLink);
+          paginationUl.appendChild(pageLi);
+        }
+      }
+
+      // Add next
+      let nextLi = document.createElement('li');
+      nextLi.className = 'page-item';
+      if (current_page == last_page) {
+        nextLi.className += ' disabled';
+      }
+      let nextLink = document.createElement('a');
+      nextLink.className = 'page-link';
+      nextLink.href = '#';
+      nextLink.innerHTML = 'Next';
+      nextLink.onclick = function() {
+        onPageClick(current_page + 1);
+      }
+      nextLi.appendChild(nextLink);
+      paginationUl.appendChild(nextLi);
+      
+      return nav;
+    }
   </script>
   @stack('custom-scripts')
 </body>
