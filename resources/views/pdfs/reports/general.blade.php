@@ -150,36 +150,29 @@
 </head>
 
 <body>
+    <div>
+        <h6 class="text-uppercase cool-gray text-right">
+            Date Generated:
+            <strong>{{ $period }}</strong>
+        </h6>
+    </div>
 
-
-    <table class="table mt-5">
+    <table class="table" style="width: 100%">
         <tbody>
-            <tr>
-                <td class="border-0 pl-0" width="70%">
-                    <h4 class="text-uppercase">
-                        <strong>{{ $title }}</strong>
-                    </h4>
+            <tr style="vertical-align: center;">
+                <td style="width: 5.2em;">
+                    <img src="{{ public_path('assets/images/shamba_records_logo.jpeg') }}" alt="logo" style="height: 5em; width: 5em;" />
                 </td>
-                <td class="border-0 pl-0">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <h6 class="text-uppercase cool-gray">
-                                        <strong>Date Generated</strong>
-                                    </h6>
-                                </td>
-                                <td>
-                                    <p>{{ $period }}</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <td class="text-left">
+                    <div style="font-size: 3em;">Shamba Records</div>
                 </td>
             </tr>
         </tbody>
     </table>
 
+    <h4 class="text-uppercase">
+        <strong>{{ $title }}</strong>
+    </h4>
 
     {{-- Table --}}
     <table class="table table-items">
@@ -206,7 +199,13 @@
             @endforeach
         </tbody>
     </table>
+    {{-- /Table --}}
 
+    @if($summation)
+    <div style="text-align: right; font-size: 1.5em; font-weight: bold;">
+        <strong>Total: {{$summation}}</strong>
+    </div>
+    @endif
 
     <p>
         {{ '' }}
