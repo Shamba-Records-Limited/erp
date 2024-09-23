@@ -50,6 +50,21 @@
         background-position: 200% 0;
       }
     }
+
+    #filter-container.hidden {
+      display: none;
+      opacity: 0;
+      transition: all 0.5s ease-in-out;
+    }
+
+    #filter-container.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .filter-display {
+      gap: 5px;
+    }
   </style>
 
   <script src="https://unpkg.com/htmx.org@1.9.3"></script>
@@ -98,6 +113,8 @@
   <script src="{{ asset('assets/js/misc.js') }}"></script>
   <script src="{{ asset('assets/js/settings.js') }}"></script>
   <script src="{{ asset('assets/js/todolist.js') }}"></script>
+  <!-- erp filter -->
+  <script src="{{ asset('assets/js/erp-filter.js') }}"></script>
   <!-- Datatables -->
   <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -420,22 +437,22 @@
         // If added
         if (i == 1 || (current_page - offset <= i && current_page + offset >= i) ||
           i == current_page || i == last_page) {
-            let pageLi = document.createElement('li');
-            pageLi.className = 'page-item';
-            if (i == current_page) {
-              pageLi.className += ' active';
-              pageLi.ariaCurrent = 'page';
-            }
+          let pageLi = document.createElement('li');
+          pageLi.className = 'page-item';
+          if (i == current_page) {
+            pageLi.className += ' active';
+            pageLi.ariaCurrent = 'page';
+          }
 
-            let pageLink = document.createElement('a');
-            pageLink.className = 'page-link';
-            pageLink.href = '#';
-            pageLink.innerHTML = i;
-            pageLink.onclick = function() {
-              onPageClick(i);
-            }
-            pageLi.appendChild(pageLink);
-            paginationUl.appendChild(pageLi);
+          let pageLink = document.createElement('a');
+          pageLink.className = 'page-link';
+          pageLink.href = '#';
+          pageLink.innerHTML = i;
+          pageLink.onclick = function() {
+            onPageClick(i);
+          }
+          pageLi.appendChild(pageLink);
+          paginationUl.appendChild(pageLi);
         } else if (i == current_page - (offset + 1) || i == current_page + (offset + 1)) {
           let pageLi = document.createElement('li');
           pageLi.className = 'page-item';
@@ -464,7 +481,7 @@
       }
       nextLi.appendChild(nextLink);
       paginationUl.appendChild(nextLi);
-      
+
       return nav;
     }
   </script>
