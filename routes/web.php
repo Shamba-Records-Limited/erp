@@ -436,6 +436,95 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.transactions.detail");
     Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
         ->name("cooperative-admin.transactions.complete");
+
+    Route::prefix('/wallet-management')->group(function () {
+        // dashboard
+        Route::get("/dashboard", "CooperativeAdmin\WalletManagementController@dashboard")
+            ->name("cooperative-admin.wallet-management.dashboard");
+        
+        // account receivables
+        Route::get("/account-receivables", "CooperativeAdmin\WalletManagementController@account_receivables")
+            ->name("cooperative-admin.wallet-management.account-receivables");
+        Route::get("/account-receivables/table", "CooperativeAdmin\WalletManagementController@account_receivables_table")
+            ->name("cooperative-admin.wallet-management.account-receivables.table");
+        Route::get('/account-receivables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_receivables')
+            ->name("cooperative-admin.account-receivables.export");
+        
+        // account payables
+        Route::get("/account-payables", "CooperativeAdmin\WalletManagementController@account_payables")
+            ->name("cooperative-admin.wallet-management.account-payables");
+        Route::get("/account-payables/table", "CooperativeAdmin\WalletManagementController@account_payables_table")
+            ->name("cooperative-admin.wallet-management.account-payables.table");
+        Route::get('/account-payables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_payables')
+            ->name("cooperative-admin.account-payables.export");
+        
+        // expenses
+        Route::get("/expenses", "CooperativeAdmin\WalletManagementController@expenses")
+            ->name("cooperative-admin.wallet-management.expenses");
+        Route::get("/expenses/table", "CooperativeAdmin\WalletManagementController@expenses_table")
+            ->name("cooperative-admin.wallet-management.expenses.table");
+        Route::get('/expenses/download/{type}', 'CooperativeAdmin\WalletManagementController@export_expenses')
+            ->name("cooperative-admin.expenses.export");
+
+        // income
+        Route::get("/income", "CooperativeAdmin\WalletManagementController@income")
+            ->name("cooperative-admin.wallet-management.income");
+        Route::get('/income/table', 'CooperativeAdmin\WalletManagementController@income_table')
+            ->name("cooperative-admin.wallet-management.income.table");
+        Route::get('/income/download/{type}', 'CooperativeAdmin\WalletManagementController@export_income')
+            ->name("cooperative-admin.income.export");
+            
+        Route::get("/deposits", "CooperativeAdmin\WalletManagementController@list_deposits")
+            ->name("cooperative-admin.wallet-management.deposits");
+        Route::get("/withdrawals", "CooperativeAdmin\WalletManagementController@list_withdrawals")
+            ->name("cooperative-admin.wallet-management.withdrawals");
+
+        // transactions
+        Route::get("/transactions", "CooperativeAdmin\WalletManagementController@list_transactions")
+            ->name("cooperative-admin.transactions.show");
+        Route::get("/make_payment", "CooperativeAdmin\WalletManagementController@view_make_payment")
+            ->name("cooperative-admin.wallet-management.view-make-payment");
+        Route::get("/transactions/add/miller-selector/{id}", "CooperativeAdmin\WalletManagementController@view_add_lot_selector")
+            ->name("cooperative-admin.transactions.view-add-lot-selector");
+        Route::post("/transactions/add/retrieve-lot-weights", "CooperativeAdmin\WalletManagementController@retrieve_lot_weights")
+            ->name("cooperative-admin.transactions.retrieve-lot-weights");
+        Route::post("/transactions/add", "CooperativeAdmin\WalletManagementController@add_transaction")
+            ->name("cooperative-admin.transactions.add");
+
+        // complete transaction
+        Route::get("/transactions/{id}/complete", "CooperativeAdmin\WalletManagementController@complete_transaction")
+            ->name("cooperative-admin.wallet-management.complete-transaction");
+
+        // operational expense
+        Route::get("/operational-expenses/add", "CooperativeAdmin\WalletManagementController@view_add_operational_expense")
+            ->name("cooperative-admin.wallet-management.operational-expenses.add");
+        Route::post("/operational-expenses/add", "CooperativeAdmin\WalletManagementController@add_operational_expense")
+            ->name("cooperative-admin.wallet-management.operational-expenses.add");
+
+        // deposits
+        Route::get("/deposits/add", "CooperativeAdmin\WalletManagementController@view_deposit")
+            ->name("cooperative-admin.wallet-management.view-deposit");
+        Route::post("/transactions/deposit", "CooperativeAdmin\WalletManagementController@deposit")
+            ->name("cooperative-admin.wallet-management.deposit");
+        Route::get("/deposits/table", "CooperativeAdmin\WalletManagementController@deposits_table")
+            ->name("cooperative-admin.wallet-management.deposits.table");
+        Route::get('/deposits/download/{type}', 'CooperativeAdmin\WalletManagementController@export_deposits')
+            ->name("cooperative-admin.deposits.export");
+
+        // withdrawals
+        Route::get("/withdrawals/add", "CooperativeAdmin\WalletManagementController@view_withdraw")
+            ->name("cooperative-admin.wallet-management.view-withdraw");
+        Route::post("/transactions/withdraw", "CooperativeAdmin\WalletManagementController@withdraw")
+            ->name("cooperative-admin.wallet-management.withdraw");
+        Route::get("/withdrawals/table", "CooperativeAdmin\WalletManagementController@withdrawals_table")
+            ->name("cooperative-admin.wallet-management.withdrawals.table");
+        Route::get('/withdrawals/download/{type}', 'CooperativeAdmin\WalletManagementController@export_withdrawals')
+            ->name("cooperative-admin.withdrawals.export");
+
+        // transactions detail
+        Route::get("/transactions/{id}", "CooperativeAdmin\TransactionController@transaction_detail")
+            ->name("cooperative-admin.transactions.detail");
+    });
 });
 
 Route::middleware('role:miller admin')->prefix('miller-admin')->group(function () {
@@ -647,6 +736,17 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         // transactions detail
         Route::get("/transactions/{id}", "MillerAdmin\TransactionController@transaction_detail")
             ->name("miller-admin.transactions.detail");
+
+
+        // complete transaction
+        Route::get("/transactions/{id}/complete", "MillerAdmin\WalletManagementController@complete_transaction")
+            ->name("miller-admin.wallet-management.complete-transaction");
+        
+        // operational expenses
+        Route::get("/operational-expenses/add", "MillerAdmin\WalletManagementController@view_add_operational_expense")
+            ->name("miller-admin.wallet-management.operational-expenses.add");
+        Route::post("/operational-expenses/add", "MillerAdmin\WalletManagementController@add_operational_expense")
+            ->name("miller-admin.wallet-management.operational-expenses.add");
     });
 
     // support

@@ -1,18 +1,25 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('content')
-
-
 <div class="card">
     <div class="card-body">
-        <div class="card-title">Expenses</div>
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="card-title">Deposits</div>
+            <!-- $acc_type can either be miller-admin or cooperative-admin -->
+            @php
+            if (empty($acc_type)) {
+            $acc_type = 'miller-admin';
+            }
+            @endphp
+            <a href="{{ route($acc_type.'.wallet-management.view-deposit')}}" class="btn btn-primary">Deposit Funds</a>
+        </div>
+
 
         @php
-        $exportRoute = $acc_type.".expenses.export";
+        $exportRoute = $acc_type.".deposits.export";
         @endphp
         <div class="d-flex justify-content-end p-2">
             <button class="btn btn-primary" title="Add Filter" onclick="toggleFilterContainer()">
@@ -24,9 +31,9 @@
             <button class="btn btn-primary btn-fw btn-sm ml-1" onclick="exportReport('{{route($exportRoute, 'pdf')}}')"><span class="mdi mdi-file-pdf"></span>Export Pdf
             </button>
         </div>
-
+        
         <div id="filter-display" class="d-flex filter-display align-items-start flex-wrap p-2">
-            <input hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="filter" type="hidden" class="table-control" id="filter" value="" />
+            <input hx-get="{{route('cooperative-admin.wallet-management.deposits.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="filter" type="hidden" class="table-control" id="filter" value="" />
             <div id="filter-container" class="border border-success rounded p-2 hidden">
                 <select class="form-control" id="filter-select" onchange="filterSelectChanged(myFilterOptions)">
                     <option value="">-- Select Filter --</option>
@@ -41,12 +48,12 @@
                 <button class="btn btn-secondary ml-2" id="filter-close" onclick="toggleFilterContainer()">&times;</button>
             </div>
         </div>
-
+        
         <div class="d-flex justify-content-between">
             <div class="d-flex align-items-center">
                 <label class="pt-1">Show:</label>
                 <div class="ml-2">
-                    <select hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" class="form-control table-control" id="show-per-page" name="limit" onchange="showPerPageChanged()">
+                    <select hx-get="{{route('cooperative-admin.wallet-management.deposits.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" class="form-control table-control" id="show-per-page" name="limit" onchange="showPerPageChanged()">
                         <option value="1">1</option>
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
@@ -60,16 +67,14 @@
             <div class="d-flex align-items-center">
                 <label for="search" class="mr-2">Search: </label>
                 <div>
-                    <input hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="keyup changed delay:500ms" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" name="search" type="search" class="form-control table-control mb-2" placeholder="Search" aria-label="Search">
+                    <input hx-get="{{route('cooperative-admin.wallet-management.deposits.table')}}" hx-trigger="keyup changed delay:500ms" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" name="search" type="search" class="form-control table-control mb-2" placeholder="Search" aria-label="Search">
                 </div>
             </div>
         </div>
 
-        <div id="tableContent" hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="load" hx-swap="innerHTML">
+        <div id="tableContent" hx-get="{{route('cooperative-admin.wallet-management.deposits.table')}}" hx-trigger="load" hx-swap="innerHTML">
             <div class="skeleton" style="height: 20px; width: 100%;"></div>
         </div>
-
-
     </div>
 </div>
 @endsection
@@ -80,12 +85,10 @@
 <script>
     let myFilterOptions = new Map([
         ["transaction_number", {}],
-        ["subject", {}],
-        ["sender", {}],
-        ["recipient", {}],
         ["amount", {
             "isNumeric": true
         }],
+        ["amount_source", {}],
         ["created_at", {
             "isNumeric": true
         }],
@@ -95,6 +98,21 @@
         // init filter select
         filterInitOptions(myFilterOptions);
     });
+
+
+    function printReceipt(transactionId) {
+        $.ajax({
+            url: `/transaction-receipts/${transactionId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
 
     function paginate(currentPage, lastPage) {
         let paginationElem = createPaginationElem(currentPage, lastPage, function(pageNum) {

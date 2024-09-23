@@ -9,7 +9,7 @@
         <div class="d-flex justify-content-between align-items-center">
 
             <div class="card-title">Withdrawals</div>
-            <a href="{{route('miller-admin.wallet-management.view-withdraw')}}" class="btn btn-primary">Add Withdrawal</a>
+            <a href="{{route('miller-admin.wallet-management.view-withdraw')}}" class="btn btn-primary">Withdraw Funds</a>
         </div>
 
         <table class="table table-striped table-bordered dt">

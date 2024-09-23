@@ -36,8 +36,18 @@ use Mockery\Exception;
 use Webpatser\Uuid\Uuid;
 
 const COLORS = [
-    "#5D62B4", "#54C3BE", "#EF726F", "#F9C446", "#f20812", "#0f412a", "#1a0b81", "#bcbc08", "#6d3c2c",
-    "#2ac48c", "#6b5557", "#de6329"
+    "#5D62B4",
+    "#54C3BE",
+    "#EF726F",
+    "#F9C446",
+    "#f20812",
+    "#0f412a",
+    "#1a0b81",
+    "#bcbc08",
+    "#6d3c2c",
+    "#2ac48c",
+    "#6b5557",
+    "#de6329"
 ];
 
 const MINIMUM_TAXABLE_AMOUNT = 24000;
@@ -657,7 +667,10 @@ if (!function_exists('get_location_details')) {
                 $result = $response['result'];
                 $location_id = (string)Uuid::generate(4);
                 DB::insert('INSERT INTO locations (id, place_id, cooperative_id, name, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)', [
-                    $location_id, $result['place_id'], $cooId, $result['name'],
+                    $location_id,
+                    $result['place_id'],
+                    $cooId,
+                    $result['name'],
                     $result['geometry']['location']['lat'],
                     $result['geometry']['location']['lng']
                 ]);
@@ -997,7 +1010,8 @@ if (!function_exists('complete_sale_payment')) {
         }
         $description = "Completed sale payment of {$invoicePayment->amount} via {$mode}  for invoice id {$invoice->id}";
         $audit_trail_data = [
-            'user_id' => $user->id, 'activity' => $description,
+            'user_id' => $user->id,
+            'activity' => $description,
             'cooperative_id' => $user->cooperative_id
         ];
         event(new AuditTrailEvent($audit_trail_data));
@@ -1360,10 +1374,10 @@ if (!function_exists('perform_transaction')) {
             $receiptItem->quantity = 1;
             $receiptItem->save();
         }        // create receipt items
-        else if($transaction->subject_type == 'INVOICE') {
+        else if ($transaction->subject_type == 'INVOICE') {
             $invoice = NewInvoice::find($transaction->subject_id);
             $invoice_items = $invoice->items;
-            foreach($invoice_items as $item) {
+            foreach ($invoice_items as $item) {
                 $receiptItem = new ReceiptItem();
                 $receiptItem->receipt_id = $receipt->id;
                 $receiptItem->item_id = $item->id;
@@ -1392,5 +1406,67 @@ if (!function_exists('perform_transaction')) {
         $transaction->completed_at = Carbon::now();
 
         $transaction->save();
+    }
+
+
+    if (!function_exists('outerConditionFromFilter')) {
+        function outerConditionFromFilter($rawFilter)
+        {
+            $outerCondition = "";
+            if ($rawFilter) {
+                $filters = explode(",", $rawFilter);
+                $orOpened = false;
+
+                for ($i = 0; $i < count($filters); $i++) {
+                    $filter = $filters[$i];
+                    if (!$filter) {
+                        continue;
+                    }
+                    $splitFilter = explode("__", $filter);
+                    $filterKey = $splitFilter[0];
+                    $filterOperator = $splitFilter[1];
+                    $filterValue = $splitFilter[2];
+                    if ($filterOperator == "has") {
+                        $filterOperator = "LIKE";
+                        $filterValue = "%" . $filterValue . "%";
+                    } else if ($filterOperator == "doesn't have") {
+                        $filterOperator = "NOT ILIKE";
+                        $filterValue = "%" . $filterValue . "%";
+                    }
+
+                    $nextKey = null;
+                    if ($i + 1 < count($filters)) {
+                        $nextKey = $filters[$i + 1];
+                        $nextKey = explode("__", $nextKey)[0];
+                    }
+
+                    $prevKey = null;
+                    if ($i - 1 >= 0) {
+                        $prevKey = $filters[$i - 1];
+                        $prevKey = explode("__", $prevKey)[0];
+                    }
+
+                    if ($nextKey == $filterKey && !$orOpened) {
+                        $outerCondition .= " AND (subquery.$filterKey $filterOperator '$filterValue' ";
+                        $orOpened = true;
+                        continue;
+                    }
+
+                    if ($nextKey != $filterKey && $orOpened) {
+                        $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' )";
+                        $orOpened = false;
+                        continue;
+                    }
+
+                    if ($orOpened) {
+                        $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' ";
+                        continue;
+                    }
+
+                    $outerCondition .= " AND subquery.$filterKey $filterOperator '$filterValue' ";
+                }
+            }
+            return $outerCondition;
+        }
     }
 }

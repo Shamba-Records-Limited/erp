@@ -601,13 +601,49 @@ class WalletManagementController extends Controller
 
     public function account_receivables()
     {
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.account-receivables.index", compact('acc_type'));
+    }
+
+    public function account_receivables_table(Request $request)
+    {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
 
         $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
 
+        $condition = "t.parent_id IS NULL AND 
+                        t.status = 'PENDING' AND
+                        t.recipient_id = :coop_id";
+
+        // pagination
+        $limit = (int)$request->query("limit", "10");
+        $page = (int)$request->query("page", "1");
+        $offset = ($page - 1) * $limit;
+
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $outerCondition = "";
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
         $receivables = DB::select(DB::raw("
-            SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
             (
                 CASE WHEN t.subject_type = 'LOT'
                     THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
@@ -638,23 +674,101 @@ class WalletManagementController extends Controller
 
             FROM transactions t
             -- WHERE HAS NO PARENT
-            WHERE t.parent_id IS NULL AND t.status = 'PENDING' AND t.recipient_id = :coop_id
-        "), ["coop_id" => $coop_id]);
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             LIMIT :limit OFFSET :offset
+        "), ["coop_id" => $coop_id, "limit" => $limit, "offset" => $offset]);
+
+        $summationQuery = DB::select(DB::raw("SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+
+            FROM transactions t
+            WHERE $condition
+            ) AS subquery
+             WHERE TRUE $outerCondition
+            "), ["coop_id" => $coop_id]);
+
+        $receivablesTotal = $summationQuery[0]->total;
+        $totalItems = $summationQuery[0]->total_count;
+
+        $lastPage = ceil($totalItems / $limit);
 
         $acc_type = "cooperative-admin";
 
-        return view("pages.common.wallet-management.account-receivables", compact('receivables', 'account', 'acc_type'));
+        return view("pages.common.wallet-management.account-receivables.table", compact('receivables', 'receivablesTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
     }
 
     public function account_payables()
+    {
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.account-payables.index", compact('acc_type'));
+    }
+
+    public function account_payables_table(Request $request)
     {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
 
         $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
 
+        $condition = "t.parent_id IS NULL AND
+                        t.status='PENDING' AND 
+                        t.sender_id = :coop_id";
+
+        // pagination
+        $limit = (int)$request->query("limit", "10");
+        $page = (int)$request->query("page", "1");
+        $offset = ($page - 1) * $limit;
+
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
         $payables = DB::select(DB::raw("
-            SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
             (
                 CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
                     THEN 'OPERATIONAL_EXPENSE'
@@ -687,17 +801,203 @@ class WalletManagementController extends Controller
             ) AS recipient
             FROM transactions t
             -- WHERE HAS NO PARENT
-            WHERE t.parent_id IS NULL AND t.status = 'PENDING' AND t.sender_id = :coop_id
-        "), ["coop_id" => $coop_id]);
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+            LIMIT :limit OFFSET :offset
+        "), ["coop_id" => $coop_id, "limit" => $limit, "offset" => $offset]);
+
+        $summationQuery = DB::select(DB::raw("SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+            "), ["coop_id" => $coop_id]);
+
+        $payablesTotal = $summationQuery[0]->total;
+        $totalItems = $summationQuery[0]->total_count;
+
+        $lastPage = ceil($totalItems / $limit);
+
 
         $acc_type = "cooperative-admin";
 
-        return view("pages.common.wallet-management.account-payables.index", compact('payables', 'account', 'acc_type'));
+        return view("pages.common.wallet-management.account-payables.table", compact('payables', 'payablesTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
+    }
+
+    public function export_account_payables(Request $request, $type)
+    {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
+
+        $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
+
+        $condition = "t.parent_id IS NULL AND
+                        t.status='PENDING' AND  
+                        t.sender_id = :coop_id";
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
+        $payables = DB::select(DB::raw("
+            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id]);
+
+        $paymentsTotal = DB::select(DB::raw("SELECT SUM(amount) AS total FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id])[0]->total;
+
+        $columns = [
+            ["name" => "Transaction Number", "key" => "transaction_number"],
+            ["name" => "Subject", "key" => "subject"],
+            ["name" => "Sender", "key" => "sender"],
+            ["name" => "Recipient", "key" => "recipient"],
+            ["name" => "Amount", "key" => "formatted_amount"],
+            ["name" => "Timestamp", "key" => "created_at"],
+        ];
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('account_payables_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $payables), $file_name);
+        } else {
+            // convert to arrays of arrays from arrays of objects
+            $payables = array_map(function ($payable) {
+                return (array) $payable;
+            }, $payables);
+
+            $data = [
+                'title' => 'Account Payables',
+                'pdf_view' => 'account_payables',
+                'records' => $payables,
+                'summation' => number_format($paymentsTotal),
+                'filename' => strtolower('account_payables_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
 
 
     public function income()
+    {
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.income_partials.income", compact('acc_type'));
+    }
+
+    public function income_table(Request $request)
     {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
@@ -710,8 +1010,31 @@ class WalletManagementController extends Controller
                 t.recipient_type != 'CASH' AND
                 t.sender_type != 'CASH'";
 
+        // pagination
+        $limit = (int)$request->query("limit", "10");
+        $page = (int)$request->query("page", "1");
+        $offset = ($page - 1) * $limit;
+
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
         $income = DB::select(DB::raw("
-            SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            SELECT * FROM (SELECT t.*, CONCAT('KSH. ', FORMAT(t.amount, 2)) as formatted_amount,
             (
                 CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
                     THEN 'OPERATIONAL_EXPENSE'
@@ -746,27 +1069,212 @@ class WalletManagementController extends Controller
             FROM transactions t
             -- WHERE HAS NO PARENT
             WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             LIMIT :limit OFFSET :offset
+        "), ["coop_id" => $coop_id, "limit" => $limit, "offset" => $offset]);
+
+        $summationQuery = DB::select(DB::raw("
+            SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.*, CONCAT('KSH. ', FORMAT(t.amount, 2)) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+             (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
         "), ["coop_id" => $coop_id]);
 
-        $incomeTotal = DB::select(DB::raw("SELECT FORMAT(sum(t.amount), 2) AS total FROM transactions t WHERE $condition"), ["coop_id" => $coop_id])[0]->total;
+        $incomeTotal = $summationQuery[0]->total;
+        $totalItems = $summationQuery[0]->total_count;
 
+        $lastPage = ceil($totalItems / $limit);
 
-        return view("pages.common.wallet-management.income", compact('income', 'account', 'incomeTotal'));
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.income_partials.table", compact('income', 'incomeTotal', 'totalItems', 'page', 'lastPage'));
     }
 
-    public function export_income() {}
-
-    public function expenses(Request $request)
+    public function export_income(Request $request, $type)
     {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
 
+        $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
+
+        $condition = "t.parent_id IS NULL AND
+                t.status = 'COMPLETE' AND
+                t.recipient_id = :coop_id AND
+                t.recipient_type != 'CASH' AND
+                t.sender_type != 'CASH'";
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
+        $income = DB::select(DB::raw("
+            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+             (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id]);
+
+        $incomeTotal = DB::select(DB::raw("
+            SELECT SUM(amount) AS total FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+             (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id])[0]->total;
+
+
+        $columns = [
+            ["name" => "Transaction Number", "key" => "transaction_number"],
+            ["name" => "Subject", "key" => "subject"],
+            ["name" => "Sender", "key" => "sender"],
+            ["name" => "Recipient", "key" => "recipient"],
+            ["name" => "Amount", "key" => "formatted_amount"],
+            ["name" => "Timestamp", "key" => "created_at"],
+        ];
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('expenses_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $income), $file_name);
+        } else {
+            // convert to arrays of arrays from arrays of objects
+            $income = array_map(function ($expense) {
+                return (array) $expense;
+            }, $income);
+
+            $data = [
+                'title' => 'Income',
+                'pdf_view' => 'income',
+                'records' => $income,
+                'summation' => number_format($incomeTotal),
+                'filename' => strtolower('income_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
+    }
+
+    public function expenses(Request $request)
+    {
         $acc_type = "cooperative-admin";
 
-        $expenses = [];
-        $filter = [];
-
-        return view("pages.common.wallet-management.expenses_partials.expenses", compact('expenses', 'filter', 'acc_type'));
+        return view("pages.common.wallet-management.expenses_partials.expenses", compact('acc_type'));
     }
 
     public function expenses_table(Request $request)
@@ -804,60 +1312,7 @@ class WalletManagementController extends Controller
 
         // filter
         $rawFilter = $request->query("filter", "");
-        if ($rawFilter) {
-            $filters = explode(",", $rawFilter);
-            $orOpened = false;
-
-            for ($i = 0; $i < count($filters); $i++) {
-                $filter = $filters[$i];
-                if (!$filter) {
-                    continue;
-                }
-                $splitFilter = explode("__", $filter);
-                $filterKey = $splitFilter[0];
-                $filterOperator = $splitFilter[1];
-                $filterValue = $splitFilter[2];
-                if ($filterOperator == "has") {
-                    $filterOperator = "LIKE";
-                    $filterValue = "%" . $filterValue . "%";
-                } else if ($filterOperator == "doesn't have") {
-                    $filterOperator = "NOT ILIKE";
-                    $filterValue = "%" . $filterValue . "%";
-                }
-
-                $nextKey = null;
-                if ($i + 1 < count($filters)) {
-                    $nextKey = $filters[$i + 1];
-                    $nextKey = explode("__", $nextKey)[0];
-                }
-
-                $prevKey = null;
-                if ($i - 1 >= 0) {
-                    $prevKey = $filters[$i - 1];
-                    $prevKey = explode("__", $prevKey)[0];
-                }
-
-                if ($nextKey == $filterKey && !$orOpened) {
-                    $outerCondition .= " AND (subquery.$filterKey $filterOperator '$filterValue' ";
-                    $orOpened = true;
-                    continue;
-                }
-
-                if ($nextKey != $filterKey && $orOpened) {
-                    $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' )";
-                    $orOpened = false;
-                    continue;
-                }
-
-                if ($orOpened) {
-                    $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' ";
-                    continue;
-                }
-
-                $outerCondition .= " AND subquery.$filterKey $filterOperator '$filterValue' ";
-            }
-        }
-
+        $outerCondition .= outerConditionFromFilter($rawFilter);
 
         $expenses = DB::select(DB::raw("
             SELECT * FROM (SELECT t.*, CONCAT('KSH. ', FORMAT(t.amount, 2)) as formatted_amount,
@@ -983,59 +1438,7 @@ class WalletManagementController extends Controller
 
         // filter
         $rawFilter = $request->query("filter", "");
-        if ($rawFilter) {
-            $filters = explode(",", $rawFilter);
-            $orOpened = false;
-
-            for ($i = 0; $i < count($filters); $i++) {
-                $filter = $filters[$i];
-                if (!$filter) {
-                    continue;
-                }
-                $splitFilter = explode("__", $filter);
-                $filterKey = $splitFilter[0];
-                $filterOperator = $splitFilter[1];
-                $filterValue = $splitFilter[2];
-                if ($filterOperator == "has") {
-                    $filterOperator = "LIKE";
-                    $filterValue = "%" . $filterValue . "%";
-                } else if ($filterOperator == "doesn't have") {
-                    $filterOperator = "NOT ILIKE";
-                    $filterValue = "%" . $filterValue . "%";
-                }
-
-                $nextKey = null;
-                if ($i + 1 < count($filters)) {
-                    $nextKey = $filters[$i + 1];
-                    $nextKey = explode("__", $nextKey)[0];
-                }
-
-                $prevKey = null;
-                if ($i - 1 >= 0) {
-                    $prevKey = $filters[$i - 1];
-                    $prevKey = explode("__", $prevKey)[0];
-                }
-
-                if ($nextKey == $filterKey && !$orOpened) {
-                    $outerCondition .= " AND (subquery.$filterKey $filterOperator '$filterValue' ";
-                    $orOpened = true;
-                    continue;
-                }
-
-                if ($nextKey != $filterKey && $orOpened) {
-                    $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' )";
-                    $orOpened = false;
-                    continue;
-                }
-
-                if ($orOpened) {
-                    $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' ";
-                    continue;
-                }
-
-                $outerCondition .= " AND subquery.$filterKey $filterOperator '$filterValue' ";
-            }
-        }
+        $outerCondition .= outerConditionFromFilter($rawFilter);
 
         $expenses = DB::select(DB::raw("
             SELECT * FROM (SELECT t.*, CONCAT('KSH. ', FORMAT(t.amount, 2)) as formatted_amount,
@@ -1142,7 +1545,7 @@ class WalletManagementController extends Controller
                 'title' => 'Expenses',
                 'pdf_view' => 'expenses',
                 'records' => $expenses,
-                'summation' => $expensesTotal,
+                'summation' => number_format($expensesTotal),
                 'filename' => strtolower('expenses_' . date('d_m_Y')),
                 'orientation' => 'letter',
             ];
@@ -1150,47 +1553,308 @@ class WalletManagementController extends Controller
         }
     }
 
-    public function list_deposits()
+    public function list_deposits(Request $request)
+    {
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.deposits.index", compact('acc_type'));
+    }
+
+    public function deposits_table(Request $request)
+    {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
+
+        $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'DEPOSIT' AND
+                        t.sender_id = :coop_id";
+
+        // pagination
+        $limit = (int)$request->query("limit", "10");
+        $page = (int)$request->query("page", "1");
+        $offset = ($page - 1) * $limit;
+
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.amount LIKE '%$search%' OR
+                            subquery.amount_source LIKE '%$search%' OR
+                            subquery.status LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
+        // dd($outerCondition);
+
+        $deposits = DB::select(DB::raw("
+            SELECT * FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.amount_source, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             LIMIT :limit OFFSET :offset
+        "), ["coop_id" => $coop_id, "limit" => $limit, "offset" => $offset]);
+
+        $summationQuery = DB::select(DB::raw("
+            SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.amount_source, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ) AS subquery
+             WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id]);
+
+        $depositsTotal = $summationQuery[0]->total;
+        $totalItems = $summationQuery[0]->total_count;
+
+        $lastPage = ceil($totalItems / $limit);
+
+
+        $acc_type = "cooperative-admin";
+
+
+        return view("pages.common.wallet-management.deposits.table", compact('deposits', 'depositsTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
+    }
+
+    public function export_deposits(Request $request, $type)
     {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
 
         $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
 
-        $condition = "t.parent_id IS NULL AND t.status = 'COMPLETE' AND t.type = 'DEPOSIT' AND t.sender_id = :coop_id";
+        $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'DEPOSIT' AND
+                        t.sender_id = :coop_id";
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.amount LIKE '%$search%' OR
+                            subquery.amount_source LIKE '%$search%' OR
+                            subquery.status LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
         $deposits = DB::select(DB::raw("
-            SELECT t.id, t.transaction_number, FORMAT(t.amount, 2) AS amount, t.amount_source, t.status
+            SELECT * FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.amount_source, t.status, t.created_at
             FROM transactions t
             -- WHERE HAS NO PARENT
             WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
         "), ["coop_id" => $coop_id]);
 
-        $depositsTotal = DB::select(DB::raw("SELECT FORMAT(sum(t.amount), 2) AS total FROM transactions t WHERE $condition"), ["coop_id" => $coop_id])[0]->total;
+        $depositsTotal = DB::select(DB::raw("
+            SELECT SUM(amount) AS total FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.amount_source, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             "), ["coop_id" => $coop_id])[0]->total;
 
 
-        $acc_type = "cooperative-admin";
+        $columns = [
+            ["name" => "Transaction Number", "key" => "transaction_number"],
+            ["name" => "Amount", "key" => "formatted_amount"],
+            ["name" => "Source", "key" => "amount_source"],
+            ["name" => "Status", "key" => "status"],
+            ["name" => "Timestamp", "key" => "created_at"],
+        ];
 
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('deposits_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $deposits), $file_name);
+        } else {
+            // convert to arrays of arrays from arrays of objects
+            $deposits = array_map(function ($deposit) {
+                return (array) $deposit;
+            }, $deposits);
 
-        return view("pages.common.wallet-management.deposits.index", compact('deposits', 'account', 'acc_type', 'depositsTotal'));
+            $data = [
+                'title' => 'Deposits',
+                'pdf_view' => 'deposits',
+                'records' => $deposits,
+                'summation' => number_format($depositsTotal),
+                'filename' => strtolower('deposits_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function list_withdrawals()
     {
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.withdrawals.index", compact('acc_type'));
+    }
+
+    public function withdrawals_table(Request $request)
+    {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
+
+        $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'WITHDRAWAL' AND
+                        t.sender_id = :coop_id";
+
+        // pagination
+        $limit = (int)$request->query("limit", "10");
+        $page = (int)$request->query("page", "1");
+        $offset = ($page - 1) * $limit;
+
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.amount LIKE '%$search%' OR
+                            subquery.purpose LIKE '%$search%' OR
+                            subquery.status LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
+        // dd($outerCondition);
+
+
+        $withdrawals = DB::select(DB::raw("
+            SELECT * FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.purpose, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             LIMIT :limit OFFSET :offset
+        "), ["coop_id" => $coop_id, "limit" => $limit, "offset" => $offset]);
+
+        $summationQuery = DB::select(DB::raw("
+            SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.purpose, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id]);
+
+        $withdrawalsTotal = $summationQuery[0]->total;
+        $totalItems = $summationQuery[0]->total_count;
+
+        $lastPage = ceil($totalItems / $limit);
+
+        $acc_type = "cooperative-admin";
+
+        return view("pages.common.wallet-management.withdrawals.table", compact('withdrawals', 'withdrawalsTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
+    }
+
+    public function export_withdrawals(Request $request, $type)
+    {
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
 
         $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
 
+        $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'WITHDRAWAL' AND
+                        t.sender_id = :coop_id";
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.amount LIKE '%$search%' OR
+                            subquery.purpose LIKE '%$search%' OR
+                            subquery.status LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
         $withdrawals = DB::select(DB::raw("
-            SELECT t.id, t.transaction_number, FORMAT(t.amount, 2) AS amount, t.purpose, t.status
+            SELECT * FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.purpose, t.status, t.created_at
             FROM transactions t
             -- WHERE HAS NO PARENT
-            WHERE t.parent_id IS NULL AND t.status = 'COMPLETE' AND t.type = 'WITHDRAWAL' AND t.sender_id = :coop_id
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
         "), ["coop_id" => $coop_id]);
 
-        $acc_type = "cooperative-admin";
+        $withdrawalsTotal = DB::select(DB::raw("
+            SELECT SUM(amount) AS total FROM (SELECT t.id, t.transaction_number, t.amount, FORMAT(t.amount, 2) AS formatted_amount, t.purpose, t.status, t.created_at
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ) AS subquery
+             WHERE TRUE $outerCondition
+             "), ["coop_id" => $coop_id])[0]->total;
 
-        return view("pages.common.wallet-management.withdrawals.index", compact('withdrawals', 'account', 'acc_type'));
+
+        $columns = [
+            ["name" => "Transaction Number", "key" => "transaction_number"],
+            ["name" => "Amount", "key" => "formatted_amount"],
+            ["name" => "Purpose", "key" => "purpose"],
+            ["name" => "Timestamp", "key" => "created_at"],
+        ];
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('withdrawals_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $withdrawals), $file_name);
+        } else {
+            // convert to arrays of arrays from arrays of objects
+            $withdrawals = array_map(function ($withdrawal) {
+                return (array) $withdrawal;
+            }, $withdrawals);
+
+            $data = [
+                'title' => 'Withdrawals',
+                'pdf_view' => 'withdrawals',
+                'records' => $withdrawals,
+                'summation' => number_format($withdrawalsTotal),
+                'filename' => strtolower('withdrawals_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
     }
 
     public function view_add_operational_expense()

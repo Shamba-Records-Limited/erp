@@ -3,22 +3,18 @@
         <thead>
             <tr>
                 <th>Transaction Number</th>
-                <th>Subject</th>
-                <th>Sender</th>
-                <th>Recipient</th>
                 <th>Amount</th>
+                <th>Purpose</th>
                 <th>Status</th>
                 <th>Timestamp</th>
             </tr>
         </thead>
         <tbody id="tbody">
-            @foreach($expenses as $transaction)
+            @foreach($withdrawals as $transaction)
             <tr>
                 <td>{{$transaction->transaction_number}}</td>
-                <td>{{$transaction->subject}}</td>
-                <td>{{$transaction->sender}}</td>
-                <td>{{$transaction->recipient}}</td>
                 <td>{{$transaction->formatted_amount}}</td>
+                <td>{{$transaction->purpose}}</td>
                 <td>{{$transaction->status}}</td>
                 <td>{{$transaction->created_at}}</td>
             </tr>
@@ -28,7 +24,7 @@
         <tfoot id="tfoot">
             <tr>
                 <th colspan="4">Total</th>
-                <th colspan="1">KSH. {{number_format($expensesTotal)}}</th>
+                <th colspan="1">KSH. {{number_format($withdrawalsTotal)}}</th>
             </tr>
         </tfoot>
 
@@ -38,7 +34,7 @@
 <div class="d-flex justify-content-between">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
-        <input hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}"/>
+        <input hx-get="{{route('cooperative-admin.wallet-management.withdrawals.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
         <div id="items-pagination"></div>
     </div>
 </div>

@@ -1,20 +1,22 @@
 @extends('layout.master')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('content')
-
-
+@php
+if (empty($acc_type)) {
+$acc_type = 'miller-admin';
+}
+@endphp
 <div class="card">
     <div class="card-body">
-        <div class="card-title">Expenses</div>
+        <div class="card-title">Account Receivables</div>
 
         @php
-        $exportRoute = $acc_type.".expenses.export";
+        $exportRoute = $acc_type.".account-receivables.export";
         @endphp
-        <div class="d-flex justify-content-end p-2">
+        <div class="d-flex justify-content-end">
             <button class="btn btn-primary" title="Add Filter" onclick="toggleFilterContainer()">
                 <span class="mdi mdi-filter"></span>
                 <span class="mdi mdi-plus"></span>
@@ -26,7 +28,7 @@
         </div>
 
         <div id="filter-display" class="d-flex filter-display align-items-start flex-wrap p-2">
-            <input hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="filter" type="hidden" class="table-control" id="filter" value="" />
+            <input hx-get="{{route('cooperative-admin.wallet-management.account-receivables.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="filter" type="hidden" class="table-control" id="filter" value="" />
             <div id="filter-container" class="border border-success rounded p-2 hidden">
                 <select class="form-control" id="filter-select" onchange="filterSelectChanged(myFilterOptions)">
                     <option value="">-- Select Filter --</option>
@@ -46,7 +48,7 @@
             <div class="d-flex align-items-center">
                 <label class="pt-1">Show:</label>
                 <div class="ml-2">
-                    <select hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" class="form-control table-control" id="show-per-page" name="limit" onchange="showPerPageChanged()">
+                    <select hx-get="{{route('cooperative-admin.wallet-management.account-receivables.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" class="form-control table-control" id="show-per-page" name="limit">
                         <option value="1">1</option>
                         <option value="5" selected>5</option>
                         <option value="10">10</option>
@@ -60,15 +62,14 @@
             <div class="d-flex align-items-center">
                 <label for="search" class="mr-2">Search: </label>
                 <div>
-                    <input hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="keyup changed delay:500ms" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" name="search" type="search" class="form-control table-control mb-2" placeholder="Search" aria-label="Search">
+                    <input hx-get="{{route('cooperative-admin.wallet-management.account-receivables.table')}}" hx-trigger="keyup changed delay:500ms" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" name="search" type="search" class="form-control table-control mb-2" placeholder="Search" aria-label="Search">
                 </div>
             </div>
         </div>
 
-        <div id="tableContent" hx-get="{{route('cooperative-admin.wallet-management.expenses.table')}}" hx-trigger="load" hx-swap="innerHTML">
+        <div id="tableContent" hx-get="{{route('cooperative-admin.wallet-management.account-receivables.table')}}" hx-trigger="load" hx-swap="innerHTML">
             <div class="skeleton" style="height: 20px; width: 100%;"></div>
         </div>
-
 
     </div>
 </div>
@@ -95,6 +96,21 @@
         // init filter select
         filterInitOptions(myFilterOptions);
     });
+
+
+    function printReceipt(transactionId) {
+        $.ajax({
+            url: `/transaction-receipts/${transactionId}/print`,
+            method: 'GET',
+            success: function(resp) {
+                // alert(resp);
+                printContent(resp);
+            },
+            error: function(errResp) {
+                alert(errResp);
+            }
+        })
+    }
 
     function paginate(currentPage, lastPage) {
         let paginationElem = createPaginationElem(currentPage, lastPage, function(pageNum) {
