@@ -14,8 +14,9 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
+use App\Product;
 use Log;
+use Illuminate\Support\Facades\Http;
 
 class MarketAuctionController extends Controller
 {
@@ -245,6 +246,8 @@ class MarketAuctionController extends Controller
         return redirect()->route("miller-admin.market-auction.coop-collections.show", $coop_id);
     }
 
+
+
     // creates order
     public function checkout_cart(Request $request, $coop_id)
     {
@@ -295,6 +298,8 @@ class MarketAuctionController extends Controller
             SELECT item.lot_number, item.quantity FROM miller_auction_cart_item item
             WHERE item.cart_id = :cart_id
         "), ["cart_id" => $cart->id]);
+        // Initialize an array to collect lot numbers
+    $lotNumbers = [];
 
         foreach ($lotsInCart as $item) {
             try {
@@ -305,6 +310,8 @@ class MarketAuctionController extends Controller
                 $orderItem->lot_number = $lot_number;
                 $orderItem->quantity = $item->quantity;
                 $orderItem->save();
+            // Add the lot number to the array
+            $lotNumbers[] = $lot_number;
             } catch (\Throwable $th) {
                 Log::error($th->getMessage());
                 DB::rollBack();
@@ -317,12 +324,21 @@ class MarketAuctionController extends Controller
         $cart->delete();
 
         // commit changes
+       // Debugging: log order and order items before committing
+//Log::debug('Checkout Order Data: ' . json_encode([
+    //'order' => $order->toArray(),
+    //'order_items' => $orderItem
+//], JSON_PRETTY_PRINT));
+
         DB::commit();
         toastr()->success('Order created successfully');
+
         // Auto-run private function after DB commit
     return $this->processBatchAndLots($order, $lotNumbers, $cart);
+
         // redirect to orders
         return redirect()->route("miller-admin.orders.show");
+
     }
 
     public function get_or_create_cart_item($coop_id, $lot_number): MillerAuctionCartItem
@@ -484,7 +500,7 @@ class MarketAuctionController extends Controller
         return redirect()->back();
     }
 
-     /**
+    /**
  * Private function to process batch, lots, and collections after DB commit
  *
  * @param MillerAuctionOrder $order
@@ -697,4 +713,5 @@ file_put_contents($blockDataFile, json_encode($existingData, JSON_PRETTY_PRINT))
     // Redirect the user back to the desired route after saving
 
 }
+
 }
