@@ -622,14 +622,14 @@ if (file_exists($tokenFile) && filesize($tokenFile) > 0) {
     $tokenData = json_decode(file_get_contents($tokenFile), true);
     
     // Check if the token data is valid and contains the necessary keys
-    if (isset($tokenData['data']['expires_in']) && time() > $tokenData['data']['expires_in']) {
+    if (isset($tokenData['expires_in']) && time() > $tokenData['expires_in']) {
         // Token expired, delete the file and fetch a new token
         unlink($tokenFile);
         $tokenData = requestNewToken($baseUrl, $encryptedPrivateKey);
         file_put_contents($tokenFile, json_encode($tokenData));
     }
     
-    return $tokenData['data']['token']; // Access the token correctly
+    return $tokenData['token']; // Access the token correctly
 }
 
     }
