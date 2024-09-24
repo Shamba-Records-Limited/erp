@@ -580,53 +580,58 @@ private function saveToBlockchain($response)
         }
     
         // Function to request a new token
+       
+    
         function requestNewToken($baseUrl, $encryptedPrivateKey)
-        {
-            $response = Http::post("{$baseUrl}/auth/token", [
-                'encrypted_private_key' => $encryptedPrivateKey
-            ]);
+{
+    $response = Http::post("{$baseUrl}/auth/token", [
+        'encrypted_private_key' => $encryptedPrivateKey
+    ]);
+
+    if ($response->failed()) {
+        Log::error('Failed to fetch new token: ' . $response->body());
+        throw new \Exception('Failed to fetch new token');
+    }
+
+    $responseData = $response->json();
+    // Normalize keys to lowercase
+    $responseData = array_change_key_case($responseData, CASE_LOWER);
+
+    // Check if 'data' key exists
+    if (!isset($responseData['data'])) {
+        Log::error('No data key in token response: ' . json_encode($responseData));
+        throw new \Exception('No data key in token response');
+    }
+
+    $tokenData = $responseData['data'];
+
+    // Check if expires_in key exists
+    if (!isset($tokenData['expires_in'])) {
+        Log::error('No expires_in key in token data: ' . json_encode($tokenData));
+        throw new \Exception('No expires_in key in token data');
+    }
+
+    // Set expiration time for the token
+    $tokenData['expires_in'] = time() + $tokenData['expires_in'] - 60; // Refresh before expiration
+
+    return $tokenData;
+}
+
+// Check if token file exists and is not empty
+if (file_exists($tokenFile) && filesize($tokenFile) > 0) {
+    $tokenData = json_decode(file_get_contents($tokenFile), true);
     
-            if ($response->failed()) {
-                Log::error('Failed to fetch new token: ' . $response->body());
-                throw new \Exception('Failed to fetch new token');
-            }
-    
-            $responseData = $response->json();
-            // Normalize keys to lowercase
-            $responseData = array_change_key_case($responseData, CASE_LOWER);
-    
-            // Check if 'data' key exists
-            if (!isset($responseData['data'])) {
-                Log::error('No data key in token response: ' . json_encode($responseData));
-                throw new \Exception('No data key in token response');
-            }
-    
-            $tokenData = $responseData['data'];
-            $tokenData['expires_at'] = time() + $tokenData['expires_in'] - 60; // Refresh before expiration
-    
-            return $tokenData;
-        }
-    
-        // Check if token file exists and is not empty
-        if (file_exists($tokenFile) && filesize($tokenFile) > 0) {
-            $tokenData = json_decode(file_get_contents($tokenFile), true);
-            
-            // Check if the token is expired
-            if (time() > $tokenData['expires_at']) {
-                // Token expired, delete the file and fetch a new token
-                unlink($tokenFile);
-                $tokenData = requestNewToken($baseUrl, $encryptedPrivateKey);
-                file_put_contents($tokenFile, json_encode($tokenData));
-            }
-            
-            return $tokenData['token'];
-        } 
-    
-        // Request a new token if the file doesn't exist or is empty
+    // Check if the token data is valid and contains the necessary keys
+    if (isset($tokenData['data']['expires_in']) && time() > $tokenData['data']['expires_in']) {
+        // Token expired, delete the file and fetch a new token
+        unlink($tokenFile);
         $tokenData = requestNewToken($baseUrl, $encryptedPrivateKey);
         file_put_contents($tokenFile, json_encode($tokenData));
+    }
     
-        return $tokenData['token'];
+    return $tokenData['data']['token']; // Access the token correctly
+}
+
     }
 
     $token = getToken();
