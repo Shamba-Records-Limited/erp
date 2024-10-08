@@ -442,7 +442,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         Route::get("/dashboard", "CooperativeAdmin\WalletManagementController@dashboard")
             ->name("cooperative-admin.wallet-management.dashboard");
         
-        // account receivables
+        // module: account receivables
         Route::get("/account-receivables", "CooperativeAdmin\WalletManagementController@account_receivables")
             ->name("cooperative-admin.wallet-management.account-receivables");
         Route::get("/account-receivables/table", "CooperativeAdmin\WalletManagementController@account_receivables_table")
@@ -450,7 +450,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         Route::get('/account-receivables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_receivables')
             ->name("cooperative-admin.account-receivables.export");
         
-        // account payables
+        // module: account payables
         Route::get("/account-payables", "CooperativeAdmin\WalletManagementController@account_payables")
             ->name("cooperative-admin.wallet-management.account-payables");
         Route::get("/account-payables/table", "CooperativeAdmin\WalletManagementController@account_payables_table")
@@ -458,7 +458,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         Route::get('/account-payables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_payables')
             ->name("cooperative-admin.account-payables.export");
         
-        // expenses
+        // module: expenses
         Route::get("/expenses", "CooperativeAdmin\WalletManagementController@expenses")
             ->name("cooperative-admin.wallet-management.expenses");
         Route::get("/expenses/table", "CooperativeAdmin\WalletManagementController@expenses_table")
@@ -466,7 +466,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         Route::get('/expenses/download/{type}', 'CooperativeAdmin\WalletManagementController@export_expenses')
             ->name("cooperative-admin.expenses.export");
 
-        // income
+        // module:income
         Route::get("/income", "CooperativeAdmin\WalletManagementController@income")
             ->name("cooperative-admin.wallet-management.income");
         Route::get('/income/table', 'CooperativeAdmin\WalletManagementController@income_table')
@@ -474,10 +474,6 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         Route::get('/income/download/{type}', 'CooperativeAdmin\WalletManagementController@export_income')
             ->name("cooperative-admin.income.export");
             
-        Route::get("/deposits", "CooperativeAdmin\WalletManagementController@list_deposits")
-            ->name("cooperative-admin.wallet-management.deposits");
-        Route::get("/withdrawals", "CooperativeAdmin\WalletManagementController@list_withdrawals")
-            ->name("cooperative-admin.wallet-management.withdrawals");
 
         // transactions
         Route::get("/transactions", "CooperativeAdmin\WalletManagementController@list_transactions")
@@ -502,6 +498,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.wallet-management.operational-expenses.add");
 
         // deposits
+        Route::get("/deposits", "CooperativeAdmin\WalletManagementController@list_deposits")
+            ->name("cooperative-admin.wallet-management.deposits");
         Route::get("/deposits/add", "CooperativeAdmin\WalletManagementController@view_deposit")
             ->name("cooperative-admin.wallet-management.view-deposit");
         Route::post("/transactions/deposit", "CooperativeAdmin\WalletManagementController@deposit")
@@ -512,6 +510,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.deposits.export");
 
         // withdrawals
+        Route::get("/withdrawals", "CooperativeAdmin\WalletManagementController@list_withdrawals")
+            ->name("cooperative-admin.wallet-management.withdrawals");
         Route::get("/withdrawals/add", "CooperativeAdmin\WalletManagementController@view_withdraw")
             ->name("cooperative-admin.wallet-management.view-withdraw");
         Route::post("/transactions/withdraw", "CooperativeAdmin\WalletManagementController@withdraw")
@@ -698,18 +698,42 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         // dashboard
         Route::get("/dashboard", "MillerAdmin\WalletManagementController@dashboard")
             ->name("miller-admin.wallet-management.dashboard");
+
+        // module: account receivables
         Route::get("/account-receivables", "MillerAdmin\WalletManagementController@account_receivables")
             ->name("miller-admin.wallet-management.account-receivables");
+        Route::get("/account-receivables/table", "MillerAdmin\WalletManagementController@account_receivables_table")
+            ->name("miller-admin.wallet-management.account-receivables.table");
+        Route::get('/account-receivables/download/{type}', 'MillerAdmin\WalletManagementController@export_account_receivables')
+            ->name("miller-admin.account-receivables.export");
+
+        // module: account payables
         Route::get("/account-payables", "MillerAdmin\WalletManagementController@account_payables")
             ->name("miller-admin.wallet-management.account-payables");
-        Route::get("/payments-made", "MillerAdmin\WalletManagementController@payments_made")
-            ->name("miller-admin.wallet-management.payments-made");
-        Route::get("/payments-received", "MillerAdmin\WalletManagementController@payments_received")
-            ->name("miller-admin.wallet-management.payments-received");
-        Route::get("/deposits", "MillerAdmin\WalletManagementController@list_deposits")
-            ->name("miller-admin.wallet-management.deposits");
-        Route::get("/withdrawals", "MillerAdmin\WalletManagementController@list_withdrawals")
-            ->name("miller-admin.wallet-management.withdrawals");
+        Route::get("/account-payables/table", "MillerAdmin\WalletManagementController@account_payables_table")
+            ->name("miller-admin.wallet-management.account-payables.table");
+        Route::get('/account-payables/download/{type}', 'MillerAdmin\WalletManagementController@export_account_payables')
+            ->name("miller-admin.account-payables.export");
+
+        // module:income
+        Route::get("/income", "MillerAdmin\WalletManagementController@income")
+            ->name("miller-admin.wallet-management.income");
+        Route::get('/income/table', 'MillerAdmin\WalletManagementController@income_table')
+            ->name("miller-admin.wallet-management.income.table");
+        Route::get('/income/download/{type}', 'MillerAdmin\WalletManagementController@export_income')
+            ->name("miller-admin.income.export");
+
+        // module: expenses
+        Route::get("/expenses", "MillerAdmin\WalletManagementController@expenses")
+            ->name("miller-admin.wallet-management.expenses");
+        Route::get("/expenses/table", "MillerAdmin\WalletManagementController@expenses_table")
+            ->name("miller-admin.wallet-management.expenses.table");
+        Route::get('/expenses/download/{type}', 'MillerAdmin\WalletManagementController@export_expenses')
+            ->name("miller-admin.expenses.export");
+
+                
+
+
 
         // transactions
         Route::get("/transactions", "MillerAdmin\WalletManagementController@list_transactions")
@@ -723,15 +747,29 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         Route::post("/transactions/add", "MillerAdmin\WalletManagementController@add_transaction")
             ->name("miller-admin.transactions.add");
 
-        // deposit n withdraw
+        // deposits
+        Route::get("/deposits", "MillerAdmin\WalletManagementController@list_deposits")
+            ->name("miller-admin.wallet-management.deposits");
         Route::get("/deposits/add", "MillerAdmin\WalletManagementController@view_deposit")
             ->name("miller-admin.wallet-management.view-deposit");
+        Route::get("/deposits/table", "MillerAdmin\WalletManagementController@deposits_table")
+            ->name("miller-admin.wallet-management.deposits.table");
         Route::post("/transactions/deposit", "MillerAdmin\WalletManagementController@deposit")
             ->name("miller-admin.wallet-management.deposit");
+        Route::get('/deposits/download/{type}', 'MillerAdmin\WalletManagementController@export_deposits')
+            ->name("miller-admin.deposits.export");
+        
+        // withdrawals
+        Route::get("/withdrawals", "MillerAdmin\WalletManagementController@list_withdrawals")
+            ->name("miller-admin.wallet-management.withdrawals");
         Route::get("/withdrawals/add", "MillerAdmin\WalletManagementController@view_withdraw")
             ->name("miller-admin.wallet-management.view-withdraw");
+        Route::get("/withdrawals/table", "MillerAdmin\WalletManagementController@withdrawals_table")
+            ->name("miller-admin.wallet-management.withdrawals.table");
         Route::post("/transactions/withdraw", "MillerAdmin\WalletManagementController@withdraw")
             ->name("miller-admin.wallet-management.withdraw");
+        Route::get('/withdrawals/download/{type}', 'MillerAdmin\WalletManagementController@export_withdrawals')
+            ->name("miller-admin.withdrawals.export");
 
         // transactions detail
         Route::get("/transactions/{id}", "MillerAdmin\TransactionController@transaction_detail")

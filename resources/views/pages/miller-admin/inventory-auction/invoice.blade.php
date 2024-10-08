@@ -247,7 +247,7 @@
                 <tbody>
                     @foreach($invoices as $invoice)
                     <tr>
-                        <td>{{$invoice->invoice_number}}</td>
+                        <td><a href="?viewing_invoice_id={{$invoice->id}}">{{$invoice->invoice_number}}</a></td>
                         <td>{{$invoice->items_count}}</td>
                         <td>KES {{$invoice->total_price}}</td>
                         @php
@@ -291,8 +291,9 @@
                                             <i class="fa fa-pdf"></i> Print Receipt
                                         </a>
                                         @elseif($invoice->has_receipt == false)
+                                        todo: add dialog 
                                         <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.mark-as-paid', $invoice->id) }}">
-                                            <i class="fa fa-edit"></i>Mark As Paid
+                                            <i class="fa fa-edit"></i>Make Payment
                                         </a>
                                         @endif
                                     </div>

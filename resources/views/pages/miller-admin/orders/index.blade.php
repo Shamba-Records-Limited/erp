@@ -1,6 +1,11 @@
 @extends('layout.master')
 
 @push('plugin-styles')
+<style>
+    .text-shamba-success {
+        color: #0F9D58;
+    }
+</style>
 
 @endpush
 

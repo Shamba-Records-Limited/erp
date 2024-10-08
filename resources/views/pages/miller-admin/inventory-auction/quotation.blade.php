@@ -248,7 +248,7 @@
                 <tbody>
                     @foreach($quotations as $quotation)
                     <tr>
-                        <td>{{$quotation->quotation_number}}</td>
+                        <td><a href="?viewing_quotation_id={{$quotation->id}}">{{$quotation->quotation_number}}</a></td>
                         <td>{{$quotation->items_count}}</td>
                         <td>KES {{$quotation->total_price}}</td>
                         @php

@@ -843,14 +843,14 @@ $cooperative = null;
                             <span class="menu-title">Account Payables</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-made']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-made') }}">
-                            <span class="menu-title">Expenses</span>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/income']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.income') }}">
+                            <span class="menu-title">Income</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/payments-received']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.payments-received') }}">
-                            <span class="menu-title">Income</span>
+                    <li class="nav-item {{ active_class(['miller-admin/wallet-management/expenses']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.wallet-management.expenses') }}">
+                            <span class="menu-title">Expenses</span>
                         </a>
                     </li>
                     <li class="nav-item {{ active_class(['miller-admin/wallet-management/deposits*']) }}">

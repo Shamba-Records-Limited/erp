@@ -1469,4 +1469,80 @@ if (!function_exists('perform_transaction')) {
             return $outerCondition;
         }
     }
+
+    if (!function_exists('erpStrFormat')) {
+        function erpStrFormat($msg, $vars)
+        {
+            $vars = (array)$vars;
+
+            $msg = preg_replace_callback('#\{\}#', function ($r) {
+                static $i = 0;
+                return '{' . ($i++) . '}';
+            }, $msg);
+
+            return str_replace(
+                array_map(function ($k) {
+                    return '{' . $k . '}';
+                }, array_keys($vars)),
+
+                array_values($vars),
+
+                $msg
+            );
+        }
+    }
+
+    // transaction sql helpers
+    if (!function_exists('getTransactionSubjectSubqueryColumn')) {
+        function getTransactionSubjectSubqueryColumn(): string
+        {
+            return "(
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'INVOICE'
+                    THEN (SELECT i.invoice_number FROM new_invoices i WHERE i.id = t.subject_id)
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                END
+            )";
+        }
+    }
+
+    if (!function_exists('getTransactionSenderSubqueryColumn')) {
+        function getTransactionSenderSubqueryColumn(): string
+        {
+            return "(
+                CASE WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.sender_id)
+                WHEN t.sender_type = 'CUSTOMER'
+                    THEN (select c.name from customers c where c.id = t.sender_id)
+                END
+            )";
+        }
+    }
+
+    if (!function_exists('getTransactionRecipientSubqueryColumn')) {
+        function getTransactionRecipientSubqueryColumn(): string
+        {
+            return "(
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            )";
+        }
+    }
 }

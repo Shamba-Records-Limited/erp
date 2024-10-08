@@ -8,7 +8,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <div class="card-title">Deposits</div>
-            <a href="{{route('miller-admin.wallet-management.view-deposit')}}" class="btn btn-primary">Add Deposit</a>
+            <a href="{{route('miller-admin.wallet-management.view-deposit')}}" class="btn btn-primary">Deposit Funds</a>
         </div>
 
         <table class="table table-striped table-bordered dt">

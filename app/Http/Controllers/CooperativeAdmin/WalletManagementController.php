@@ -726,6 +726,140 @@ class WalletManagementController extends Controller
         return view("pages.common.wallet-management.account-receivables.table", compact('receivables', 'receivablesTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
     }
 
+    public function export_account_receivables(Request $request, $type)
+    {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
+
+        $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
+
+        $condition = "t.parent_id IS NULL AND
+                        t.status='PENDING' AND  
+                        t.sender_id = :coop_id";
+
+        // search
+        $outerCondition = "";
+        $search = $request->query("search");
+        if ($search) {
+            $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+        }
+
+        // filter
+        $rawFilter = $request->query("filter", "");
+        $outerCondition .= outerConditionFromFilter($rawFilter);
+
+        $payables = DB::select(DB::raw("
+            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id]);
+
+        $paymentsTotal = DB::select(DB::raw("SELECT SUM(amount) AS total FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            (
+                CASE WHEN t.type = 'OPERATIONAL_EXPENSE'
+                    THEN 'OPERATIONAL_EXPENSE'
+                WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                ELSE t.type
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.sender_id)
+                WHEN t.sender_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.sender_id)
+                WHEN t.sender_type = 'CASH'
+                    THEN 'CASH'
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_type = 'CASH'
+                    THEN 'CASH'
+                WHEN t.recipient_type = 'COOPERATIVE'
+                    THEN (select c.name from cooperatives c where c.id = t.recipient_id)
+                WHEN t.recipient_type = 'MILLER'
+                    THEN (select m.name from millers m where m.id = t.recipient_id)
+                WHEN t.recipient_type = 'FARMER'
+                    THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
+                END
+            ) AS recipient
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition) AS subquery
+            WHERE TRUE $outerCondition
+        "), ["coop_id" => $coop_id])[0]->total;
+
+        $columns = [
+            ["name" => "Transaction Number", "key" => "transaction_number"],
+            ["name" => "Subject", "key" => "subject"],
+            ["name" => "Sender", "key" => "sender"],
+            ["name" => "Recipient", "key" => "recipient"],
+            ["name" => "Amount", "key" => "formatted_amount"],
+            ["name" => "Timestamp", "key" => "created_at"],
+        ];
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('account_payables_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $payables), $file_name);
+        } else {
+            // convert to arrays of arrays from arrays of objects
+            $payables = array_map(function ($payable) {
+                return (array) $payable;
+            }, $payables);
+
+            $data = [
+                'title' => 'Account Payables',
+                'pdf_view' => 'account_payables',
+                'records' => $payables,
+                'summation' => number_format($paymentsTotal),
+                'filename' => strtolower('account_payables_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
+        }
+    }
+
     public function account_payables()
     {
         $acc_type = "cooperative-admin";
@@ -1123,7 +1257,7 @@ class WalletManagementController extends Controller
 
         $acc_type = "cooperative-admin";
 
-        return view("pages.common.wallet-management.income_partials.table", compact('income', 'incomeTotal', 'totalItems', 'page', 'lastPage'));
+        return view("pages.common.wallet-management.income_partials.table", compact('income', 'incomeTotal', 'totalItems', 'page', 'lastPage', 'acc_type'));
     }
 
     public function export_income(Request $request, $type)

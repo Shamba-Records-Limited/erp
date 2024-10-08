@@ -34,7 +34,7 @@
 <div class="d-flex justify-content-between">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
-        <input hx-get="{{route('cooperative-admin.wallet-management.withdrawals.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
+        <input hx-get="{{route($acc_type.'.wallet-management.withdrawals.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
         <div id="items-pagination"></div>
     </div>
 </div>

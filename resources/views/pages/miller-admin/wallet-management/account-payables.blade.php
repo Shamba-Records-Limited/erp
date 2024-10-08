@@ -4,18 +4,23 @@
 @endpush
 
 @section('content')
+
 <div class="card">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <div class="card-title">Account Payables</div>
-            <div class="dropdown ml-2">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Make Payment
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" id="makePayment" href="{{route('miller-admin.wallet-management.view-make-payment')}}">Make Payment</a>
+            <div class="d-flex">
+                <div class="dropdown ml-2">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Make Payment
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" id="makePayment" href="{{route('miller-admin.wallet-management.view-make-payment')}}">Make Payment</a>
+                    </div>
                 </div>
+                <a class="btn btn-primary ml-2" id="addOperationalExpense" href="{{route('cooperative-admin.wallet-management.operational-expenses.add')}}">Add Operational Expense</a>
             </div>
+
         </div>
 
 

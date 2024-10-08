@@ -28,7 +28,7 @@
                                 Actions
                             </button>
                             <div class="dropdown-menu">
-                                <a class="text-primary dropdown-item" href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
+                                <a class="text-primary dropdown-item" href="{{route($acc_type.'.transactions.detail', $transaction->id )}}">
                                     <i class="fa fa-edit"></i> View Details
                                 </a>
                                 @if($transaction->status == 'PENDING')
@@ -61,7 +61,7 @@
 <div class="d-flex justify-content-between">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
-        <input hx-get="{{route('cooperative-admin.wallet-management.account-payables.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
+        <input hx-get="{{route($acc_type.'.wallet-management.account-payables.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
         <div id="items-pagination"></div>
     </div>
 </div>

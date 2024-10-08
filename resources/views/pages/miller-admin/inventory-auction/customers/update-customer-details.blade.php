@@ -17,6 +17,21 @@ $gender_options = config('enums.employee_configs')['gender'];
             <input type="hidden" name="customer_id" value="{{$customer->id}}">
             <div class="row">
                 <div class="form-group col-lg-4 col-md-6 col-12">
+                    <label for="title">Customer Type</label>
+                    <select name="customer_type" id="customer_type" class=" form-control select2bs4 {{ $errors->has('customer_type') ? ' is-invalid' : '' }}">
+                        <option value=""> -Select Customer Type-</option>
+                        <option value="Individual" @if($customer->customer_type == 'Individual') selected @endif>Individual</option>
+                        <option value="Company" @if($customer->customer_type == 'Company') selected @endif>Company</option>
+                    </select>
+
+                    @if ($errors->has('customer_type'))
+                    <span class="help-block text-danger">
+                        <strong>{{ $errors->first('customer_type')  }}</strong>
+                    </span>
+                    @endif
+                </div>
+
+                <div class="form-group col-lg-4 col-md-6 col-12">
                     <label for="title">Title</label>
                     <input type="text" class="form-control {{ $errors->has('title') ? ' is-invalid' : '' }}" id="title" placeholder="e.g. Mr, Mrs, Miss..." name="title" value="{{old('title',$customer->title)}}">
 
