@@ -8,9 +8,22 @@ class BlockchainController extends Controller
 {
     public function index()
     {
-        // Read the blockdata.json file from storage
+        // Define the path to the blockdata.json file
         $path = storage_path('blockdata.json');
+
+        // Check if the file exists and is not empty
+        if (!File::exists($path) || File::size($path) === 0) {
+            // Return an empty message if the file is missing or empty
+            return view('blockchain.index')->with('message', 'The file is empty or does not exist.');
+        }
+
+        // Read the blockdata.json file and decode its content
         $data = json_decode(File::get($path), true);
+
+        // If the file contains no usable data, return the empty message
+        if (empty($data)) {
+            return view('blockchain.index')->with('message', 'The file contains no valid data.');
+        }
 
         // Normalize data into a consistent structure for easier processing
         $records = [];
@@ -33,7 +46,12 @@ class BlockchainController extends Controller
             }
         }
 
-        // Paginate records
+        // Check if there are no records after processing
+        if (empty($records)) {
+            return view('blockchain.index')->with('message', 'No records found in the file.');
+        }
+
+        // Paginate the records
         $page = request()->get('page', 1);
         $perPage = 10;
         $paginatedRecords = new LengthAwarePaginator(
@@ -44,6 +62,7 @@ class BlockchainController extends Controller
             ['path' => route('blockchain.index')]
         );
 
+        // Return the view with paginated records
         return view('blockchain.index', compact('paginatedRecords'));
     }
 }

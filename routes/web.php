@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', 'HomeController@index')->name('home');
+Route::get('/blockchain-data', 'BlockchainController@index')->name('blockchain.index');
+
 
 Route::get('/download/employee-upload-template', function () {
     return Storage::disk('public')->download('templates/employee_bulk_import.csv');
