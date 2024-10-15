@@ -716,7 +716,7 @@ class InsuranceController extends Controller
                 'filename' => 'insurance_subscriptions_report_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -734,7 +734,7 @@ class InsuranceController extends Controller
                 'filename' => 'insurance_transaction_report_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -753,7 +753,7 @@ class InsuranceController extends Controller
                 'filename' => 'insurance_claims_mngt_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

@@ -196,7 +196,7 @@ class EmployeeLeaveController extends Controller
                 'filename' => strtolower('registered_employees_leaves_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

@@ -411,7 +411,7 @@ class EmployeePayrollController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -460,7 +460,7 @@ class EmployeePayrollController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -581,7 +581,7 @@ class EmployeePayrollController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

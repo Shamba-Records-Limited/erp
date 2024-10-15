@@ -569,7 +569,7 @@ class ManufacturingController extends Controller
                 'filename' => strtolower('manufacturing_registered_produced_products_' . date('d_m_Y')),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -587,7 +587,7 @@ class ManufacturingController extends Controller
                 'filename' => 'manufacturing_final_products_' . date('d_m_Y'),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -607,7 +607,7 @@ class ManufacturingController extends Controller
                 'filename' => strtolower('manufacturing_reports_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -626,7 +626,7 @@ class ManufacturingController extends Controller
                 'filename' => strtolower('manufacturing_raw_materials_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -711,7 +711,7 @@ class ManufacturingController extends Controller
                 'filename' => strtolower('stores_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1064,7 +1064,7 @@ class ManufacturingController extends Controller
                 'filename' => strtolower('supplies_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1095,7 +1095,7 @@ class ManufacturingController extends Controller
                 'filename' => $file_name_prefix,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1125,7 +1125,7 @@ class ManufacturingController extends Controller
                 'filename' => $file_name_prefix,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1242,7 +1242,7 @@ class ManufacturingController extends Controller
                 'filename' => 'production_history_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1265,7 +1265,7 @@ class ManufacturingController extends Controller
                 'filename' => 'production_history_raw_materials_' . date('d_m_Y'),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1306,7 +1306,7 @@ class ManufacturingController extends Controller
                 'filename' => 'production_history_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1338,7 +1338,7 @@ class ManufacturingController extends Controller
                 'filename' => $file_name_prefix,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -1373,7 +1373,7 @@ class ManufacturingController extends Controller
                 'filename' => 'expired_stock_' . date('d_m_Y'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 

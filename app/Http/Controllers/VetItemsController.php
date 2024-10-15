@@ -86,7 +86,7 @@ class VetItemsController extends Controller
                 'filename' => strtolower('vet_items_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

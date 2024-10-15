@@ -464,7 +464,7 @@ class CollectionController extends Controller
                 'filename' => strtolower('collections_' . date('d_m_Y')),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -492,7 +492,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -517,7 +517,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -569,7 +569,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -734,7 +734,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -761,7 +761,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -810,7 +810,7 @@ class CollectionController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

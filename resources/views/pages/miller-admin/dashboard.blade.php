@@ -187,7 +187,7 @@ $total_gender_distribution = 0;
 @endsection
 
 @push('plugin-scripts')
-<script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endpush
 
 @push('custom-scripts')
@@ -262,25 +262,13 @@ $total_gender_distribution = 0;
         datasets: [{
             label: 'Income',
             data: incomeValues,
-            backgroundColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-            ],
-            borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-            ]
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
         }, {
             label: 'Expenses',
             data: expensesValues,
-            backgroundColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-            ]
+            borderColor: 'rgba(192, 75, 192, 1)',
+            backgroundColor: 'rgba(192, 75, 192, 0.2)',
         }]
     };
 

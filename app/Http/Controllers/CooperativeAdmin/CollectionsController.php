@@ -33,7 +33,9 @@ class CollectionsController extends Controller
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
-                    u.username
+                    u.username,
+                    u.first_name,
+                    u.other_names
                 FROM farmers f
                 JOIN users u ON f.user_id = u.id
                 JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
@@ -194,6 +196,8 @@ class CollectionsController extends Controller
 
         $collections = Collection::where("cooperative_id", $cooperative)->get();
 
+        dd($collections);
+
         if ($type != env('PDF_FORMAT')) {
             $file_name = strtolower('collections_' . date('d_m_Y')) . '.' . $type;
             return Excel::download(new CollectionExport($collections), $file_name);
@@ -205,7 +209,7 @@ class CollectionsController extends Controller
                 'filename' => strtolower('collections_' . date('d_m_Y')),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 

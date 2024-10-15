@@ -108,7 +108,7 @@ class CooperativeHrReports extends Controller
             'filename' => $file_name,
             'orientation' => 'landscape'
         ];
-        return download_pdf($data);
+        return deprecated_download_pdf($data);
     }
 
 
@@ -240,7 +240,7 @@ class CooperativeHrReports extends Controller
             'filename' => $file_name,
             'orientation' => 'landscape'
         ];
-        return download_pdf($data);
+        return deprecated_download_pdf($data);
     }
 
     private function net_gross_pay($request)
@@ -284,7 +284,7 @@ class CooperativeHrReports extends Controller
             'filename' => $year . '_' . strtolower(str_replace(' ', '_', $request->report_type)),
             'orientation' => 'landscape'
         ];
-        return download_pdf($allData);
+        return deprecated_downoad_pdf($allData);
     }
 
 
@@ -327,7 +327,7 @@ class CooperativeHrReports extends Controller
             'filename' => $year . '_' . strtolower(str_replace(' ', '_', $request->report_type)),
             'orientation' => 'landscape'
         ];
-        return download_pdf($allData);
+        return deprecated_downoad_pdf($allData);
     }
 
     private function unserialize_data_extract_value($data, $key)
@@ -391,7 +391,7 @@ class CooperativeHrReports extends Controller
             'filename' => $year . '_' . strtolower(str_replace(' ', '_', $request->report_type)),
             'orientation' => 'landscape'
         ];
-        return download_pdf($allData);
+        return deprecated_downoad_pdf($allData);
     }
 
     /**
@@ -478,7 +478,7 @@ class CooperativeHrReports extends Controller
             'filename' => $year . '_' . strtolower(str_replace(' ', '_', $request->report_type)),
             'orientation' => 'landscape'
         ];
-        return download_pdf($allData);
+        return deprecated_downoad_pdf($allData);
     }
 
 

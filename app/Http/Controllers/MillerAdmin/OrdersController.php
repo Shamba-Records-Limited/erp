@@ -40,7 +40,7 @@ class OrdersController extends Controller
         //     JOIN millers ON millers.id = ord.miller_id AND millers.id = :miller_id;
         // "), ["miller_id" => $miller_id]);
 
-        $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->get();
+        $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->orderBy('created_at', 'desc')->get();
 
         return view('pages.miller-admin.orders.index', compact('orders'));
     }

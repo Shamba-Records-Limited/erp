@@ -33,7 +33,7 @@ class OrdersController extends Controller
         //     WHERE ord.cooperative_id = :coop_id
         // "), ["coop_id" => $coop->id]);
 
-        $orders = MillerAuctionOrder::where("cooperative_id", $coop->id)->get();
+        $orders = MillerAuctionOrder::where("cooperative_id", $coop->id)->orderBy('created_at', 'desc')->get();
 
         return view("pages.cooperative-admin.orders.index", compact('orders'));
     }

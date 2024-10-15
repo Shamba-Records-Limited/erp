@@ -239,7 +239,7 @@ class TransportProviderController extends Controller
                 'filename' => $fileName,
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

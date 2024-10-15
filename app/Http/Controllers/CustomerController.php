@@ -114,7 +114,7 @@ class CustomerController extends Controller
                 'filename' => strtolower('customers_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

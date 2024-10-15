@@ -347,7 +347,7 @@ class AccountingController extends Controller
                 'filename' => strtolower('accounting_transactions_journal_entries_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -372,7 +372,7 @@ class AccountingController extends Controller
                 'filename' => strtolower('accounting_details_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -393,7 +393,7 @@ class AccountingController extends Controller
                 'filename' => strtolower('accounting_reports_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

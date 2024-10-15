@@ -260,7 +260,7 @@ class VetController extends Controller
                 'filename' => strtolower('vet_bookings_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -283,7 +283,7 @@ class VetController extends Controller
                 'filename' => strtolower('vets' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

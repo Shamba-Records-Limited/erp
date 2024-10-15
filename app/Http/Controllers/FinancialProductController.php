@@ -374,7 +374,7 @@ class FinancialProductController extends Controller
                 'filename' => strtolower($cooperative->name . '_loaned_farmers'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -400,7 +400,7 @@ class FinancialProductController extends Controller
                 'filename' => strtolower($cooperative->name . '_farmer_savings'),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -428,7 +428,7 @@ class FinancialProductController extends Controller
                 'filename' => strtolower($farmer . '_saving_installment'),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -449,7 +449,7 @@ class FinancialProductController extends Controller
                 'filename' => strtolower($farmer . '_loan_' . $loan_id . '_installment'),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -474,7 +474,7 @@ class FinancialProductController extends Controller
                 'filename' => 'loan_defaulters',
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -499,7 +499,7 @@ class FinancialProductController extends Controller
                 'filename' => 'loan_repayments',
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -572,7 +572,7 @@ class FinancialProductController extends Controller
                 'filename' => strtolower('Loan_Interest_' . date('d_m_Y')),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 

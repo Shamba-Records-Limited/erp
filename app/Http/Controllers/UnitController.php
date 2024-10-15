@@ -109,7 +109,7 @@ class UnitController extends Controller
                 'filename' => $file_name,
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
 
     }

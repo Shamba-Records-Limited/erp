@@ -361,7 +361,7 @@ class TripController extends Controller
                 'filename' => $fileName,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

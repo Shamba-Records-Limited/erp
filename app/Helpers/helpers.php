@@ -22,6 +22,7 @@ use App\Wallet;
 use App\CooperativeFinancialPeriod;
 use App\CooperativeProperty;
 use App\CooperativeWallet;
+use App\Exports\GeneratableExport;
 use App\Location;
 use App\NewInvoice;
 use App\Receipt;
@@ -761,6 +762,23 @@ if (!function_exists('download_pdf')) {
         $pdf = app('dompdf.wrapper');
         $pdf->setPaper('letter', $data['orientation']);
         $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns', 'summation'));
+        $file_name = $data['filename'];
+        return $pdf->download($file_name . '.pdf');
+    }
+}
+
+if (!function_exists('deprecated_download_pdf')) {
+    # deprecated
+    function deprecated_download_pdf($data)
+    {
+        $pdf_view = $data['pdf_view'];
+        $title = $data['title'];
+        $period = Carbon::now()->format('D, d M Y  H:i:s');
+        $records = $data['records'];
+        $summation = $data['summation'] ?? null;
+        $pdf = app('dompdf.wrapper');
+        $pdf->setPaper('letter', $data['orientation']);
+        $pdf->loadView('pages.cooperative.pdf_views.' . $pdf_view, compact('title', 'period', 'records'));
         $file_name = $data['filename'];
         return $pdf->download($file_name . '.pdf');
     }
@@ -1543,6 +1561,155 @@ if (!function_exists('perform_transaction')) {
                     THEN (select CONCAT(u.first_name,' ',u.other_names) from farmers f join users u ON f.user_id = u.id where f.id = t.recipient_id)
                 END
             )";
+        }
+    }
+
+    // export helpers
+    if (!function_exists('general_export_transaction')) {
+        function general_export_transaction($request, $transaction_type, $acc_type, $export_type, $options = [
+            "columns" => [
+                "transaction_number",
+                "subject",
+                "sender",
+                "recipient",
+                "amount",
+                "status",
+                "created_at"
+            ]
+        ])
+        {
+            $user = Auth::user();
+
+            if ($acc_type == "miller-admin") {
+                $subject_id = $user->miller_admin->miller_id;
+            } else if ($acc_type == "cooperative-admin") {
+                $subject_id = $user->cooperative->id;
+            } else {
+                throw new Exception("Invalid account type");
+            }
+
+            if ($transaction_type == "income") {
+                $condition = "t.parent_id IS NULL AND
+                t.status = 'COMPLETE' AND
+                t.recipient_id = :subject_id AND
+                t.recipient_type != 'CASH' AND
+                t.sender_type != 'CASH'";
+                $title = "Income";
+            } else if ($transaction_type == "expense") {
+                $condition = "t.parent_id IS NULL AND
+                t.status = 'COMPLETE' AND
+                t.sender_id = :subject_id AND
+                t.recipient_type != 'CASH' AND
+                t.sender_type != 'CASH'";
+                $title = "Expenses";
+            } else if ($transaction_type == "deposit") {
+                $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'DEPOSIT' AND
+                        t.sender_id = :subject_id";
+                $title = "Deposits";
+            } else if ($transaction_type == "withdrawal") {
+                $condition = "t.parent_id IS NULL AND
+                        t.status = 'COMPLETE' AND
+                        t.type = 'WITHDRAWAL' AND
+                        t.sender_id = :subject_id";
+                $title = "Withdrawals";
+            }
+            else {
+                throw new Exception("Invalid transaction type");
+            }
+
+
+            // search
+            $outerCondition = "";
+            $search = $request->query("search");
+            if ($search) {
+                $outerCondition .= " AND (
+                            subquery.transaction_number LIKE '%$search%' OR
+                            subquery.subject LIKE '%$search%' OR
+                            subquery.sender LIKE '%$search%' OR
+                            subquery.recipient LIKE '%$search%' OR
+                            subquery.formatted_amount LIKE '%$search%' OR
+                            subquery.created_at LIKE '%$search%'
+                            )";
+            }
+
+            // filter
+            $rawFilter = $request->query("filter", "");
+            $outerCondition .= outerConditionFromFilter($rawFilter);
+
+
+            $subjectColumn = getTransactionSubjectSubqueryColumn();
+            $senderColumn = getTransactionSenderSubqueryColumn();
+            $recipientColumn = getTransactionRecipientSubqueryColumn();
+
+
+            $transactionRecordsQuery = "SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            $subjectColumn AS subject,
+            $senderColumn AS sender,
+            $recipientColumn AS recipient
+
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+            ";
+
+            $transactionRecords = DB::select(DB::raw($transactionRecordsQuery), ["subject_id" => $subject_id]);
+
+            $transactionTotal = DB::select(DB::raw("
+            SELECT SUM(amount) AS total FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
+            $subjectColumn AS subject,
+            $senderColumn AS sender,
+            $recipientColumn AS recipient
+
+            FROM transactions t
+            -- WHERE HAS NO PARENT
+            WHERE $condition
+            ORDER BY t.created_at DESC
+            ) AS subquery
+             WHERE TRUE $outerCondition
+        "), ["subject_id" => $subject_id])[0]->total;
+
+            $columnsMap = [
+                "transaction_number" => ["name" => "Transaction Number", "key" => "transaction_number"],
+                "subject" => ["name" => "Subject", "key" => "subject"],
+                "sender" => ["name" => "Sender", "key" => "sender"],
+                "recipient" => ["name" => "Recipient", "key" => "recipient"],
+                "amount" => ["name" => "Amount", "key" => "formatted_amount"],
+                "amount_source" => ["name" => "Amount Source", "key" => "amount_source"],
+                "purpose" => ["name" => "Purpose", "key" => "purpose"],
+                "status" => ["name" => "Status", "key" => "status"],
+                "created_at" => ["name" => "Timestamp", "key" => "created_at"],
+            ];
+            $columns = [];
+            foreach ($options["columns"] as $column_definition) {
+                $columns[] = $columnsMap[$column_definition];
+            }
+
+
+
+            if ($export_type != env('PDF_FORMAT')) {
+                $file_name = strtolower($title . '_' . date('d_m_Y')) . '.' . $export_type;
+                return Excel::download(new GeneratableExport($columns, $transactionRecords), $file_name);
+            } else {
+                // convert to arrays of arrays from arrays of objects
+                $transactionRecords = array_map(function ($expense) {
+                    return (array) $expense;
+                }, $transactionRecords);
+
+                $data = [
+                    'title' => $title,
+                    'pdf_view' => strtolower($title),
+                    'records' => $transactionRecords,
+                    'summation' => number_format($transactionTotal),
+                    'filename' => strtolower($title . '_' . date('d_m_Y')),
+                    'orientation' => 'letter',
+                ];
+                return download_pdf($columns, $data);
+            }
         }
     }
 }

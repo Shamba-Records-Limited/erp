@@ -100,7 +100,7 @@ class ProductController extends Controller
                 'filename' => strtolower('products_' . date('d') . '_' . date('m') . '_' . date('Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -133,7 +133,7 @@ class ProductController extends Controller
                 'filename' => strtolower('products_suppliers' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -172,7 +172,7 @@ class ProductController extends Controller
                 'filename' => $file_name_prefix,
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 

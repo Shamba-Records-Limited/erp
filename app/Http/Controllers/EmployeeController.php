@@ -74,7 +74,7 @@ class EmployeeController extends Controller
                 'orientation' => 'landscape'
             ];
 
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 

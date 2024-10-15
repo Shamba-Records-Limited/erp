@@ -80,7 +80,7 @@ $collection_time_options = config('enums.collection_time');
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="coop_branch_id">Coop Branch</label>
+                                <label for="coop_branch_id">Coop Branch<span class="text-danger">*</span> </label>
                                 <select name="coop_branch_id" id="coop_branch_id" class="form-control select2bs4 {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Branch --</option>
                                     @foreach($coopBranches as $branch)
@@ -94,11 +94,11 @@ $collection_time_options = config('enums.collection_time');
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="farmer_id">Farmer</label>
+                                <label for="farmer_id">Farmer<span class="text-danger">*</span></label>
                                 <select name="farmer_id" id="farmer_id" class="form-control select2bs4 {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Farmer --</option>
                                     @foreach($farmers as $farmer)
-                                    <option value="{{$farmer->id}}" @if($farmer->id == old('farmer_id')) selected @endif>{{$farmer->username}}</option>
+                                    <option value="{{$farmer->id}}" @if($farmer->id == old('farmer_id')) selected @endif>{{$farmer->first_name}} {{$farmer->other_names}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('farmer_id'))
@@ -108,7 +108,7 @@ $collection_time_options = config('enums.collection_time');
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="product_id">Product</label>
+                                <label for="product_id">Product<span class="text-danger">*</span></label>
                                 <select name="product_id" id="product_id" class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}" required onchange="set_unit_id()">
                                     <option value="">-- Select Product --</option>
                                     @foreach($products as $product)
@@ -122,7 +122,7 @@ $collection_time_options = config('enums.collection_time');
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="quantity">Quantity</label>
+                                <label for="quantity">Quantity<span class="text-danger">*</span></label>
                                 <input type="text" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="10.5" value="{{ old('quantity')}}" required>
 
                                 @if ($errors->has('quantity'))
@@ -132,7 +132,7 @@ $collection_time_options = config('enums.collection_time');
                                 @endif
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="unit">Unit</label>
+                                <label for="unit">Unit<span class="text-danger">*</span></label>
                                 <!-- <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
                                     <option value="">-- Select Unit --</option>
                                     @foreach(config('enums.units') as $key => $unit)
@@ -147,7 +147,7 @@ $collection_time_options = config('enums.collection_time');
                                 <input type="text" name="unit" class="form-control {{ $errors->has('unit') ? ' is-invalid' : '' }}" id="unit" placeholder="KG" value="{{ old('unit')}}" required readonly>
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="collection_time">Collection Time</label>
+                                <label for="collection_time">Collection Time<span class="text-danger">*</span></label>
                                 <select name="collection_time" id="collection_time" class="form-control select2bs4 {{ $errors->has('collection_time') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Collection Time --</option>
                                     @foreach($collection_time_options as $key => $option)
@@ -163,7 +163,7 @@ $collection_time_options = config('enums.collection_time');
                         </div>
                         <div class="form-row">
                             <div class="form-group col-lg-6 col-12">
-                                <label>Comments</label>
+                                <label>Comments<span class="text-danger">*</span></label>
                                 <textarea class="form-control" rows="3" name="comments">{{old('comment')}}</textarea>
                             </div>
                         </div>

@@ -111,7 +111,7 @@ class CowController extends Controller
                 'filename' => strtolower('farm_management_livestock_poultry_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

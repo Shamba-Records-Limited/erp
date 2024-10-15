@@ -809,7 +809,7 @@ class CropManagementController extends Controller
                 'filename' => strtolower('FarmerCalendar_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
@@ -827,7 +827,7 @@ class CropManagementController extends Controller
                 'filename' => strtolower('crop_details_' . date('d_m_Y')),
                 'orientation' => 'portrait'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 }

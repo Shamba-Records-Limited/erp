@@ -118,7 +118,7 @@ class ReportedCasesController extends Controller
                 'filename' => strtolower('disease_reported_cases_' . date('d_m_Y')),
                 'orientation' => 'landscape'
             ];
-            return download_pdf($data);
+            return deprecated_download_pdf($data);
         }
     }
 
