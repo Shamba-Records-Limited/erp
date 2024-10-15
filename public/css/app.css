@@ -2277,8 +2277,8 @@ th {
 label {
   display: inline-block;
   margin-bottom: 0.5rem;
-  font-size:1rem;
-  font-weight:500;
+  font-size: 0.888rem;
+  font-weight: 500;
 }
 
 button {
@@ -19714,15 +19714,15 @@ small {
   font-weight: 600;
 }
 
-h4{
-  font-weight:bold;
-  font-size:1.5rem;
+h4 {
+  font-weight: bold;
+  font-size: 1.5rem;
 }
 
-h6.mb-3{
-  font-weight:bold;
+h6.mb-3 {
+  font-weight: bold;
 }
 
-h6.h6.mt-2{
-  font-weight:600;
+h6.h6.mt-2 {
+  font-weight: 600;
 }
