@@ -22,10 +22,11 @@ class CreateNotificationsTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-
             $table->string("subject_type");
             $table->string("subject_id");
 
+            $table->string("title");
+            $table->text("body");
             $table->string("status")->default("UNREAD");
 
             $table->timestamps();
