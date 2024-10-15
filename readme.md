@@ -76,11 +76,24 @@ Follow these steps to setup the project
    1. `docker exec laravel-app php artisan db:seed --class=DatabaseSeeder`
 6. Run the following command to create default cooperative admin `docker exec laravel-app php artisan create:coopadmin`
 7. Default super admin credentials `username: admin` and `password: 12345678`
-8. Add admin to admin role
-   `docker exec -it laravel-app php artisan tinker`
-   `$user = App\Models\User::where('username', 'admin')->first();`
-   `$user->assignRole('admin');`
-   `exit`
+## Deprecated
+
+### 8. Add admin to admin role
+
+This method of adding the `admin` role to the user with the username `admin` using `php artisan tinker` has been **deprecated**. 
+
+**Deprecated Method**:
+
+```bash
+docker exec -it laravel-app php artisan tinker
+$user = App\Models\User::where('username', 'admin')->first();
+$user->assignRole('admin');
+exit;
+
+
+
+
+
 
 
 #### API Setup Instructions (Passports)
