@@ -78,7 +78,7 @@ Follow these steps to setup the project
 7. Default super admin credentials `username: admin` and `password: 12345678`
 ## Deprecated
 
-### 8. Add admin to admin role
+### 9. Add admin to admin role
 
 This method of adding the `admin` role to the user with the username `admin` using `php artisan tinker` has been **deprecated**. 
 
@@ -89,6 +89,7 @@ docker exec -it laravel-app php artisan tinker
 $user = App\Models\User::where('username', 'admin')->first();
 $user->assignRole('admin');
 exit;
+```
 
 
 
