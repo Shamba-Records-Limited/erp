@@ -19,7 +19,7 @@ class AssignAdminrole extends Migration
         Artisan::call( 'db:seed',['--class'=>'UserSeeder',
                                    '--force'=>true
                       
-                      ])
+                      ]);
 
 
 
