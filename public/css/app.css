@@ -2703,6 +2703,7 @@ pre code {
   flex-wrap: wrap;
   margin-right: -12.5px;
   margin-left: -12.5px;
+
 }
 
 .no-gutters {
@@ -16364,12 +16365,12 @@ small {
 }
 
 .card .card-title {
-  font-weight: 500;
+  font-weight: bold;
   color: #343a40;
   margin-bottom: 15px;
   text-transform: capitalize;
   font-family: "Roboto", sans-serif;
-  font-size: 16px;
+  font-size: 20px;
 }
 
 .card .card-subtitle {
@@ -19725,4 +19726,12 @@ h6.mb-3 {
 
 h6.h6.mt-2 {
   font-weight: 600;
+}
+
+
+
+.card .card-body .row.custom-border {
+  box-shadow: 0 4px 9px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+
 }
