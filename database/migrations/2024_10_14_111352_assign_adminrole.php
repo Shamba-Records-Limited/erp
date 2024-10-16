@@ -16,10 +16,10 @@ class AssignAdminrole extends Migration
     public function up()
     {
         //
-        Artisan::call( 'db:seed',['--class'=>'UserSeeder',
+        /*Artisan::call( 'db:seed',['--class'=>'UserSeeder',
                                    '--force'=>true
                       
-                      ]);
+                      ]);*/
 
 
 
