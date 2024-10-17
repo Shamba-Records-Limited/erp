@@ -3,7 +3,11 @@
 @push('plugin-styles')
 
 @endpush
-
+@push('js')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js">
+</script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+@endpush
 @push('chartjs')
 <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 @endpush
@@ -147,26 +151,54 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
     </div>
 </div>
 
-</div>
-</div>
-<h3 class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</h3>
-</div>
-<h3 class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</h3>
-</div>
-</div>
-<div class="card-body">
-    <div class="card-title d-flex align-items-center">
-        <div class="mr-2">
-            <i class="mdi mdi-basket-outline" style="font-size: 30px;color: #a57150;"></i>
+
+<div class="col-xl-8 mb-5 mb-xl-0">
+    <div class="card bg-gradient-default shadow">
+        <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                    <h2 class="text-white mb-0">Collections Weight (KGs)</h2>
+                </div>
+                <div class="col">
+                    <ul class="nav nav-pills justify-content-end">
+                        <!-- All Option -->
+                        <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#CollectionsBarChart" <a
+                            href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
+                            <span class="d-none d-md-block">All</span>
+                            <span class="d-md-none">All</span>
+                            </a>
+                        </li>
+                        <!-- Month Option -->
+                        <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#CollectionsBarChart" <a
+                            href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                            <span class="d-none d-md-block">Month</span>
+                            <span class="d-md-none">M</span>
+                            </a>
+                        </li>
+                        <!-- Week Option -->
+                        <li class="nav-item" data-toggle="chart" data-target="#CollectionsBarChart" data-prefix="KG" <a
+                            href="#" class="nav-link py-2 px-3" data-toggle="tab">
+                            <span class="d-none d-md-block">Week</span>
+                            <span class="d-md-none">W</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div>
-            Collection Count
+        <div class="card-body">
+            <!-- Chart -->
+            <div class="chart">
+                <!-- Chart wrapper -->
+                <canvas id="CollectionsBarChart" class="chart-canvas "></canvas>
+            </div>
         </div>
     </div>
 </div>
-</div>
 
-<div class="span-4 card" style="overflow-y: scroll; height:350px;">
+
+<div class=" span-4 card" style="overflow-y: scroll; height:350px;">
     <div class="card-body">
         <div class="card-title">Gender Distribution</div>
         <div class="row">
@@ -209,7 +241,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
     </div>
 </div>
 
-<div class="card span-6" style="overflow-y: scroll; height:350px;">
+<!-- <div class="card span-6" style="overflow-y: scroll; height:350px;">
     <div class="card-body">
         <div class="card-title">Grade Distribution KGs</div>
         <div class="row">
@@ -218,14 +250,28 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
             </div>
         </div>
     </div>
+</div> -->
+<div class="col-xl-4">
+    <div class="card shadow">
+        <div class="card-header bg-transparent">
+            <div class="row align-items-center">
+                <div class="col">
+                    <h6 class="text-uppercase text-muted ls-1 mb-1">Grade Distribution KGs</h6>
+                    <h2 class="mb-0">Total orders</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <!-- Chart -->
+            <div class="chart">
+                <canvas id="Chart-orders" class="chart-canvas"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 </div>
-
-
 @endsection
-
 @push('plugin-scripts')
-<script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
 @endpush
 
 @push('custom-scripts')
@@ -236,7 +282,7 @@ let collectionsData = @json($data['collections']);
 let collectionsLabels = collectionsData.map(c => c.x)
 let collectionsValues = collectionsData.map(c => c.y)
 let collectionsBarChartCanvas = document.getElementById("CollectionsBarChart")
-
+console.log(collectionValues);
 let collectionsBarData = {
     labels: collectionsLabels,
     datasets: [{
@@ -245,7 +291,6 @@ let collectionsBarData = {
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
     }],
-    // labels: ["Male", "Female", "Other"]
 };
 let collectionsBarOptions = {
     animationEasing: "easeOutBounce",
