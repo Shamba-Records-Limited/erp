@@ -24,6 +24,10 @@ $countries = get_countries();
                     <a type="button" href="{{route('cooperative-admin.farmers.view_add_existing')}}" class="btn btn-primary btn-fw btn-sm ml-2">
                         <span class="mdi mdi-plus"></span>Add Existing Farmer
                     </a>
+                    <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('cooperative-admin.farmers.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+                    </a>
+                    <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('cooperative-admin.farmers.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+                    </a>
                 </div>
 
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\CooperativeAdmin;
 
 use App\County;
+use App\Exports\GeneratableExport;
 use App\Farmer;
 use App\FarmerCooperative;
 use App\Http\Controllers\Controller;
@@ -308,7 +309,7 @@ class FarmersController extends Controller
                 LEFT JOIN counties county ON county.id = f.county_id
                 LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
                 JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
-            "),["coop_id" => $coop_id]);
+            "), ["coop_id" => $coop_id]);
 
 
         $counties = County::all();
@@ -476,7 +477,8 @@ class FarmersController extends Controller
 
             $data = [
                 "name" => ucwords(strtolower($request->first_name)) . ' ' . ucwords(strtolower($request->other_names)),
-                "email" => $request->email, "password" => $password
+                "email" => $request->email,
+                "password" => $password
             ];
             // $audit_trail_data = [
             //     'user_id' => $user->id,
@@ -556,6 +558,65 @@ class FarmersController extends Controller
             }
             toastr()->error('Upload was  not successful');
             return redirect()->back()->with(['uploadErrors' => $uploadErrors]);
+        }
+    }
+
+    function export_farmers(Request $request, $type)
+    {
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
+
+        $farmers = DB::select(DB::raw("
+                SELECT
+                    f.id,
+                    f.member_no,
+                    f.gender,
+                    u.username,
+                    u.first_name,
+                    u.other_names,
+                    county.name as county_name,
+                    sub_county.name as sub_county_name,
+                    CONCAT((SELECT SUM(c.quantity) FROM collections c WHERE c.farmer_id=f.id), ' KG') AS total_collection_quantity
+                FROM farmers f
+                JOIN users u ON f.user_id = u.id
+                LEFT JOIN counties county ON county.id = f.county_id
+                LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
+                JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
+            "), ["coop_id" => $coop_id]);
+
+        $faremersCount = DB::select(DB::raw("
+            SELECT COUNT(*) AS count FROM farmers f
+                JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
+        "), ["coop_id" => $coop_id])[0]->count;
+
+        $columns = [
+            ['name' => 'Farmer ID', 'key' => "id"],
+            ['name' => 'First Name', 'key' => "first_name"],
+            ['name' => 'Other Names', 'key' => "other_names"],
+            ['name' => 'Gender', 'key' => "gender"],
+            ['name' => 'County', 'key' => "county_name"],
+            ['name' => 'Sub County', 'key' => "sub_county_name"],
+            ['name' => 'Total Collection Quantity', 'key' => "total_collection_quantity"],
+        ];
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('farmers_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new GeneratableExport($columns, $farmers), $file_name);
+        } else {
+
+            // convert to arrays of arrays from arrays of objects
+            $farmers = array_map(function ($farmer) {
+                return (array) $farmer;
+            }, $farmers);
+
+            $data = [
+                'title' => 'Farmers',
+                'pdf_view' => 'farmers',
+                'records' => $farmers,
+                'filename' => strtolower('farmers_' . date('d_m_Y')),
+                'orientation' => 'letter',
+            ];
+            return download_pdf($columns, $data);
         }
     }
 }

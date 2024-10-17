@@ -361,6 +361,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     })->name('cooperative-admin.download-upload-farmers-template');
     Route::post('/farmers/import-bulk', 'CooperativeAdmin\FarmersController@import_bulk')
         ->name('cooperative-admin.farmers.import-bulk');
+    Route::get('/farmers/download/{type}', 'CooperativeAdmin\FarmersController@export_farmers')
+        ->name("cooperative-admin.farmers.export");
 
 
     // lots
