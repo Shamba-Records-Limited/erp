@@ -9,46 +9,9 @@
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 @endpush
 @push('chartjs')
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 @endpush
 
 @push('plugin-styles')
-<!-- <style>
-.grid {
-    display: grid;
-}
-
-.grid-cols-2 {
-    grid-template-columns: repeat(2, 1fr);
-}
-
-.dashgrid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 10px;
-}
-
-.span-8 {
-    grid-column: span 8;
-}
-
-.span-4 {
-    grid-column: span 4;
-}
-
-.span-2 {
-    grid-column: span 2;
-}
-
-.span-6 {
-    grid-column: span 6;
-}
-
-
-.row-span-2 {
-    grid-row: span 2;
-}
-</style> -->
 @endpush
 
 @section('content')
@@ -88,13 +51,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
 
     </div>
-
-
-
-
-
-
-
 
 
     <div class="row">
@@ -184,41 +140,48 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
             </div>
         </div>
     </div>
+
+
     <div class="row mt-5">
-
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collections Weight (KGs) By Gender
+        <div class="col-xl-4">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Collections Weight (KGs) By Gender
+                            </h6>
+                            <h2 class=" mb-0">Collection By Gender</h2>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <canvas id="CollectionsGenderBarChart" class="mb-4 mb-md-0" height="250"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="card span-6" style="overflow-y: scroll; height:350px;">
-            <div class="card-body">
-                <div class="card-title">Collection By Wet Mills (KGs)</div>
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <canvas id="WetMillCollectionsBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart">
+                        <canvas id="CollectionsGenderBarChart" class="chart-canvas"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card bg-gradient-default shadow">
 
-        <!-- <div class="card span-6" style="overflow-y: scroll; height:350px;">
-    <div class="card-body">
-        <div class="card-title">Grade Distribution KGs</div>
-        <div class="row">
-            <div class="col-12 d-flex align-items-center">
-                <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-light ls-1 mb-1">Collection By Wet Mills (KGs)</h6>
+                            <h2 class="text-white mb-0">Wet Mills</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart">
+                        <!-- Chart wrapper -->
+                        <canvas id="WetMillCollectionsBarChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div> -->
-
     </div>
 </div>
 </div>
@@ -269,13 +232,12 @@ let collectionsBarChart = new Chart(collectionsBarChartCanvas, {
     options: collectionsBarOptions
 });
 
-// collections gender
+// Collections gender chart data
 let maleCollectionsData = @json($data['male_collections']);
-console.log(maleCollectionsData);
 let maleCollectionValues = maleCollectionsData.map(c => c.y);
 
-let collectionsGenderLabels = maleCollectionsData.map(c => c.x)
-let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart")
+let collectionsGenderLabels = maleCollectionsData.map(c => c.x);
+let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart");
 
 let femaleCollectionsData = @json($data['female_collections']);
 let femaleCollectionValues = femaleCollectionsData.map(c => c.y);
@@ -285,76 +247,178 @@ let collectionsGenderBarData = {
     datasets: [{
         label: 'Male',
         data: maleCollectionValues,
-        borderColor: 'rgba(54, 162, 235, 1)',
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: '#11cdef',
+        backgroundColor: '#11cdef',
+        tension: 0.4,
+        fill: true,
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: '#172b4d',
+        backgroundColor: '#172b4d',
+        tension: 0.4,
+        fill: true,
     }],
-    // labels: ["Male", "Female", "Other"]
 };
+
 let collectionsGenderBarOptions = {
-    animationEasing: "easeOutBounce",
-    animateScale: true,
-    responsive: true,
+    scales: {
+        yAxes: [{
+            gridLines: {
+                color: 'rgb(251,99,64)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
+            ticks: {
+                callback: function(value) {
+                    if (value % 10 === 0) {
+                        return value + ' KGs'; // y-axis tick label
+                    }
+                },
+                beginAtZero: true,
+            },
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
+    tooltips: {
+        callbacks: {
+            label: function(item, data) {
+                var label = data.datasets[item.datasetIndex].label || '';
+                var yLabel = item.yLabel;
+                var content = '';
+
+                if (data.datasets.length > 1) {
+                    content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                }
+
+                content += '<span class="popover-body-value">' + yLabel + ' KGs</span>';
+                return content;
+            },
+        },
+        mode: 'index',
+        intersect: true,
+    },
     maintainAspectRatio: false,
-    showScale: true,
     legend: {
-        display: true
+        display: true,
+        position: 'top',
+        labels: {
+            boxWidth: 10,
+            padding: 15,
+        },
     },
     layout: {
         padding: {
             left: 0,
             right: 0,
             top: 0,
-            bottom: 0
-        }
-    }
-    // y axis is KGs
+            bottom: 0,
+        },
+    },
+    animation: {
+        easing: 'easeOutBounce',
+        duration: 1000,
+    },
 };
+
 let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, {
-    type: "line",
+    type: 'bar',
     data: collectionsGenderBarData,
-    options: collectionsGenderBarOptions
+    options: collectionsGenderBarOptions,
 });
 
-// wet mill collections chart
+
+// Wet mill collections chart
 let wetMillCollectionsData = @json($data['collections_by_wet_mills']);
-let wetMillCollectionsLabels = wetMillCollectionsData.map(c => c.name)
-let wetMillCollectionsValues = wetMillCollectionsData.map(c => c.quantity)
-let wetMillCollectionsBarChartCanvas = document.getElementById("WetMillCollectionsBarChart")
+let wetMillCollectionsLabels = wetMillCollectionsData.map(c => c.name);
+let wetMillCollectionsValues = wetMillCollectionsData.map(c => c.quantity);
+
+let wetMillCollectionsBarChartCanvas = document.getElementById("WetMillCollectionsBarChart");
+
 let wetMillCollectionsBarData = {
     labels: wetMillCollectionsLabels,
     datasets: [{
+        label: 'Weight in KGs',
         data: wetMillCollectionsValues,
-        backgroundColor: []
-    }]
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: false,
+        tension: 0.4,
+    }],
 };
+
 let wetMillCollectionsBarOptions = {
-    animationEasing: "easeOutBounce",
-    responsive: true,
-    maintainAspectRatio: true,
-    showScale: true,
+    scales: {
+        yAxes: [{
+            gridLines: {
+                color: 'rgba(77, 77, 77, 0.2)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
+            ticks: {
+                callback: function(value) {
+                    if (value % 10 === 0) {
+                        return value + ' KGs';
+                    }
+                },
+                beginAtZero: true,
+            },
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
+    tooltips: {
+        callbacks: {
+            label: function(item, data) {
+                var label = data.datasets[item.datasetIndex].label || '';
+                var yLabel = item.yLabel;
+                var content = '';
+
+                if (data.datasets.length > 1) {
+                    content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                }
+
+                content += '<span class="popover-body-value">' + yLabel + ' KGs</span>';
+                return content;
+            },
+        },
+        mode: 'index',
+        intersect: false,
+    },
+    maintainAspectRatio: false,
     legend: {
-        display: false
+        display: true,
+        position: 'top',
+        labels: {
+            boxWidth: 10,
+            padding: 15,
+        },
     },
     layout: {
         padding: {
             left: 0,
             right: 0,
             top: 0,
-            bottom: 0
-        }
-    }
-}
+            bottom: 0,
+        },
+    },
+    animation: {
+        easing: 'easeOutBounce',
+        duration: 1000,
+    },
+};
 
 let wetMillCollectionsBarChart = new Chart(wetMillCollectionsBarChartCanvas, {
-    type: "bar",
+    type: 'line',
     data: wetMillCollectionsBarData,
-    options: wetMillCollectionsBarOptions
+    options: wetMillCollectionsBarOptions,
 });
+
 
 
 // grade distribution chart
@@ -397,7 +461,7 @@ let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
     options: gradeDistributionBarOptions
 });
 
-// gender distribution chart
+//gender distribution chart
 let rawGenderData = @json($data['gender']);
 let genderData = Object.values(rawGenderData)
 let farmersGenderdoughnutChartCanvas = document.getElementById("FarmersGenderDoughnutChart")
@@ -440,7 +504,6 @@ let genderChart = new Chart(farmersGenderdoughnutChartCanvas, {
     data: genderPieData,
     options: genderPieOptions
 });
-
 
 
 function exportChart() {
