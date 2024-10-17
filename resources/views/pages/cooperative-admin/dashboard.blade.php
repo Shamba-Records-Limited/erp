@@ -120,26 +120,35 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
     </div>
 
-    <div class=" span-4 card" style="overflow-y: scroll; height:350px;">
+    <div class="card mt-5" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         <div class="card-body">
-            <div class="card-title">Gender Distribution</div>
-            <div class="row">
-                <div class="col-12 d-flex align-items-center">
-                    <canvas id="FarmersGenderDoughnutChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
+            <div class="card-title"></div>
+            <h2 class="mb-4">Gender Distribution</h2>
+            <div class="row gx-2 align-items-center">
+                <div class="col-5 d-flex flex-column align-items-center">
+                    <div class="p-2">
+                        <div>Male</div>
+                        <div class="d-flex align-items-center">
+                            <h3 id="maleCount">{{$data["gender"]->male}}</h3>
+                        </div>
+                    </div>
+                    <div class="p-2">
+                        <div>Female</div>
+                        <div class="d-flex align-items-center">
+                            <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="grid grid-cols-2">
-                <div class="p-4">
-                    <div>Male</div>
-                    <h3 id="maleCount">{{$data["gender"]->male}}</h3>
-                </div>
-                <div class="p-4">
-                    <div>Female</div>
-                    <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+
+                <div class="col-3 d-flex justify-content-center">
+                    <canvas id="FarmersGenderDoughnutChart"></canvas>
                 </div>
             </div>
         </div>
     </div>
+
+
+
 
 
     <div class="row mt-5">
