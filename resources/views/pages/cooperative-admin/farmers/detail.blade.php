@@ -12,10 +12,14 @@
         <div class="row custom-border mt-4">
             <div class="col-md-4 d-flex flex-column align-items-center">
 
-                <!-- fetch the images from user db -->
                 <div class="mb-3">
-                    <img src="{{ asset('assets/images/avatar.png') }}" alt="Farmer's Profile Picture"
-                        class="img-fluid rounded-circle" width="150" height="150">
+                    @if($farmer->profile_picture)
+                    <img src="{{url('storage/'.$farmer->profile_picture)}}" height="150px" width="150px"
+                        class="d-block" />
+                    @else
+                    <img src="{{ url('assets/images/avatar.png') }}" height="150px" width="150px" alt="profile image"
+                        class="d-block">
+                    @endif
                 </div>
                 <div class="border rounded p-3 text-center w-100 mt-3">
                     <div>Total Collection Quantity</div>

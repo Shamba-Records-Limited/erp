@@ -300,6 +300,7 @@ class FarmersController extends Controller
                     u.username,
                     u.first_name,
                     u.other_names,
+                    u.profile_picture,
                     county.name as county_name,
                     sub_county.name as sub_county_name,
                     (SELECT SUM(c.quantity) FROM collections c WHERE c.farmer_id=f.id) AS total_collection_quantity
@@ -313,7 +314,7 @@ class FarmersController extends Controller
 
         $counties = County::all();
         $sub_counties = SubCounty::all();
-
+        //dd($farmers);   
         return view('pages.cooperative-admin.farmers.index', compact('farmers', 'counties', 'sub_counties'));
 
         // return view(
@@ -530,6 +531,7 @@ class FarmersController extends Controller
             JOIN products p ON c.product_id = p.id
             WHERE c.farmer_id = :farmer_id;
         "), ["farmer_id" => $id]);
+        
 
         return view('pages.cooperative-admin.farmers.detail', compact('farmer', 'tab', 'farmerCollections'));
     }

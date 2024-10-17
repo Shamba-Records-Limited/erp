@@ -6,54 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .d-flex {
-            display: flex;
-        }
+    .d-flex {
+        display: flex;
+    }
 
-        .d-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
+    .d-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+    }
 
-        .card {
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px;
-            border-radius: 10px;
-        }
+    .card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10px;
+    }
 
-        .card-title {
-            font-size: 1.5em;
-        }
+    .card-title {
+        font-size: 1.5em;
+    }
 
-        .card-value {
-            font-weight: bold;
-            font-size: 2em;
-        }
+    .card-value {
+        font-weight: bold;
+        font-size: 2em;
+    }
 
-        .range-span {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin: 10px;
-        }
+    .range-span {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin: 10px;
+    }
 
-        .border {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-        }
+    .border {
+        border: 1px solid #ccc;
+        border-radius: 10px;
+    }
 
-        .p-10 {
-            padding: 10px;
-        }
+    .p-10 {
+        padding: 10px;
+    }
 
-        .m-10 {
-            margin: 10px;
-        }
+    .m-10 {
+        margin: 10px;
+    }
 
-        .text-center {
-            text-align: center;
-        }
+    .text-center {
+        text-align: center;
+    }
     </style>
 </head>
 

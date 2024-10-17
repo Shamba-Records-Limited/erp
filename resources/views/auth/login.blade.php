@@ -1,72 +1,100 @@
-@extends('layout.master-mini')
+@extends('layouts.app', ['class' => 'bg-default'])
+
 @section('content')
+@include('layouts.headers.guest')
 
-    <div class="content-wrapper d-flex align-items-center justify-content-center auth theme-one"
-         style="background-image: {{ url('assets/images/auth/login_1.jpg') }}; background-size: cover;">
-        <div class="row w-100">
-            <div class="col-lg-4 mx-auto">
-                <div class="auto-form-wrapper">
-                    <form method="POST" action="{{ route('login') }}">
-                        {{ csrf_field() }}
-                        <div class="form-group">
-                            <label class="label">Username or Email</label>
-                            <div class="input-group">
-                                <input type="text"
-                                       class="form-control {{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
-                                       name="login" value="{{ old('username') ?: old('email') }}" required autofocus
-                                       placeholder="Username or Email">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                      <i class="mdi mdi-email-alert-outline"></i>
-                                    </span>
+<div class="container mt--8 pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7">
+            <div class="card bg-secondary shadow border-0">
+                <div class="card-header bg-transparent pb-5">
+                    <div class="text-muted text-center mt-2 mb-3"><small>{{ __('Sign in with') }}</small></div>
+                    <div class="btn-wrapper text-center">
+                        <a href="#" class="btn btn-neutral btn-icon">
+                            <span class="btn-inner--icon"><img
+                                    src="{{ asset('argon') }}/img/icons/common/github.svg"></span>
+                            <span class="btn-inner--text">{{ __('Github') }}</span>
+                        </a>
+                        <a href="#" class="btn btn-neutral btn-icon">
+                            <span class="btn-inner--icon"><img
+                                    src="{{ asset('argon') }}/img/icons/common/google.svg"></span>
+                            <span class="btn-inner--text">{{ __('Google') }}</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body px-lg-5 py-lg-5">
+                    <div class="text-center text-muted mb-4">
+                        <small>
+                            <a href="{{ route('register') }}">{{ __('Create new account') }}</a>
+                            {{ __('OR Sign in with these credentials:') }}
+                        </small>
+                        <br>
+
+                    </div>
+                    <form role="form" method="POST" action="{{ route('login') }}">
+                        @csrf
+
+                        <div
+                            class="form-group{{ $errors->has('username') || $errors->has('email') ? ' has-danger' : '' }} mb-3">
+                            <div class="input-group input-group-alternative">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                                 </div>
+                                <input
+                                    class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}"
+                                    placeholder="{{ __('Username or Email') }}" type="text" name="login"
+                                    value="{{ old('username') ?: old('email') }}" required autofocus>
                             </div>
-
                             @if ($errors->has('username') || $errors->has('email'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
-                                </span>
+                            <span class="invalid-feedback" style="display: block;" role="alert">
+                                <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
+                            </span>
                             @endif
                         </div>
-                        <div class="form-group">
-                            <label class="label">Password</label>
-                            <div class="input-group">
-                                <input type="password"
-                                       class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}"
-                                       placeholder="*********" name="password">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                      <i class="mdi mdi-lock"></i>
-                                    </span>
+
+                        <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
+                            <div class="input-group input-group-alternative">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                                 </div>
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                    name="password" placeholder="{{ __('Password') }}" type="password" value="secret"
+                                    required>
                             </div>
-
                             @if ($errors->has('password'))
-                                <span class="help-block text-danger">
-                                        <span>{{ $errors->first('password') }}</span>
-                                    </span>
+                            <span class="invalid-feedback" style="display: block;" role="alert">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
                             @endif
                         </div>
-                        <div class="form-group">
-                            <button class="btn btn-primary submit-btn btn-block">Login</button>
+                        <div class="custom-control custom-control-alternative custom-checkbox">
+                            <input class="custom-control-input" name="remember" id="customCheckLogin" type="checkbox"
+                                {{ old('remember') ? 'checked' : '' }}>
+                            <label class="custom-control-label" for="customCheckLogin">
+                                <span class="text-muted">{{ __('Remember me') }}</span>
+                            </label>
                         </div>
-                        <div class="form-group d-flex">
-                            <div class="form-check mt-0">
-{{--                                                                <label class="form-check-label">--}}
-{{--                                                                    <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> Remember Me--}}
-{{--                                                                </label>--}}
-                            </div>
-                            <a href="{{ route('password.request') }}" class="text-small forgot-password text-black">Forgot Password</a>
-                            <span class="text-small forgot-password pl-1 pr-1">|</span>
-                            <a href="{{ route('farmer.register') }}" class="text-small forgot-password text-black pl-1">Farmer Register</a>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary my-4">{{ __('Sign in') }}</button>
                         </div>
-
                     </form>
                 </div>
-                <p class="footer-text text-center mt-5">copyright © @php echo date('Y') @endphp Shamba Equity. All
-                    rights reserved.</p>
+            </div>
+            <div class="row mt-3">
+                <div class="col-6">
+                    @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}" class="text-light">
+                        <small>{{ __('Forgot password?') }}</small>
+                    </a>
+                    @endif
+                </div>
+                <div class="col-6 text-right">
+                    <a href="{{ route('register') }}" class="text-light">
+                        <small>{{ __('Create new account') }}</small>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-
+</div>
 @endsection

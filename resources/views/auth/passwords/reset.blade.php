@@ -1,85 +1,62 @@
-@extends('layout.master-mini')
+@extends('layouts.app', ['class' => 'bg-default'])
 
 @section('content')
-    <div class="content-wrapper d-flex align-items-center justify-content-center auth theme-one"
-         style="background-image: url({{ url('assets/images/auth/login_1.jpg') }}); background-size: cover;">
+    @include('layouts.headers.guest')
+    
+    <div class="container mt--8 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="card bg-secondary shadow border-0">
+                    <div class="card-body px-lg-5 py-lg-5">
+                        <div class="text-center text-muted mb-4">
+                            <small>{{ __('Reset Password') }}</small>
+                        </div>
+                        <form role="form" method="POST" action="{{ route('password.update') }}">
+                            @csrf
 
-        <div class="row w-100">
-            <div class="col-lg-4 mx-auto">
-                <div class="auto-form-wrapper">
-                    <form method="POST" action="{{ route('password.update') }}">
-                        @csrf
+                            <input type="hidden" name="token" value="{{ $token }}">
 
-                        <input type="hidden" name="token" value="{{ $token }}">
-                        <div class="form-group">
-                            <label class="label">Email</label>
-                            <div class="input-group">
-                                <input type="text"
-                                       class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}"
-                                       name="email" value="{{ old('email') }}" required autofocus
-                                       placeholder="Email">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                      <i class="mdi mdi-email-alert-outline"></i>
+                            <div class="form-group{{ $errors->has('email') ? ' has-danger' : '' }} mb-3">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                    </div>
+                                    <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('Email') }}" type="email" name="email" value="{{ $email ?? old('email') }}" required autofocus>
+                                </div>
+                                @if ($errors->has('email'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('email') }}</strong>
                                     </span>
+                                @endif
+                            </div>
+                            <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                    </div>
+                                    <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" placeholder="{{ __('Password') }}" type="password" required>
+                                </div>
+                                @if ($errors->has('password'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                                    </div>
+                                    <input class="form-control" placeholder="{{ __('Confirm Password') }}" type="password" name="password_confirmation" required>
                                 </div>
                             </div>
-
-                            @if ($errors->has('email'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('email') }}</strong>
-                                </span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <label class="label">Password</label>
-                            <div class="input-group">
-                                <input type="password"
-                                       class="form-control {{ $errors->has('password') ? ' is-invalid' : '' }}"
-                                       placeholder="*********" name="password">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                      <i class="mdi mdi-lock"></i>
-                                    </span>
-                                </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary my-4">{{ __('Reset Password') }}</button>
                             </div>
-
-                            @if ($errors->has('password'))
-                                <span class="help-block text-danger">
-                                        <span>{{ $errors->first('password') }}</span>
-                                    </span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <label class="label">Confirm Password</label>
-                            <div class="input-group">
-                                <input type="password"
-                                       class="form-control {{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}"
-                                       placeholder="*********" name="password_confirmation">
-                                <div class="input-group-append">
-                                    <span class="input-group-text">
-                                      <i class="mdi mdi-lock"></i>
-                                    </span>
-                                </div>
-                            </div>
-
-                            @if ($errors->has('password_confirmation'))
-                                <span class="help-block text-danger">
-                                        <span>{{ $errors->first('password_confirmation') }}</span>
-                                    </span>
-                            @endif
-                        </div>
-
-                        <div class="form-group">
-                            <button class="btn btn-primary submit-btn btn-block">Reset Password</button>
-                        </div>
-
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-
     </div>
 @endsection
