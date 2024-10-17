@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.app')
 
 @push('style')
     <link rel="stylesheet" href="{{ asset('css/override.css') }}" type="text/css">

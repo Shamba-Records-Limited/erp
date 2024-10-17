@@ -219,7 +219,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
     </div>
 </div>
 
-<div class="card span-8">
+<div class="card">
     <div class="card-body">
         <div class="card-title">
             Collections Weight (KGs) By Gender
@@ -282,7 +282,7 @@ let collectionsData = @json($data['collections']);
 let collectionsLabels = collectionsData.map(c => c.x)
 let collectionsValues = collectionsData.map(c => c.y)
 let collectionsBarChartCanvas = document.getElementById("CollectionsBarChart")
-console.log(collectionValues);
+
 let collectionsBarData = {
     labels: collectionsLabels,
     datasets: [{

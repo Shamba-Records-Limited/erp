@@ -1037,7 +1037,7 @@ var SalesChart = (function () {
 
   function init($chart) {
     var CollectionsBarChart = new Chart($chart, {
-      type: 'line',
+      type: 'bar',
       options: {
         scales: {
           yAxes: [

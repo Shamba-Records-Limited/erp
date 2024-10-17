@@ -29,7 +29,8 @@ $cooperative = null;
                             @endif
                         </p>
                         <div class="dropdown" data-display="static">
-                            <a href="#" class="nav-link d-flex user-switch-dropdown-toggler" id="UsersettingsDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                            <a href="#" class="nav-link d-flex user-switch-dropdown-toggler" id="UsersettingsDropdown"
+                                href="#" data-toggle="dropdown" aria-expanded="false">
 
                                 @if($user)
                                 @php
@@ -58,7 +59,8 @@ $cooperative = null;
                                         <div class="py-3 px-4 d-flex align-items-center justify-content-center">
                                             <i class="mdi mdi-bookmark-plus-outline mr-0 text-gray"></i>
                                         </div>
-                                        <div class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right">
+                                        <div
+                                            class="py-3 px-4 d-flex align-items-center justify-content-center border-left border-right">
                                             <i class="mdi mdi-account-outline mr-0 text-gray"></i>
                                         </div>
                                         <div class="py-3 px-4 d-flex align-items-center justify-content-center">
@@ -146,7 +148,9 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {!!  active_class(['admin/products/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#productsManagement" aria-expanded="{!!  is_active_route(['cooperative/products/*'])  !!}" aria-controls="productdManagement">
+            <a class="nav-link" data-toggle="collapse" href="#productsManagement"
+                aria-expanded="{!!  is_active_route(['cooperative/products/*'])  !!}"
+                aria-controls="productdManagement">
                 <i class="menu-icon mdi mdi-flower"></i>
                 <span class="menu-title">Product Management</span>
                 <i class="menu-arrow"></i>
@@ -217,18 +221,24 @@ $cooperative = null;
         @endif
 
         @if($user && $user->hasRole('cooperative admin|employee'))
-        <li class="nav-item {{ active_class(['dashboard']) }}">
+        <!-- <li class="nav-item {{ active_class(['dashboard']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
-        </li>
+        </li> -->
 
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
+                <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
+            </a>
+        </li>
         @php
         $activeArr = ['cooperative-admin/branches*', 'cooperative/hr/branches*'];
         @endphp
         <li class="nav-item {!!  active_class($activeArr) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#wetMillsManagement" aria-expanded="{!!  is_active_route($activeArr)  !!}" aria-controls="wetMillsManagement">
+            <a class="nav-link" data-toggle="collapse" href="#wetMillsManagement"
+                aria-expanded="{!!  is_active_route($activeArr)  !!}" aria-controls="wetMillsManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Wet Mills CRM</span>
                 <i class="menu-arrow"></i>
@@ -237,7 +247,8 @@ $cooperative = null;
             <div class="collapse {{ show_class($activeArr) }}" id="wetMillsManagement">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item {{ active_class(['cooperative-admin/branches-mini-dashboard']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">Dashboard</a>
+                        <a class="nav-link"
+                            href="{{ route('cooperative-admin.branches.mini-dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
                         <a class="nav-link" href="{{ route('hr.branches.show') }}">Wet Mills
@@ -248,35 +259,44 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {!!  active_class(['cooperative-admin/farmers*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#farmerManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/farmers*'])  !!}" aria-controls="farmerManagement">
+            <a class="nav-link" data-toggle="collapse" href="#farmerManagement"
+                aria-expanded="{!!  is_active_route(['cooperative-admin/farmers*'])  !!}"
+                aria-controls="farmerManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Farmer CRM</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse {{ show_class(['cooperative-admin/farmers*']) }}" id="farmerManagement">
                 <ul class="nav flex-column sub-menu">
-                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['dashboard'], config('enums.system_permissions')['view']))
+                    @if(has_right_permission(config('enums.system_modules')['Farmer CRM']['dashboard'],
+                    config('enums.system_permissions')['view']))
                     <li class="nav-item {{ active_class(['cooperative-admin/farmers-mini-dashboard']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">{{config('enums.system_modules')['Farmer CRM']['dashboard']}}</a>
+                        <a class="nav-link"
+                            href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">{{config('enums.system_modules')['Farmer CRM']['dashboard']}}</a>
                     </li>
                     @endif
                     <li class="nav-item {{ active_class(['cooperative-admin/farmers/*']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
+                        <a class="nav-link"
+                            href="{{ route('cooperative-admin.farmers.show') }}">{{config('enums.system_modules')['Farmer CRM']['farmers']}}</a>
                     </li>
                 </ul>
             </div>
         </li>
 
         <li class="nav-item {!!  active_class(['cooperative-admin/collections*', 'cooperative-admin/lots*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#collectionManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/collections*',  'cooperative-admin/lots*'])  !!}" aria-controls="farmerManagement">
+            <a class="nav-link" data-toggle="collapse" href="#collectionManagement"
+                aria-expanded="{!!  is_active_route(['cooperative-admin/collections*',  'cooperative-admin/lots*'])  !!}"
+                aria-controls="farmerManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Collection CRM</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse {{ show_class(['cooperative-admin/collections*', 'cooperative-admin/lots*']) }}" id="collectionManagement">
+            <div class="collapse {{ show_class(['cooperative-admin/collections*', 'cooperative-admin/lots*']) }}"
+                id="collectionManagement">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item {{ active_class(['cooperative-admin/collections-mini-dashboard']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">Dashboard</a>
+                        <a class="nav-link"
+                            href="{{ route('cooperative-admin.collections.mini-dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item {{ active_class(['cooperative-admin/lots*']) }}">
                         <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
@@ -291,7 +311,9 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {!!  active_class(['cooperative-admin/wallet-management/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#walletManagement" aria-expanded="{!!  is_active_route(['cooperative-admin/wallet-management/*'])  !!}" aria-controls="walletManagement">
+            <a class="nav-link" data-toggle="collapse" href="#walletManagement"
+                aria-expanded="{!!  is_active_route(['cooperative-admin/wallet-management/*'])  !!}"
+                aria-controls="walletManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Wallet Management</span>
                 <i class="menu-arrow"></i>
@@ -303,8 +325,10 @@ $cooperative = null;
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
-                    <li class="nav-item {{ active_class(['cooperative-admin/wallet-management/account-receivables']) }}">
-                        <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
+                    <li
+                        class="nav-item {{ active_class(['cooperative-admin/wallet-management/account-receivables']) }}">
+                        <a class="nav-link"
+                            href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
                             <span class="menu-title">Account Receivables</span>
                         </a>
                     </li>
@@ -393,7 +417,8 @@ $cooperative = null;
 
 
 
-        @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'], config('enums.system_permissions')['view']))
+        @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
+        config('enums.system_permissions')['view']))
         <!-- <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
             <a class="nav-link" href="{{ route('hr.employees.show') }}">
                 <i class="menu-icon mdi mdi-television"></i>
@@ -744,7 +769,9 @@ $cooperative = null;
             </a>
         </li>
         <li class="nav-item {!!  active_class(['miller-admin/inventory/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#inventoryManagement" aria-expanded="{!!  is_active_route(['miller-admin/inventory/*'])  !!}" aria-controls="inventoryManagement">
+            <a class="nav-link" data-toggle="collapse" href="#inventoryManagement"
+                aria-expanded="{!!  is_active_route(['miller-admin/inventory/*'])  !!}"
+                aria-controls="inventoryManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Inventory</span>
                 <i class="menu-arrow"></i>
@@ -777,7 +804,9 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {!!  active_class(['miller-admin/inventory-auction*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#inventoryAuction" aria-expanded="{!!  is_active_route(['miller-admin/inventory-auction*'])  !!}" aria-controls="inventoryAuction">
+            <a class="nav-link" data-toggle="collapse" href="#inventoryAuction"
+                aria-expanded="{!!  is_active_route(['miller-admin/inventory-auction*'])  !!}"
+                aria-controls="inventoryAuction">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Inventory Auction</span>
                 <i class="menu-arrow"></i>
@@ -821,7 +850,9 @@ $cooperative = null;
         <!-- todo: separate transactions into account receivable(expected amount to be received) and account payable(expected amount to be paid) -->
         <!-- todo: income and expenses -->
         <li class="nav-item {!!  active_class(['miller-admin/wallet-management/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#walletManagement" aria-expanded="{!!  is_active_route(['miller-admin/wallet-management/*'])  !!}" aria-controls="walletManagement">
+            <a class="nav-link" data-toggle="collapse" href="#walletManagement"
+                aria-expanded="{!!  is_active_route(['miller-admin/wallet-management/*'])  !!}"
+                aria-controls="walletManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
                 <span class="menu-title">Wallet Management</span>
                 <i class="menu-arrow"></i>
@@ -931,7 +962,8 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {!!  active_class(['vet*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#vetSchedule" aria-expanded="{!!  is_active_route(['vet*'])  !!}" aria-controls="vetSchedule">
+            <a class="nav-link" data-toggle="collapse" href="#vetSchedule"
+                aria-expanded="{!!  is_active_route(['vet*'])  !!}" aria-controls="vetSchedule">
                 <i class="menu-icon mdi mdi-calendar"></i>
                 <span class="menu-title">My Schedule</span>
                 <i class="menu-arrow"></i>
@@ -949,7 +981,8 @@ $cooperative = null;
 
         @if(env('APP_ENV') == 'localx' || env('APP_ENV') == 'development')
         <li class="nav-item {!!  active_class(['basic-ui/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#basic-ui" aria-expanded="{!!  is_active_route(['basic-ui/*'])  !!}" aria-controls="basic-ui">
+            <a class="nav-link" data-toggle="collapse" href="#basic-ui"
+                aria-expanded="{!!  is_active_route(['basic-ui/*'])  !!}" aria-controls="basic-ui">
                 <i class="menu-icon mdi mdi-dna"></i>
                 <span class="menu-title">Basic UI Elements</span>
                 <i class="menu-arrow"></i>
@@ -988,7 +1021,8 @@ $cooperative = null;
             </a>
         </li>
         <li class="nav-item {{ active_class(['user-pages/*']) }}">
-            <a class="nav-link" data-toggle="collapse" href="#user-pages" aria-expanded="{{ is_active_route(['user-pages/*']) }}" aria-controls="user-pages">
+            <a class="nav-link" data-toggle="collapse" href="#user-pages"
+                aria-expanded="{{ is_active_route(['user-pages/*']) }}" aria-controls="user-pages">
                 <i class="menu-icon mdi mdi-lock-outline"></i>
                 <span class="menu-title">User Pages</span>
                 <i class="menu-arrow"></i>
@@ -1009,7 +1043,9 @@ $cooperative = null;
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="https://www.bootstrapdash.com/demo/star-laravel-free/documentation/documentation.html" target="_blank">
+            <a class="nav-link"
+                href="https://www.bootstrapdash.com/demo/star-laravel-free/documentation/documentation.html"
+                target="_blank">
                 <i class="menu-icon mdi mdi-file-outline"></i>
                 <span class="menu-title">Documentation</span>
             </a>
