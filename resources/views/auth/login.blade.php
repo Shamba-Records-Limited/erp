@@ -32,24 +32,24 @@
                             @csrf
 
                             <div class="form-group{{ $errors->has('username') || $errors->has('email') ? ' has-danger' : '' }} mb-3">
-    <div class="input-group input-group-alternative">
-        <div class="input-group-prepend">
-            <span class="input-group-text"><i class="ni ni-email-83"></i></span>
-        </div>
-        <input class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}" 
-               placeholder="{{ __('Username or Email') }}" 
-               type="text" 
-               name="login" 
-               value="{{ old('username') ?: old('email') }}" 
-               required 
-               autofocus>
-    </div>
-    @if ($errors->has('username') || $errors->has('email'))
-        <span class="invalid-feedback" style="display: block;" role="alert">
-            <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
-        </span>
-    @endif
-</div>
+                                <div class="input-group input-group-alternative">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                                    </div>
+                                    <input class="form-control{{ $errors->has('username') || $errors->has('email') ? ' is-invalid' : '' }}" 
+                                        placeholder="{{ __('Username or Email') }}" 
+                                        type="text" 
+                                        name="login" 
+                                        value="{{ old('username') ?: old('email') }}" 
+                                        required 
+                                        autofocus>
+                                </div>
+                                @if ($errors->has('username') || $errors->has('email'))
+                                    <span class="invalid-feedback" style="display: block;" role="alert">
+                                        <strong>{{ $errors->first('username') ?: $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
 
                             <div class="form-group{{ $errors->has('password') ? ' has-danger' : '' }}">
                                 <div class="input-group input-group-alternative">
