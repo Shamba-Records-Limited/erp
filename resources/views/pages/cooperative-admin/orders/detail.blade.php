@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="form-group col-lg-4 col-md-4 col-12">
                                     <label for="quantity">Quantity</label>
-                                    <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}">
+                                    <input type="number" step="0.01" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}">
 
                                     @if ($errors->has('quantity'))
                                     <span class="help-block text-danger">
@@ -112,7 +112,10 @@
 @endsection
 
 @section('content')
-
+@php
+$orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+$statusClass = $deliveredQuantity == 0 ? 'danger' : ($undeliveredQuantity > 0 ? 'warning' : 'success');
+@endphp
 
 <div class="card">
     <div class="card-body">
@@ -180,7 +183,9 @@
         </div>
         @elseif ($tab == 'deliveries')
         <div class="d-flex justify-content-end p-2">
+            @if($orderStatus == 'Pending')
             <a href="?tab=deliveries&action=add_delivery" class="btn btn-primary">Add Delivery</a>
+            @endif
         </div>
         <div class="table-responsive p-2">
             <table class="table table-hover dt clickable">
