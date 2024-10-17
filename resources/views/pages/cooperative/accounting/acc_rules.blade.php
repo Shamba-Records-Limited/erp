@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.app')
 
 @section('content')
     @if(has_right_permission(config('enums.system_modules')['Accounting']['accounting_rules'], config('enums.system_permissions')['create']))

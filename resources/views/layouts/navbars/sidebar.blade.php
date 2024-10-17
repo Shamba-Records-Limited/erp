@@ -6,7 +6,7 @@
         </button>
         <!-- Brand -->
         <a class="navbar-brand pt-0" href="{{ route('home') }}">
-            <img src="{{ asset('argon') }}/img/brand/blue.png" class="navbar-brand-img" alt="...">
+            <img src="{{ asset('argon') }}/img/brand/coffee.png" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
         <ul class="nav align-items-center d-md-none">
@@ -78,30 +78,30 @@
             </form>
             <!-- Navigation -->
             <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Warehouse') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Marketplace') }}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
-                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Orders') }}
-                    </a>
-                </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('home') }}">
+                    <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Dashboard') }}
+                </a>
+            </li>
+            <li class="nav-item {{ active_class(['miller-admin/warehouses*']) }}">
+                <a class="nav-link" href="{{ route('miller-admin.warehouses.show') }}">
+                    <i class="ni ni-building text-green"></i> {{ __('Warehouse') }}
+                </a>
+            </li>
+            <li class="nav-item {{ active_class(['miller-admin.market-auction*']) }}">
+                <a class="nav-link" href="{{ route('miller-admin.market-auction.show') }}">
+                    <i class="ni ni-basket text-green"></i> {{ __('Marketplace') }}
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('home') }}">
+                    <i class="ni ni-delivery-fast text-green"></i> {{ __('Orders') }}
+                </a>
+            </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Iventory') }}</span>
+                        <i class="fab fa-laravel" style="color: #8a8a8a;"></i>
+                        <span class="nav-link-text" style="color: #8a8a8a;">{{ __('Iventory') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
@@ -131,8 +131,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Iventory Auction') }}</span>
+                        <i class="fab fa-laravel" style="color: #8a8a8a;"></i>
+                        <span class="nav-link-text" style="color: #8a8a8a;">{{ __('Iventory Auction') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
@@ -167,8 +167,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button" aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
+                        <i class="fab fa-laravel" style="color: #8a8a8a;"></i>
+                        <span class="nav-link-text" style="color: #8a8a8a;">{{ __('Wallet Management') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
@@ -214,37 +214,38 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <i class="ni ni-planet text-blue"></i> {{ __('Icons') }}
+                        <i class="ni ni-credit-card text-green"></i> {{ __('Transactions Report') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <i class="ni ni-pin-3 text-orange"></i> {{ __('Maps') }}
+                        <i class="ni ni-support-16 text-green"></i> {{ __('Support') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <i class="ni ni-key-25 text-info"></i> {{ __('Login') }}
+                        <i class="ni ni-chat-round text-green"></i> {{ __('Chat') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">
-                        <i class="ni ni-circle-08 text-pink"></i> {{ __('Register') }}
+                        <i class="ni ni-map-big text-green"></i> {{ __('Tracking Tree') }}
                     </a>
                 </li>
+
             </ul>
             <!-- Divider -->
             <!-- <hr class="my-3"> -->
             <!-- Heading -->
             <!-- <h6 class="navbar-heading text-muted">Documentation</h6> -->
             <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
+            <!-- <ul class="navbar-nav mb-md-3"> -->
                 <!-- <li class="nav-item">
                     <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
                         <i class="ni ni-spaceship"></i> Getting started
                     </a>
                 </li> -->
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
                         <i class="ni ni-palette"></i> Foundation
                     </a>
@@ -253,8 +254,8 @@
                     <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
                         <i class="ni ni-ui-04"></i> Components
                     </a>
-                </li>
-            </ul>
+                </li> -->
+            <!-- </ul> -->
         </div>
     </div>
 </nav>

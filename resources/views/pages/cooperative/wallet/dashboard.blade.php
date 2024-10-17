@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.app')
 
 @push('plugin-styles')
     {{--    <link rel="stylesheet" href="{{ asset('/assets/plugins/plugin.css') }}" type="text/css">--}}

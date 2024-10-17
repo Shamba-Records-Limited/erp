@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layouts.app')
 
 @push('plugin-styles')
   {!! Html::style('/assets/plugins/dragula/dragula.min.css') !!}

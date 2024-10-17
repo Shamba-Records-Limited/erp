@@ -1,5 +1,5 @@
 @php $user = \Illuminate\Support\Facades\Auth::user(); @endphp
-@extends('layout.master')
+@extends('layouts.app')
 
 @section('content')
 

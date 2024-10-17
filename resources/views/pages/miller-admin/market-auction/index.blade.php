@@ -1,10 +1,13 @@
-@extends('layout.master')
+@extends('layouts.app')
 
 @push('plugin-styles')
 
 @endpush
 
 @section('content')
+<br>
+<br>
+<br>
 <div class="card">
     <div class="card-body">
         <div class="card-title">Market Auction</div>
