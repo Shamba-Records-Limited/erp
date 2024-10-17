@@ -221,18 +221,14 @@ $cooperative = null;
         @endif
 
         @if($user && $user->hasRole('cooperative admin|employee'))
-        <!-- <li class="nav-item {{ active_class(['dashboard']) }}">
+        <li class="nav-item {{ active_class(['dashboard']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
-        </li> -->
-
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
-                <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
-            </a>
         </li>
+
+
         @php
         $activeArr = ['cooperative-admin/branches*', 'cooperative/hr/branches*'];
         @endphp
@@ -402,7 +398,7 @@ $cooperative = null;
         </li>
 
         <li class="nav-item {{ active_class(['cooperative-admin/support*']) }}">
-            <a class="nav-link" href="{{ route('cooperative-admin.support.show') }}">
+            <a class="nav-link" href=" ">
                 <i class="menu-icon mdi mdi-help-circle-outline"></i>
                 <span class="menu-title">Support</span>
             </a>

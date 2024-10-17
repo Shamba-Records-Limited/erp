@@ -86,7 +86,7 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
+                    <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
                         <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
                     </a>
                 </li>
@@ -94,19 +94,18 @@
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
                         <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Laravel Examples') }}</span>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit') }}">
-                                    {{ __('User profile') }}
+                                <a class="nav-link" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
+                                    {{ __('Dashboard') }}
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user.index') }}">
-                                    {{ __('User Management') }}
+                                <a class="nav-link" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}
                                 </a>
                             </li>
                         </ul>
@@ -114,6 +113,153 @@
                 </li>
 
                 <li class="nav-item">
+                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="navbar-examples">
+                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Farmer CRM') }}</span>
+                    </a>
+
+                    <div class="collapse show" id="navbar-examples">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
+                                    {{ __('Farmers') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="navbar-examples">
+                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
+                    </a>
+
+                    <div class="collapse show" id="navbar-examples">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}"> {{ __('Lots') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}}">
+                                    {{ __('Collections') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
+                        aria-expanded="true" aria-controls="navbar-examples">
+                        <i class="fab fa-laravel" style="color: #f4645f;"></i>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
+                    </a>
+
+                    <div class="collapse show" id="navbar-examples">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
+                                    {{ __('Account Receivables') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
+                                    {{ __('Account Payables') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
+                                    {{ __('Account Payables') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.income') }}">
+                                    {{ __('Income') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.expenses') }}">
+                                    {{ __('Expenses') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.deposits') }}">
+                                    {{ __('Deposits') }}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
+                                    {{ __('Withdrawals') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Products') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Transactions Reports') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Orders') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Settings') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('cooperative-admin.support.show') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Support') }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('chat.index') }}">
+                        <i class="ni ni-tv-2 text-primary"></i> {{ __('Chat') }}
+                    </a>
+                </li>
+
+
+
+
+
+
+
+
+
+
+
+
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">
                         <i class="ni ni-planet text-blue"></i> {{ __('Icons') }}
                     </a>
@@ -139,32 +285,32 @@
                         <i class="ni ni-cloud-download-95"></i> Upgrade to PRO
                     </a>
                 </li>
-            </ul>
-            <!-- Divider -->
-            <hr class="my-3">
-            <!-- Heading -->
-            <h6 class="navbar-heading text-muted">Documentation</h6>
-            <!-- Navigation -->
-            <ul class="navbar-nav mb-md-3">
-                <li class="nav-item">
-                    <a class="nav-link"
-                        href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
-                        <i class="ni ni-spaceship"></i> Getting started
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"
-                        href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
-                        <i class="ni ni-palette"></i> Foundation
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link"
-                        href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
-                        <i class="ni ni-ui-04"></i> Components
-                    </a>
-                </li>
-            </ul>
+            </ul> -->
+                <!-- Divider -->
+                <!-- <hr class="my-3"> -->
+                <!-- Heading -->
+                <!-- <h6 class="navbar-heading text-muted">Documentation</h6> -->
+                <!-- Navigation -->
+                <!-- <ul class="navbar-nav mb-md-3">
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
+                            <i class="ni ni-spaceship"></i> Getting started
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
+                            <i class="ni ni-palette"></i> Foundation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                            href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
+                            <i class="ni ni-ui-04"></i> Components
+                        </a>
+                    </li>
+                </ul> -->
         </div>
     </div>
 </nav>
