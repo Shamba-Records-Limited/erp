@@ -120,7 +120,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
     </div>
 
-    <div class="card mt-5" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+    <div class="card mt-3" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         <div class="card-body">
             <div class="card-title"></div>
             <h2 class="mb-4">Gender Distribution</h2>
@@ -151,7 +151,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 
 
 
-    <div class="row mt-5">
+    <div class="row mt-3">
         <div class="col-xl-4">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
