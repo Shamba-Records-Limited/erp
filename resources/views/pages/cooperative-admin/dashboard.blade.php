@@ -257,14 +257,14 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
             <div class="row align-items-center">
                 <div class="col">
                     <h6 class="text-uppercase text-muted ls-1 mb-1">Grade Distribution KGs</h6>
-                    <h2 class="mb-0">Total orders</h2>
+                    <h2 class="mb-0">Grade Distribution</h2>
                 </div>
             </div>
         </div>
         <div class="card-body">
             <!-- Chart -->
             <div class="chart">
-                <canvas id="Chart-orders" class="chart-canvas"></canvas>
+                <canvas id="GradeDistributionBarChart" class="chart-canvas"></canvas>
             </div>
         </div>
     </div>

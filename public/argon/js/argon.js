@@ -948,8 +948,8 @@ var OrdersChart = (function () {
   // Variables
   //
 
-  var $chart = $('#chart-orders');
-  var $ordersSelect = $('[name="ordersSelect"]');
+  var $chart = $('#GradeDistributionBarChart');
+  var $GradeDistributionBarChart = $('[name="ordersSelect"]');
 
   //
   // Methods
@@ -958,7 +958,7 @@ var OrdersChart = (function () {
   // Init chart
   function initChart($chart) {
     // Create chart
-    var ordersChart = new Chart($chart, {
+    var GradeDistributionBarChart = new Chart($chart, {
       type: 'bar',
       options: {
         scales: {
@@ -1009,7 +1009,7 @@ var OrdersChart = (function () {
     });
 
     // Save to jQuery object
-    $chart.data('chart', ordersChart);
+    $chart.data('chart', GradeDistributionBarChart);
   }
 
   // Init chart
