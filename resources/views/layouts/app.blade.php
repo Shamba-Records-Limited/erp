@@ -8,9 +8,9 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Argon Dashboard') }}</title>
+    <title>{{ env('APP_NAME') }}</title>
     <!-- Favicon -->
-    <link href="{{ asset('argon') }}/img/brand/favicon.png" rel="icon" type="image/png">
+    <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}">
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <!-- Icons -->
@@ -29,8 +29,9 @@
     @endauth
 
     <div class="main-content">
-        @include('layouts.navbars.navbar')
         @yield('topItem')
+
+        @include('layouts.navbars.navbar')
         @include('layout.export-dialog')
 
         <div class="content-wrapper">
@@ -38,11 +39,15 @@
 
             </div>
             @yield('content')
+            @include('layouts.footers.nav')
         </div>
+        @if(isset($collections_chart))
+        {!! $collections_chart->script() !!}
+        @endif
+        @if(isset($gender_chart))
+        {!! $gender_chart->script() !!}
+        @endif
 
-        @guest()
-        @include('layouts.footers.guest')
-        @endguest
 
         <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
         <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

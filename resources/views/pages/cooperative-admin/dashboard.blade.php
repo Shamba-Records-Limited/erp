@@ -439,10 +439,11 @@ let gradeDistributionBarData = {
     datasets: [{
         data: gradeDistributionValues,
         backgroundColor: [
-            'rgba(65, 47, 38, 1)',
-            'rgba(165, 113, 80, 1)',
-            'rgba(184, 134, 11, 1)',
-            'rgba(245, 245, 220, 1)',
+            '#FB6340'
+            // 'rgba(65, 47, 38, 1)',
+            // 'rgba(165, 113, 80, 1)',
+            // 'rgba(184, 134, 11, 1)',
+            // 'rgba(245, 245, 220, 1)',
         ]
     }],
     labels: gradeDistributionLabels
