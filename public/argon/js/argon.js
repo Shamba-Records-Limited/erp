@@ -943,80 +943,70 @@ var Charts = (function () {
 // Orders chart
 //
 
-var OrdersChart = (function () {
-  //
-  // Variables
-  //
+// var OrdersChart = (function () {
 
-  var $chart = $('#GradeDistributionBarChart');
-  var $GradeDistributionBarChart = $('[name="ordersSelect"]');
 
-  //
-  // Methods
-  //
+//   var $chart = $('#GradeDistributionBarChart');
+//   var $GradeDistributionBarChart = $('[name="ordersSelect"]');
 
-  // Init chart
-  function initChart($chart) {
-    // Create chart
-    var GradeDistributionBarChart = new Chart($chart, {
-      type: 'bar',
-      options: {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                callback: function (value) {
-                  if (!(value % 10)) {
-                    //return '$' + value + 'k'
-                    return value;
-                  }
-                },
-              },
-            },
-          ],
-        },
-        tooltips: {
-          callbacks: {
-            label: function (item, data) {
-              var label = data.datasets[item.datasetIndex].label || '';
-              var yLabel = item.yLabel;
-              var content = '';
 
-              if (data.datasets.length > 1) {
-                content +=
-                  '<span class="popover-body-label mr-auto">' +
-                  label +
-                  '</span>';
-              }
+//   function initChart($chart) {
+//     var GradeDistributionBarChart = new Chart($chart, {
+//       type: 'bar',
+//       options: {
+//         scales: {
+//           yAxes: [
+//             {
+//               ticks: {
+//                 callback: function (value) {
+//                   if (!(value % 10)) {
+//                     return value;
+//                   }
+//                 },
+//               },
+//             },
+//           ],
+//         },
+//         tooltips: {
+//           callbacks: {
+//             label: function (item, data) {
+//               var label = data.datasets[item.datasetIndex].label || '';
+//               var yLabel = item.yLabel;
+//               var content = '';
 
-              content +=
-                '<span class="popover-body-value">' + yLabel + '</span>';
+//               if (data.datasets.length > 1) {
+//                 content +=
+//                   '<span class="popover-body-label mr-auto">' +
+//                   label +
+//                   '</span>';
+//               }
 
-              return content;
-            },
-          },
-        },
-      },
-      data: {
-        labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-          {
-            label: 'Sales',
-            data: [25, 20, 30, 22, 17, 29],
-          },
-        ],
-      },
-    });
+//               content +=
+//                 '<span class="popover-body-value">' + yLabel + '</span>';
 
-    // Save to jQuery object
-    $chart.data('chart', GradeDistributionBarChart);
-  }
+//               return content;
+//             },
+//           },
+//         },
+//       },
+//       data: {
+//         labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//         datasets: [
+//           {
+//             label: 'Sales',
+//             data: [25, 20, 30, 22, 17, 29],
+//           },
+//         ],
+//       },
+//     });
 
-  // Init chart
-  if ($chart.length) {
-    initChart($chart);
-  }
-})();
+//     $chart.data('chart', GradeDistributionBarChart);
+//   }
+
+//   if ($chart.length) {
+//     initChart($chart);
+//   }
+// })();
 
 //
 // Charts
@@ -1028,74 +1018,71 @@ var OrdersChart = (function () {
 // Sales chart
 //
 
-var SalesChart = (function () {
-  // Variables
+// var SalesChart = (function () {
 
-  var $chart = $('#CollectionsBarChart');
+//   var $chart = $('#CollectionsBarChart');
 
-  // Methods
 
-  function init($chart) {
-    var CollectionsBarChart = new Chart($chart, {
-      type: 'bar',
-      options: {
-        scales: {
-          yAxes: [
-            {
-              gridLines: {
-                color: Charts.colors.gray[900],
-                zeroLineColor: Charts.colors.gray[900],
-              },
-              ticks: {
-                callback: function (value) {
-                  if (!(value % 10)) {
-                    return '$' + value + 'k';
-                  }
-                },
-              },
-            },
-          ],
-        },
-        tooltips: {
-          callbacks: {
-            label: function (item, data) {
-              var label = data.datasets[item.datasetIndex].label || '';
-              var yLabel = item.yLabel;
-              var content = '';
+//   function init($chart) {
+//     var CollectionsBarChart = new Chart($chart, {
+//       type: 'line',
+//       options: {
+//         scales: {
+//           yAxes: [
+//             {
+//               gridLines: {
+//                 color: Charts.colors.gray[900],
+//                 zeroLineColor: Charts.colors.gray[900],
+//               },
+//               ticks: {
+//                 callback: function (value) {
+//                   if (!(value % 10)) {
+//                     return '$' + value + 'k';
+//                   }
+//                 },
+//               },
+//             },
+//           ],
+//         },
+//         tooltips: {
+//           callbacks: {
+//             label: function (item, data) {
+//               var label = data.datasets[item.datasetIndex].label || '';
+//               var yLabel = item.yLabel;
+//               var content = '';
 
-              if (data.datasets.length > 1) {
-                content +=
-                  '<span class="popover-body-label mr-auto">' +
-                  label +
-                  '</span>';
-              }
+//               if (data.datasets.length > 1) {
+//                 content +=
+//                   '<span class="popover-body-label mr-auto">' +
+//                   label +
+//                   '</span>';
+//               }
 
-              content +=
-                '<span class="popover-body-value">$' + yLabel + 'k</span>';
-              return content;
-            },
-          },
-        },
-      },
-      data: {
-        labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-        datasets: [
-          {
-            label: 'Weight in Kgs',
-            data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
-          },
-        ],
-      },
-    });
+//               content +=
+//                 '<span class="popover-body-value">$' + yLabel + 'k</span>';
+//               return content;
+//             },
+//           },
+//         },
+//       },
+//       data: {
+//         labels: ['May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//         datasets: [
+//           {
+//             label: 'Weight in Kgs',
+//             data: [0, 20, 10, 30, 15, 40, 20, 60, 60],
+//           },
+//         ],
+//       },
+//     });
 
-    // Save to jQuery object
 
-    $chart.data('chart', CollectionsBarChart);
-  }
+//     $chart.data('chart', CollectionsBarChart);
+//   }
 
-  // Events
 
-  if ($chart.length) {
-    init($chart);
-  }
-})();
+//   if ($chart.length) {
+//     init($chart);
+//   }
+// }
+
