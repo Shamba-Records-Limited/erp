@@ -101,6 +101,9 @@ Route::get('/common/product/{product_id}/unit', 'Common\CommonController@product
 
 Route::middleware('auth')->group(function () {
     Route::get("/wallet-details", 'Common\CommonController@wallet_details')->name('wallet.details');
+
+    Route::get("/notifications_summary", 'Common\CommonController@notifications_summary')->name('notifications.summary');
+    Route::get("/read_and_view_notification/{id}", "Common\CommonController@read_and_view_notification")->name('notifications.read_n_view');
 });
 
 // superadmin routes

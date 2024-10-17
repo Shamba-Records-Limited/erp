@@ -337,6 +337,37 @@
       }
     })
 
+    // load notifications summary
+    $.ajax({
+      url: '{{route("notifications.summary")}}',
+      method: 'get',
+      success:function(resp) {
+        let topUnreadNotifications = resp.topUnreadNotifications;
+        let unreadNotificationsCount = resp.unreadNotificationsCount;
+
+        // clear notification indicator and list
+        $(".notifications-menu-icon").removeClass("text-danger");
+        $(".notification-indicator").remove();
+        $(".notification-list .notification-item").remove();
+
+        if (topUnreadNotifications.length > 0) {
+          let notificationIndicatorElem = `<span class="notification-indicator badge badge-danger">${unreadNotificationsCount}</span>`;
+          $(".notifications-menu-icon").after(notificationIndicatorElem);
+          $(".notifications-menu-icon").addClass("text-danger");
+
+          for(let unreadNotification of topUnreadNotifications) {
+            let unreadNotificationElem = `<a href="/read_and_view_notification/${unreadNotification.id}" class="dropdown-item" style="flex-wrap:wrap;">`
+            unreadNotificationElem += `<div class="font-weight-bold">${unreadNotification.title}</div>`
+            unreadNotificationElem += `<div style="height: 0; flex-basis: 100%;"></div>` // break
+            unreadNotificationElem += `<div class="small text-muted">${unreadNotification.body}</div>`
+            unreadNotificationElem += '</a>'
+
+            $(".notification-list").append(unreadNotificationElem);
+          }
+        }
+      }
+    });
+
     function printContent(content) {
       var originalContent = document.body.innerHTML;
 

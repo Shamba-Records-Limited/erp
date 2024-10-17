@@ -25,6 +25,7 @@ use App\CooperativeWallet;
 use App\Exports\GeneratableExport;
 use App\Location;
 use App\NewInvoice;
+use App\Notification;
 use App\Receipt;
 use App\ReceiptItem;
 use App\Transaction;
@@ -1712,4 +1713,22 @@ if (!function_exists('perform_transaction')) {
             }
         }
     }
+
+    // create notification
+    // create a new notification
+    if (!function_exists("create_notification")){
+        function create_notification($user_id, $title, $body, $subject_type, $subject_id){
+            $notification = new Notification();
+            $notification->user_id = $user_id;
+            $notification->title = $title;
+            $notification->body = $body;
+            $notification->subject_type = $subject_type;
+            $notification->subject_id = $subject_id;
+            $notification->save();
+
+            return $notification->id;
+        }
+    }
+
 }
+

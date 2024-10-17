@@ -6,9 +6,11 @@ use App\Account;
 use App\Collection;
 use App\Http\Controllers\Controller;
 use App\NewInvoice;
+use App\Notification;
 use App\Quotation;
 use App\Receipt;
 use App\Transaction;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Log;
@@ -153,6 +155,49 @@ class CommonController extends Controller
         $receipt = Receipt::find($id);
 
         return view('pages.common.print_receipt', compact('receipt'));
+    }
+
+    public function notifications_summary(Request $request) {
+        $user = Auth::user();
+
+        $topUnreadNotifications = DB::select(DB::raw("SELECT n.* FROM notifications n
+            WHERE n.user_id = :user_id AND
+            n.status = 'UNREAD'
+            ORDER BY n.created_at DESC
+            LIMIT 5"), ['user_id' => $user->id]);
+
+        $unreadNotificationsCount = DB::select(DB::raw("SELECT COUNT(*) AS count FROM notifications n
+            WHERE n.user_id = :user_id AND
+            n.status = 'UNREAD'
+            "), ['user_id' => $user->id]);
+
+        $count = $unreadNotificationsCount[0]->count;
+
+        return response()->json([
+            'topUnreadNotifications' => $topUnreadNotifications,
+            'unreadNotificationsCount' => $count
+        ]);
+    }
+
+    public function read_and_view_notification(Request $request, $id){
+        $user = Auth::user();
+
+        $notification = Notification::findOrFail($id);
+        if ($notification->user_id != $user->id) {
+            toastr()->error("You are not authorized to view this notification");
+            return redirect()->back();
+        }
+
+        $notification->status = 'READ';
+        $notification->save();
+
+        if ($user->hasRole('miller admin') && $notification->subject_type == 'miller_auction_order') {
+            return redirect()->route('miller-admin.orders.detail', $notification->subject_id);
+        } else if ($user->hasRole('cooperative admin') && $notification->subject_type == 'miller_auction_order') {
+            return redirect()->route('cooperative-admin.orders.detail', $notification->subject_id);
+        }
+
+        return redirect()->back();
     }
 
 }
