@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @push('plugin-styles')
 
 @endpush
@@ -19,14 +18,16 @@
 @php
 $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other;
 @endphp
+
 @include('layouts.headers.cards')
+@include('layout.export-dialog')
 
 <div class="container-fluid mt--7">
 
     <div class="d-flex justify-content-between w-100">
 
         <div>Dashboard</div>
-        <div class="d-flex align-items-start">
+        <div class=" d-flex align-items-start">
             <form class="d-flex">
                 <div class="form-group">
                     <select name="date_range" placeholder="Select Date Range" class="form-control select2bs4"

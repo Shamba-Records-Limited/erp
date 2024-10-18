@@ -18,6 +18,45 @@
     <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+    <!-- htmx -->
+    <style>
+    .skeleton {
+
+        background-color: #e0e0e0;
+        background-image: linear-gradient(90deg, #e0e0e0, #f0f0f0, #e0e0e0);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: 4px;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    #filter-container.hidden {
+        display: none;
+        opacity: 0;
+        transition: all 0.5s ease-in-out;
+    }
+
+    #filter-container.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .filter-display {
+        gap: 5px;
+    }
+    </style>
+    <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+    @stack('style')
+
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -28,19 +67,20 @@
     @include('layouts.navbars.sidebar')
     @endauth
 
-    <div class="main-content">
+    <div class="main-content ">
         @yield('topItem')
-
-        @include('layouts.navbars.navbar')
+        <div class="mt-10">
+            @include('layouts.navbars.navbar')
+        </div>
         @include('layout.export-dialog')
-
-        <div class="content-wrapper">
-            <div class="d-flex" id='wallet_cont'>
+        <div class="content-wrapper ">
+            <div class="d-flex mt-10 " id="wallet_cont">
 
             </div>
             @yield('content')
             @include('layouts.footers.nav')
         </div>
+
         @if(isset($collections_chart))
         {!! $collections_chart->script() !!}
         @endif
@@ -49,7 +89,8 @@
         @endif
 
 
-        <script src="{{ asset('argon') }}/vendor/jquery/dist/jquery.min.js"></script>
+        <script src=" {{ asset('argon') }}/vendor/jquery/dist/jquery.min.js">
+        </script>
         <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
         @stack('js')
@@ -60,7 +101,8 @@
         <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
         <script>
         document.body.addEventListener('htmx:configRequest', (event) => {
-            event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]').content;
+            event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]')
+                .content;
         });
 
         $('.dt').DataTable({
@@ -255,7 +297,8 @@
                         elem += `<span class="border p-1">Wallet</span>`
                         elem +=
                             ` Acc No: <span class="font-weight-bold text-primary">${w.acc_number}</span>&nbsp`
-                        elem += ` Bal: <span class="font-weight-bold text-primary">KES ${balance}</span>`
+                        elem +=
+                            ` Bal: <span class="font-weight-bold text-primary">KES ${balance}</span>`
                         elem += `</div>`
                         $("#wallet_cont").append(elem)
                     }
