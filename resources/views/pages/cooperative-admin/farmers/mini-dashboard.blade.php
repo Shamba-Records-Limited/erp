@@ -2,23 +2,37 @@
 
 @push('plugin-styles')
 @endpush
+@push('js')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js">
+</script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+@endpush
+@push('chartjs')
+@endpush
 
 @section('content')
 @php
 $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other
 @endphp
 <div>
-    <h2 class=" semi-bold">Mini Dashboard</h2>
+    <h2>Mini Dashboard</h2>
 </div>
 <div class="row">
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collections Weight (KGs) By Gender
+    <div class="col-xl-4">
+        <div class="card shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="text-uppercase text-muted ls-1 mb-1"> Collections Weight (KGs) By Gender
+                        </h6>
+                        <h2 class=" mb-0">Collection By Gender</h2>
+                    </div>
                 </div>
-                <div>
-                    <canvas id="CollectionsGenderBarChart" class="mb-4 mb-md-0" height="250"></canvas>
+            </div>
+            <div class="card-body">
+                <!-- Chart -->
+                <div class="chart">
+                    <canvas id="CollectionsGenderBarChart" class="chart-canvas"></canvas>
                 </div>
             </div>
         </div>
@@ -110,7 +124,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 @endsection
 
 @push('plugin-scripts')
-<script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
+<!-- <script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script> -->
 @endpush
 
 @push('custom-scripts')
@@ -160,12 +174,12 @@ let genderChart = new Chart(farmersGenderdoughnutChartCanvas, {
     options: genderPieOptions
 });
 
-// collections gender
+// Collections gender chart data
 let maleCollectionsData = @json($data['male_collections']);
 let maleCollectionValues = maleCollectionsData.map(c => c.y);
 
-let collectionsGenderLabels = maleCollectionsData.map(c => c.x)
-let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart")
+let collectionsGenderLabels = maleCollectionsData.map(c => c.x);
+let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart");
 
 let femaleCollectionsData = @json($data['female_collections']);
 let femaleCollectionValues = femaleCollectionsData.map(c => c.y);
@@ -175,39 +189,87 @@ let collectionsGenderBarData = {
     datasets: [{
         label: 'Male',
         data: maleCollectionValues,
-        borderColor: 'rgba(54, 162, 235, 1)',
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(54, 162, 235, 1)', //male
+        backgroundColor: 'rgba(54, 162, 235, 1)', //male
+        tension: 0.4,
+        fill: true,
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: '#F4D8F0',
+        backgroundColor: '#F4D8F0',
+        tension: 0.4,
+        fill: true,
     }],
-    // labels: ["Male", "Female", "Other"]
 };
+
 let collectionsGenderBarOptions = {
-    animationEasing: "easeOutBounce",
-    animateScale: true,
-    responsive: true,
+    scales: {
+        yAxes: [{
+            gridLines: {
+                color: 'rgb(251,99,64)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
+            ticks: {
+                callback: function(value) {
+                    if (value % 10 === 0) {
+                        return value + ' KGs'; // y-axis tick label
+                    }
+                },
+                beginAtZero: true,
+            },
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
+    tooltips: {
+        callbacks: {
+            label: function(item, data) {
+                var label = data.datasets[item.datasetIndex].label || '';
+                var yLabel = item.yLabel;
+                var content = '';
+
+                if (data.datasets.length > 1) {
+                    content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                }
+
+                content += '<span class="popover-body-value">' + yLabel + ' KGs</span>';
+                return content;
+            },
+        },
+        mode: 'index',
+        intersect: true,
+    },
     maintainAspectRatio: false,
-    showScale: true,
     legend: {
-        display: true
+        display: true,
+        position: 'top',
+        labels: {
+            boxWidth: 10,
+            padding: 15,
+        },
     },
     layout: {
         padding: {
             left: 0,
             right: 0,
             top: 0,
-            bottom: 0
-        }
-    }
-    // y axis is KGs
+            bottom: 0,
+        },
+    },
+    animation: {
+        easing: 'easeOutBounce',
+        duration: 1000,
+    },
 };
+
 let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, {
-    type: "line",
+    type: 'bar',
     data: collectionsGenderBarData,
-    options: collectionsGenderBarOptions
+    options: collectionsGenderBarOptions,
 });
 
 // age gender

@@ -94,11 +94,28 @@
         <script src="{{ asset('argon') }}/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
         @stack('js')
+        <!-- common js -->
+        <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
+        <script src="{{asset('assets/js/hoverable-collapse.js') }}"></script>
+        <script src="{{ asset('assets/js/misc.js') }}"></script>
+        <script src="{{ asset('assets/js/settings.js') }}"></script>
+        <script src="{{ asset('assets/js/todolist.js') }}"></script>
+        <!-- erp filter -->
+        <script src="{{ asset('assets/js/erp-filter.js') }}"></script>
+        <!-- Datatables -->
+        <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.js') }}"></script>
+        <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+        <!-- Select 2 -->
+        <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
+        <!-- Summernote -->
+        <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
+        <!--file input-->
+        <script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+        <!-- end common js -->
         {{--date range picker--}}
         <script src="{{ asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
-        <!-- Argon JS -->
-        <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
+
         <script>
         document.body.addEventListener('htmx:configRequest', (event) => {
             event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]')

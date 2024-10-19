@@ -90,6 +90,8 @@ if ($('canvas').length) {
     tooltipEl.style.fontStyle = tooltipModel._bodyFontStyle;
     tooltipEl.style.padding = tooltipModel.yPadding + 'px ' + tooltipModel.xPadding + 'px';
     tooltipEl.style.pointerEvents = 'none';
+    tooltipEl.style.backgroundColor = '#F3E2F4';
+
   }
   Chart.defaults.global.legend.labels.fontStyle = "italic";
   Chart.defaults.global.tooltips.intersect = false;
