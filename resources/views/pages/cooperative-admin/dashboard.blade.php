@@ -100,14 +100,45 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 </div>
             </div>
         </div>
+        <div class="card mt-3" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+            <div class="card-body">
+                <div class="card-title"></div>
+                <h2 class="mb-4">Gender Distribution</h2>
+                <div class="row gx-2 align-items-center">
+                    <div class="col-5 d-flex flex-column align-items-center">
+                        <div class="p-2">
+                            <div>Male</div>
+                            <div class="d-flex align-items-center">
+                                <h3 id="maleCount">{{$data["gender"]->male}}</h3>
+                            </div>
+                        </div>
+                        <div class="p-2">
+                            <div>Female</div>
+                            <div class="d-flex align-items-center">
+                                <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="col-xl-4">
+                    <div class="col-3 d-flex justify-content-center">
+                        <canvas id="FarmersGenderDoughnutChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="row mt-3">
+        <div class="col-12">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
                             <h6 class="text-uppercase text-muted ls-1 mb-1">Grade Distribution KGs</h6>
-                            <h2 class="mb-0">Grade Distribution</h2>
+                            <h2 class="mb-0">Grade Distribution KGs</h2>
                         </div>
                     </div>
                 </div>
@@ -121,32 +152,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
     </div>
 
-    <div class="card mt-3" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-        <div class="card-body">
-            <div class="card-title"></div>
-            <h2 class="mb-4">Gender Distribution</h2>
-            <div class="row gx-2 align-items-center">
-                <div class="col-5 d-flex flex-column align-items-center">
-                    <div class="p-2">
-                        <div>Male</div>
-                        <div class="d-flex align-items-center">
-                            <h3 id="maleCount">{{$data["gender"]->male}}</h3>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div>Female</div>
-                        <div class="d-flex align-items-center">
-                            <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-3 d-flex justify-content-center">
-                    <canvas id="FarmersGenderDoughnutChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 
@@ -193,7 +198,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
             </div>
         </div>
     </div>
-</div>
 </div>
 @endsection
 @push('plugin-scripts')
@@ -449,46 +453,93 @@ let wetMillCollectionsBarChart = new Chart(wetMillCollectionsBarChartCanvas, {
 
 
 
-// grade distribution chart
+// Grade distribution chart
 let gradeDistributionData = @json($data['grade_distribution']);
-let gradeDistributionLabels = gradeDistributionData.map(c => c.name)
-let gradeDistributionValues = gradeDistributionData.map(c => c.quantity)
-let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart")
+let gradeDistributionLabels = gradeDistributionData.map(c => c.name);
+let gradeDistributionValues = gradeDistributionData.map(c => c.quantity);
+let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart");
+
+// Chart data
 let gradeDistributionBarData = {
     datasets: [{
         data: gradeDistributionValues,
-        backgroundColor: [
-            '#FB6340'
-            // 'rgba(65, 47, 38, 1)',
-            // 'rgba(165, 113, 80, 1)',
-            // 'rgba(184, 134, 11, 1)',
-            // 'rgba(245, 245, 220, 1)',
-        ]
+        backgroundColor: '#FB6340', // Single color for simplicity, you can use multiple colors if desired
     }],
-    labels: gradeDistributionLabels
+    labels: gradeDistributionLabels, // These will now be used for the y-axis in a horizontal bar chart
 };
+
+// Chart options
 let gradeDistributionBarOptions = {
-    animationEasing: "easeOutBounce",
-    responsive: true,
-    maintainAspectRatio: true,
-    showScale: true,
+    scales: {
+        // Y-axis (horizontal) - contains the grade names
+        yAxes: [{
+            ticks: {
+                beginAtZero: true, // Start from zero
+                fontSize: 10, // Adjust the font size if needed
+                padding: 10, // Space between the chart and the y-axis labels
+            },
+            gridLines: {
+                display: false, // Hide grid lines for the y-axis
+            },
+        }],
+        // X-axis (vertical) - contains the percentage values
+        xAxes: [{
+            ticks: {
+                beginAtZero: true, // Start from zero for the x-axis as well
+                callback: function(value) {
+                    return value + '';
+                },
+            },
+            gridLines: {
+                color: 'rgba(77, 77, 77, 0.2)', // Lighter grid lines for the x-axis
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)', // Zero line color
+            },
+        }],
+    },
+    tooltips: {
+        callbacks: {
+            label: function(item, data) {
+                var label = data.datasets[item.datasetIndex].label || '';
+                var yLabel = item.xLabel; // Using xLabel since we are using a horizontal bar chart
+                var content = '';
+
+                if (data.datasets.length > 1) {
+                    content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                }
+
+                content += '<span class="popover-body-value">' + yLabel +
+                    '%</span>'; // Format tooltip to show percentages
+                return content;
+            },
+        },
+        mode: 'index',
+        intersect: true,
+    },
+    maintainAspectRatio: false,
     legend: {
-        display: false
+        display: false, // Optional: Disable the legend if not needed
     },
     layout: {
         padding: {
             left: 0,
             right: 0,
             top: 0,
-            bottom: 0
-        }
-    }
+            bottom: 0,
+        },
+    },
+    animation: {
+        easing: 'easeOutBounce',
+        duration: 1000,
+    },
 };
+
+// Create the chart
 let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
-    type: "horizontalBar",
+    type: "horizontalBar", // Horizontal bar chart type
     data: gradeDistributionBarData,
     options: gradeDistributionBarOptions
 });
+
 
 //gender distribution chart
 let rawGenderData = @json($data['gender']);
