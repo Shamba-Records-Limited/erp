@@ -32,7 +32,7 @@ $countries = get_countries();
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-12">
-                                <h6 class="mb-3">Bulk Import Farmers</h6>
+                                <h4 class="mb-3">Bulk Import Farmers</h4>
                             </div>
                             <div class="form-row col-12">
                                 @if(isset($uploadErrors))
