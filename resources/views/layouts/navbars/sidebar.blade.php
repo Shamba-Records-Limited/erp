@@ -5,7 +5,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <a class="navbar-brand pt-0" href="{{ route('cooperative-admin.dashboard') }}">
-            <img src="{{ asset('argon') }}/img/brand/coop-admin.png" class="navbar-brand-img" alt="...">
+            <img src="{{ asset('argon') }}/img/brand/coffee.png" class="navbar-brand-img" alt="...">
         </a>
         <ul class="nav align-items-center d-md-none">
             <li class="nav-item dropdown">
@@ -80,13 +80,13 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
-                        <i class="ni ni-chart-pie-35 text-primary"></i> {{ __('Dashboard') }}
+                        <i class="ni ni-chart-pie-35 text-custom-green"></i> {{ __('Dashboard') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-building text-primary"></i>
+                        <i class="ni ni-building text-custom-green"></i>
                         <span class=" nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
                     </a>
 
@@ -108,7 +108,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-single-02 text-primary"></i>
+                        <i class="ni ni-single-02 text-custom-green"></i>
                         <span class=" nav-link-text" style="color: #f4645f;">{{ __('Farmer CRM') }}</span>
                     </a>
 
@@ -130,7 +130,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-archive-2 text-primary"></i>
+                        <i class="ni ni-archive-2 text-custom-green"></i>
                         <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
                     </a>
 
@@ -156,7 +156,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-money-coins text-primary"></i>
+                        <i class="ni ni-money-coins text-custom-green"></i>
                         <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
                     </a>
 
@@ -212,32 +212,32 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
-                        <i class="ni ni-tag text-primary"></i> {{ __('Products') }}
+                        <i class="ni ni-tag text-custom-green"></i> {{ __('Products') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
-                        <i class="ni ni-sound-wave text-primary"></i> {{ __('Transactions Reports') }}
+                        <i class="ni ni-sound-wave text-custom-green"></i> {{ __('Transactions Reports') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
-                        <i class="ni ni-cart text-primary"></i> {{ __('Orders') }}
+                        <i class="ni ni-cart text-custom-green"></i> {{ __('Orders') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
-                        <i class="ni ni-settings text-primary"></i> {{ __('Settings') }}
+                        <i class="ni ni-settings text-custom-green"></i> {{ __('Settings') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.support.show') }}">
-                        <i class="ni ni-support-16 text-primary"></i> {{ __('Support') }}
+                        <i class="ni ni-support-16 text-custom-green"></i> {{ __('Support') }}
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('chat.index') }}">
-                        <i class="ni ni-chat-round text-primary"></i> {{ __('Chat') }}
+                        <i class="ni ni-chat-round text-custom-green"></i> {{ __('Chat') }}
                     </a>
                 </li>
         </div>

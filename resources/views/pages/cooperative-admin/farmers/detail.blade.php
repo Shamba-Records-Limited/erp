@@ -31,31 +31,31 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="m-4">
-                            <span class="semi-bold">Email: </span>{{$farmer->email}}
+                            <span class="semi-bold mr-2">Email: </span>{{$farmer->email}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">Phone: </span>{{$farmer->phone_no}}
+                            <span class="semi-bold mr-2">Phone: </span>{{$farmer->phone_no}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">Country: </span>{{$farmer->country_code}}
+                            <span class="semi-bold mr-2">Country: </span>{{$farmer->country_code}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">County: </span>{{$farmer->county_name}}
+                            <span class="semi-bold mr-2">County: </span>{{$farmer->county_name}}
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="m-4">
-                            <span class="semi-bold">Sub-County: </span>{{$farmer->sub_county_name}}
+                            <span class="semi-bold mr-2">Sub-County: </span>{{$farmer->sub_county_name}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">Id Number: </span>{{$farmer->id_no}}
+                            <span class="semi-bold mr-2">Id Number: </span>{{$farmer->id_no}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">Member Number: </span>{{$farmer->member_no}}
+                            <span class="semi-bold mr-2">Member Number: </span>{{$farmer->member_no}}
                         </div>
                         <div class="m-4">
-                            <span class="semi-bold">Gender: </span>{{$farmer->gender}}
+                            <span class="semi-bold mr-2">Gender: </span>{{$farmer->gender}}
                         </div>
                     </div>
                 </div>
