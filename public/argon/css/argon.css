@@ -11558,7 +11558,7 @@ button.bg-darker:focus {
 
     .pt-md-8,
     .py-md-8 {
-        padding-top: 8rem !important;
+        /* padding-top: 8rem !important; */
     }
 
     .pr-md-8,
@@ -16828,7 +16828,7 @@ textarea[resize='horizontal'] {
 }
 
 .header {
-    position: relative;
+    /* position: relative; */
 }
 
 .icon {

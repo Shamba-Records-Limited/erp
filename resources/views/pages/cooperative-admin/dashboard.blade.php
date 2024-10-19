@@ -26,7 +26,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 
     <div class="d-flex justify-content-between w-100">
 
-        <div>Dashboard</div>
+        <div>
+        </div>
         <div class=" d-flex align-items-start">
             <form class="d-flex">
                 <div class="form-group">
@@ -121,11 +122,11 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                             </div>
 
                             <!-- Female count -->
-                            <div class="p-2">
-                                <div class="d-flex justify-content-between">
-                                    <div>Female:</div>
+                            <div class="p-2 ">
+                                <div class=" d-flex ">
+                                    <div class="">Female:</div>
                                     <div>
-                                        <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+                                        <h3 class="" id=" femaleCount">{{$data["gender"]->female}}</h3>
                                     </div>
                                 </div>
                             </div>
@@ -144,10 +145,10 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                     </div>
 
                     <!-- Doughnut chart centered below -->
-                    <div class="row mt-4">
+                    <div class="row mt-4 mb">
                         <div class="col-12 d-flex justify-content-center">
                             <canvas id="FarmersGenderDoughnutChart"
-                                style="width: 100%; max-width: 300px; height: auto;"></canvas>
+                                style="width: 100%; max-width: 300px; height: auto; margin-bottom:64px;"></canvas>
                         </div>
                     </div>
                 </div>
@@ -310,15 +311,15 @@ let collectionsGenderBarData = {
     datasets: [{
         label: 'Male',
         data: maleCollectionValues,
-        borderColor: '#11cdef',
-        backgroundColor: '#11cdef',
+        borderColor: 'rgba(54, 162, 235, 1)', //male
+        backgroundColor: 'rgba(54, 162, 235, 1)', //male
         tension: 0.4,
         fill: true,
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: '#172b4d',
-        backgroundColor: '#172b4d',
+        borderColor: '#F4D8F0',
+        backgroundColor: '#F4D8F0',
         tension: 0.4,
         fill: true,
     }],
@@ -494,7 +495,8 @@ let gradeDistributionBarChartCanvas = document.getElementById("GradeDistribution
 let gradeDistributionBarData = {
     datasets: [{
         data: gradeDistributionValues,
-        backgroundColor: '#FB6340', // Single color for simplicity, you can use multiple colors if desired
+        // backgroundColor: '#FB6340',
+        backgroundColor: '#2dce89', // Single color for simplicity, you can use multiple colors if desired
     }],
     labels: gradeDistributionLabels, // These will now be used for the y-axis in a horizontal bar chart
 };
@@ -582,9 +584,9 @@ let genderPieData = {
     datasets: [{
         data: genderData,
         backgroundColor: [
-            'rgba(54, 162, 235, 1)',
-            '#F4D8F0 ',
-            "172B4D",
+            'rgba(54, 162, 235, 1)', //male
+            '#F4D8F0 ', //female
+            "172B4D", //others
         ],
         borderColor: [
             'rgba(54, 162, 235, 1)',
