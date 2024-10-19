@@ -146,7 +146,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}}">
+                                <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
                                     {{ __('Collections') }}
                                 </a>
                             </li>

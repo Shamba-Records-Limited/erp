@@ -238,7 +238,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 @push('custom-scripts')
 
 <script>
-// collections chart
+// collections  chart
 let collectionsData = @json($data['collections']);
 let collectionsLabels = collectionsData.map(c => c.x);
 let collectionsValues = collectionsData.map(c => c.y);
