@@ -774,6 +774,7 @@ var Charts = (function () {
             return value;
           }
         },
+        fontColor: colors.black,
       },
     });
 
@@ -786,6 +787,7 @@ var Charts = (function () {
       },
       ticks: {
         padding: 20,
+        fontColor: colors.black,
       },
       maxBarThickness: 10,
     });

@@ -1,8 +1,6 @@
 @auth()
-<div class="mb-10">
 
-    @include('layouts.navbars.navs.auth')
-</div>
+@include('layouts.navbars.navs.auth')
 @endauth
 
 @guest()
