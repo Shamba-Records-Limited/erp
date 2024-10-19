@@ -12,13 +12,13 @@
     <h2 class="mt-5 ml-5"> Mini Dashboard</h2>
 </div>
 <div class=" col-xl-8 mt-15 mb-xl-0">
-    <div class="card bg-gradient-default shadow">
+    <div class="card shadow">
 
         <div class="card-header bg-transparent">
             <div class="row align-items-center">
                 <div class="col">
                     <h6 class="text-uppercase text-light ls-1 mb-1">Collection By Wet Mills (KGs)</h6>
-                    <h2 class="text-white mb-0">Wet Mills</h2>
+                    <h2 class="mb-0">Wet Mills</h2>
                 </div>
             </div>
         </div>
@@ -52,7 +52,7 @@ let wetMillCollectionsBarData = {
     datasets: [{
         label: 'Weight in KGs',
         data: wetMillCollectionsValues,
-        borderColor: 'rgba(75, 192, 192, 1)',
+        borderColor: '#2dce89',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: false,
         tension: 0.4,
