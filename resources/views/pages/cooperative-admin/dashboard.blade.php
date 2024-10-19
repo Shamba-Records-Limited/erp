@@ -67,24 +67,27 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                         <div class="col">
                             <ul class="nav nav-pills justify-content-end">
                                 <!-- All Option -->
-                                <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#CollectionsBarChart"
-                                    <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
-                                    <span class="d-none d-md-block">All</span>
-                                    <span class="d-md-none">All</span>
+                                <li class="nav-item mr-2 mr-md-0" data-toggle="chart"
+                                    data-target="#CollectionsBarChart">
+                                    <a href="#" class="nav-link py-2 px-3 active bg-custom-gradient-green"
+                                        data-toggle="tab">
+                                        <span class="d-none d-md-block">All</span>
+                                        <span class="d-md-none">All</span>
                                     </a>
                                 </li>
                                 <!-- Month Option -->
-                                <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#CollectionsBarChart"
+                                <li class="nav-item mr-2 mr-md-0 " data-toggle="chart"
+                                    data-target="#CollectionsBarChart">
                                     <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
-                                    <span class="d-none d-md-block">Month</span>
-                                    <span class="d-md-none">M</span>
+                                        <span class="d-none d-md-block">Month</span>
+                                        <span class="d-md-none">M</span>
                                     </a>
                                 </li>
                                 <!-- Week Option -->
-                                <li class="nav-item" data-toggle="chart" data-target="#CollectionsBarChart"
-                                    data-prefix="KG" <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
-                                    <span class="d-none d-md-block">Week</span>
-                                    <span class="d-md-none">W</span>
+                                <li class="nav-item" data-toggle="chart" data-target="#CollectionsBarChart"><a href="#"
+                                        class="nav-link py-2 px-3" data-toggle="tab">
+                                        <span class="d-none d-md-block">Week</span>
+                                        <span class="d-md-none">W</span>
                                     </a>
                                 </li>
                             </ul>
@@ -100,32 +103,60 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 </div>
             </div>
         </div>
-        <div class="card mt-3" style="box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
-            <div class="card-body">
-                <div class="card-title"></div>
-                <h2 class="mb-4">Gender Distribution</h2>
-                <div class="row gx-2 align-items-center">
-                    <div class="col-5 d-flex flex-column align-items-center">
-                        <div class="p-2">
-                            <div>Male</div>
-                            <div class="d-flex align-items-center">
-                                <h3 id="maleCount">{{$data["gender"]->male}}</h3>
+        <div class="col-xl-4">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="card-title"></div>
+                    <h2 class="mb-4">Gender Distribution</h2>
+
+                    <div class="row gx-2 align-items-start mb-5">
+                        <div class="col-md-6">
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                    <div>Male:</div>
+                                    <div>
+                                        <h3 id="maleCount">{{$data["gender"]->male}}</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Female count -->
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                    <div>Female:</div>
+                                    <div>
+                                        <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="p-2">
-                            <div>Female</div>
-                            <div class="d-flex align-items-center">
-                                <h3 id="femaleCount">{{$data["gender"]->female}}</h3>
+
+                        <div class="col-md-6">
+                            <div class="p-2">
+                                <div class="d-flex justify-content-between">
+                                    <div>Other:</div>
+                                    <div>
+                                        <h3 id="otherCount">{{$data["gender"]->other}}</h3>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-3 d-flex justify-content-center">
-                        <canvas id="FarmersGenderDoughnutChart"></canvas>
+                    <!-- Doughnut chart centered below -->
+                    <div class="row mt-4">
+                        <div class="col-12 d-flex justify-content-center">
+                            <canvas id="FarmersGenderDoughnutChart"
+                                style="width: 100%; max-width: 300px; height: auto;"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+
 
     </div>
 
@@ -375,7 +406,7 @@ let wetMillCollectionsBarData = {
     datasets: [{
         label: 'Weight in KGs',
         data: wetMillCollectionsValues,
-        borderColor: 'rgba(75, 192, 192, 1)',
+        borderColor: '#2dce89',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: false,
         tension: 0.4,
@@ -500,11 +531,13 @@ let gradeDistributionBarOptions = {
         callbacks: {
             label: function(item, data) {
                 var label = data.datasets[item.datasetIndex].label || '';
-                var yLabel = item.xLabel; // Using xLabel since we are using a horizontal bar chart
+                var yLabel = item
+                    .xLabel; // Using xLabel since we are using a horizontal bar chart
                 var content = '';
 
                 if (data.datasets.length > 1) {
-                    content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                    content += '<span class="popover-body-label mr-auto">' + label +
+                        '</span>';
                 }
 
                 content += '<span class="popover-body-value">' + yLabel +
@@ -550,12 +583,15 @@ let genderPieData = {
         data: genderData,
         backgroundColor: [
             'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
+            '#F4D8F0 ',
+            "172B4D",
         ],
         borderColor: [
             'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
+            '#F4D8F0 ',
+            "172B4D",
         ]
+
     }],
     labels: ["Male", "Female", "Other"]
 };

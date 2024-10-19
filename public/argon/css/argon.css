@@ -20207,3 +20207,7 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 .bg-custom-green {
     background-color: #2dce89 !important;
 }
+
+.custom-gradient-green {
+    background-color:linear-gradient(310deg, #2dce89, #2dcecc);
+}
