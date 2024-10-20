@@ -259,7 +259,7 @@ $cooperative = null;
                 aria-expanded="{!!  is_active_route(['cooperative-admin/farmers*'])  !!}"
                 aria-controls="farmerManagement">
                 <i class="menu-icon mdi mdi-account-multiple"></i>
-                <span class="menu-title">Farmer CRM</span>
+                <span class="menu-title">Farmer / Suppliers CRM</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse {{ show_class(['cooperative-admin/farmers*']) }}" id="farmerManagement">

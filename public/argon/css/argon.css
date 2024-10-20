@@ -20204,6 +20204,10 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     height: 3px;
 }
 
+/* .custom-green {
+    color: #2dce89 !important;
+} */
+
 .bg-custom-green {
     background-color: #2dce89 !important;
 }
@@ -20229,4 +20233,55 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     /* Less shadow on right and left */
     padding: 15px;
     border-radius: 5px;
+}
+
+/* Wallet card styling */
+.wallet-card {
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    transition: transform 0.2s ease-in-out;
+}
+
+.wallet-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Wallet balance styling */
+.wallet-balance h5 {
+    font-size: 1.25rem;
+    color: #28a745;
+    /* Green for positive balance */
+}
+
+/* Wallet info styling */
+.wallet-info h5 {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+}
+
+.wallet-info h5 i {
+    margin-right: 8px;
+    color: #007bff;
+    /* Primary blue for wallet icon */
+}
+
+.wallet-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #495057;
+    /* Dark gray for account number */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+
+    .wallet-info,
+    .wallet-balance {
+        text-align: center;
+    }
+
+    .wallet-balance {
+        margin-top: 10px;
+    }
 }

@@ -74,8 +74,10 @@
         </div>
         @include('layout.export-dialog')
         <div class="content-wrapper ">
-            <div class="d-flex mt-10 " id="wallet_cont">
+            <div class="d-flex mt-10 bg-custom-green">
+                <div class="d-flex mt-10 " id="wallet_cont">
 
+                </div>
             </div>
             @yield('content')
             @include('layouts.footers.nav')
@@ -302,29 +304,51 @@
             }
         }
 
-        // load wallet details
+        // Template function to generate wallet elements
+        function generateWalletElement(wallet) {
+            const balance = Number(wallet.balance).toLocaleString();
+            return `
+    <div class="card mb-3 wallet-card shadow-sm">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="wallet-info">
+            <h5 class="card-title text-primary mb-2"><i class="fas fa-wallet"></i> Wallet</h5>
+            <div class="d-flex align-items-center">
+              <p class="mb-0">Acc No: <span class="font-weight-bold text-dark">${wallet.acc_number}</span></p>
+              <span class="mx-3 text-muted">|</span>
+              <p class="mb-0">Balance: <span class="font-weight-bold text-success">KES ${balance}</span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+        }
+
+        // Load wallet details via AJAX
         $.ajax({
             url: '{{route("wallet.details")}}',
             method: 'get',
             success: function(resp) {
                 if (resp.has_wallet) {
-                    for (let w of resp.wallets) {
-                        let balance = Number(w.balance).toLocaleString()
-                        let elem = `<div class="p-2 border rounded bg-light">`
-                        elem += `<span class="border p-1">Wallet</span>`
-                        elem +=
-                            ` Acc No: <span class="font-weight-bold text-primary">${w.acc_number}</span>&nbsp`
-                        elem +=
-                            ` Bal: <span class="font-weight-bold text-primary">KES ${balance}</span>`
-                        elem += `</div>`
-                        $("#wallet_cont").append(elem)
-                    }
+                    const wallets = resp.wallets;
+                    const walletContainer = $("#wallet_cont");
+
+                    // Clear existing content
+                    walletContainer.empty();
+
+                    // Append wallet elements
+                    wallets.forEach((wallet) => {
+                        const walletElement = generateWalletElement(wallet);
+                        walletContainer.append(walletElement);
+                    });
                 }
             },
             error: function(errResp) {
-                alert(errResp);
+                alert(errResp.responseText || "Failed to load wallet details.");
             }
-        })
+        });
+
 
         function printContent(content) {
             var originalContent = document.body.innerHTML;

@@ -109,7 +109,7 @@
                     <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
                         aria-expanded="true" aria-controls="navbar-examples">
                         <i class="ni ni-single-02 text-custom-green"></i>
-                        <span class=" nav-link-text" style="color: #f4645f;">{{ __('Farmer CRM') }}</span>
+                        <span class=" nav-link-text" style="color: #f4645f;">{{ __('Farmer / Suppliers CRM') }}</span>
                     </a>
 
                     <div class="collapse show" id="navbar-examples">
@@ -212,7 +212,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
-                        <i class="ni ni-tag text-custom-green"></i> {{ __('Products') }}
+                        <i class="ni ni-tag text-custom-green"></i> {{ __('Products / Raw Materials ') }}
                     </a>
                 </li>
                 <li class="nav-item">

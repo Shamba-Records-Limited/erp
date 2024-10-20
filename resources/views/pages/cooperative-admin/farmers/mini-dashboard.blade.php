@@ -17,8 +17,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 <div>
     <h2>Mini Dashboard</h2>
 </div>
-<div class="row">
-    <div class="col-xl-4">
+<div class="row custom-border">
+    <div class="col">
         <div class="card shadow">
             <div class="card-header bg-transparent">
                 <div class="row align-items-center">
@@ -38,12 +38,15 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
         </div>
     </div>
 </div>
-<div class="row">
+<div class="row custom-border">
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
                 <div class="card-title">
-                    Farmer Ages
+
+                    <h6 class="text-uppercase text-muted ls-1 mb-1"> Ages & Gender
+                    </h6>
+                    <h2 class=" mb-0">Farmer Ages</h2>
                 </div>
                 <div>
                     <canvas id="AgesGenderBarChart" class="mb-4 mb-md-0" height="250"></canvas>
@@ -61,8 +64,10 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                         <canvas id="FarmersGenderDoughnutChart" class="400x160 mb-4 mb-md-0" height="200"></canvas>
                     </div>
                     <div class="col-md-7">
-                        <h4 class="card-title font-weight-medium mb-0 d-none d-md-block">Farmers Gender
-                            Distribution</h4>
+
+                        <h6 class="text-uppercase text-muted ls-1 mb-1">Overview
+                        </h6>
+                        <h2 class=" mb-0">Farmers Gender Distribution</h2>
                         <div class="wrapper mt-4">
                             <div class="d-flex justify-content-between mb-2">
                                 <div class="d-flex align-items-center">
@@ -74,8 +79,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                     %</p>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar bg-primary" role="progressbar"
-                                    style="width: {{ $total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}%"
+                                <div class="progress-bar " role="progressbar"
+                                    style="background-color:#F4D8F0;width: {{ $total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}%"
                                     aria-valuenow="{{$total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}"
                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -91,8 +96,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                     %</p>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar"
-                                    style="width: {{ $total_gender_distribution ? (($data["gender"]->male / $total_gender_distribution) * 100) : 0}}%"
+                                <div class="progress-bar" role=" progressbar"
+                                    style="background-color:rgba(54, 162, 235, 1); width: {{ $total_gender_distribution ? (($data["gender"]->male / $total_gender_distribution) * 100) : 0}}%"
                                     aria-valuenow="{{$total_gender_distribution ? (($data["gender"]->male / $total_gender_distribution) * 100) : 0}}"
                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -109,8 +114,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                     %</p>
                             </div>
                             <div class="progress">
-                                <div class="progress-bar bg-danger" role="progressbar"
-                                    style="width: {{ $total_gender_distribution ? (($data["gender"]->other / $total_gender_distribution) * 100) : 0}}%"
+                                <div class="progress-bar " role="progressbar"
+                                    style="background-color:#172B4D;width: {{ $total_gender_distribution ? (($data["gender"]->other / $total_gender_distribution) * 100) : 0}}%"
                                     aria-valuenow="{{ $total_gender_distribution ? (($data["gender"]->other / $total_gender_distribution) * 100) : 0}}"
                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -129,6 +134,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 
 @push('custom-scripts')
 <script>
+//gender distribution chart
 let rawGenderData = @json($data['gender']);
 let genderData = Object.values(rawGenderData)
 let farmersGenderdoughnutChartCanvas = document.getElementById("FarmersGenderDoughnutChart")
@@ -136,15 +142,16 @@ let genderPieData = {
     datasets: [{
         data: genderData,
         backgroundColor: [
-            successColor,
-            primaryColor,
-            dangerColor
+            'rgba(54, 162, 235, 1)', //male
+            '#F4D8F0 ', //female
+            "172B4D", //others
         ],
         borderColor: [
-            successColor,
-            primaryColor,
-            dangerColor
+            'rgba(54, 162, 235, 1)',
+            '#F4D8F0 ',
+            "172B4D",
         ]
+
     }],
     labels: ["Male", "Female", "Other"]
 };
@@ -157,7 +164,7 @@ let genderPieOptions = {
     maintainAspectRatio: true,
     showScale: true,
     legend: {
-        display: false
+        display: true
     },
     layout: {
         padding: {
@@ -207,7 +214,7 @@ let collectionsGenderBarOptions = {
     scales: {
         yAxes: [{
             gridLines: {
-                color: 'rgb(251,99,64)',
+                // color: 'rgb(251,99,64)',
                 zeroLineColor: 'rgba(77, 77, 77, 0.5)',
             },
             ticks: {
