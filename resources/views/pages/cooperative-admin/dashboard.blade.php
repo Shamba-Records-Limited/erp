@@ -329,7 +329,7 @@ let collectionsGenderBarOptions = {
     scales: {
         yAxes: [{
             gridLines: {
-                color: 'rgb(251,99,64)',
+                // color: 'rgb(251,99,64)',
                 zeroLineColor: 'rgba(77, 77, 77, 0.5)',
             },
             ticks: {
