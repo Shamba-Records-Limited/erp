@@ -2152,7 +2152,7 @@ pre code {
 
     transition: all .2s cubic-bezier(.68, -.55, .265, 1.55);
 
-    color: #8898aa;
+    color: #000000;
     border: 1px solid #cad1d7;
     border-radius: .375rem;
     background-color: #fff;
@@ -2172,7 +2172,7 @@ pre code {
 }
 
 .form-control:focus {
-    color: #8898aa;
+    color: #000000;
     border-color: rgba(50, 151, 211, .25);
     outline: 0;
     background-color: #fff;
