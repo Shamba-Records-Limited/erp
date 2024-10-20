@@ -221,7 +221,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
+                    <a class="nav-link" href="{{ route('cooperative-admin.orders.show') }}">
                         <i class="ni ni-cart text-custom-green"></i> {{ __('Orders') }}
                     </a>
                 </li>
