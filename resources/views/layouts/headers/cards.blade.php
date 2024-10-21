@@ -8,7 +8,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Collection Total Weight</h5>
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Collection Total Weight</h5>
                                     <span class="h2 font-weight-bold mb-0">
                                         {{ isset($data['total_collection_weight']) ? $data['total_collection_weight'] : "0" }}
                                         KG
@@ -33,7 +33,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Farmer Count</h5>
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Farmer Count</h5>
                                     <span class="h2 font-weight-bold mb-0">
                                         {{ isset($data['farmer_count']) ? $data['farmer_count'] : 0 }}
                                     </span>
@@ -57,7 +57,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Collection Count</h5>
+                                    <h5 class="text-muted mb-0" style="font-size:1rem"> Collection Count</h5>
                                     <span class="h2 font-weight-bold mb-0">
                                         {{ isset($data['collection_count']) ? $data['collection_count'] : 0 }}
                                     </span>
