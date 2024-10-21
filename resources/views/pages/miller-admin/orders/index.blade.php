@@ -11,7 +11,7 @@
 
 @section('content')
 <div>Orders</div>
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="card-title">Orders</div>
         <div class="d-flex justify-content-end">

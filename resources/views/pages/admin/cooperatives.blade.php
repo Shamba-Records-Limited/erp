@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@extends('layouts.app')
 
 @push('plugin-styles')
 
@@ -125,12 +126,10 @@ $countries = get_countries();
 
                                     @if ($errors->has('sub_county_id'))
                                     <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('sub_county_id')  }}</strong>
+                                        <strong>{{ $errors->first('sub_county_id') }}</strong>
                                     </span>
-                                    @endif
-                                </select>
+                                @endif
                             </div>
-
 
 
                             <div class="form-group col-lg-3 col-md-6 col-12">

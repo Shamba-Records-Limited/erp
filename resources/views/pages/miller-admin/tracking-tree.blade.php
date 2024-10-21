@@ -1,208 +1,162 @@
 @extends('layouts.app')
 
-@push('plugin-styles')
-@endpush
-
 @section('content')
-<div class="card">
-    <div class="card-body">
-        <div class="card-title">Tracking Tree</div>
-        <div>
-            <!-- root -->
-            <div class="node">
-                <div class="border rounded p-2">
-                    <input type="hidden" name="level" class="level" value="0">
-                    <form id="get_root_details">
-                        <div class="form-group">
-                            <label for="root_type">Root Type</label>
-                            <select class="form-control select2bs4 node_type" name="root_type" id="root_type">
-                                <option value="">-- SELECT ROOT TYPE --</option>
-                                <option value="collection">Collection</option>
-                                <option value="lot">Lot</option>
-                                <option value="final_product">Final Product</option>
-                            </select>
+<div class="container">
+    <h1 class="text-center">Tracking Tree</h1>
 
-                            <span class="help-block text-danger">
-                                <strong id="root_type_error"></strong>
-                            </span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tree_direction">Tree Direction</label>
-                            <select class="form-control select2bs4 node_type" name="direction" id="direction">
-                                <option value="to_source">To Source</option>
-                                <option value="to_final_product">To Final Product</option>
-                            </select>
-
-                            <span class="help-block text-danger">
-                                <strong id="direction_error"></strong>
-                            </span>
-                        </div>
-                        <button class="btn btn-outline-primary">Submit</button>
-                    </form>
-                    <!-- root details -->
-                    <div id="root_details_wrap mt-2">
-                        <div id="root_details_top" class="border rounded p-2">
-                            <div class="d-flex justify-content-between">
-                                <div>Root Details</div>
-                                <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#root_details">View Details</button>
-                            </div>
-                            <div id="root_details">
-                                Details Here
-                            </div>
-                        </div>
-                    </div>
-                    <!-- /root details -->
-                    <button class="btn btn-outline-primary mt-2 show-children">Show Children</button>
-
-
+    <!-- Root Type and Tree Direction Dropdowns -->
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="get_root_details">
+                <div class="form-group">
+                    <label for="root_type">Root Type</label>
+                    <select class="form-control" name="root_type" id="root_type" required>
+                        <option value="">-- SELECT ROOT TYPE --</option>
+                        <option value="collection">Collection</option>
+                        <option value="lot">Lot</option>
+                        <option value="final_product">Final Product</option>
+                    </select>
                 </div>
-                <div class="pt-3 ml-3 position-relative pl-2">
-                    <!-- vertical bar -->
-                    <div class="position-absolute h-100 w-10 bg-black" style="top:0;left:0;height: 100%; width: 5px; background: black"></div>
-                    <!-- /vertical bar -->
-                    <div class="node_children">
-                        <!-- child -->
-                        <div class="position-relative pl-3">
-                            <!-- horizontal bar -->
-                            <div class="position-absolute" style="top:50%;left:0;height: 2px; width: 15px; background: black"></div>
-                            <!-- /horizontal bar -->
-                            <div class="border rounded p-2">
-                                <div class="d-flex justify-content-between">
-                                    <div>Child Type: Identifier</div>
-                                    <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#child_details">View Details</button>
-                                </div>
-                                <div id="child_details">
-                                    Child Details Here
-                                </div>
-                                <button class="btn btn-outline-primary mt-2 show-children">Show Children</button>
-                                <!-- child details -->
-                                <!-- /child details -->
-                            </div>
-                        </div>
-                        <!-- /child -->
-                    </div>
-
+                <div class="form-group">
+                    <label for="direction">Tree Direction</label>
+                    <select class="form-control" name="direction" id="direction" required>
+                        <option value="to_source">To Source</option>
+                        <option value="to_final_product">To Final Product</option>
+                    </select>
                 </div>
-            </div>
-            <!-- /root -->
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
         </div>
     </div>
-</div>
 
+    <!-- Hierarchical Data Structure as Timeline -->
+    <div class="timeline">
+        <!-- Order Level -->
+        <div class="timeline-item">
+            <div class="timeline-icon">
+                <i class="fas fa-circle"></i>
+            </div>
+            <div class="timeline-content">
+                <h5>Order: B20240703-1</h5>
+                <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#orderDetails" aria-expanded="false" aria-controls="orderDetails">Show Details</button>
+                <div id="orderDetails" class="collapse mt-2">
+                    <!-- Delivery Level -->
+                    <div class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <h6>Delivery:</h6>
+                            <p>Child Details Here</p>
+                            <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#deliveryDetails" aria-expanded="false" aria-controls="deliveryDetails">Show Children</button>
+                            <div id="deliveryDetails" class="collapse mt-2">
+                                <!-- Pre-Milled Inventory Level -->
+                                <div class="timeline-item">
+                                    <div class="timeline-icon">
+                                        <i class="fas fa-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <h6>Pre-Milled Inventory: INV20240827002</h6>
+                                        <p>Child Details Here</p>
+                                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#preMilledDetails" aria-expanded="false" aria-controls="preMilledDetails">Show Children</button>
+                                        <div id="preMilledDetails" class="collapse mt-2">
+                                            <!-- Milled Inventory Level -->
+                                            <div class="timeline-item">
+                                                <div class="timeline-icon">
+                                                    <i class="fas fa-circle"></i>
+                                                </div>
+                                                <div class="timeline-content">
+                                                    <h6>Raw Material: Milled Inventory: INV20241011002</h6>
+                                                    <p>Child Details Here</p>
+                                                    <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#milledDetails1" aria-expanded="false" aria-controls="milledDetails1">Show Children</button>
+                                                    <div id="milledDetails1" class="collapse mt-2">
+                                                        <h6>Raw Material: Milled Inventory: INV20241003001</h6>
+                                                        <p>Child Details Here</p>
+                                                    </div>
+                                                </div>
+                                            </div> <!-- End of Milled Inventory -->
+                                        </div>
+                                    </div>
+                                </div> <!-- End of Pre-Milled Inventory -->
+                            </div>
+                        </div>
+                    </div> <!-- End of Delivery -->
+                </div>
+            </div>
+        </div> <!-- End of Order -->
+    </div>
+</div>
 @endsection
-@push('plugin-scripts')
-@endpush
 
 @push('custom-scripts')
 <script>
-    let csrf = "{{csrf_token()}}";
-
-    $('#root_type').on('change', function(e) {
-        let root_type = $("#root_type").val() || ''
-        if (root_type == '') {
-            return
-        }
-
-        // submit form
-        $.ajax({
-            method: 'GET',
-            url: `/miller-admin/tracking-tree/root-identifier/${root_type}`,
-            error: function(data) {
-
-            },
-            success: function(data) {
-                $("#identifier").closest(".form-group").remove();
-                $("#root_type").closest(".form-group").after(data)
-            }
-        })
+    // Handle form submission without reloading the page
+    $("#get_root_details").on("submit", function(e) {
+        e.preventDefault();  // Prevent the page reload
+        // You can add any logic here if needed, like validating inputs
     });
 
-    $("#get_root_details").on('submit', function(e) {
-        e.preventDefault();
-        // validate form
-        let data = {
-            _token: "{{ csrf_token() }}",
-            root_type: $("#root_type").val() || '',
-            identifier: $("#identifier").val() || '',
-        }
-
-
-        $("#root_type").removeClass("is-invalid");
-        $("#root_type_error").html("");
-        $("#identifier").removeClass("is-invalid");
-        $("#identifier_error").html("");
-
-        let has_error = false;
-        if (data.root_type == '') {
-            $("#root_type").addClass("is-invalid");
-            $("#root_type_error").html("This field is required");
-            has_error = true
-        }
-
-        if (data.identifier == '') {
-            $("#identifier").addClass("is-invalid");
-            $("#identifier_error").html("This field is required");
-            has_error = true
-        }
-
-        if (has_error) {
-            return
-        }
-
-        // submit form
-        $.ajax({
-            method: 'POST',
-            url: "/miller-admin/tracking-tree/root-details",
-            data,
-            error: function(data) {
-
-            },
-            success: function(data) {
-
-            }
-        })
-    })
-
-    $("body").on("click", ".show-children", function(e) {
-        let direction = $("#direction").val();
-        if (direction == "") {
-            return
-        }
-
-        let node_type_elem = $(e.target).closest(".node").find(".node_type")[0]
-        let node_type = $(node_type_elem).val()
-        if (node_type == "") {
-            alert("unable to find node_type")
-            return
-        }
-
-        let node_identity_elem = $(e.target).closest(".node").find(".node_identity")[0]
-        let node_identity = $(node_identity_elem).val()
-        if (node_identity == "") {
-            alert("unable to find node_identity")
-            return
-        }
-
-        $.ajax({
-            method: 'POST',
-            url: "/miller-admin/tracking-tree/node-children",
-            data: {
-                _token: "{{ csrf_token() }}",
-                node_type,
-                node_identity,
-                direction
-            },
-            error: function(data) {
-
-            },
-            success: function(data) {
-                let node_children_elem = $(e.target).closest(".node").find(".node_children");
-                console.log(node_children_elem);
-                $(node_children_elem).empty();
-                $(node_children_elem).append(data);
-            }
-        })
-    })
+    // Toggle collapse functionality for expand buttons
+    $(document).ready(function () {
+        $('.btn').on('click', function() {
+            $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
+        });
+    });
 </script>
 @endpush
+
+<!-- CSS -->
+<style>
+    .timeline {
+        position: relative;
+        padding: 20px 0;
+        margin-top: 20px;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 20px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #007bff;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 20px;
+        padding-left: 50px;
+    }
+
+    .timeline-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .timeline-icon {
+        position: absolute;
+        left: 10px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+    }
+
+    .timeline-content {
+        padding: 10px 20px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-sm {
+        padding: 5px 10px; /* Smaller padding for compact buttons */
+    }
+
+    .timeline-content h6, .timeline-content h5 {
+        margin-top: 0;
+    }
+</style>

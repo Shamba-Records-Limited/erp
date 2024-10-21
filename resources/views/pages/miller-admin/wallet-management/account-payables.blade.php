@@ -5,7 +5,7 @@
 
 @section('content')
 
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
             <div class="card-title">Account Payables</div>
