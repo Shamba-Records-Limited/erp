@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center">Shamba Traceability</h1>
+    <h1 class="text-center">Tracking Tree</h1>
 
     <!-- Root Type and Tree Direction Dropdowns -->
     <div class="card mb-3">
