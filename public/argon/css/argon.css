@@ -21926,9 +21926,6 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
 
 
 
-
-
-
 .card {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -21951,4 +21948,28 @@ button.btn-success {
 
 button i {
     float: right;
+}
+
+.btn-success {
+    width: auto; /* Ensure the buttons take up only the required space */
+    display: inline-block; /* Prevent the buttons from stretching full width */
+}
+
+.btn-sm {
+    padding: 5px 10px; /* Smaller padding for compact buttons */
+    font-size: 14px; /* Adjust the font size to match smaller buttons */
+}
+
+/* Adjust the card content styling */
+.card {
+    margin-bottom: 15px;
+}
+
+.container {
+    max-width: 700px; /* Restrict container width to avoid stretching */
+}
+
+/* Optional: Add some padding for better appearance */
+.card-body {
+    padding: 10px 20px;
 }
