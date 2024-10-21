@@ -3,10 +3,10 @@
         <div class="copyright text-center text-xl-left text-muted">
             &copy; {{ now()->year }} <a href="https://www.creative-tim.com" class="font-weight-bold ml-1"
                 target="_blank">Copyright ©</a> &amp;
-            <a href="https://www.updivision.com" class="font-weight-bold ml-1" target="_blank">Shamba Equity</a>
+            <a href="https://www.updivision.com" class="font-weight-bold ml-1" target="_blank">Shamba Traceability>
         </div>
     </div>
-    <div class="col-xl-6">
+    <!-- <div class="col-xl-6">
         <ul class="nav nav-footer justify-content-center justify-content-xl-end">
             <li class="nav-item">
                 <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Current Version </a>
@@ -25,5 +25,5 @@
                     target="_blank">MIT License</a>
             </li>
         </ul>
-    </div>
+    </div> -->
 </div>
