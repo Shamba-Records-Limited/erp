@@ -8,11 +8,11 @@
 @php
 $collection_time_options = config('enums.collection_time');
 @endphp
-<div class="row">
+<div class="row ">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <div>
+                <div class="d-flex justify-content-end mb-3">
                     <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse"
                         data-target="#bulkUploadCollectionsAccordion"
                         aria-expanded="@if ($errors->count() > 0) true @else false @endif"
@@ -43,7 +43,7 @@ $collection_time_options = config('enums.collection_time');
                         @csrf
                         <div class="form-row">
                             <div class="form-group col-12">
-                                <h6 class="mb-3">Bulk Import Collections</h6>
+                                <h4 class="mb-3">Bulk Import Collections</h4>
                             </div>
                             <div class="form-row col-12">
                                 @if(isset($uploadErrors))

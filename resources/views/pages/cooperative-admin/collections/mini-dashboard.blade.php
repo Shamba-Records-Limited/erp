@@ -11,7 +11,7 @@
 <div>
     <h3>Mini Dashboard</h3>
 </div>
-<div class="d-flex justify-content-between w-100">
+<div class="d-flex justify-content-end  w-100">
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">
@@ -27,7 +27,7 @@
                 <input type="date" class="form-control" name="from_date" value="{{$from_date}}"
                     onchange="this.form.submit()" id="fromDate" />
             </div>
-            <div class="form-group">
+            <div class="form-group mr-2">
                 <input type="date" class="form-control" name="to_date" value="{{$to_date}}"
                     onchange="this.form.submit()" id="toDate" />
             </div>

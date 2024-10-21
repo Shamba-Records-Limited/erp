@@ -287,7 +287,13 @@ th {
 
 label {
     display: inline-block;
+    font-family: inherit;
+    font-weight: 600;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    margin-bottom: .5rem;
 
+    color: #32325d;
     margin-bottom: .5rem;
 }
 
@@ -5341,8 +5347,18 @@ input[type='button'].btn-block {
     flex: 1 1 auto;
 }
 
+
+
 .card-title {
     margin-bottom: 1.25rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    display: inline-block;
+    border-bottom: 1px solid #172B4D;
+    padding-bottom: 0.25rem;
+    color: #172B4D;
+    margin-bottom: 25px;
 }
 
 .card-subtitle {
@@ -16232,6 +16248,9 @@ a.btn-icon-only {
 
 .main-content {
     position: relative;
+    min-height: 100vh;
+    /* Ensure the main-content takes at least 100% of the viewport height */
+
 }
 
 .main-content .navbar-top {
@@ -19308,7 +19327,8 @@ textarea[resize='horizontal'] {
 
 .table td,
 .table th {
-    font-size: .8125rem;
+    font-size: 0.95rem;
+    /* Slightly smaller */
 
     white-space: nowrap;
 }
@@ -20284,4 +20304,28 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     .wallet-balance {
         margin-top: 10px;
     }
+}
+
+.farmer-card {
+    border: 1px solid #e0e0e0;
+    /* Soft border for card */
+    transition: box-shadow 0.3s ease;
+    /* Smooth hover effect */
+}
+
+.farmer-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Elevated shadow on hover */
+}
+
+.farmer-list h5 {
+    font-size: 1.2rem;
+    /* Larger font for the farmer's name */
+}
+
+.farmer-list p {
+    font-size: 0.95rem;
+    /* Adjust size for other details */
+    color: #666;
+    /* Subtle text color for details */
 }

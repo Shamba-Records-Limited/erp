@@ -14,7 +14,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
         <div class="card-title">Add New Farmer</div>
         <form action="{{ route('cooperative-admin.farmers.add') }}" method="post" enctype="multipart/form-data">
             @csrf
-            {{$errors}}
+            <!-- {{$errors}} -->
             <div class="form-row">
                 <div class="form-group col-lg-12">
                     <h4 class="">Farmer Details</h4>
