@@ -20330,3 +20330,6 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     /* Subtle text color for details */
 }
 
+.card.shadow-lg {
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35), 0 12px 36px rgba(0, 0, 0, 0.45);
+}
