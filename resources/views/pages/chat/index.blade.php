@@ -7,7 +7,7 @@
 @section('topItem')
 
 @if($isAddingGroup == 1)
-<div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; min-height: 100vh;">
+<div style="padding-top: 6rem; position: absolute; z-index: 1050; background-color: #2222; width: 100vw; min-height: 100vh;">
     <div class="container-fluid h-100 w-100" style="min-height: 100vh;">
         <div class="row h-100" style="min-height: 100vh;">
             <div class="col"></div>
@@ -234,7 +234,7 @@
 @endsection
 
 @section('content')
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="row">
             <div class="col">

@@ -536,7 +536,7 @@ var Charts = (function() {
 			'info': '#11cdef',
 			'success': '#2dce89',
 			'danger': '#f5365c',
-			'warning': '#fb6340'
+			'warning': '#2dce89'  //Colour code for the main dash bar graph
 		},
 		black: '#12263F',
 		white: '#FFFFFF',
@@ -555,8 +555,8 @@ var Charts = (function() {
 				global: {
 					responsive: true,
 					maintainAspectRatio: false,
-					defaultColor: (mode == 'dark') ? colors.gray[700] : colors.gray[600],
-					defaultFontColor: (mode == 'dark') ? colors.gray[700] : colors.gray[600],
+					defaultColor: (mode == 'dark') ? colors.gray[700] : colors.gray[600], // Keep this as is for other chart elements
+					defaultFontColor: '#000000', // Set font color for all text elements (axis numbers) to white
 					defaultFontFamily: fonts.base,
 					defaultFontSize: 13,
 					layout: {
@@ -578,7 +578,7 @@ var Charts = (function() {
 						line: {
 							tension: .4,
 							borderWidth: 4,
-							borderColor: colors.theme['primary'],
+							borderColor: '#ffffff',
 							backgroundColor: colors.transparent,
 							borderCapStyle: 'rounded'
 						},
@@ -587,7 +587,7 @@ var Charts = (function() {
 						},
 						arc: {
 							backgroundColor: colors.theme['primary'],
-							borderColor: (mode == 'dark') ? colors.gray[800] : colors.white,
+							borderColor: '#ffffff',
 							borderWidth: 4
 						}
 					},
@@ -965,7 +965,7 @@ var OrdersChart = (function() {
 				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 				datasets: [{
 					label: 'Sales',
-					data: [25, 20, 30, 22, 17, 29]
+					data: [0, 18, 12, 23, 0, 0]
 				}]
 			}
 		});
@@ -1061,3 +1061,115 @@ var SalesChart = (function() {
 	}
 
 })();
+
+var InventoryVsSalesChart = (function() {
+ 
+    // Variables
+ 
+    var $chart = $('#InventoryVsSalesChart');
+ 
+    // Methods
+ 
+    function init($chart) {
+        var inventorySeries = JSON.parse($chart.attr('data-inventory-series'));
+        var salesSeries = JSON.parse($chart.attr('data-sales-series'));
+		console.log(inventorySeries);
+		console.log(salesSeries);
+        var inventoryVsSalesLabels = inventorySeries.map(c => c.x);
+        var inventoryValues = inventorySeries.map(c => c.y);
+        var salesValues = salesSeries.map(c => c.y);
+ 
+        var inventoryVsSalesData = {
+            labels: inventoryVsSalesLabels,
+            datasets: [{
+                label: 'Inventory',
+                data: inventoryValues,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ]
+            }, {
+                label: 'Sales',
+                data: salesValues,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                ]
+            }]
+        };
+ 
+        var inventoryVsSalesOptions = {
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        color: Charts.colors.gray[900],
+                        zeroLineColor: Charts.colors.gray[900]
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            if (!(value % 10)) {
+                                return '$' + value + 'k';
+                            }
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(item, data) {
+                        var label = data.datasets[item.datasetIndex].label || '';
+                        var yLabel = item.yLabel;
+                        var content = '';
+ 
+                        if (data.datasets.length > 1) {
+                            content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                        }
+ 
+                        content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
+                        return content;
+                    }
+                }
+            },
+            animationEasing: "easeOutBounce",
+            responsive: true,
+            maintainAspectRatio: true,
+            showScale: true,
+            legend: {
+                display: true
+            },
+            layout: {
+                padding: {
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    bottom: 0
+                }
+            }
+        };
+ 
+        var inventoryVsSalesChart = new Chart($chart, {
+            type: 'line',
+            data: inventoryVsSalesData,
+            options: inventoryVsSalesOptions
+        });
+ 
+        // Save to jQuery object
+        $chart.data('chart', inventoryVsSalesChart);
+    };
+ 
+    // Events
+ 
+    if ($chart.length) {
+        init($chart);
+    }
+ 
+})();
+ 

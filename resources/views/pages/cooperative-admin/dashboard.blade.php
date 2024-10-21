@@ -82,7 +82,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 Collections Weight (KGs)
             </div>
             <div>
-                <canvas id="CollectionsBarChart" class="mb-4 mb-md-0" height="250"></canvas>
+                <canvas id="CollectionsBarChart" class="chart-canvas" data-collections="{{ json_encode($data['collections'])}}" height="250"></canvas>
             </div>
         </div>
     </div>

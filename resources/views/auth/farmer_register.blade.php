@@ -82,7 +82,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                             <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select County-</option>
                                 @foreach($counties as $county)
-                                <option value="{{$county->id}}" @if($county->id == old('county_id', '')) selected @endif> {{ $county->name }}</option>
+                                <option value="{{$county->id}}"> {{ $county->name }}</option>
                                 @endforeach
 
                                 @if ($errors->has('county_id'))
@@ -95,17 +95,20 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="sub_county">Select Sub County</label>
-                            <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
-                                <option value=""> -Select Sub County-</option>
-
-                                @if ($errors->has('sub_county_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('sub_county_id')  }}</strong>
-                                </span>
-                                @endif
+                            <select name="sub_county_id" id="sub_county_id" class="form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                <option value="">-Select Sub County-</option>
+                                @foreach ($sub_counties as $sub_county)
+                                    <option value="{{ $sub_county->id }}">{{ $sub_county->name }}</option>
+                                @endforeach
                             </select>
+                        
+                            @if ($errors->has('sub_county_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('sub_county_id') }}</strong>
+                                </span>
+                            @endif
                         </div>
-
+                        
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="member_no">Member No</label>
                             <input type="text" name="member_no" class="form-control {{ $errors->has('member_no') ? ' is-invalid' : '' }}" id="member_no" placeholder="A236...Z" value="{{ old('member_no')}}">
@@ -250,39 +253,21 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 @endpush
 @push('custom-scripts')
 <script>
-    function set_subcounty_list(is_initial = false) {
-        let county_value = $("#county_id").val();
-        alert(county_value);
-
-
+$("#county_id").change(function(e) {
         $("#sub_county_id").value = "";
         $("#sub_county_id").empty();
 
         $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
 
-        if (county_value == "") {
-            return;
-        }
         let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
         let filteredSubCounties = []
         for (let subCounty of subCounties) {
-            if (subCounty.county_id == county_value) {
-                let elem = '';
-                if (is_initial && subCounty.id == "{{ old('sub_county_id', '') }}") {
-                    elem = `<option value='${subCounty.id}' selected>${subCounty.name}</option>`
-                } else {
-                    elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
-                }
+            console.log(subCounty)
+            if (subCounty.county_id == e.target.value) {
+                elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
                 $("#sub_county_id").append(elem)
             }
         }
-    }
-
-    $("#county_id").change(function(e) {
-        set_subcounty_list();
-    });
-
-    // on page load
-    set_subcounty_list(true);
+    });         
 </script>
 @endpush

@@ -104,17 +104,19 @@ $countries = get_countries();
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="sub_county">Select Sub County</label>
-                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
-                                    <option value=""> -Select Sub County-</option>
-
-                                    @if ($errors->has('sub_county_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('sub_county_id')  }}</strong>
-                                    </span>
-                                    @endif
+                                <select name="sub_county_id" id="sub_county_id" class="form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                    <option value="">-Select Sub County-</option>
+                                    @foreach ($sub_counties as $sub_county)
+                                        <option value="{{ $sub_county->id }}">{{ $sub_county->name }}</option>
+                                    @endforeach
                                 </select>
+                            
+                                @if ($errors->has('sub_county_id'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('sub_county_id') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-
 
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -176,6 +178,7 @@ $countries = get_countries();
                                 <select name="main_product_id" id="main_product_id" class="form-control select2bs4 {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Main Product --</option>
                                     @foreach($products as $product)
+                                    <?php var_dump($product);?>
                                     <option value="{{$product->id}}" @if($product->id == old('main_product_id')) selected @endif>{{$product->name}}</option>
                                     @endforeach
                                 </select>

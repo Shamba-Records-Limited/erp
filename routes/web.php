@@ -533,6 +533,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // dashboard
     Route::get("/dashboard", "MillerAdmin\DashboardController@index")
         ->name("miller-admin.dashboard");
+    Route::get('/miller-admin/dashboard/export', [DashboardController::class, 'export'])->name('miller-admin.dashboard.export');
+
 
     // warehouses
     Route::get("/warehouses", "MillerAdmin\WarehousesController@index")
@@ -541,6 +543,15 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name('miller-admin.warehouses.store');
     Route::get('/warehouses/download/{type}', 'MillerAdmin\WarehousesController@export_warehouses')
         ->name("miller-admin.warehouses.export");
+
+    // market/dashboard
+    Route::get("market-auction/dashboard", "MillerAdmin\MarketDashboardController@index")
+        ->name("miller-admin.marketplace-dashboard");
+
+
+    // market/products
+    Route::get("market-auction/products", "MillerAdmin\MarketProductsController@index")
+        ->name("miller-admin.marketplace-products");
 
     // market/auction
     Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")
@@ -557,6 +568,7 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.market-auction.view-checkout-cart");
     Route::post("/market-auction/{coop_id}/checkout-cart", "MillerAdmin\MarketAuctionController@checkout_cart")
         ->name("miller-admin.market-auction.checkout-cart");
+
 
 
     // Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
