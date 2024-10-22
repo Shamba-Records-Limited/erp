@@ -20228,8 +20228,11 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     color: #2dce89 !important;
 } */
 
-.bg-custom-green {
+/* .bg-custom-green {
     background-color: #2dce89 !important;
+} */
+.bg-custom-green {
+    background: linear-gradient(135deg, rgba(0, 171, 102, 0.3) 0%, rgba(0, 171, 102, 0.9) 100%) !important;
 }
 
 .text-custom-green {
@@ -20332,4 +20335,4 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 
 .card.shadow-lg {
     box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35), 0 12px 36px rgba(0, 0, 0, 0.45);
-}p
+}
