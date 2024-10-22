@@ -469,7 +469,6 @@ $total_gender_distribution = 0;
         </div>
     </div>
 
-    @include('layouts.footers.auth')
 </div>
 
 

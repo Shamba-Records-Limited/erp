@@ -724,8 +724,8 @@ $cooperative = null;
 
             @if($user && $user->hasRole('miller admin'))
             <ul class="navbar-nav">
-                <li class="nav-item {{ active_class(['home*']) }}">
-                    <a class="nav-link text-black" href="{{ route('home') }}">
+                <li class="nav-item {{ active_class(['miller-admin/dashboard']) }}">
+                    <a class="nav-link text-black" href="{{ route('miller-admin.dashboard') }}">
                         <i class="ni ni-chart-bar-32 text-green"></i> {{ __('Dashboard') }}
                     </a>
                 </li>
