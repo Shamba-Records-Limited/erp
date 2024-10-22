@@ -77,7 +77,7 @@
         <div class="content-wrapper flex-grow-1">
             <!-- Added flex-grow-1 to content-wrapper -->
             <div class="d-flex mt-10 bg-custom-green">
-                <div class="d-flex mt-10" id="wallet_cont">
+                <div class="d-flex mt-10 ml-4" id="wallet_cont">
                 </div>
             </div>
             @yield('content')
