@@ -21960,16 +21960,3 @@ button i {
     font-size: 14px; /* Adjust the font size to match smaller buttons */
 }
 
-/* Adjust the card content styling */
-.card {
-    margin-bottom: 15px;
-}
-
-.container {
-    max-width: 700px; /* Restrict container width to avoid stretching */
-}
-
-/* Optional: Add some padding for better appearance */
-.card-body {
-    padding: 10px 20px;
-}
