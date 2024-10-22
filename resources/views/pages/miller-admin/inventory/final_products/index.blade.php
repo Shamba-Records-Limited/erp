@@ -270,7 +270,18 @@ $units = config('enums.units')
                     <td>{{$product->name}} {{$product->quantity}} {{$product->unit}}</td>
                     <td>KES {{$product->selling_price}} / KG</td>
                     <td>{{$product->count}}</td>
-                    <td></td>
+                    <td>
+                        <div class="btn-group dropdown">
+                            <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="text-primary dropdown-item" href="{{route('miller-admin.final-products.detail', $product->id )}}">
+                                    <i class="fa fa-edit"></i>View Details
+                                </a>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>

@@ -76,6 +76,7 @@
                         <th>Batch Number</th>
                         <th>Lot Number</th>
                         <th>Quantity</th>
+                        <th>Status</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -88,7 +89,12 @@
                         <td>{{$inventory->l_num}}</td>
                         <td>{{$inventory->quantity}} KG</td>
                         <td>
+                            <span class="text-{{$inventory->milled_inventory_id ? 'success' : 'warning'}}">
+                            {{$inventory->milled_inventory_id ? "Milled" : "Not Milled"}}</span></td>
+                        <td>
+                            @if(!$inventory->milled_inventory_id)
                             <a class="btn btn-primary" href="?pre_milled_inventory_id={{$inventory->id}}&is_milling=1">Mill</a>
+                            @endif
                         </td>
                     </tr>
                     @endforeach

@@ -17,6 +17,30 @@ function filterInitOptions(filterOptions) {
     })
 }
 
+function filterInitOptionsV2(filterOptions) {
+    let filterSelect = document.getElementById("filter-select");
+    filterSelect.innerHTML = "";
+
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "-- Select Filter --";
+    filterSelect.appendChild(option);
+
+
+    for (let optionDesc of filterOptions) {
+        let splitOptionDesc = optionDesc.split("__");
+        let key = splitOptionDesc[0];
+        let isNumeric = splitOptionDesc.length > 1 ? splitOptionDesc[1] == "numeric" : false;
+
+        let option = document.createElement("option");
+        option.value = splitOptionDesc[0];
+        option.text = splitOptionDesc[0];
+        option.setAttribute("data-filter-key", splitOptionDesc[0]);
+        option.setAttribute("data-is-numeric", isNumeric);
+        filterSelect.appendChild(option);
+    }
+}
+
 function filterSelectChanged(filterOptions) {
     var filterKeyElem = document.getElementById("filter-select");
     var filterKey = filterKeyElem.value;
@@ -65,6 +89,51 @@ function filterSelectChanged(filterOptions) {
     }
 };
 
+function filterSelectChangedV2(filterOptions) {
+    var filterKeyElem = document.getElementById("filter-select");
+    var filterKey = filterKeyElem.value;
+
+    var isNumeric = filterKeyElem.getAttribute("data-is-numeric");
+
+    let filterOperatorElem = document.getElementById("filter-operator");
+    filterOperatorElem.innerHTML = "";
+    let option = document.createElement("option");
+    option.value = "";
+    option.text = "-- Select Operator --";
+    filterOperatorElem.appendChild(option);
+
+    if (filterKey) {
+        let myOperators = ["has", "doesn't have", "=", "!=", ">", "<", ">=", "<="];
+
+        for (let i = 0; i < myOperators.length; i++) {
+            if (isNumeric && i < 2) {
+                continue;
+            }
+
+            let option = document.createElement("option");
+            option.value = myOperators[i];
+            option.text = myOperators[i];
+            if (!isNumeric && i == 0) {
+                option.selected = true;
+            }
+            if (isNumeric && i == 2) {
+                option.selected = true;
+            }
+            filterOperatorElem.appendChild(option);
+        }
+
+        document.getElementById("filter-operator").disabled = false;
+        filterOperatorChangedV2(filterOptions);
+
+        document.getElementById("filter-value").disabled = false;
+        document.getElementById("filter-apply").disabled = true;
+    } else {
+        document.getElementById("filter-operator").disabled = true;
+        document.getElementById("filter-value").disabled = true;
+        document.getElementById("filter-apply").disabled = true;
+    }
+};
+
 function filterOperatorChanged(filterOptions) {
     // validates and creates filter value input or select
     var filterOperator = document.getElementById("filter-operator").value;
@@ -77,6 +146,60 @@ function filterOperatorChanged(filterOptions) {
 
 
     var isNumeric = filterOption["isNumeric"] || false;
+
+    if (filterOperator) {
+        let optionsOperators = ["=", "!="];
+        if (optionsOperators.includes(filterOperator) && hasOptions) {
+            let valueElem = document.createElement("select");
+            valueElem.id = "filter-value";
+            valueElem.className = "form-control ml-2";
+            valueElem.onchange = function () {
+                filterValueChanged();
+            }
+
+
+            let defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "-- Select Value --";
+            valueElem.appendChild(defaultOption);
+
+            for (let i = 0; i < myOptions.length; i++) {
+                let option = document.createElement("option");
+                option.value = myOptions[i];
+                option.text = myOptions[i];
+                valueElem.appendChild(option);
+            }
+
+            document.getElementById("filter-value").replaceWith(valueElem);
+        } else {
+            let valueElem = document.createElement("input");
+            valueElem.id = "filter-value";
+            valueElem.className = "form-control ml-2";
+            valueElem.onkeyup = function () {
+                filterValueKeyUp();
+            }
+
+            document.getElementById("filter-value").replaceWith(valueElem);
+        }
+
+        document.getElementById("filter-apply").disabled = true;
+    } else {
+        document.getElementById("filter-value").disabled = true;
+        document.getElementById("filter-apply").disabled = true;
+    }
+
+};
+
+function filterOperatorChangedV2(filterOptions) {
+    // validates and creates filter value input or select
+    var filterOperator = document.getElementById("filter-operator").value;
+
+    var filterKeyElem = document.getElementById("filter-select");
+    var isNumeric = filterKeyElem.getAttribute("data-is-numeric");
+
+    var myOptions = [];
+    var hasOptions = false;
+
 
     if (filterOperator) {
         let optionsOperators = ["=", "!="];

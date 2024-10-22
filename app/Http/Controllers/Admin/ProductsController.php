@@ -172,10 +172,7 @@ class ProductsController extends Controller
 
     public function store_category(Request $request)
     {
-        $units = [];
-        foreach (config('enums.units') as $k => $u) {
-            $units[] = $k;
-        }
+        $units = ["KG", "LB", "L", "GAL"];
 
         $request->validate([
             "name" => "required|unique:product_categories,name",

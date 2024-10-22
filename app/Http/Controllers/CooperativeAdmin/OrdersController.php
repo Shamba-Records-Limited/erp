@@ -77,7 +77,24 @@ class OrdersController extends Controller
         if (count($orders) > 0) {
             $order = $orders[0];
         }
+        
+        // get delivered quantity
+        $orderQuantityResult =  DB::select(DB::raw("
+            SELECT sum(item.quantity) as quantity
+            FROM miller_auction_order_item item
+            WHERE item.order_id = :order_id
+        "), ["order_id" => $id,]);
+        $orderQuantity = $orderQuantityResult[0]->quantity;
 
+        $deliveredQuantityResult = DB::select(DB::raw("
+            SELECT sum(item.quantity) as quantity
+            FROM auction_order_delivery_item item
+            JOIN auction_order_delivery delivery ON delivery.id = item.delivery_id
+            WHERE delivery.order_id = :order_id
+        "), ["order_id" => $id,]);
+        $deliveredQuantity = $deliveredQuantityResult[0]->quantity;
+
+        $undeliveredQuantity = $orderQuantity - $deliveredQuantity;
 
         $tab = $request->query('tab', 'items');
         $action = $request->query('action', '');
@@ -132,7 +149,7 @@ class OrdersController extends Controller
 
 
 
-        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items', 'totalInOrder', 'aggregateGradeDistribution'));
+        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items', 'totalInOrder', 'aggregateGradeDistribution', 'deliveredQuantity', 'undeliveredQuantity'));
     }
 
     public function add_delivery_item(Request $request, $order_id)
@@ -172,9 +189,9 @@ class OrdersController extends Controller
                 $now = Carbon::now();
                 $now_str = strtoupper($now->format('Ymd'));
                 $date_str = $now->format('Y-m-d') . " 00:00:00";
-            
+
                 $dateAfter_str = $now->format('Y-m-d') . " 23:59:59";
-                
+
                 $delivery_count = AuctionOrderDelivery::where('created_at', '>=', $date_str)
                     ->where('created_at', '<', $dateAfter_str)
                     ->count();

@@ -214,6 +214,10 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.add');
     Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
         ->name('admin.farmers.detail');
+    Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
+        ->name('admin.farmers.detail');
+    Route::get('/farmers/download/{type}', 'Admin\FarmersController@export_farmers')
+        ->name("admin.farmers.export");
 
     // products
     Route::get('/products/dash', 'Admin\ProductsController@dash')
@@ -267,6 +271,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     // collections
     Route::get('/collections', 'Admin\CollectionsController@index')
         ->name('admin.collections.show');
+    Route::get('/collections/table', 'Admin\CollectionsController@table')
+        ->name('admin.collections.partials.table');
 
 
 
@@ -625,6 +631,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.final-product.discard-draft");
     Route::get("/inventory/final-products/publish", "MillerAdmin\InventoryController@publish_final_product")
         ->name("miller-admin.final-products.publish");
+    Route::get("/inventory/final-products/{id}", "MillerAdmin\InventoryController@final_product_details")
+        ->name("miller-admin.final-products.detail");
     // Route::post("/inventory", "MillerAdmin\InventoryController@save")
     //     ->name("miller-admin.inventory.save");
     // Route::post("/inventory", "MillerAdmin\InventoryController@store")

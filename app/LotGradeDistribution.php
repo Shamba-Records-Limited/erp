@@ -26,4 +26,9 @@ class LotGradeDistribution extends Model
             $model->id = (string) Uuid::generate(4);
         });
     }
+
+    public function product_grade()
+    {
+        return $this->belongsTo(ProductGrade::class, "product_grade_id", "id");
+    }
 }

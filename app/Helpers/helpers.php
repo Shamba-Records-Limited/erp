@@ -1466,23 +1466,23 @@ if (!function_exists('perform_transaction')) {
                     }
 
                     if ($nextKey == $filterKey && !$orOpened) {
-                        $outerCondition .= " AND (subquery.$filterKey $filterOperator '$filterValue' ";
+                        $outerCondition .= " AND ($filterKey $filterOperator '$filterValue' ";
                         $orOpened = true;
                         continue;
                     }
 
                     if ($nextKey != $filterKey && $orOpened) {
-                        $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' )";
+                        $outerCondition .= " OR $filterKey $filterOperator '$filterValue' )";
                         $orOpened = false;
                         continue;
                     }
 
                     if ($orOpened) {
-                        $outerCondition .= " OR subquery.$filterKey $filterOperator '$filterValue' ";
+                        $outerCondition .= " OR $filterKey $filterOperator '$filterValue' ";
                         continue;
                     }
 
-                    $outerCondition .= " AND subquery.$filterKey $filterOperator '$filterValue' ";
+                    $outerCondition .= " AND $filterKey $filterOperator '$filterValue' ";
                 }
             }
             return $outerCondition;
@@ -1727,6 +1727,18 @@ if (!function_exists('perform_transaction')) {
             $notification->save();
 
             return $notification->id;
+        }
+    }
+
+    if (!function_exists("unit_converter")){
+        function unit_converter($value, $from, $to, $density)
+        {
+            if ($from == 'KG' && $to == 'G'){
+                return $value * 1000;
+            } else if ($from == 'G' && $to == 'KG'){
+                return $value / 1000;
+            }
+
         }
     }
 

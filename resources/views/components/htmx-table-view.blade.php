@@ -12,10 +12,12 @@
                 <span class="mdi mdi-filter"></span>
                 <span class="mdi mdi-plus"></span>
             </button>
+            @if($exportRoute)
             <button class="btn btn-primary btn-fw btn-sm ml-1" onclick="exportReport('{{route($exportRoute, 'xlsx')}}')"><span class="mdi mdi-file-excel"></span>Export Excel
             </button>
             <button class="btn btn-primary btn-fw btn-sm ml-1" onclick="exportReport('{{route($exportRoute, 'pdf')}}')"><span class="mdi mdi-file-pdf"></span>Export Pdf
             </button>
+            @endif
         </div>
 
         <div id="filter-display" class="d-flex filter-display align-items-start flex-wrap p-2">
@@ -24,7 +26,7 @@
                 <select class="form-control" id="filter-select" onchange="filterSelectChangedV2(myFilterOptions)">
                     <option value="">-- Select Filter --</option>
                 </select>
-                <select class="form-control ml-2" id="filter-operator" onchange="filterOperatorChanged(myFilterOptions)" disabled>
+                <select class="form-control ml-2" id="filter-operator" onchange="filterOperatorChangedV2(myFilterOptions)" disabled>
                     <option value="">-- Select Operator --</option>
                     <option value="is:">is:</option>
                 </select>
@@ -41,8 +43,8 @@
                 <div class="ml-2">
                     <select hx-get="{{$tableRoute}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control:not(#page)" hx-swap="innerHTML" class="form-control table-control" id="show-per-page" name="limit" onchange="showPerPageChanged()">
                         <option value="1">1</option>
-                        <option value="5" selected>5</option>
-                        <option value="10">10</option>
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
                         <option value="25">25</option>
                         <option value="50">50</option>
                         <option value="100">100</option>

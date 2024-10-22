@@ -402,28 +402,81 @@ return [
         '0' => 'Gross Pay Reducing',
         '1' => 'Gross Pay Fixed'
     ],
-    'units' => [
+    'weight_units' => [
         'KG' => [
-            'name' => 'Kilograms'
+            'name' => 'Kilograms',
         ],
         'G' => [
             'name' => 'Grams',
         ],
+        'LB' => [
+            'name' => 'Pounds'
+        ],
+        'OZ' => [
+            'name' => 'Ounces'
+        ]
+    ],
+    'volume_units' => [
         'L' => [
             'name' => 'Litres',
         ],
         'ML' => [
             'name' => 'Millilitres',
         ],
+        'GAL' => [
+            'name' => 'Gallons',
+        ]
+    ],  
+    "length_units" => [
         'M' => [
             'name' => 'Meters',
+        ],
+        "KM" => [
+            "name" => "Kilometers"
         ],
         'CM' => [
             'name' => 'Centimeters',
         ],
+        'MM' => [
+            'name' => 'Millimeters',
+        ],
+        'MI' => [
+            'name' => 'Miles',
+        ],
         'IN' => [
             'name' => 'Inches',
         ],
+        'FT' => [
+            'name' => 'Feet',
+        ],
+        'YD' => [
+            'name' => 'Yards',
+        ],
+        'NM' => [
+            'name' => 'Nautical Miles',
+        ]
+    ],
+    "weight_conversions" => [
+        "grams" => 1,
+        "kilograms" => 0.001,
+        "pounds" => 0.00220462,
+        "ounces" => 0.035274
+    ],
+    "volume_conversions" => [
+        "litres" => 1,
+        "millilitres" => 1000,
+        "gallons" => 0.00378541,
+    ],
+    "length_conversions" => [
+        "meters" => 1,
+        "kilometers" => 0.001,
+        "centimeters" => 100,
+        "millimeters" => 1000,
+        "miles" => 0.000621371,
+        "inches" => 39.3701,
+        "feet" => 3.28084,
+        "yards" => 1.09361,
+        "nautical_miles" => 0.000539957
     ],
     "ticket_labels" => ["Bug", "Feature Request", "Enhancement", "Task"],
 ];

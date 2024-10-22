@@ -38,10 +38,11 @@
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="unit">Unit</label>
                                 <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
-                                    <option value="">-- Select Unit --</option>
-                                    @foreach(config('enums.units') as $key => $unit)
-                                    <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>
-                                    @endforeach
+                                    <option value="">-- Select Unit Of Measurement --</option>
+                                    <option value="KG">Kilograms</option>
+                                    <option value="LB">Pounds</option>
+                                    <option value="L">Litres</option>
+                                    <option value="GAL">Gallons</option>
                                 </select>
                                 @if ($errors->has('unit'))
                                 <span class="help-block text-danger">

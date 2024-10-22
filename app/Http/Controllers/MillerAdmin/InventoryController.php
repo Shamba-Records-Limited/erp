@@ -11,6 +11,7 @@ use App\FinalProductRawMaterial;
 use App\Http\Controllers\Controller;
 use App\Inventory;
 use App\InventoryItem;
+use App\LotGradeDistribution;
 use App\MilledInventory;
 use App\MilledInventoryGrade;
 use App\PreMilledInventory;
@@ -224,13 +225,29 @@ class InventoryController extends Controller
 
     public function milled_details(Request $request, $id)
     {
-        $milling = MilledInventory::find($id);
 
-        $gradings = MilledInventoryGrade::with("product_grade")->get();
+        $milling = DB::select(DB::raw("
+            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num, SUM(grade.quantity) AS milled_grading_total
+            FROM milled_inventories inv
+            JOIN milled_inventory_grades grade ON grade.milled_inventory_id = inv.id
+
+            JOIN pre_milled_inventories pre_inv ON pre_inv.id = inv.pre_milled_inventory_id
+            JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
+            JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
+            JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
+            WHERE inv.id = :id
+            GROUP BY inv.id
+            ORDER BY inv.created_at DESC;
+        "), ["id" => $id])[0];
+
+
+        $milledGradings = MilledInventoryGrade::with("product_grade")->where("milled_inventory_id", $id)->get();
+        $preMilledGradings = LotGradeDistribution::with("product_grade")->where("lot_number", $milling->l_num)->get();
 
         # todo: fetch actual lot unit
         $lot_unit = "KG";
 
+        $tab = $request->query("tab", "milled_grading");
         $isAddingGrade = $request->query("is_adding_grade", "0");
         $grades = [];
         if ($isAddingGrade == "1") {
@@ -239,7 +256,7 @@ class InventoryController extends Controller
             "));
         }
 
-        return view('pages.miller-admin.inventory.milled.detail', compact('id', 'milling', 'gradings', 'lot_unit', "isAddingGrade", "grades"));
+        return view('pages.miller-admin.inventory.milled.detail', compact('id', 'milling', 'milledGradings', 'preMilledGradings', 'lot_unit', "isAddingGrade", "grades", "tab"));
     }
 
     public function save_milling(Request $request)
@@ -264,7 +281,13 @@ class InventoryController extends Controller
 
         DB::beginTransaction();
 
+
         try {
+            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
+            if ($preMilledInventory->milled_inventory_id) {
+                throw new \Exception("This inventory is already milled");
+            }
+
             $now = Carbon::now();
             $inventoryNumber = "INV";
             $inventoryNumber .= $now->format('Ymd');
@@ -283,7 +306,6 @@ class InventoryController extends Controller
             $inventory->save();
 
             // update pre milled inventory
-            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
             $preMilledInventory->milled_inventory_id = $inventory->id;
             $preMilledInventory->save();
 
@@ -434,6 +456,17 @@ class InventoryController extends Controller
 
 
         return view("pages.miller-admin.inventory.final_products.index", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
+    }
+
+    public function final_product_details(Request $request, $id)
+    {
+        $finalProduct = FinalProduct::findOrFail($id);
+
+        $rawMaterials = FinalProductRawMaterial::with("milled_inventory")->where("final_product_id", $id)->get();
+
+        # todo: fetch actual lot unit
+        $lot_unit = "KG";
+        return view('pages.miller-admin.inventory.final_products.detail', compact('id', 'finalProduct', 'lot_unit', 'rawMaterials'));
     }
 
     public function export_final_products($type)

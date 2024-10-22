@@ -30,7 +30,7 @@
                                 <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Grade --</option>
                                     @foreach($grades as $grade)
-                                    <option value="{{$grade->id}}" @if(old('product_grade_id') == $grade->id) selected @endif> {{ $grade->name }}</option>
+                                    <option value="{{$grade->id}}" @if(old('product_grade_id')==$grade->id) selected @endif> {{ $grade->name }}</option>
                                     @endforeach
 
                                     @if ($errors->has('product_grade_id'))
@@ -78,13 +78,30 @@
         <div class="card-title">Milled Inventory Details</div>
         <div class="card-subtitle">Inventory Number: <span class="font-weight-bold">{{$milling->inventory_number}}</span></div>
         <div class="row">
-            <div class="col-4">
-                <div></div>
+            <div class="col-3 border rounded d-flex m-2">
+                <div>Milled Quantity:&nbsp;</div>
+                <div class="text-primary">{{$milling->milled_quantity}} KG</div>
+            </div>
+            <div class="col-3 border rounded d-flex m-2">
+                <div>Waste Quantity:&nbsp;</div>
+                <div class="text-primary">{{$milling->waste_quantity}} KG</div>
+            </div>
+            <div class="col-3 border rounded d-flex m-2">
+                <div>Milled Grading:&nbsp;</div>
+                <div class="text-primary">{{$milling->milled_grading_total}} of {{$milling->milled_quantity}} KG</div>
             </div>
         </div>
 
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'milled_grading'?'active':'' }}" href="?tab=milled_grading">Milled Grading</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ $tab == 'pre_milled_grading'?'active':'' }}" href="?tab=pre_milled_grading">Pre-Milled Grading</a>
+            </li>
+        </ul>
 
-        <h4>Grading</h4>
+        @if($tab == 'milled_grading' || empty($tab))
         <div class="d-flex justify-content-end">
             <a href="?is_adding_grade=1" class="btn btn-primary">Add Grading</a>
         </div>
@@ -98,7 +115,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($gradings as $grading)
+                    @foreach($milledGradings as $grading)
                     <tr>
                         <td>{{$grading->product_grade->name}}</td>
                         <td>{{$grading->quantity}} {{$grading->unit}}</td>
@@ -114,6 +131,29 @@
                 </tbody>
             </table>
         </div>
+        @elseif($tab == 'pre_milled_grading')
+        <div class="p-2 table-responsive">
+            <table class="table table-hover dt">
+                <thead>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($preMilledGradings as $grading)
+                    <tr>
+                        <td>{{$grading->product_grade->name}}</td>
+                        <td>{{$grading->quantity}} {{$grading->unit}}</td>
+                        <td>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
     </div>
 </div>
 
