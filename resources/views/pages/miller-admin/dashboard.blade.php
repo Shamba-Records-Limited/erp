@@ -164,7 +164,7 @@ $total_gender_distribution = 0;
 <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-xl-8 mb-5 mb-xl-0">
-                <div class="card bg-gradient-default shadow">
+                <div class="card  shadow">
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
@@ -507,7 +507,7 @@ $total_gender_distribution = 0;
 
 @push('custom-scripts')
 <script>
-
+//Milled Vs Premilled Chart
     let milledSeries = @json($data['milled_series']);
     let preMilledSeries = @json($data['pre_milled_series']);
     let milledVsPremilledLables = milledSeries.map(c => c.x)
@@ -565,6 +565,7 @@ $total_gender_distribution = 0;
         options: milledVsPremilledOptions
     });
 
+    //Income Vs Expense Chart
     let incomeSeries = @json($data['income_series']);
     let expensesSeries = @json($data['expenses_series']);
     let incomeVsExpensesLables = incomeSeries.map(c => c.x)
@@ -622,6 +623,8 @@ $total_gender_distribution = 0;
         options: incomeVsExpensesOptions
     });
 
+//Inventory Vs Sales Chart
+    let inventoryVsSalesChartCanvas = document.getElementById("InventoryVsSalesChart");
 
     let inventorySeries = @json($data['inventory_series']);
     let salesSeries = @json($data['sales_series']);
@@ -656,6 +659,7 @@ $total_gender_distribution = 0;
         }]
     };
 
+// Chart options
     let inventoryVsSalesOptions = {
         animationEasing: "easeOutBounce",
         responsive: true,
@@ -679,49 +683,7 @@ $total_gender_distribution = 0;
         options: inventoryVsSalesOptions
     });
 
-    let gradeDistribution = @json($data['grade_distribution']);
-    let gradeDistributionLables = gradeDistribution.map(c => c.name)
-    let gradeDistributionValues = gradeDistribution.map(c => c.quantity)
 
-    let gradeDistributionChartCanvas = document.getElementById("GradeDistributionChart")
-    let gradeDistributionChartData = {
-        labels: gradeDistributionLables,
-        datasets: [{
-            label: 'Milled',
-            data: gradeDistributionValues,
-            backgroundColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-            ],
-            borderColor: [
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 99, 132, 1)',
-            ]
-        }]
-    };
-
-    let gradeDistributionChartOptions = {
-        animationEasing: "easeOutBounce",
-        responsive: true,
-        maintainAspectRatio: true,
-        showScale: true,
-        legend: {
-            display: true
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }
-        }
-    };
-    let gradeDistributionChart = new Chart(gradeDistributionChartCanvas, {
-        type: "horizontalBar",
-        data: gradeDistributionChartData,
-        options: gradeDistributionChartOptions
-    });
 
     // Grade distribution chart
     let gradeDistributionData = @json($data['grade_distribution']);
@@ -729,41 +691,36 @@ $total_gender_distribution = 0;
     let gradeDistributionValues = gradeDistributionData.map(c => c.quantity);
     let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart");
 
-    // Chart data
     let gradeDistributionBarData = {
         datasets: [{
             data: gradeDistributionValues,
-            // backgroundColor: '#FB6340',
-            backgroundColor: '#2dce89', // Single color for simplicity, you can use multiple colors if desired
+            backgroundColor: '#2dce89', 
         }],
-        labels: gradeDistributionLabels, // These will now be used for the y-axis in a horizontal bar chart
+        labels: gradeDistributionLabels, 
     };
 
-    // Chart options
     let gradeDistributionBarOptions = {
         scales: {
-            // Y-axis (horizontal) - contains the grade names
             yAxes: [{
                 ticks: {
-                    beginAtZero: true, // Start from zero
-                    fontSize: 10, // Adjust the font size if needed
-                    padding: 10, // Space between the chart and the y-axis labels
+                    beginAtZero: true,
+                    fontSize: 10, 
+                    padding: 10,
                 },
                 gridLines: {
-                    display: false, // Hide grid lines for the y-axis
+                    display: false,
                 },
             }],
-            // X-axis (vertical) - contains the percentage values
             xAxes: [{
                 ticks: {
-                    beginAtZero: true, // Start from zero for the x-axis as well
+                    beginAtZero: true, 
                     callback: function(value) {
                         return value + '';
                     },
                 },
                 gridLines: {
-                    color: 'rgba(77, 77, 77, 0.2)', // Lighter grid lines for the x-axis
-                    zeroLineColor: 'rgba(77, 77, 77, 0.5)', // Zero line color
+                    color: 'rgba(77, 77, 77, 0.2)', 
+                    zeroLineColor: 'rgba(77, 77, 77, 0.5)',
                 },
             }],
         },
@@ -772,7 +729,7 @@ $total_gender_distribution = 0;
                 label: function(item, data) {
                     var label = data.datasets[item.datasetIndex].label || '';
                     var yLabel = item
-                        .xLabel; // Using xLabel since we are using a horizontal bar chart
+                        .xLabel;
                     var content = '';
 
                     if (data.datasets.length > 1) {
@@ -781,7 +738,7 @@ $total_gender_distribution = 0;
                     }
 
                     content += '<span class="popover-body-value">' + yLabel +
-                        '%</span>'; // Format tooltip to show percentages
+                        '%</span>';
                     return content;
                 },
             },
@@ -790,7 +747,7 @@ $total_gender_distribution = 0;
         },
         maintainAspectRatio: false,
         legend: {
-            display: false, // Optional: Disable the legend if not needed
+            display: false, 
         },
         layout: {
             padding: {
@@ -806,9 +763,8 @@ $total_gender_distribution = 0;
         },
     };
 
-    // Create the chart
     let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
-        type: "horizontalBar", // Horizontal bar chart type
+        type: "horizontalBar",
         data: gradeDistributionBarData,
         options: gradeDistributionBarOptions
     });
