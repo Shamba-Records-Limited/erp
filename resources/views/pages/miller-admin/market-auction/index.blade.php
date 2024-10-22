@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="card-title">Market Auction</div>
         <div class="card-subtitle">Cooperatives</div>
@@ -14,8 +14,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Name</th>
-                        <th>Num of Lots</th>
+                        <th>Cooperative/Aggregator</th>
+                        <th>Available Lots</th>
+                        <th>Action</th>
                         <th></th>
                     </tr>
                 </thead>

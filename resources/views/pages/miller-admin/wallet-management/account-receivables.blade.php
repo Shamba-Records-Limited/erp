@@ -4,7 +4,7 @@
 @endpush
 
 @section('content')
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="card-title">Account Receivables</div>
         <table class="table table-striped table-bordered dt">

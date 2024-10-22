@@ -4,7 +4,7 @@
 @endpush
 
 @section('content')
-<div class="card">
+<div class="card pt-6">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-end">
             <div class="card-title">Transactions</div>

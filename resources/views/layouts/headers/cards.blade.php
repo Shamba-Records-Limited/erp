@@ -1,4 +1,5 @@
 <div class="header bg-custom-green pb-8 pt-5 pt-md-8">
+<div class="header bg-gradient-primary pb-8 pt-5 pt-md-5">
     <div class="container-fluid">
         <div class="header-body">
             <!-- Card stats -->
@@ -37,6 +38,8 @@
                                     <span class="h2 font-weight-bold mb-0">
                                         {{ isset($data['farmer_count']) ? $data['farmer_count'] : 0 }}
                                     </span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Coffee In Marketplace</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{$data["coffee_in_marketplace"] ?? "0"}} KG</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -51,7 +54,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
@@ -61,6 +63,9 @@
                                     <span class="h2 font-weight-bold mb-0">
                                         {{ isset($data['collection_count']) ? $data['collection_count'] : 0 }}
                                     </span>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Cooperative Partnerships
+                                        <br>
+                                    <span class="h2 font-weight-bold mb-0">{{$data["cooperative_partnerships"] ?? "0"}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -79,4 +84,49 @@
         </div>
     </div>
 
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Current Orders</h5>
+                                    <span class="h2 font-weight-bold mb-0">924</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                <span class="text-nowrap">Since yesterday</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Performance</h5>
+                                    <span class="h2 font-weight-bold mb-0">49,65%</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-percent"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
 </div>
