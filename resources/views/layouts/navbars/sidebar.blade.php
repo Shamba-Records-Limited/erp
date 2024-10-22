@@ -73,6 +73,7 @@ $cooperative = null;
                                 <a class="dropdown-item"> Check Inbox </a>
                                 <a class="dropdown-item"> Sign Out </a>
                             </div>
+                            <hr class="horizontal light mb-4">
                         </div>
                     </div>
                 </div>
@@ -80,7 +81,7 @@ $cooperative = null;
         </li>
 
         @if($user && $user->hasRole('admin'))
-        <li class="nav-item {{ active_class(['admin/dashboard']) }}">
+        <li class=" nav-item {{ active_class(['admin/dashboard']) }}">
             <a class="nav-link" href="{{ route('admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
@@ -221,12 +222,12 @@ $cooperative = null;
         @endif
 
         @if($user && $user->hasRole('cooperative admin|employee'))
-        <li class="nav-item {{ active_class(['dashboard']) }}">
+        <!-- <li class="nav-item {{ active_class(['dashboard']) }}">
             <a class="nav-link" href="{{ route('cooperative-admin.dashboard') }}">
                 <i class="menu-icon mdi mdi-television"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
-        </li>
+        </li> -->
 
 
         @php
