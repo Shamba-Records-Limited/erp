@@ -62,31 +62,23 @@
 </head>
 
 <body class="{{ $class ?? '' }}">
+
     @auth()
     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
     @include('layouts.navbars.sidebar')
     @endauth
-
+    <div class="bg-custom-green" style=" width:100%;">
+        @include('layouts.navbars.navbar')
+    </div>
     <div class="main-content d-flex flex-column min-vh-100">
-        <!-- Added flex-column and min-vh-100 -->
-        @yield('topItem')
-        <div class="mt-10">
-            @include('layouts.navbars.navbar')
-        </div>
 
-        <div class="content-wrapper flex-grow-1">
-            <!-- Added flex-grow-1 to content-wrapper -->
-            <div class="d-flex mt-10 bg-custom-green">
-                <div class="d-flex mt-10 ml-4" id="wallet_cont">
-                </div>
-            </div>
-            @yield('content')
-        </div>
+        @yield('topItem')
+
+        @yield('content')
 
         @include('layouts.footers.auth')
-        <!-- Footer included here -->
     </div>
 
 

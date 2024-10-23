@@ -4793,7 +4793,6 @@ input[type='button'].btn-block {
 
 .nav {
     display: flex;
-
     margin-bottom: 0;
     padding-left: 0;
 
@@ -4889,14 +4888,12 @@ input[type='button'].btn-block {
 
 .navbar {
     position: relative;
-
     display: flex;
 
     padding: 1rem 1rem;
-
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
 }
 
 .navbar>.container,
@@ -5342,7 +5339,7 @@ input[type='button'].btn-block {
 }
 
 .card-body {
-    padding: 1.5rem;
+    padding: 2.8rem;
 
     flex: 1 1 auto;
 }
@@ -16247,10 +16244,11 @@ a.btn-icon-only {
 }
 
 .main-content {
-    position: relative;
+    /* position: relative; */
     min-height: 100vh;
-    /* Ensure the main-content takes at least 100% of the viewport height */
-
+    margin-left: 300px;
+    /* padding-left: 15%; */
+    overflow-x: hidden;
 }
 
 .main-content .navbar-top {
@@ -18009,7 +18007,7 @@ textarea[resize='horizontal'] {
         overflow-y: auto;
 
         width: 100%;
-        max-width: 250px;
+        max-width: 280px;
         padding-right: 1.5rem;
         padding-left: 1.5rem;
     }
@@ -20251,32 +20249,30 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 .custom-border {
     border: 1px solid #ddd;
     border-top: none;
-    /* No top border */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* Less shadow on right and left */
     padding: 15px;
     border-radius: 5px;
 }
+.wallet-container{
+    margin-left:300px;
+}
 
-/* Wallet card styling */
 .wallet-card {
     border-radius: 10px;
     background-color: #f8f9fa;
     transition: transform 0.2s ease-in-out;
+
 }
 
 .wallet-card:hover {
     transform: translateY(-5px);
 }
 
-/* Wallet balance styling */
 .wallet-balance h5 {
     font-size: 1.25rem;
     color: #28a745;
-    /* Green for positive balance */
 }
 
-/* Wallet info styling */
 .wallet-info h5 {
     font-size: 1.1rem;
     display: flex;
@@ -20286,17 +20282,14 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 .wallet-info h5 i {
     margin-right: 8px;
     color: #007bff;
-    /* Primary blue for wallet icon */
 }
 
 .wallet-info p {
     margin: 0;
     font-size: 0.9rem;
     color: #495057;
-    /* Dark gray for account number */
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
 
     .wallet-info,
@@ -20311,26 +20304,20 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 
 .farmer-card {
     border: 1px solid #e0e0e0;
-    /* Soft border for card */
     transition: box-shadow 0.3s ease;
-    /* Smooth hover effect */
 }
 
 .farmer-card:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    /* Elevated shadow on hover */
 }
 
 .farmer-list h5 {
     font-size: 1.2rem;
-    /* Larger font for the farmer's name */
 }
 
 .farmer-list p {
     font-size: 0.95rem;
-    /* Adjust size for other details */
     color: #666;
-    /* Subtle text color for details */
 }
 
 .card.shadow-lg {
@@ -20347,3 +20334,65 @@ hr.horizontal.light {
     height: 1px;
     background-color: #B0BAC4;
 }
+
+#sidenav-main {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    /* width: 980px; */
+    height: calc(100vh - 70px);
+    background-color: #fff;
+    border-radius: 15px;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.2),
+        0 3px 6px rgba(0, 0, 0, 0.15),
+        0 10px 20px rgba(0, 0, 0, 0.1);
+
+    z-index: 19000;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+
+
+.nav-profile-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 19000;
+}
+
+.nav-items-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 120px;
+}
+
+.nav-items-wrapper ul {
+    padding-top: 10px;
+}
+
+.coop-profile-image img {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.status-indicator.online {
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+}
+
+.user-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
