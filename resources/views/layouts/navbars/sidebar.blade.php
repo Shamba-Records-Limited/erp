@@ -72,7 +72,7 @@ $cooperative = null;
                                     <a class="dropdown-item"> Check Inbox </a>
                                     <a class="dropdown-item"> Sign Out </a>
                                 </div>
-                                <hr class="horizontal light mb-4">
+                                <!-- <hr class="horizontal light mb-4"> -->
                             </div>
                         </div>
                     </div>
