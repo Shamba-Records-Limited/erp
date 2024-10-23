@@ -15,7 +15,24 @@
                 <td>{{$transaction->transaction_number}}</td>
                 <td>{{$transaction->formatted_amount}}</td>
                 <td>{{$transaction->purpose}}</td>
-                <td>{{$transaction->status}}</td>
+
+                @php
+                $statusCls = 'text-warning'; // Default class
+                if ($transaction->status == 'COMPLETE') {
+                $statusCls = 'text-success';
+                } elseif ($transaction->status == 'PENDING') {
+                $statusCls = 'text-warning';
+                } else {
+                $statusCls = 'text-danger'; // Other statuses can be handled here
+                }
+                @endphp
+
+                <td>
+                    <div class="{{ $statusCls }}">
+                        {{$transaction->status}}
+                    </div>
+                </td>
+
                 <td>{{$transaction->created_at}}</td>
             </tr>
             @endforeach
@@ -34,7 +51,9 @@
 <div class="d-flex justify-content-between">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
-        <input hx-get="{{route($acc_type.'.wallet-management.withdrawals.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
+        <input hx-get="{{route($acc_type.'.wallet-management.withdrawals.table')}}" hx-trigger="change"
+            hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden"
+            class="form-control table-control" id="page" value="{{$page}}" />
         <div id="items-pagination"></div>
     </div>
 </div>
