@@ -48,7 +48,7 @@
     </table>
 </div>
 
-<div class="d-flex justify-content-between">
+<div class="d-flex justify-content-between mt-2">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
         <input hx-get="{{route($acc_type.'.wallet-management.withdrawals.table')}}" hx-trigger="change"
