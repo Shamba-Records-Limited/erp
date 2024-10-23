@@ -20429,7 +20429,7 @@ hr.horizontal.light {
 }
 
 .avatar {
-    position: absolute; /* Allows you to position the avatar anywhere within a container */
-    top: -60px;          /* Adjust 'top' value to move the avatar vertically */
-    right: 10px;        /* Adjust 'right' value to move the avatar horizontally */
+    position: absolute; 
+    top: -60px;         
+    right: 10px;        
 }
