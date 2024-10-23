@@ -16,7 +16,7 @@ $acc_type = 'miller-admin';
         @php
         $exportRoute = $acc_type.".account-receivables.export";
         @endphp
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end mb-5">
             <button class="btn btn-primary" title="Add Filter" onclick="toggleFilterContainer()">
                 <span class="mdi mdi-filter"></span>
                 <span class="mdi mdi-plus">Add Filter</span>
