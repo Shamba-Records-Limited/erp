@@ -20,37 +20,50 @@
                 <td>{{$transaction->sender}}</td>
                 <td>{{$transaction->recipient}}</td>
                 <td>{{$transaction->formatted_amount}}</td>
-                <td>{{$transaction->status}}</td>
                 <td>{{$transaction->created_at}}</td>
+                @php
+                $statusCls = 'text-warning';
+                if($transaction->status == 'COMPLETE'){
+                $statusCls = 'text-success';
+                } elseif($transaction->status == 'PENDING') {
+                $statusCls = 'text-warning';
+                } else {
+                $statusCls = 'text-danger'; // Example for other statuses
+                }
+                @endphp
                 <td>
-                        <div class="btn-group dropdown">
-                            <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Actions
+                    <div class="{{ $statusCls }}">
+                        {{$transaction->status}}
+                    </div>
+                </td>
+                <td>
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                            Actions
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="text-primary dropdown-item"
+                                href="{{route($acc_type.'.transactions.detail', $transaction->id )}}">
+                                <i class="fa fa-edit"></i> View Details
+                            </a>
+                            @if($transaction->status == 'PENDING')
+                            <a class="text-success dropdown-item"
+                                href="/{{$acc_type}}/wallet-management/transactions/{{$transaction->id}}/complete?to='{{$acc_type}}.wallet-management.account-payables'">
+                                <i class="fa fa-edit"></i> Complete
+                            </a>
+                            @endif
+                            @if($transaction->status == 'COMPLETE')
+                            <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
+                                <i class="fa fa-edit"></i> Print Receipt
                             </button>
-                            <div class="dropdown-menu">
-                                @php
-                                $viewDetailsRouteName = $acc_type.'.transactions.detail';
-                                @endphp
-                                <a class="text-primary dropdown-item" href="{{route($viewDetailsRouteName, $transaction->id )}}">
-                                    <i class="fa fa-edit"></i> View Details
-                                </a>
-                                @if($transaction->status == 'PENDING')
-                                <a class="text-success dropdown-item" href="/{{$acc_type}}/wallet-management/transactions/{{$transaction->id}}/complete?to='{{$acc_type}}.wallet-management.account-receivables'">
-                                    <i class="fa fa-edit"></i> Complete
-                                </a>
-                                @endif
-                                @if($transaction->status == 'COMPLETE')
-                                <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
-                                    <i class="fa fa-edit"></i> Print Receipt
-                                </button>
-                                @endif
-                            </div>
+                            @endif
                         </div>
-                    </td>
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>
-
         <tfoot id="tfoot">
             <tr>
                 <th colspan="4">Total</th>
@@ -64,7 +77,9 @@
 <div class="d-flex justify-content-between">
     <div id="total-items">Items Count: {{number_format($totalItems)}}</div>
     <div>
-        <input hx-get="{{route($acc_type.'.wallet-management.account-receivables.table')}}" hx-trigger="change" hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden" class="form-control table-control" id="page" value="{{$page}}" />
+        <input hx-get="{{route($acc_type.'.wallet-management.account-receivables.table')}}" hx-trigger="change"
+            hx-target="#tableContent" hx-include=".table-control" hx-swap="innerHTML" name="page" type="hidden"
+            class="form-control table-control" id="page" value="{{$page}}" />
         <div id="items-pagination"></div>
     </div>
 </div>
