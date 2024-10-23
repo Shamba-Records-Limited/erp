@@ -342,12 +342,6 @@ $cooperative = null;
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link"
-                                    href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
-                                    {{ __('Account Payables') }}
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.income') }}">
                                     {{ __('Income') }}
                                 </a>
