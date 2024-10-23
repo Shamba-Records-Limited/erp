@@ -16265,8 +16265,8 @@ a.btn-icon-only {
 
 @media (min-width: 768px) {
     .main-content .container-fluid {
-        padding-right: 39px !important;
-        padding-left: 39px !important;
+        /* padding-right: 39px !important; */
+        /* padding-left: 39px !important; */
     }
 }
 
@@ -20253,8 +20253,9 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
     padding: 15px;
     border-radius: 5px;
 }
-.wallet-container{
-    margin-left:300px;
+
+.wallet-container {
+    margin-left: 300px;
 }
 
 .wallet-card {
@@ -20381,13 +20382,41 @@ hr.horizontal.light {
     border-radius: 50%;
 }
 
-.status-indicator.online {
-    background-color: green;
-    border-radius: 50%;
-    display: inline-block;
-    width: 10px;
-    height: 10px;
+.status-indicator {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    /* Adjust the space above the status indicator */
 }
+
+.status-indicator .dot {
+    width: 8px;
+    /* Size of the dot */
+    height: 8px;
+    /* Size of the dot */
+    background-color: green;
+    /* Color of the dot */
+    border-radius: 50%;
+    /* Makes it circular */
+    margin-right: 5px;
+    /* Space between dot and text */
+}
+
+/* Optional: Additional styles for better appearance */
+.profile-name {
+    font-size: 1.2em;
+    /* Increase font size */
+    font-weight: bold;
+    /* Make the name bold */
+}
+
+.designation {
+    font-size: 0.9em;
+    /* Font size for roles and cooperative name */
+    color: #6c757d;
+    /* Muted text color */
+}
+
 
 .user-wrapper {
     display: flex;
@@ -20395,4 +20424,3 @@ hr.horizontal.light {
     padding: 15px;
     border-bottom: 1px solid #e0e0e0;
 }
-

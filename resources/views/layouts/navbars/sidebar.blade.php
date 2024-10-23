@@ -32,19 +32,24 @@ $cooperative = null;
                             </p>
                             <div class="dropdown" data-display="static">
                                 <a href="#" class="nav-link d-flex user-switch-dropdown-toggler"
-                                    id="UsersettingsDropdown" href="#" data-toggle="dropdown" aria-expanded="false">
+                                    id="UsersettingsDropdown" data-toggle="dropdown" aria-expanded="false">
                                     @if($user)
                                     @php
                                     $roles = $user->getRoleNames();
                                     @endphp
-                                    <small class="designation text-muted">
+                                    <!-- Role name section -->
+                                    <small class="designation text-muted semi-bold">
                                         @foreach($roles as $role)
                                         {{ ucwords(strtolower($role)) }}
                                         @endforeach
                                     </small>
-                                    <span class="status-indicator online"></span>
                                     @endif
                                 </a>
+                                <!-- Status Indicator -->
+                                <div class="status-indicator ml-3">
+                                    <span class="bg-success dot"></span>
+                                    <small><span class=" text-success semi-bold">Online</span></small>
+                                </div>
                                 <small class="designation text-muted">
                                     @if (!is_null($cooperative))
                                     {{ ucwords(strtolower($cooperative->name)) }}
@@ -72,7 +77,6 @@ $cooperative = null;
                                     <a class="dropdown-item"> Check Inbox </a>
                                     <a class="dropdown-item"> Sign Out </a>
                                 </div>
-                                <!-- <hr class="horizontal light mb-4"> -->
                             </div>
                         </div>
                     </div>
