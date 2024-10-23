@@ -20427,3 +20427,9 @@ hr.horizontal.light {
     padding: 15px;
     border-bottom: 1px solid #e0e0e0;
 }
+
+.avatar {
+    position: absolute; /* Allows you to position the avatar anywhere within a container */
+    top: -60px;          /* Adjust 'top' value to move the avatar vertically */
+    right: 10px;        /* Adjust 'right' value to move the avatar horizontally */
+}
