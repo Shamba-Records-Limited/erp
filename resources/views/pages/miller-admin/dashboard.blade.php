@@ -153,13 +153,13 @@ $total_gender_distribution = 0;
     </div>
 </div>
 
-<div class="d-flex justify-content-between w-100 mt-6 pb-6">
+<div class="d-flex justify-content-end w-100 mt-6 pb-6">
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">
                 <select name="date_range" placeholder="Select Date Range" class="form-control select2bs4"
                     onchange="this.form.submit()" id="dateRange">
-                    <option value="week" @if($date_range=="week" ) selected @endif)>This Week</option>
+                    <option value="week" @if($date_range=="week" ) selected @endif>This Week</option>
                     <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>
                     <option value="year" @if($date_range=="year" ) selected @endif>This Year</option>
                     <option value="custom" @if($date_range=="custom" ) selected @endif>Custom</option>
