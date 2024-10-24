@@ -16251,7 +16251,7 @@ a.btn-icon-only {
     min-height: 100vh;
     margin-left: 250px;
     /* Match this to the sidebar's width */
-    padding: 20px;
+    padding-left: 20px;
     /* Add some padding for content */
     flex-grow: 1;
     overflow-x: hidden;

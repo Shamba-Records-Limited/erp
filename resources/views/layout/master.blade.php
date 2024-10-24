@@ -120,7 +120,6 @@
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <!-- Select 2 -->
-    <script src="{{ asset('assets/plugins/select2/js/select2.full.min.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('assets/plugins/summernote/summernote-bs4.min.js') }}"></script>
     <!--file input-->

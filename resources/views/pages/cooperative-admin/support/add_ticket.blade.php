@@ -21,7 +21,7 @@ $ticket_labels = config('enums.ticket_labels');
 
             <div class="form-group">
                 <label for="labels">Labels</label>
-                <select name="labels[]" multiple="multiple" id="labels" class="form-control select2bs4"
+                <select name="labels[]" multiple="multiple" id="labels" class="form-control form-select"
                     placeholder="Select Label(s)" onchange="submitForm()">
                     @foreach($ticket_labels as $label)
                     <option value="{{$label}}" @if(!is_null($ticket->labels) && in_array($label,

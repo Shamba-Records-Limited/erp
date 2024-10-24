@@ -11,7 +11,7 @@
             @csrf
             <div id="for_single_payment" class="form-group">
                 <label for="">Farmer</label>
-                <select class="form-control select2bs4" id="farmer_id" name="farmer_id" onchange="retrieveCollectionsSelector()">
+                <select class="form-control form-select" id="farmer_id" name="farmer_id" onchange="retrieveCollectionsSelector()">
                     <option value="" disabled selected>-- SELECT FARMER --</option>
                     @foreach($farmers as $farmer)
                     <option value="{{$farmer->id}}">{{$farmer->username}}</option>
@@ -20,7 +20,7 @@
             </div>
             <div id="for_bulk_payment" class="form-group">
                 <label for="">Collections</label>
-                <select class="form-control select2bs4" multiple name="collection_ids[]" id="collection_ids">
+                <select class="form-control form-select" multiple name="collection_ids[]" id="collection_ids">
                     <option value="">All Collections</option>
                     <option disabled>Select Farmer First</option>
                 </select>
