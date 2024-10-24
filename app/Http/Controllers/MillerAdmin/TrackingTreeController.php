@@ -43,7 +43,7 @@ class TrackingTreeController extends Controller
         if ($root_type == 'collection') {
             $collections = Collection::all();
             $elem .= '<label for="identifier">Collection</label>
-                        <select class="form-control select2bs4 node_identity" name="identifier" id="identifier">
+                        <select class="form-control form-select node_identity" name="identifier" id="identifier">
                             <option value="">-- COLLECTION --</option>';
 
             foreach ($collections as $collection) {
@@ -54,7 +54,7 @@ class TrackingTreeController extends Controller
         } else if ($root_type == 'lot') {
             $lots = Lot::all();
             $elem .= '<label for="identifier">Lot</label>
-                        <select class="form-control select2bs4 node_identity" name="identifier" id="identifier">
+                        <select class="form-control form-select node_identity" name="identifier" id="identifier">
                             <option value="">-- LOT --</option>';
 
             foreach ($lots as $lot) {
@@ -65,7 +65,7 @@ class TrackingTreeController extends Controller
         } else if ($root_type == 'final_product') {
             $finalProducts = FinalProduct::where("miller_id", $miller_id)->get();
             $elem .= '<label for="identifier">Final Product</label>
-                        <select class="form-control select2bs4 node_identity" name="identifier" id="identifier">
+                        <select class="form-control form-select node_identity" name="identifier" id="identifier">
                             <option value="">-- Final Product --</option>';
             foreach ($finalProducts as $finalProduct) {
                 $elem .= "<option value='$finalProduct->id'>$finalProduct->product_number</option>";

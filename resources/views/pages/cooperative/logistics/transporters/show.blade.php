@@ -44,7 +44,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="vehicle_type">Vehicle Type</label>
                                         <select id="vehicle_type" name="vehicle_type"
-                                                class="form-control select2bs4 {{ $errors->has('vehicle_type') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('vehicle_type') ? ' is-invalid' : '' }}"
                                                 placeholder="Van" value="{{ old('vehicle_type')}}" required>
                                             <option value="">select</option>
                                             @foreach ($vehicleTypes as $type)
@@ -292,7 +292,7 @@
                                                                     <div class="form-group col-6">
                                                                         <label for="vehicle_type_edit_{{$vehicle->id}}">Vehicle Type</label>
                                                                         <select name="vehicle_type_edit"
-                                                                                class="form-control select2bs4 {{ $errors->has('vehicle_type_edit') ? ' is-invalid' : '' }}"
+                                                                                class="form-control form-select {{ $errors->has('vehicle_type_edit') ? ' is-invalid' : '' }}"
                                                                                 id="vehicle_type_edit_{{$vehicle->id}}"
                                                                                 required>
                                                                             @foreach ($vehicleTypes as $type)

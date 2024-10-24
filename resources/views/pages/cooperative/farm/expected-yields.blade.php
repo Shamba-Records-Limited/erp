@@ -31,7 +31,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="type">Type</label>
                                         <select name="type" id="type"
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                                 onchange="alterProduct()">
                                             <option value="" selected>--Select Type--</option>
                                             <option value="farm">Crop</option>
@@ -47,7 +47,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="for-crop">
                                         <label for="crop">Crop</label>
                                         <select name="crop" id="crop"
-                                                class=" form-control select2bs4 {{ $errors->has('crop') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('crop') ? ' is-invalid' : '' }}">
                                             <option value="" selected>--Select Crop--</option>
                                             @foreach($crops as $crop)
                                                 <option value="{{$crop->id}}">
@@ -67,7 +67,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="for-livestock">
                                         <label for="breed">Livestock/Poultry Breed</label>
                                         <select name="breed" id="breed"
-                                                class=" form-control select2bs4 {{ $errors->has('breed') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('breed') ? ' is-invalid' : '' }}">
                                             <option value="" selected>--Select Breed--</option>
                                             @foreach($breeds as $breed)
                                                 <option value="{{$breed->id}}" {{ old('breed') == $breed->id ? 'selected' : '' }}>
@@ -85,7 +85,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="volume_indicator">Production Per </label>
                                         <select name="volume_indicator" id="volume_indicator"
-                                                class=" form-control select2bs4 {{ $errors->has('volume_indicator') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('volume_indicator') ? ' is-invalid' : '' }}">
                                             <option value="" selected>----</option>
                                             @foreach(volume_indicators() as $key=>$indicator)
                                                 <option value="{{$indicator}}">{{ ucwords($indicator)}}</option>
@@ -116,7 +116,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farm_unit"> Unit Measure</label>
                                         <select name="farm_unit" id="farm_unit"
-                                                class=" form-control select2bs4 {{ $errors->has('farm_unit') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('farm_unit') ? ' is-invalid' : '' }}">
                                             <option value="" selected>--Select Crop--</option>
                                             @foreach($farm_units as $unit)
                                                 <option value="{{$unit->id}}">
@@ -202,7 +202,7 @@
                                                                         <label for="edit_crop_{{$yield->id}}">Crop</label>
                                                                         <select name="edit_crop"
                                                                                 id="edit_crop_{{$yield->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('edit_crop') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('edit_crop') ? ' is-invalid' : '' }}">
                                                                             <option value="" selected>--Select Crop--
                                                                             </option>
                                                                             @foreach($crops as $crop)
@@ -226,7 +226,7 @@
                                                                         <label for="edit_breed_{{$yield->id}}">Livestock</label>
                                                                         <select name="edit_breed"
                                                                                 id="edit_breed_{{$yield->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('edit_breed') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('edit_breed') ? ' is-invalid' : '' }}">
                                                                             <option value="" selected>--Select
                                                                                 Livestock--
                                                                             </option>
@@ -249,7 +249,7 @@
                                                                         Per </label>
                                                                     <select name="edit_volume_indicator"
                                                                             id="edit_volume_indicator_{{$yield->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('volume_indicator') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('volume_indicator') ? ' is-invalid' : '' }}">
                                                                         <option value="" selected>------</option>
                                                                         @foreach(volume_indicators() as $indicator)
                                                                             <option value="{{$indicator}}" {{ $yield->volume_indicator == $indicator ? 'selected' : '' }}>{{ ucwords($indicator)}}</option>
@@ -283,7 +283,7 @@
                                                                         Measure</label>
                                                                     <select name="edit_farm_unit"
                                                                             id="edit_farm_unit_{{$yield->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_farm_unit') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_farm_unit') ? ' is-invalid' : '' }}">
                                                                         <option value="" selected>--Select Unit--
                                                                         </option>
                                                                         @foreach($farm_units as $unit)

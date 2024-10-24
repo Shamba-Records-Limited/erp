@@ -29,7 +29,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="subscription">Subscription</label>
                                     <select name="subscription" id="subscription"
-                                            class=" form-control select2bs4 {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Subscription---</option>
                                         @foreach($subscriptions as $subscription)
                                             <option value="{{$subscription->id}}">{{ucwords(strtolower($subscription->insurance_product->name))}}</option>
@@ -46,7 +46,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="dependant">Dependant</label>
                                     <select name="dependant" id="dependant"
-                                            class=" form-control select2bs4 {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
                                         @foreach($dependants as $d)
                                             <option value="{{$d->id}}">{{ucwords(strtolower($d->name))}}</option>
                                         @endforeach
@@ -177,7 +177,7 @@
                                                                         <div class="form-group col-12">
                                                                             <label for="subscription_{{$c->id}}">Subscription</label>
                                                                             <select name="subscription" id="subscription_{{$c->id}}"
-                                                                                    class=" form-control select2bs4 {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
+                                                                                    class=" form-control form-select {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
                                                                                 <option value="">---Select Subscription---</option>
                                                                                 @foreach($subscriptions as $subscription)
                                                                                     <option value="{{$subscription->id}}" {{ $subscription->id == $c->subscription_id ? 'selected' : '' }}>{{ucwords(strtolower($subscription->insurance_product->name))}}</option>
@@ -194,7 +194,7 @@
                                                                         <div class="form-group col-12">
                                                                             <label for="dependant_{{$c->id}}">Dependant</label>
                                                                             <select name="dependant" id="dependant_{{$c->id}}"
-                                                                                    class=" form-control select2bs4 {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
+                                                                                    class=" form-control form-select {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
                                                                                 @foreach($dependants as $d)
                                                                                     <option value="{{$d->id}}" {{ $d->id == $c->dependant_id ? 'selected' : ''}}>{{ucwords(strtolower($d->name))}}</option>
                                                                                 @endforeach

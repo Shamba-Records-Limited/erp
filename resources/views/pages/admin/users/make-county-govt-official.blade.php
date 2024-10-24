@@ -67,7 +67,7 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="country">Country</label>
-                            <select name="country" id="country" class=" form-control select2bs4 {{ $errors->has('country') ? ' is-invalid' : '' }}">
+                            <select name="country" id="country" class=" form-control form-select {{ $errors->has('country') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
                                 <option value="{{$country->id}}"> {{ $country->name }}</option>
@@ -104,7 +104,7 @@
                         
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="gender">Gender</label>
-                            <select name="gender" id="gender" class=" form-control select2bs4 {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+                            <select name="gender" id="gender" class=" form-control form-select {{ $errors->has('gender') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Gender-</option>
                                 @foreach($gender_options as $key => $option)
                                 <option value="{{$option}}"> {{ $option}}</option>

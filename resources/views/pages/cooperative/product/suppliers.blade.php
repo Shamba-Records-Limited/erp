@@ -38,7 +38,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="filter_route">Route</label>
                                     <select name="filter_route" id="filter_route"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($routes as $route)
                                             <option value="{{$route->id}}"
@@ -60,7 +60,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="filter_customer_type">Customer Type</label>
                                     <select name="filter_customer_type" id="filter_customer_type"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums.farmer_customer_types') as $key=>$type)
                                             <option value="{{$key}}"

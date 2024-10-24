@@ -31,7 +31,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farmer">Farmer</label>
                                         <select name="farmer" id="farmer"
-                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                                 onchange="getValuationsByFarmer('farmer', 'valuation')">
                                             <option value="">---Select Farmer---</option>
                                             @foreach($farmers as $farmer)
@@ -49,7 +49,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="product">Product</label>
                                         <select name="product" id="product"
-                                                class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Product---</option>
                                             @foreach($products as $product)
                                                 <option value="{{$product->id}}">{{ $product->name }}</option>
@@ -65,7 +65,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="valuation">Valuation</label>
                                         <select name="valuation" id="valuation"
-                                                class=" form-control select2bs4 {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
 
                                         </select>
                                         @if ($errors->has('valuation'))
@@ -78,7 +78,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="payment_mode">Mode</label>
                                         <select name="payment_mode" id="payment_mode"
-                                                class=" form-control select2bs4 {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Mode---</option>
                                             <option value="{{\App\InsuranceSubscriber::MODE_WEEKLY}}" {{ old('payment_mode') == \App\InsuranceSubscriber::MODE_WEEKLY ? 'selected' : '' }}>
                                                 Weekly
@@ -271,7 +271,7 @@
                                                                         <label for="farmer_{{$subscription->id}}">Farmer</label>
                                                                         <select name="farmer"
                                                                                 id="farmer_{{$subscription->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                                                                 onchange="getValuationsByFarmer('farmer_{{$subscription->id}}', 'valuation_{{$subscription->id}}')">
                                                                             <option value="">---Select Farmer---
                                                                             </option>
@@ -292,7 +292,7 @@
                                                                         <label for="product_{{$subscription->id}}">Product</label>
                                                                         <select name="product"
                                                                                 id="product_{{$subscription->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Product---
                                                                             </option>
                                                                             @foreach($products as $product)
@@ -313,7 +313,7 @@
                                                                         <label for="valuation">Valuation</label>
                                                                         <select name="valuation"
                                                                                 id="valuation_{{$subscription->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
 
                                                                         </select>
                                                                         @if ($errors->has('valuation'))
@@ -328,7 +328,7 @@
                                                                         <label for="payment_mode_{{$subscription->id}}">Mode</label>
                                                                         <select name="payment_mode"
                                                                                 id="payment_mode_{{$subscription->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Mode---</option>
                                                                             <option value="1" {{$subscription->payment_mode == '1' ? 'selected' : ''}}>
                                                                                 Monthly
@@ -447,7 +447,7 @@
                                                                         <label for="relationship_{{$subscription->id}}">Relationship</label>
                                                                         <select name="relationship"
                                                                                 id="relationship_{{$subscription->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('relationship') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('relationship') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Dependant---
                                                                             </option>
                                                                             <option value="1">Spouse</option>

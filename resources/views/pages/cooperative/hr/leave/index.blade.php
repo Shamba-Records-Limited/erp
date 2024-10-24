@@ -78,7 +78,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="status">Status</label>
                                     <select name="status"
-                                            class="form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}"
+                                            class="form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}"
                                             id="status" value="{{ old('status')}}">
                                         <option value="0"> Pending</option>
                                         <option value="1"> Grant</option>
@@ -94,7 +94,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="reason">Reason </label>
                                     <select name="reason"
-                                            class="form-control select2bs4 {{ $errors->has('reason') ? ' is-invalid' : '' }}"
+                                            class="form-control form-select {{ $errors->has('reason') ? ' is-invalid' : '' }}"
                                             id="reason" value="{{ old('reason')}}">
                                         <option value="">-Select Reason-</option>
                                         <option value="Sick Leave">Sick Leave</option>

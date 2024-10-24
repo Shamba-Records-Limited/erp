@@ -56,7 +56,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="category">Category</label>
                                         <select name="category" id="category"
-                                                class=" form-control select2bs4 {{ $errors->has('category') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('category') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($categories as $cat)
                                                 <option value="{{$cat->id}}" {{$cat->id == old('category') ?  'selected' : ''}}> {{ $cat->name }}</option>
@@ -73,7 +73,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="unit">Unit Measure</label>
                                         <select name="unit" id="unit"
-                                                class=" form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}">
                                             @foreach($units as $unit)
                                                 <option value="{{$unit->id}}" {{$unit->id == old('unit') ? 'selected' : ''}}> {{ $unit->name }}</option>
                                             @endforeach
@@ -201,7 +201,7 @@
                                                                     <div class="form-group col-12">
                                                                         <label for="category_{{$prod->id}}">Category</label>
                                                                         <select name="edit_category" id="category_{{$prod->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('edit_category') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('edit_category') ? ' is-invalid' : '' }}">
                                                                             <option value=""></option>
                                                                             @foreach($categories as $cat)
                                                                                 <option value="{{$cat->id}}" {{$cat->id == $prod->category_id ?  'selected' : ''}}> {{ $cat->name }}</option>
@@ -218,7 +218,7 @@
                                                                     <div class="form-group col-12">
                                                                         <label for="unit_{{$prod->id}}">Unit Measure</label>
                                                                         <select name="edit_unit" id="unit_{{$prod->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('edit_unit') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('edit_unit') ? ' is-invalid' : '' }}">
                                                                             @foreach($units as $unit)
                                                                                 <option value="{{$unit->id}}" {{$unit->id == $prod->unit_id ? 'selected' : ''}}> {{ $unit->name }}</option>
                                                                             @endforeach

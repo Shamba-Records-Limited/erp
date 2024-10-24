@@ -31,7 +31,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="type">Booking Type</label>
                                     <select name="type" id="type"
-                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                             onchange="getVets('{{ 'vet' }}', '{{'type'}}')">
                                         <option value="">---Select Booking Type---</option>
                                         @foreach(config('enums.vet_service_types')[0] as $type)
@@ -48,7 +48,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="vet">Vet/Extension Officer</label>
                                     <select name="vet" id="vet"
-                                            class=" form-control select2bs4 {{ $errors->has('vet') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('vet') ? ' is-invalid' : '' }}">
 
                                     </select>
                                     @if ($errors->has('vet'))
@@ -89,7 +89,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="service">Service</label>
                                     <select name="service" id="service"
-                                            class=" form-control select2bs4 {{ $errors->has('service') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('service') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Service---</option>
                                         @foreach($services as $service)
                                             <option value="{{$service->id}}"> {{$service->name}}</option>
@@ -203,7 +203,7 @@
                                                                 <div class="form-group col-12">
                                                                     <label for="type">Booking Type</label>
                                                                     <select name="edit_type" id="type_{{$booking->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_type') ? ' is-invalid' : '' }}"
+                                                                            class=" form-control form-select {{ $errors->has('edit_type') ? ' is-invalid' : '' }}"
                                                                             onchange="getVets('{{ 'vet_'.$booking->id }}', '{{'type_'.$booking->id}}')">
                                                                         <option value="">---Select Booking Type---
                                                                         </option>
@@ -222,7 +222,7 @@
                                                                     <label for="vet_{{$booking->id}}">Vet/Extension
                                                                         Officer</label>
                                                                     <select name="edit_vet" id="vet_{{$booking->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_vet') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_vet') ? ' is-invalid' : '' }}">
                                                                     </select>
                                                                     @if ($errors->has('edit_vet'))
                                                                         <span class="help-block text-danger">
@@ -270,7 +270,7 @@
                                                                     <label for="service_{{$booking->id}}">Service</label>
                                                                     <select name="edit_service"
                                                                             id="service_{{$booking->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_service') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_service') ? ' is-invalid' : '' }}">
                                                                         <option value="">---Select Service---</option>
                                                                         @foreach($services as $service)
                                                                             <option value="{{$service->id}}" {{ $booking->service_id == $service->id ? 'selected' : '' }}> {{$service->name}}</option>
@@ -337,7 +337,7 @@
                                                                 <div class="form-group col-12">
                                                                     <label for="status_{{$booking->id}}">Status</label>
                                                                     <select name="status" id="status_{{$booking->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}">
                                                                         @foreach(config('enums.booking_status')[0] as $status)
                                                                             <option value="{{$status}}" {{$booking->status == $status ? 'selected' : ''}}> {{$status}}</option>
                                                                         @endforeach

@@ -158,7 +158,7 @@ class WalletManagementController extends Controller
 
         $elem = "
             <label>Lot</label>
-            <select class='form-control select2bs4' name='lot_ids' id='lot_ids' multiple>
+            <select class='form-control form-select' name='lot_ids' id='lot_ids' multiple>
                 $lotOptions
             </select>
         ";

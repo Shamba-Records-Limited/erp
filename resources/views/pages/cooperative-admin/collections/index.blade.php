@@ -96,7 +96,11 @@ $collection_time_options = config('enums.collection_time');
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="coop_branch_id">Coop Branch</label>
                                 <select name="coop_branch_id" id="coop_branch_id"
+<<<<<<< Updated upstream
                                     class="form-control form-select{{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
+=======
+                                    class="form-control form-select {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
+>>>>>>> Stashed changes
                                     required>
                                     <option value="">-- Select Branch --</option>
                                     @foreach($coopBranches as $branch)
@@ -159,7 +163,7 @@ $collection_time_options = config('enums.collection_time');
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="unit">Unit</label>
-                                <!-- <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
+                                <!-- <select name="unit" id="unit" class="form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
                                     <option value="">-- Select Unit --</option>
                                     @foreach(config('enums.units') as $key => $unit)
                                     <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>

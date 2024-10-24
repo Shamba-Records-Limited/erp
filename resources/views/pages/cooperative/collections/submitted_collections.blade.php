@@ -40,7 +40,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="farmer">Farmers</label>
                                     <select name="farmer" id="farmer"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($farmers as $farmer)
                                             <option value="{{$farmer->farmer->id}}"
@@ -62,7 +62,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="quality">Quality Standards</label>
                                     <select name="quality" id="quality"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($quality_stds as $std)
                                             <option value="{{$std->id}}"
@@ -84,7 +84,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}"
@@ -98,7 +98,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="status">Status</label>
                                     <select name="status" id="status"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums.collection_submission_statuses') as $key => $v)
                                             <option value="{{$key}}"
@@ -254,7 +254,7 @@
                                                                     <select name="status"
                                                                             id="product_{{$item->id}}"
                                                                             class=" form-control
-                                                                      select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                                      form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                                                         <option value="">--Select
                                                                             Status--
                                                                         </option>

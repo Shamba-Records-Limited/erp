@@ -29,7 +29,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="period">Type</label>
                                         <select name="type" id="type" required
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value=""> Select Loan Type</option>
                                             @foreach($loan_types as $type)
                                                 <option value="{{$type->id}}"> {{ $type->name }}</option>
@@ -46,7 +46,7 @@
                                         <label for="farmer">Farmer <small>(leave blank for all farmers)</small></label>
                                         <input id="all_farmers" type="hidden" value="{{count($farmers)}}">
                                         <select name="farmers[]" id="farmer" multiple
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             @foreach($farmers as $farmer)
                                                 <option value="{{$farmer->id}}"> {{ $farmer->user->first_name.' '.$farmer->user->other_names }}</option>
                                             @endforeach

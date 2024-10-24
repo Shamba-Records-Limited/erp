@@ -46,7 +46,7 @@
                                     <div class="form-group col-lg-2 col-md-6 col-12">
                                         <label for="product">Product</label>
                                         <select name="product" id="product"
-                                                class="form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                             <option value=""> {{ '- Select Product -'}}</option>
                                             @foreach($products as $product)
                                                 <option value="{{$product->id}}" {{$product->id == old('product') ? 'selected' : ''}}> {{ $product->name }}
@@ -80,7 +80,7 @@
                                     <div class="form-group col-lg-2 col-md-6 col-12">
                                         <label for="will_expire">Will Expire</label>
                                         <select name="will_expire" id="will_expire"
-                                                class="form-control select2bs4 {{ $errors->has('will_expire') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('will_expire') ? ' is-invalid' : '' }}"
                                                 onchange="showExpireField()"
                                         >
                                             <option value=""></option>
@@ -113,7 +113,7 @@
                                     <div class="form-group col-lg-2 col-md-6 col-12">
                                         <label for="store">Store</label>
                                         <select name="store" id="store"
-                                                class="form-control select2bs4 {{ $errors->has('store') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('store') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($stores as $store)
                                                 <option value="{{$store->id}}"> {{ $store->name }}</option>
@@ -148,7 +148,7 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label for="material">Raw Material</label>
                                             <select name="material" id="material"
-                                                    class="form-control select2bs4 {{ $errors->has('materials') ? ' is-invalid' : '' }}">
+                                                    class="form-control form-select {{ $errors->has('materials') ? ' is-invalid' : '' }}">
                                                 <option value=""></option>
                                                 @foreach($materials as $material)
                                                     <option value="{{$material}}"> {{ $material->product_id ? $material->product->name : $material->name }}

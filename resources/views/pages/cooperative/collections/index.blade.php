@@ -161,7 +161,7 @@
                                                                         <label for="agent_{{$item->id}}">Agents</label>
                                                                         <select name="agent"
                                                                                 id="agent_{{$item->id}}"
-                                                                                class="form-control select2bs4 {{ $errors->has('agent') ? ' is-invalid' : '' }}">
+                                                                                class="form-control form-select {{ $errors->has('agent') ? ' is-invalid' : '' }}">
                                                                             @foreach( $agents as $agent)
                                                                                 <option value="{{$agent->id}}">
                                                                                     {{ ucwords(strtolower($agent->first_name.' '.$agent->other_names)) }}
@@ -264,7 +264,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="filter_product">Product</label>
                                     <select name="product" id="filter_product"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}"

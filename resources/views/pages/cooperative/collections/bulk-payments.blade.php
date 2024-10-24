@@ -51,7 +51,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}" {{ request()->product == $product->id ?  'selected' : ''}}> {{ $product->name }}</option>
@@ -245,7 +245,7 @@
                                                             <label for="employee">Mode of
                                                                 Payment</label>
                                                             <select name="mode" id="pmode"
-                                                                    class="form-control select2bs4">
+                                                                    class="form-control form-select">
                                                                 @foreach(config('enums.bulk_payment_modes') as $k => $v)
                                                                     <option value="{{$k}}">
                                                                         {{$v}}
@@ -328,7 +328,7 @@
                                 {{--                                <div class="form-group col-lg-3 col-md-6 col-12">--}}
                                 {{--                                    <label for="employee">Employee</label>--}}
                                 {{--                                    <select name="employee" id="employee"--}}
-                                {{--                                            class=" form-control select2bs4">--}}
+                                {{--                                            class=" form-control form-select">--}}
                                 {{--                                        <option value=""></option>--}}
                                 {{--                                        @foreach($products as $product)--}}
                                 {{--                                            <option value="{{$product->id}}" {{ request()->products ? (in_array($product->id,  request()->products) ?  'selected' : '') : ''}}> {{ $product->name }}</option>--}}
@@ -341,7 +341,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="mode">Payment Mode</label>
                                     <select name="mode" id="mode"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums.bulk_payment_modes') as $k => $v)
                                             <option value="{{$k}}" {{ (request()->mode == $k ?  'selected' : '') }}>

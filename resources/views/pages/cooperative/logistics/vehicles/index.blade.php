@@ -43,7 +43,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="vehicle_type">Vehicle Type</label>
                                         <select id="vehicle_type" name="vehicle_type"
-                                                class="form-control select2bs4 {{ $errors->has('vehicle_type') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('vehicle_type') ? ' is-invalid' : '' }}"
                                                 placeholder="Van" value="{{ old('vehicle_type')}}" required>
                                             <option value="">select</option>
                                             @foreach ($vehicleTypes as $type)
@@ -59,7 +59,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="driver">Driver</label>
                                         <select id="driver" name="driver"
-                                                class="form-control select2bs4 {{ $errors->has('name') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('name') ? ' is-invalid' : '' }}"
                                                 placeholder="Van" value="{{ old('driver')}}" required>
                                             <option value="">select</option>
                                             @foreach ($drivers as $driver)
@@ -89,7 +89,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="status">Status</label>
                                         <select id="status" name="status"
-                                                class="form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}"
                                                 value="{{ old('status')}}" required>
                                             <option value="">select</option>
                                             <option value="1">Active</option>
@@ -236,7 +236,7 @@
                                                                 <div class="form-group col-6">
                                                                     <label for="vehicle_type_edit_{{$vehicle->id}}">Vehicle Type</label>
                                                                     <select id="vehicle_type_edit_{{$vehicle->id}}" name="vehicle_type_edit"
-                                                                            class="form-control select2bs4 {{ $errors->has('vehicle_type_edit') ? ' is-invalid' : '' }}"
+                                                                            class="form-control form-select {{ $errors->has('vehicle_type_edit') ? ' is-invalid' : '' }}"
                                                                             placeholder="Van" required>
                                                                         <option value="">select</option>
                                                                         @foreach ($vehicleTypes as $type)
@@ -256,7 +256,7 @@
                                                                 <div class="form-group col-6">
                                                                     <label for="driver_edit_{{$vehicle->id}}">Driver</label>
                                                                     <select id="driver_edit_{{$vehicle->id}}" name="driver_edit"
-                                                                        class="form-control select2bs4 {{ $errors->has('driver_edit') ? ' is-invalid' : '' }}"
+                                                                        class="form-control form-select {{ $errors->has('driver_edit') ? ' is-invalid' : '' }}"
                                                                         required>
                                                                         <option value="">select</option>
                                                                         @foreach ($drivers as $driver)
@@ -288,7 +288,7 @@
                                                                 <div class="form-group col-6">
                                                                     <label for="status_edit_{{$vehicle->id}}">Status</label>
                                                                     <select id="status_edit_{{$vehicle->id}}" name="status_edit"
-                                                                            class="form-control select2bs4 {{ $errors->has('status_edit') ? ' is-invalid' : '' }}"
+                                                                            class="form-control form-select {{ $errors->has('status_edit') ? ' is-invalid' : '' }}"
                                                                             required>
                                                                         <option value="">select</option>
                                                                         <option value="1" @if($vehicle->status == 1) selected @endif>Active</option>

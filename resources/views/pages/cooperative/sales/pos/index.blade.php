@@ -68,7 +68,7 @@
 
                                     <div class="form-group col-lg-2 col-md-3 col-12">
                                         <label for="status-filter">Status</label>
-                                        <select class="form-control select2bs4" name="status"
+                                        <select class="form-control form-select" name="status"
                                                 id="status-filter">
                                             <option value=""></option>
                                             <option value="{{\App\Invoice::STATUS_UNPAID}}" {{ (int)\App\Invoice::STATUS_UNPAID === request()->status ? 'selected' : '' }}>
@@ -88,7 +88,7 @@
 
                                     <div class="form-group col-lg-2 col-md-3 col-12">
                                         <label for="farmer-filter">Farmer</label>
-                                        <select class="form-control select2bs4" name="farmer[]"
+                                        <select class="form-control form-select" name="farmer[]"
                                                 id="farmer-filter" multiple>
                                             <option value=""></option>
                                             @foreach($farmers as $farmer)
@@ -101,7 +101,7 @@
 
                                     <div class="form-group col-lg-2 col-md-3 col-12">
                                         <label for="customer-filter">Customer</label>
-                                        <select class="form-control select2bs4" name="customer[]"
+                                        <select class="form-control form-select" name="customer[]"
                                                 id="customer-filter" multiple>
                                             <option value=""></option>
                                             @foreach($customers as $customer)

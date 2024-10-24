@@ -28,7 +28,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                         <label for="parent_ledger_id">Parent Ledger</label>
                                         <select name="parent_ledger" id="parent_ledger"
-                                                class=" form-control select2bs4 {{ $errors->has('parent_ledger') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('parent_ledger') ? ' is-invalid' : '' }}"
                                                 onchange="getNextLedgerAccount()">
                                             <option value="" selected>---Select Parent Ledger---</option>
                                             @foreach($parent_ledgers as $pl)
@@ -58,7 +58,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                         <label for="account_type">Account Type</label>
                                         <select name="account_type" id="account_type"
-                                                class=" form-control select2bs4 {{ $errors->has('account_type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('account_type') ? ' is-invalid' : '' }}">
                                             <option value="">---Name---</option>
                                             <option value="current">Current</option>
                                             <option value="long term">Long Term</option>
@@ -87,7 +87,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                         <label for="classification">Account Classification</label>
                                         <select name="classification" id="classification"
-                                                class=" form-control select2bs4 {{ $errors->has('classification') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('classification') ? ' is-invalid' : '' }}">
                                             <option value="">---Classification---</option>
                                             <option value="ACCOUNT_RECEIVALBLES">Account Receivables</option>
                                             <option value="ACCOUNT_PAYABLES">Account Payables</option>
@@ -229,7 +229,7 @@
                                                                                 Type</label>
                                                                             <select name="account_type_edit"
                                                                                     id="account_type_edit_{{$l->id}}"
-                                                                                    class="form-control select2bs4 {{ $errors->has('account_type_edit') ? ' is-invalid' : '' }}">
+                                                                                    class="form-control form-select {{ $errors->has('account_type_edit') ? ' is-invalid' : '' }}">
                                                                                 <option value="current" {{$l->type == 'current' ? 'selected' : null }}>
                                                                                     Current
                                                                                 </option>

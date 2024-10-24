@@ -30,7 +30,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="provider">Transport Provider</label>
                                         <select name="provider"
-                                                class="form-control select2bs4 {{ $errors->has('provider') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('provider') ? ' is-invalid' : '' }}"
                                                 id="provider" value="{{ old('provider')}}" required>
                                             <option value="">--Select Provider--</option>
                                             <option value="own_vehicle">Company Vehicle</option>
@@ -48,7 +48,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="vehicle">Vehicle</label>
                                         <select name="vehicle"
-                                                class="form-control select2bs4 {{ $errors->has('vehicle') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('vehicle') ? ' is-invalid' : '' }}"
                                                 id="vehicle" value="{{ old('vehicle')}}" required>
                                             <option value="">--Select Vehicle--</option>
                                             @foreach($vehicles as $vehicle)
@@ -65,7 +65,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 own_driver" style="display: none;">
                                         <label for="driver">Driver</label>
                                         <select name="driver"
-                                                class="form-control select2bs4 {{ $errors->has('driver') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('driver') ? ' is-invalid' : '' }}"
                                                 id="driver" value="{{ old('driver')}}">
                                             <option value="">--Select Driver--</option>
                                             @foreach($drivers as $driver)
@@ -126,7 +126,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="departure_weighbridge">Departure Weighbridge</label>
                                         <select name="departure_weighbridge"
-                                                class="form-control select2bs4 {{ $errors->has('departure_weighbridge') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('departure_weighbridge') ? ' is-invalid' : '' }}"
                                                 id="departure_weighbridge" value="{{ old('departure_weighbridge')}}"
                                                 required>
                                             <option value="">--Select Weighbridge--</option>
@@ -163,7 +163,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="arrival_weighbridge">Arrival Weighbridge</label>
                                         <select name="arrival_weighbridge"
-                                                class="form-control select2bs4 {{ $errors->has('arrival_weighbridge') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('arrival_weighbridge') ? ' is-invalid' : '' }}"
                                                 id="arrival_weighbridge" value="{{ old('arrival_weighbridge')}}"
                                                 required>
                                             <option value="">--Select Weighbridge--</option>
@@ -196,7 +196,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="load_unit">Load Unit</label>
                                         <select name="load_unit"
-                                                class="form-control select2bs4 {{ $errors->has('load_unit') ? ' is-invalid' : '' }}"
+                                                class="form-control form-select {{ $errors->has('load_unit') ? ' is-invalid' : '' }}"
                                                 id="arrival_location" value="{{ old('load_unit')}}" required>
                                             <option value="">--Select Unit--</option>
                                             @foreach($units as $unit)

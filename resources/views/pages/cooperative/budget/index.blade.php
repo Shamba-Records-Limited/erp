@@ -20,7 +20,7 @@
                                     <div class="form-group">
                                         <label for="type">Budget Type:</label>
                                         <select id="type" name="type"
-                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                             value="{{ old('type') }}"
                                             required>
                                             <option value="">-- select --</option>

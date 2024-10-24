@@ -68,7 +68,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="type">Status</label>
                                         <select name="status" id="status"
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value="available">Available</option>
                                             <option value="sold"> Sold</option>
                                         </select>
@@ -246,7 +246,7 @@
                                                                 <div class="form-group col-lg-4 col-md-6 col-12">
                                                                     <label for="type">Status</label>
                                                                     <select name="status" id="status_{{$asset->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
 
                                                                         <option value="available" {{ strtolower($asset->status == 'available') ? 'selected' : ''}}>
                                                                             Available

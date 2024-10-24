@@ -34,7 +34,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="employee">Employee</label>
                                         <select name="employee" id="employee"
-                                                class=" form-control select2bs4 {{ $errors->has('employee') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('employee') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($employees as $employee)
                                                 <option value="{{$employee->id}}"> {{ ucwords(strtolower($employee->first_name.' '.$employee->other_names)) }}</option>
@@ -49,7 +49,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="module">Module</label>
                                         <select name="module" id="module" onchange="getSubmodulesByModule()"
-                                                class=" form-control select2bs4 {{ $errors->has('module') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('module') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($modules as $module)
                                                 <option value="{{$module->id}}"> {{ $module->name }}</option>
@@ -65,7 +65,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="module">Sub Module</label>
                                         <select name="submodule" id="submodule"
-                                                class=" form-control select2bs4 {{ $errors->has('module') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('module') ? ' is-invalid' : '' }}">
 
                                         </select>
                                         @if ($errors->has('submodule'))
@@ -78,7 +78,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="roles">Permissions</label>
                                         <select name="permissions[]" multiple="multiple" id="roles"
-                                                class="form-control select2bs4 {{ $errors->has('roles') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('roles') ? ' is-invalid' : '' }}">
                                             <option value="{{\App\InternalUserPermission::CAN_VIEW}}">Can View</option>
                                             <option value="{{\App\InternalUserPermission::CAN_CREATE}}">Can Create
                                             </option>

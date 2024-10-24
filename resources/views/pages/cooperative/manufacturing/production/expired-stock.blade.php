@@ -54,7 +54,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="final_product">Final Product</label>
                                     <select name="final_product" id="final_product"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($finalProducts as $product)
                                             <option value="{{$product->id}}" {{$product->id == request()->final_product ? 'selected' : ''}}>

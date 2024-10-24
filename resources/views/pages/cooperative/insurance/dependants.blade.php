@@ -80,7 +80,7 @@
                                                                     <div class="form-group col-12">
                                                                         <label for="relationship_{{$d->id}}">Relationship</label>
                                                                         <select name="relationship" id="relationship_{{$d->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('relationship') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('relationship') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Dependant---</option>
                                                                             <option value="1" {{ $d->relationship == 1 ? 'selected' : '' }}>Spouse</option>
                                                                             <option value="2" {{ $d->relationship == 2 ? 'selected' : '' }}>Child</option>

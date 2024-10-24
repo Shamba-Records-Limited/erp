@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="order_id">Order</label>
-                                <select name="order_id" id="order_id" class="form-control select2bs4 {{ $errors->has('order_id') ? ' is-invalid' : '' }}" onchange="submitForm()">
+                                <select name="order_id" id="order_id" class="form-control form-select {{ $errors->has('order_id') ? ' is-invalid' : '' }}" onchange="submitForm()">
                                     <option value="">-- Select Order Item --</option>
                                     @foreach($selectableOrderItems as $item)
                                     <option value="{{$item->id}}" @if(!is_null($draftInventory) && $draftInventory->order_id == $item->id) selected @endif> {{ $item->batch_number }}</option>
@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="form-group col-lg-4 col-md-4 col-12">
                                         <label for="unit">Select Unit</label>
-                                        <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" readonly>
+                                        <select name="unit" id="unit" class="form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}" readonly>
                                             <option value="">-- Select Unit --</option>
                                             @foreach(config('enums.units') as $key => $unit)
                                             <option value="{{$key}}"> {{ $key }}</option>
@@ -96,7 +96,7 @@
                                     </div>
                                     <div class="form-group col-lg-4 col-md-4 col-12">
                                         <label for="product_grade_id">Select Grade</label>
-                                        <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" readonly>
+                                        <select name="product_grade_id" id="product_grade_id" class="form-control form-select {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" readonly>
                                             <option value="">-- Select Grade --</option>
                                             @foreach($grades as $grade)
                                             <option value="{{$grade->id}}"> {{ $grade->name }}</option>

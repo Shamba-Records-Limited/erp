@@ -33,7 +33,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="product">Product</label>
                                         <select name="products[]"  multiple="multiple" id="products"
-                                                class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($products as $product)
                                                 <option value="{{$product->id}}" {{ request()->products ? (in_array($product->id,  request()->products) ?  'selected' : '') : ''}}> {{ $product->name }}</option>

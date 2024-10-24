@@ -70,7 +70,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="breed_id">Breed</label>
                                         <select name="breed_id" id="breed_id"
-                                                class=" form-control select2bs4 {{ $errors->has('breed_id') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('breed_id') ? ' is-invalid' : '' }}">
                                             @foreach($breeds as $breed)
                                                 <option value="{{$breed->id}}"> {{ $breed->name }}</option>
                                             @endforeach
@@ -86,7 +86,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farmer_id">Farmer</label>
                                         <select name="farmer_id" id="farmer_id"
-                                                class=" form-control select2bs4 {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}">
                                             @foreach($farmers as $user)
                                                 <option value="{{$user->id}}">
                                                     {{ ucwords( strtolower($user->first_name).' '.strtolower($user->other_names)) }}
@@ -228,7 +228,7 @@
                                                                     <label for="edit_breed_id_{{$cow->id}}">Breed</label>
                                                                     <select name="edit_breed_id"
                                                                             id="edit_breed_id_{{$cow->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_breed_id') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_breed_id') ? ' is-invalid' : '' }}">
                                                                         @foreach($breeds as $breed)
                                                                             <option value="{{$breed->id}}" {{$breed->id == $cow->breed_id ? 'selected': '' }}> {{ $breed->name }}</option>
                                                                         @endforeach
@@ -243,7 +243,7 @@
                                                                     <label for="farmer_id_{{$cow->id}}">Farmer</label>
                                                                     <select name="edit_farmer_id"
                                                                             id="farmer_id_{{$cow->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_farmer_id') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_farmer_id') ? ' is-invalid' : '' }}">
                                                                         @foreach($farmers as $user)
                                                                             <option value="{{$user->id}}" {{ $user->id == $cow->farmer_id ? 'selected' : ''  }}>
                                                                                 {{ ucwords( strtolower($user->first_name).' '.strtolower($user->other_names)) }}
@@ -392,7 +392,7 @@
                                                                     <label for="other_edit_breed_id_{{$cow->id}}">Breed</label>
                                                                     <select name="edit_breed_id"
                                                                             id="other_edit_breed_id_{{$cow->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_breed_id') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_breed_id') ? ' is-invalid' : '' }}">
                                                                         @foreach($breeds as $breed)
                                                                             <option value="{{$breed->id}}" {{$breed->id == $cow->breed_id ? 'selected': '' }}> {{ $breed->name }}</option>
                                                                         @endforeach
@@ -407,7 +407,7 @@
                                                                     <label for="other_farmer_id_{{$cow->id}}">Farmer</label>
                                                                     <select name="edit_farmer_id"
                                                                             id="other_farmer_id_{{$cow->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_farmer_id') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_farmer_id') ? ' is-invalid' : '' }}">
                                                                         @foreach($farmers as $user)
                                                                             <option value="{{$user->id}}" {{ $user->id == $cow->farmer_id ? 'selected' : ''  }}>
                                                                                 {{ ucwords( strtolower($user->first_name).' '.strtolower($user->other_names)) }}
@@ -425,7 +425,7 @@
                                                                         Status</label>
                                                                     <select name="edit_approval_status"
                                                                             id="edit_approval_status_{{$cow->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('edit_approval_status') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('edit_approval_status') ? ' is-invalid' : '' }}">
 
                                                                         <option value="{{ \App\Cow::APPROVAL_STATUS_REJECTED }}" {{ $cow->approval_status == \App\Cow::APPROVAL_STATUS_REJECTED ? 'selected' : ''  }}>
                                                                             Rejected

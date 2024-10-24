@@ -941,6 +941,119 @@ var Charts = (function () {
   };
 })();
 
+
+var InventoryVsSalesChart = (function() {
+ 
+  // Variables
+
+  var $chart = $('#InventoryVsSalesChart');
+
+  // Methods
+
+  function init($chart) {
+      var inventorySeries = JSON.parse($chart.attr('data-inventory-series'));
+      var salesSeries = JSON.parse($chart.attr('data-sales-series'));
+      var inventoryVsSalesLabels = inventorySeries.map(c => c.x);
+      var inventoryValues = inventorySeries.map(c => c.y);
+      var salesValues = salesSeries.map(c => c.y);
+
+      var inventoryVsSalesData = {
+          labels: inventoryVsSalesLabels,
+          datasets: [{
+              label: 'Inventory',
+              data: inventoryValues,
+              backgroundColor: [
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 99, 132, 1)',
+              ],
+              borderColor: [
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 99, 132, 1)',
+              ]
+          }, {
+              label: 'Sales',
+              data: salesValues,
+              backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+              ]
+          }]
+      };
+
+      var inventoryVsSalesOptions = {
+          scales: {
+              yAxes: [{
+                  gridLines: {
+                      color: Charts.colors.gray[900],
+                      zeroLineColor: Charts.colors.gray[900]
+                  },
+                  ticks: {
+                      callback: function(value) {
+                          if (!(value % 10)) {
+                              return '$' + value + 'k';
+                          }
+                      }
+                  }
+              }]
+          },
+          tooltips: {
+              callbacks: {
+                  label: function(item, data) {
+                      var label = data.datasets[item.datasetIndex].label || '';
+                      var yLabel = item.yLabel;
+                      var content = '';
+
+                      if (data.datasets.length > 1) {
+                          content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                      }
+
+                      content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
+                      return content;
+                  }
+              }
+          },
+          animationEasing: "easeOutBounce",
+          responsive: true,
+          maintainAspectRatio: true,
+          showScale: true,
+          legend: {
+              display: true
+          },
+          layout: {
+              padding: {
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0
+              }
+          }
+      };
+
+      var inventoryVsSalesChart = new Chart($chart, {
+          type: 'line',
+          data: inventoryVsSalesData,
+          options: inventoryVsSalesOptions
+      });
+
+      // Save to jQuery object
+      $chart.data('chart', inventoryVsSalesChart);
+  };
+
+  // Events
+
+  if ($chart.length) {
+      init($chart);
+  }
+
+})();
+
+
+
+
 //
 // Orders chart
 //

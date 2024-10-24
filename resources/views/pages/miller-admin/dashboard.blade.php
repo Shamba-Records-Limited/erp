@@ -4,13 +4,6 @@
 </script>
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 @endpush
-@push('chartjs')
-@push('js')
-<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js">
-</script>
-<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
-@endpush
-@push('chartjs')
 
 @section('content')
 @include('layouts.headers.cards')
@@ -157,7 +150,7 @@ $total_gender_distribution = 0;
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">
-                <select name="date_range" placeholder="Select Date Range" class="form-control select2bs4"
+                <select name="date_range" placeholder="Select Date Range" class="form-control form-select"
                     onchange="this.form.submit()" id="dateRange">
                     <option value="week" @if($date_range=="week" ) selected @endif>This Week</option>
                     <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>
@@ -507,13 +500,13 @@ $total_gender_distribution = 0;
                 </div>
                 <div>Inventory vs Sales</div>
             </div> -->
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12 d-flex align-items-center">
             <canvas id="InventoryVsSalesChart" class="mb-4 mb-md-0"
                 data-inventory-series="{{ json_encode($data['inventory_series']) }}"
                 data-sales-series="{{ json_encode($data['sales_series']) }}" style="height: 200px;"></canvas>
         </div>
-    </div>
+    </div> -->
 </div>
 </div>
 
@@ -652,61 +645,61 @@ let incomeVsExpensesChart = new Chart(incomeVsExpensesChartCanvas, {
 });
 
 
-let inventorySeries = @json($data['inventory_series']);
-let salesSeries = @json($data['sales_series']);
-let inventoryVsSalesLables = inventorySeries.map(c => c.x)
-let inventoryValues = inventorySeries.map(c => c.y)
-let salesValues = salesSeries.map(c => c.y)
-let inventoryVsSalesChartCanvas = document.getElementById("InventoryVsSalesChart")
-let inventoryVsSalesData = {
-    labels: inventoryVsSalesLables,
-    datasets: [{
-        label: 'Inventory',
-        data: inventoryValues,
-        backgroundColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ],
-        borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ]
-    }, {
-        label: 'Sales',
-        data: salesValues,
-        backgroundColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-        ]
-    }]
-};
+// let inventorySeries = @json($data['inventory_series']);
+// let salesSeries = @json($data['sales_series']);
+// let inventoryVsSalesLables = inventorySeries.map(c => c.x)
+// let inventoryValues = inventorySeries.map(c => c.y)
+// let salesValues = salesSeries.map(c => c.y)
+// let inventoryVsSalesChartCanvas = document.getElementById("InventoryVsSalesChart")
+// let inventoryVsSalesData = {
+//     labels: inventoryVsSalesLables,
+//     datasets: [{
+//         label: 'Inventory',
+//         data: inventoryValues,
+//         backgroundColor: [
+//             'rgba(54, 162, 235, 1)',
+//             'rgba(255, 99, 132, 1)',
+//         ],
+//         borderColor: [
+//             'rgba(54, 162, 235, 1)',
+//             'rgba(255, 99, 132, 1)',
+//         ]
+//     }, {
+//         label: 'Sales',
+//         data: salesValues,
+//         backgroundColor: [
+//             'rgba(255, 99, 132, 1)',
+//             'rgba(54, 162, 235, 1)',
+//         ],
+//         borderColor: [
+//             'rgba(255, 99, 132, 1)',
+//             'rgba(54, 162, 235, 1)',
+//         ]
+//     }]
+// };
 
-let inventoryVsSalesOptions = {
-    animationEasing: "easeOutBounce",
-    responsive: true,
-    maintainAspectRatio: true,
-    showScale: true,
-    legend: {
-        display: true
-    },
-    layout: {
-        padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-        }
-    }
-};
-let inventoryVsSalesChart = new Chart(inventoryVsSalesChartCanvas, {
-    type: "line",
-    data: inventoryVsSalesData,
-    options: inventoryVsSalesOptions
-});
+// let inventoryVsSalesOptions = {
+//     animationEasing: "easeOutBounce",
+//     responsive: true,
+//     maintainAspectRatio: true,
+//     showScale: true,
+//     legend: {
+//         display: true
+//     },
+//     layout: {
+//         padding: {
+//             left: 0,
+//             right: 0,
+//             top: 0,
+//             bottom: 0
+//         }
+//     }
+// };
+// let inventoryVsSalesChart = new Chart(inventoryVsSalesChartCanvas, {
+//     type: "line",
+//     data: inventoryVsSalesData,
+//     options: inventoryVsSalesOptions
+// });
 
 let gradeDistribution = @json($data['grade_distribution']);
 let gradeDistributionLables = gradeDistribution.map(c => c.name)

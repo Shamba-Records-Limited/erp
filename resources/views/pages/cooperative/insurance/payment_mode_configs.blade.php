@@ -32,7 +32,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="payment_mode">Mode</label>
                                         <select name="payment_mode" id="payment_mode"
-                                                class=" form-control select2bs4 {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Mode---</option>
                                             <option value="4">Weekly</option>
                                             <option value="1">Monthly</option>
@@ -137,7 +137,7 @@
                                                                     <label for="payment_mode_{{$config->id}}">Mode</label>
                                                                     <select name="payment_mode"
                                                                             id="payment_mode_{{$config->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
                                                                         <option value="">---Select Mode---</option>
                                                                         <option value="1" {{ $config->payment_mode == 1 ? 'selected' : '' }}>
                                                                             Monthly

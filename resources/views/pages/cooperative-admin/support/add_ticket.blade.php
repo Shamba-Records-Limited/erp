@@ -61,7 +61,7 @@ $ticket_labels = config('enums.ticket_labels');
 @push('custom-scripts')
 <script>
 $(document).ready(function() {
-    $('.select2bs4').select2({
+    $('.form-select').select2({
         theme: 'bootstrap4'
     });
 });

@@ -41,7 +41,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="raw_material">Raw Material</label>
                                         <select name="raw_material" id="raw_material"
-                                                class=" form-control select2bs4 {{ $errors->has('raw_material') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('raw_material') ? ' is-invalid' : '' }}"
                                                 onchange="showUnits('raw_material', 'units')"
                                         >
                                             <option value=""></option>
@@ -59,7 +59,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="supply_type">Supply Type</label>
                                         <select name="supply_type" id="supply_type"
-                                                class=" form-control select2bs4 {{ $errors->has('supply_type') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('supply_type') ? ' is-invalid' : '' }}"
                                                 onchange="showTheRightDiv('supply_type', 'collectionDiv', 'supplierDiv','paymentStatusDiv')"
                                         >
                                             <option value=""></option>
@@ -79,7 +79,7 @@
                                          id="collectionDiv">
                                         <label for="collection">Collection</label>
                                         <select name="collection" id="collection"
-                                                class=" form-control select2bs4 {{ $errors->has('collection') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('collection') ? ' is-invalid' : '' }}"
                                         >
                                             <option value=""></option>
                                             @foreach($collection_products as $product)
@@ -97,7 +97,7 @@
                                          id="supplierDiv">
                                         <label for="supplier">Supplier</label>
                                         <select name="supplier" id="supplier"
-                                                class=" form-control select2bs4 {{ $errors->has('supplier') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('supplier') ? ' is-invalid' : '' }}"
                                         >
                                             <option value=""></option>
                                             @foreach($suppliers as $supplier)
@@ -161,7 +161,7 @@
                                          id="paymentStatusDiv">
                                         <label for="payment_status">Payment Status</label>
                                         <select name="payment_status" id="payment_status"
-                                                class=" form-control select2bs4 {{ $errors->has('payment_status') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('payment_status') ? ' is-invalid' : '' }}"
                                                 onchange="showPaidAmountDiv()"
                                         >
                                             <option value=""></option>
@@ -193,7 +193,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="store">Store</label>
                                         <select name="store" id="store"
-                                                class=" form-control select2bs4 {{ $errors->has('store') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('store') ? ' is-invalid' : '' }}"
                                         >
                                             <option value=""></option>
                                             @foreach($stores as $store)
@@ -224,7 +224,7 @@
                                          id="deliveryDiv">
                                         <label for="delivery_status">Delivery Status</label>
                                         <select name="delivery_status" id="delivery_status"
-                                                class=" form-control select2bs4
+                                                class=" form-control form-select
                                                  {{ $errors->has('delivery_status') ? ' is-invalid' : '' }}"
                                         >
                                             <option value=""></option>

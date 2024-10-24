@@ -37,7 +37,7 @@
 
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="employmntType">Employment Type</label>
-                                    <select name="employment_type" id="employmentType" class=" form-control select2bs4
+                                    <select name="employment_type" id="employmentType" class=" form-control form-select
                                         {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
                                         <option value="all">All</option>
                                         @foreach($employment_types as $type)
@@ -56,7 +56,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="employees">Employees</label>
                                     <select name="employees[]" multiple="multiple" id="employees"
-                                            class=" form-control select2bs4 {{ $errors->has('employees') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('employees') ? ' is-invalid' : '' }}">
                                         <option value="">All Employees</option>
                                         @foreach($employees as $emp)
                                             <option value="{{$emp->id}}"> {{ucwords($emp->name)}}</option>
@@ -70,7 +70,7 @@
                                 </div>
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="year">Year</label>
-                                    <select name="year" id="year" class=" form-control select2bs4
+                                    <select name="year" id="year" class=" form-control form-select
                                         {{ $errors->has('year') ? ' is-invalid' : '' }}">
                                         @foreach($years as $yr)
                                             <option value="{{$yr}}"
@@ -89,7 +89,7 @@
 
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="month">Month</label>
-                                    <select name="month" id="month" class=" form-control select2bs4
+                                    <select name="month" id="month" class=" form-control form-select
                                         {{ $errors->has('month') ? ' is-invalid' : '' }}">
                                         @foreach(config('enums.Months') as $key => $m)
                                             <option value="{{$key}}"
@@ -123,7 +123,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label>Employee</label>
                                     <select name="employee" id="employeeFilter"
-                                            class=" form-control select2bs4 {{ $errors->has('employee') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('employee') ? ' is-invalid' : '' }}">
                                         <option value="">All Employees</option>
                                         @foreach($employees as $emp)
                                             <option value="{{$emp->id}}"> {{ucwords($emp->name)}}</option>
@@ -197,7 +197,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="employmentTypeFilter">Employment Type</label>
                                     <select name="employment_type" id="employmentTypeFilter"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value="all">All</option>
                                         @foreach($employment_types as $type)
                                             <option value="{{$type->id}}" {{$type->id == request()->employment_type ? 'selected' : '' }}>
@@ -211,7 +211,7 @@
                                     <label for="employees">Employees</label>
                                     <select name="employees[]" multiple="multiple"
                                             id="filter_employees"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($employees as $emp)
                                             <option value="{{$emp->id}}"
@@ -226,7 +226,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="year">Year</label>
                                     <select name="year" id="filter_year"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option></option>
                                         @foreach($years as $yr)
                                             <option value="{{$yr}}"
@@ -240,7 +240,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="month">Month</label>
                                     <select name="month" id="filter_month"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums.Months') as $key => $m)
                                             <option value="{{$key}}"
@@ -254,7 +254,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="department">Department</label>
                                     <select name="department" id="department"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($departments as $d)
                                             <option value="{{$d->id}}"

@@ -27,7 +27,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="type">Type</label>
                                     <select name="type" id="type"
-                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                             onchange="changeStageType()">
                                         <option value="">--Select Type--</option>
                                         <option value="1">Crop</option>
@@ -43,7 +43,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="showCrop">
                                     <label for="crop">Crop</label>
                                     <select name="crop" id="crop"
-                                            class=" form-control select2bs4 {{ $errors->has('crop') ? ' is-invalid' : '' }}"
+                                            class=" form-control form-select {{ $errors->has('crop') ? ' is-invalid' : '' }}"
                                             onchange="getStages('crop', 'stage','next_stage')">
                                         <option value="" selected>--Select Crop--</option>
                                         @foreach($crops as $crop)
@@ -62,7 +62,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="showLivestock">
                                     <label for="livestock">Livestock/Poultry</label>
                                     <select name="livestock" id="livestock"
-                                            class=" form-control select2bs4 {{ $errors->has('livestock') ? ' is-invalid' : '' }}"
+                                            class=" form-control form-select {{ $errors->has('livestock') ? ' is-invalid' : '' }}"
                                             onchange="getStages('livestock', 'stage','next_stage')">
                                         <option value="">--Select Livestock/Poultry--</option>
                                         @foreach($livestock as $animal)
@@ -79,7 +79,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="stage">Stage</label>
                                     <select name="stage" id="stage"
-                                            class=" form-control select2bs4 {{ $errors->has('stage') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('stage') ? ' is-invalid' : '' }}">
                                     </select>
                                     @if ($errors->has('stage'))
                                         <span class="help-block text-danger">
@@ -104,7 +104,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="next_stage">Next Stage</label>
                                     <select name="next_stage" id="next_stage"
-                                            class=" form-control select2bs4 {{ $errors->has('next_stage') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('next_stage') ? ' is-invalid' : '' }}">
                                     </select>
                                     @if ($errors->has('next_stage'))
                                         <span class="help-block text-danger">
@@ -116,7 +116,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="status">Status</label>
                                     <select name="status" id="status"
-                                            class=" form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}">
                                         @foreach(config('enums')["farmer_crop_status"][0] as $status)
                                             <option value="{{$status}}">{{ucwords($status)}}</option>
                                         @endforeach

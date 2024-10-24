@@ -102,7 +102,7 @@
     @stack('js')
     <!-- common js -->
     <script src="{{ asset('assets/js/off-canvas.js') }}"></script>
-    <script src="{{asset('assets/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ asset('assets/js/hoverable-collapse.js') }}"></script>
     <script src="{{ asset('assets/js/misc.js') }}"></script>
     <script src="{{ asset('assets/js/settings.js') }}"></script>
     <script src="{{ asset('assets/js/todolist.js') }}"></script>
@@ -121,9 +121,11 @@
     {{--date range picker--}}
     <script src="{{ asset('assets/plugins/daterangepicker/moment.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
+    <!-- argon js -->
+    <script src="{{ asset('argon') }}/js/argon.js"></script>
 
     <script>
-    document.body.addEventListener('htmx:configRequest', (event) => {
+    document.body.addEventListener('htmx:configRequest', (event) => {   
         event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]')
             .content;
     });
@@ -140,7 +142,7 @@
     //Initialize Select2 Elements
     $('.select2').select2();
 
-    $('.select2bs4').select2({
+    $('.form-select').select2({
         theme: 'bootstrap4'
     });
 

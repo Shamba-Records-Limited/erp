@@ -30,7 +30,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farmer">Farmer</label>
                                         <select name="farmer" id="farmer"
-                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                                 onchange="getSubscriptionByFarmer('farmer', 'subscription', 'dependant')">
                                             <option value="">---Select Farmer---</option>
                                             @foreach($farmers as $farmer)
@@ -48,7 +48,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="subscription">Subscription</label>
                                         <select name="subscription" id="subscription"
-                                                class=" form-control select2bs4 {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
 
                                         </select>
                                         @if ($errors->has('subscription'))
@@ -62,7 +62,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="dependant">Dependant</label>
                                         <select name="dependant" id="dependant"
-                                                class=" form-control select2bs4 {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
 
                                         </select>
                                         @if ($errors->has('dependant'))
@@ -225,7 +225,7 @@
                                                                     <div class="form-group col-12">
                                                                         <label for="status_{{$c->id}}">Relationship</label>
                                                                         <select name="status" id="status_{{$c->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Status---
                                                                             </option>
                                                                             @if($c->status == \App\InsuranceClaim::STATUS_PENDING)
@@ -299,7 +299,7 @@
                                                                     <div class="form-group col-12">
                                                                         <label for="farmer_{{$c->id}}">Farmer</label>
                                                                         <select name="farmer" id="farmer_{{$c->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                                                                 onchange="getSubscriptionByFarmer('farmer_{{$c->id}}', 'subscription_{{$c->id}}', 'dependant_{{$c->id}}')">
                                                                             <option value="">---Select Farmer---
                                                                             </option>
@@ -319,7 +319,7 @@
                                                                         <label for="subscription_{{$c->id}}">Subscription</label>
                                                                         <select name="subscription"
                                                                                 id="subscription_{{$c->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
 
                                                                         </select>
                                                                         @if ($errors->has('subscription'))
@@ -334,7 +334,7 @@
                                                                         <label for="dependant_{{$c->id}}">Dependant</label>
                                                                         <select name="dependant"
                                                                                 id="dependant_{{$c->id}}"
-                                                                                class=" form-control select2bs4 {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control form-select {{ $errors->has('dependant') ? ' is-invalid' : '' }}">
 
                                                                         </select>
                                                                         @if ($errors->has('dependant'))

@@ -42,7 +42,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="year">Year</label>
                                     <select name="year" id="filter_year"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option></option>
                                         @foreach($years as $yr)
                                             <option value="{{$yr}}"
@@ -56,7 +56,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="month">Month</label>
                                     <select name="month" id="filter_month"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums.Months') as $key => $m)
                                             <option value="{{$key}}"
@@ -70,7 +70,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="department">Department</label>
                                     <select name="department" id="department"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($departments as $d)
                                             <option value="{{$d->id}}"

@@ -71,7 +71,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="country">Country</label>
-                            <select name="country" id="country" class=" form-control select2bs4 {{ $errors->has('country') ? ' is-invalid' : '' }}">
+                            <select name="country" id="country" class=" form-control form-select {{ $errors->has('country') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
                                 <option value="{{$country->id}}"> {{ $country->name }}</option>
@@ -126,7 +126,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="gender">Gender</label>
-                            <select name="gender" id="gender" class=" form-control select2bs4 {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+                            <select name="gender" id="gender" class=" form-control form-select {{ $errors->has('gender') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Gender-</option>
                                 @foreach($gender_options as $key => $option)
                                 <option value="{{$option}}"> {{ $option}}</option>
@@ -140,7 +140,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="marital_status">Marital Status</label>
-                            <select name="marital_status" id="marital_status" class=" form-control select2bs4 {{ $errors->has('marital_status') ? ' is-invalid' : '' }}">
+                            <select name="marital_status" id="marital_status" class=" form-control form-select {{ $errors->has('marital_status') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Marital Status-</option>
                                 @foreach($marital_status_options as $key => $option)
                                 <option value="{{$option}}"> {{ $option}}</option>
@@ -186,7 +186,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="bank_id">Bank</label>
-                            <select name="bank_id" id="bank_id" class=" form-control select2bs4 {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
+                            <select name="bank_id" id="bank_id" class=" form-control form-select {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
                                 <option value="">---Select Bank---</option>
                                 @foreach($banks as $bank)
                                 <option value="{{$bank->id}}"> {{ $bank->name }}</option>
@@ -201,7 +201,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="bank_branch_id">Bank Branch</label>
-                            <select name="bank_branch_id" id="bank_branch_id" class=" form-control select2bs4 {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
+                            <select name="bank_branch_id" id="bank_branch_id" class=" form-control form-select {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
 
                             </select>
                             @if ($errors->has('bank_branch_id'))
@@ -244,7 +244,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="department">Department</label>
-                            <select name="department" id="department" class=" form-control select2bs4 {{ $errors->has('department') ? ' is-invalid' : '' }}">
+                            <select name="department" id="department" class=" form-control form-select {{ $errors->has('department') ? ' is-invalid' : '' }}">
                                 <option value="">-Select Department-</option>
                                 @foreach($departments as $department)
                                 <option value="{{$department->id}}"> {{ $department->name }}</option>
@@ -272,7 +272,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="employment_type">Employment Type</label>
-                            <select name="employment_type" id="employment_type" class=" form-control select2bs4 {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
+                            <select name="employment_type" id="employment_type" class=" form-control form-select {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
 
                                 @foreach($types as $type)
                                 <option value="{{$type->id}}"> {{ ucwords(strtolower($type->type)) }}</option>
@@ -287,7 +287,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="position">Positions</label>
-                            <select name="position" id="position" class=" form-control select2bs4 {{ $errors->has('position') ? ' is-invalid' : '' }}">
+                            <select name="position" id="position" class=" form-control form-select {{ $errors->has('position') ? ' is-invalid' : '' }}">
                                 @foreach($positions ?? '' as $position)
                                 <option value="{{$position->id}}"> {{ $position->position }}</option>
                                 @endforeach

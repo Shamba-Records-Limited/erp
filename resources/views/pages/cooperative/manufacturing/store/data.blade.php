@@ -55,7 +55,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="raw_material">Raw Material</label>
                                     <select name="raw_material" id="raw_material"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($raw_materials as $material)
                                             <option value="{{$material->id}}" {{$material->id == request()->raw_material ?  'selected' : ''}}> {{ $material->name }}</option>
@@ -66,7 +66,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}" {{$product->id == request()->product ?  'selected' : ''}}> {{ $product->name }}</option>
@@ -85,7 +85,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="supplier_type">Supplier Type</label>
                                     <select name="supplier_type" id="supplier_type"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums')["supply_types"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->supplier_type ? 'selected' : ''}}>
@@ -98,7 +98,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="supplier">Supplier</label>
                                     <select name="supplier" id="supplier"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach($suppliers as $supplier)
                                             <option value="{{$supplier->id}}" {{$supplier->id == request()->supplier ?  'selected' : ''}}> {{ $supplier->name }}</option>
@@ -109,7 +109,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="payment_status">Payment Status</label>
                                     <select name="payment_status" id="payment_status"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums')["supply_payment_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->payment_status ? 'selected' : ''}}>
@@ -123,7 +123,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="delivery_status">Delivery Status</label>
                                     <select name="delivery_status" id="delivery_status"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums')["delivery_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->delivery_status ? 'selected' : ''}}>
@@ -340,7 +340,7 @@ $canEdit = has_right_permission(config('enums.system_modules')['Procurement']['p
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="expiry_status">Expiry Status</label>
                                     <select name="expiry_status" id="expiry_status"
-                                            class=" form-control select2bs4">
+                                            class=" form-control form-select">
                                         <option value=""></option>
                                         @foreach(config('enums')["expiry_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->expiry_status ? 'selected' : ''}}>

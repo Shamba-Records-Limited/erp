@@ -334,7 +334,7 @@ class MarketAuctionController extends Controller
         toastr()->success('Order created successfully');
 
         // Auto-run private function after DB commit
-    return $this->processBatchAndLots($order, $lotNumbers, $cart);
+    //return $this->processBatchAndLots($order, $lotNumbers, $cart);
 
         // redirect to orders
         return redirect()->route("miller-admin.orders.show");

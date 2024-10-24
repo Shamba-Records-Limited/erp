@@ -44,7 +44,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="unit_measure">Unit Measure</label>
                                         <select name="unit_measure" id="unit_measure"
-                                                class=" form-control select2bs4 {{ $errors->has('unit_measure') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('unit_measure') ? ' is-invalid' : '' }}">
                                             @foreach($units as $unit)
                                                 <option value="{{$unit->id}}"> {{ $unit->name }}</option>
                                             @endforeach

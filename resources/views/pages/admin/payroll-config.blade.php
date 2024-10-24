@@ -34,7 +34,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="country">Country</label>
                                     <select name="country" id="country"
-                                            class=" form-control select2bs4 {{ $errors->has('address') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('address') ? ' is-invalid' : '' }}">
                                         @foreach($countries as $country)
                                             <option value="{{$country->id}}"> {{ $country->name }}</option>
                                         @endforeach
@@ -116,7 +116,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="deduction_stage">Deduction Stage</label>
                                     <select name="deduction_stage" id="deduction_stage"
-                                            class=" form-control select2bs4 {{ $errors->has('deduction_stage') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('deduction_stage') ? ' is-invalid' : '' }}">
                                         <option value="{{\App\PayrollDeduction::BEFORE_PAYE_DEDUCTION}}">
                                             Before PAYE
                                         </option>
@@ -135,7 +135,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="base_amount">Base Amount</label>
                                     <select name="base_amount" id="base_amount"
-                                            class=" form-control select2bs4 {{ $errors->has('base_amount') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('base_amount') ? ' is-invalid' : '' }}">
                                         <option value=""></option>
                                        @foreach(config('enums.payroll_deduction_base_value') as $k => $v)
                                            <option value="{{$k}}">{{ $v }}</option>
@@ -244,7 +244,7 @@
                                                                     <label for="country_{{$config->id}}">Country</label>
                                                                     <select name="country"
                                                                             id="country_{{$config->id}}"
-                                                                            class=" form-control select2bs4">
+                                                                            class=" form-control form-select">
                                                                         @foreach($countries as $country)
                                                                             <option value="{{$country->id}}"
                                                                                     {{$country->id==$config->country_id ? 'selected' :''}}>
@@ -312,7 +312,7 @@
                                                                         Stage</label>
                                                                     <select name="deduction_stage"
                                                                             id="deduction_stage_{{$config->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('deduction_stage') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('deduction_stage') ? ' is-invalid' : '' }}">
                                                                         <option value="{{\App\PayrollDeduction::BEFORE_PAYE_DEDUCTION}}"
                                                                                 {{\App\PayrollDeduction::BEFORE_PAYE_DEDUCTION == $config->deduction_stage ? 'selected':''}}>
                                                                             Before PAYE
@@ -328,7 +328,7 @@
                                                                 <div class="form-group col-12">
                                                                     <label for="base_amount_{{$config->id}}">Base Amount</label>
                                                                     <select name="base_amount" id="base_amount_{{$config->id}}"
-                                                                            class=" form-control select2bs4 {{ $errors->has('base_amount') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control form-select {{ $errors->has('base_amount') ? ' is-invalid' : '' }}">
                                                                         <option value=""></option>
                                                                         @foreach(config('enums.payroll_deduction_base_value') as $k => $v)
                                                                             <option value="{{$k}}" {{ $k == $config->on_gross_pay ? 'selected' : '' }}>{{ $v }}</option>

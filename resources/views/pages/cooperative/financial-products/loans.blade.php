@@ -51,7 +51,7 @@
                                         <input name="farmer_id" id="farmer_id" hidden/>
                                         <input name="wallet_id" id="wallet_id" hidden/>
                                         <select name="farmer" id="farmer" required
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value=""> Select Farmer</option>
                                             @foreach($farmers as $farmer)
                                                 <option value="{{$farmer}}"> {{ $farmer->user->first_name.' '.$farmer->user->other_names }}</option>
@@ -68,7 +68,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farm_tools">Farm Tools</label>
                                         <select name="farm_tools" id="farm_tools"
-                                                class=" form-control select2bs4 {{ $errors->has('farm_tools') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('farm_tools') ? ' is-invalid' : '' }}">
                                             <option value="">--Select--</option>
                                             @foreach(config('enums')['farm_tools'][0] as $k=>$tool)
                                                 <option value="{{$k}}">{{$tool}}</option>
@@ -97,7 +97,7 @@
                                         <label for="period">Type</label>
                                         <input id="type_id" name="type_id" hidden/>
                                         <select name="type" id="type" required
-                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value=""> Select Type</option>
                                             @foreach($loan_configs as $config)
                                                 <option value="{{$config}}"> {{ $config->type }}</option>
@@ -114,7 +114,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="mode_of_repayment">Repayment Mode</label>
                                         <select name="mode_of_repayment" id="mode_of_repayment"
-                                                class=" form-control select2bs4 {{ $errors->has('mode_of_repayment') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('mode_of_repayment') ? ' is-invalid' : '' }}">
                                             <option value="">--Select Mode of Payment--</option>
                                             <option value="1">One Off Auto Deduction</option>
                                             <option value="2">Monthly Deductions</option>
@@ -231,7 +231,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="filterFarmer">Farmer</label>
                                         <select name="farmer" id="filterFarmer"
-                                                class=" form-control select2bs4">
+                                                class=" form-control form-select">
                                             <option value=""> --Select--</option>
                                             @foreach($farmers as $farmer)
                                                 <option value="{{$farmer->id}}" {{ request()->get('farmer') == $farmer->id ? 'selected' : '' }}> {{ $farmer->user->first_name.' '.$farmer->user->other_names }}</option>
@@ -242,7 +242,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="status">Status</label>
                                         <select name="status" id="status"
-                                                class=" form-control select2bs4">
+                                                class=" form-control form-select">
                                             <option value="">--Select--</option>
                                             @foreach(config('enums')['loan_status'][0] as $k=>$status)
                                                 <option value="{{$k}}" {{ request()->get('status') == $k ? 'selected' : '' }}>{{$status}}</option>
