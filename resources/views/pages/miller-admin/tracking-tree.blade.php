@@ -29,61 +29,111 @@
         </div>
     </div>
 
-    <!-- Hierarchical Data Structure as Timeline -->
-    <div class="timeline">
-        <!-- Order Level -->
-        <div class="timeline-item">
-            <div class="timeline-icon">
-                <i class="fas fa-circle"></i>
-            </div>
-            <div class="timeline-content">
-                <h5>Order: B20240703-1</h5>
-                <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#orderDetails" aria-expanded="false" aria-controls="orderDetails">Show Details</button>
-                <div id="orderDetails" class="collapse mt-2">
-                    <!-- Delivery Level -->
-                    <div class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fas fa-circle"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <h6>Delivery:</h6>
-                            <p>Child Details Here</p>
-                            <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#deliveryDetails" aria-expanded="false" aria-controls="deliveryDetails">Show Children</button>
-                            <div id="deliveryDetails" class="collapse mt-2">
-                                <!-- Pre-Milled Inventory Level -->
-                                <div class="timeline-item">
-                                    <div class="timeline-icon">
-                                        <i class="fas fa-circle"></i>
-                                    </div>
-                                    <div class="timeline-content">
-                                        <h6>Pre-Milled Inventory: INV20240827002</h6>
-                                        <p>Child Details Here</p>
-                                        <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#preMilledDetails" aria-expanded="false" aria-controls="preMilledDetails">Show Children</button>
-                                        <div id="preMilledDetails" class="collapse mt-2">
-                                            <!-- Milled Inventory Level -->
-                                            <div class="timeline-item">
-                                                <div class="timeline-icon">
-                                                    <i class="fas fa-circle"></i>
-                                                </div>
-                                                <div class="timeline-content">
-                                                    <h6>Raw Material: Milled Inventory: INV20241011002</h6>
-                                                    <p>Child Details Here</p>
-                                                    <button class="btn btn-success btn-sm" data-toggle="collapse" data-target="#milledDetails1" aria-expanded="false" aria-controls="milledDetails1">Show Children</button>
-                                                    <div id="milledDetails1" class="collapse mt-2">
-                                                        <h6>Raw Material: Milled Inventory: INV20241003001</h6>
-                                                        <p>Child Details Here</p>
-                                                    </div>
-                                                </div>
-                                            </div> <!-- End of Milled Inventory -->
-                                        </div>
-                                    </div>
-                                </div> <!-- End of Pre-Milled Inventory -->
-                            </div>
-                        </div>
-                    </div> <!-- End of Delivery -->
+    <!-- Collapse Button at the Top -->
+    <button class="btn btn-primary" id="collapseBtn" data-toggle="collapse" data-target="#timelineContent" aria-expanded="true" aria-controls="timelineContent">
+        Click to collapse
+    </button>
+
+    <!-- Collapsible Timeline Content -->
+    <div id="timelineContent" class="collapse show">
+        <div class="timeline">
+            
+            <!-- Timeline Item: Collection Stage -->
+            <div class="timeline-item">
+                <div class="timeline-icon">
+                    <i class="fas fa-circle"></i>
+                </div>
+                <div class="timeline-content">
+                    <h6>Stage: Collection</h6>
+                    <p>The coffee beans are collected from the farms and are now ready to be transported to the processing plant.</p>
+                    <button class="btn btn-secondary" data-toggle="collapse" data-target="#deliveryStage" aria-expanded="false">Next Step</button>
                 </div>
             </div>
-        </div> <!-- End of Order -->
+
+            <!-- Timeline Item: Delivery Stage -->
+            <div id="deliveryStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Delivery</h6>
+                        <p>The coffee beans have been delivered to the milling plant for processing.</p>
+                        <button class="btn btn-secondary" data-toggle="collapse" data-target="#preMilledStage" aria-expanded="false">Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item: Pre-Milled Inventory -->
+            <div id="preMilledStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Pre-Milled Inventory</h6>
+                        <p>The coffee beans are stored in inventory, awaiting the milling process to begin.</p>
+                        <button class="btn btn-secondary" data-toggle="collapse" data-target="#millingStage" aria-expanded="false">Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item: Milling Process -->
+            <div id="millingStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Milling Process</h6>
+                        <p>The coffee beans are being milled to remove the outer husk, producing green coffee beans.</p>
+                        <button class="btn btn-secondary" data-toggle="collapse" data-target="#qualityControlStage" aria-expanded="false">Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item: Quality Control -->
+            <div id="qualityControlStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Quality Control</h6>
+                        <p>The milled coffee beans are undergoing quality control to ensure they meet export or roasting standards.</p>
+                        <button class="btn btn-secondary" data-toggle="collapse" data-target="#exportStage" aria-expanded="false">Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item: Export Readiness -->
+            <div id="exportStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Export Readiness</h6>
+                        <p>The coffee beans have passed quality control and are ready to be exported or sent to roasters.</p>
+                        <button class="btn btn-secondary" data-toggle="collapse" data-target="#finalProductStage" aria-expanded="false">Next Step</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item: Final Product -->
+            <div id="finalProductStage" class="collapse">
+                <div class="timeline-item">
+                    <div class="timeline-icon">
+                        <i class="fas fa-circle"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <h6>Stage: Final Product</h6>
+                        <p>The coffee beans have been roasted, packaged, and are now ready for distribution to retailers and consumers.</p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
     </div>
 </div>
 @endsection
@@ -96,11 +146,13 @@
         // You can add any logic here if needed, like validating inputs
     });
 
-    // Toggle collapse functionality for expand buttons
-    $(document).ready(function () {
-        $('.btn').on('click', function() {
-            $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up');
-        });
+    // Toggle collapse button text between "Click to collapse" and "Click to expand"
+    $('#collapseBtn').click(function () {
+        if ($('#timelineContent').hasClass('show')) {
+            $(this).text('Click to expand');
+        } else {
+            $(this).text('Click to collapse');
+        }
     });
 </script>
 @endpush
@@ -116,7 +168,7 @@
     .timeline::before {
         content: '';
         position: absolute;
-        left: 20px;
+        left: 35px; /* Center line adjustment */
         top: 0;
         bottom: 0;
         width: 2px;
@@ -126,7 +178,7 @@
     .timeline-item {
         position: relative;
         margin-bottom: 20px;
-        padding-left: 50px;
+        padding-left: 60px; /* Increase padding for icon */
     }
 
     .timeline-item:last-child {
@@ -135,7 +187,7 @@
 
     .timeline-icon {
         position: absolute;
-        left: 10px;
+        left: 20px; /* Adjust the position of the icon */
         width: 20px;
         height: 20px;
         border-radius: 50%;
@@ -152,11 +204,38 @@
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
 
-    .btn-sm {
-        padding: 5px 10px; /* Smaller padding for compact buttons */
+    .location {
+        font-weight: bold;
+        font-size: 1.1rem;
     }
 
-    .timeline-content h6, .timeline-content h5 {
-        margin-top: 0;
+    .timestamp {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .status {
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .timeline-content p {
+        margin: 5px 0;
+    }
+
+    .btn-link {
+        font-size: 1rem;
+        font-weight: bold;
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .btn-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+
+    .btn-secondary {
+        margin-top: 10px;
     }
 </style>
