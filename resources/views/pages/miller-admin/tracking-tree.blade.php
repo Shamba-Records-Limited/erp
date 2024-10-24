@@ -37,15 +37,15 @@
     <!-- Collapsible Timeline Content -->
     <div id="timelineContent" class="collapse show">
         <div class="timeline">
-            
-            <!-- Timeline Item: Collection Stage -->
+
+            <!-- Timeline Item: Order Level -->
             <div class="timeline-item">
                 <div class="timeline-icon">
                     <i class="fas fa-circle"></i>
                 </div>
                 <div class="timeline-content">
-                    <h6>Stage: Collection</h6>
-                    <p>The coffee beans are collected from the farms and are now ready to be transported to the processing plant.</p>
+                    <h6>Order: B20240703</h6>
+                    <p>The order has been confirmed for coffee beans collection.</p>
                     <button class="btn btn-secondary" data-toggle="collapse" data-target="#deliveryStage" aria-expanded="false">Next Step</button>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Delivery</h6>
+                        <h6>Invoice: INV20240827002 - Delivery</h6>
                         <p>The coffee beans have been delivered to the milling plant for processing.</p>
                         <button class="btn btn-secondary" data-toggle="collapse" data-target="#preMilledStage" aria-expanded="false">Next Step</button>
                     </div>
@@ -71,7 +71,7 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Pre-Milled Inventory</h6>
+                        <h6>Invoice: INV20240827003 - Pre-Milled Inventory</h6>
                         <p>The coffee beans are stored in inventory, awaiting the milling process to begin.</p>
                         <button class="btn btn-secondary" data-toggle="collapse" data-target="#millingStage" aria-expanded="false">Next Step</button>
                     </div>
@@ -85,7 +85,7 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Milling Process</h6>
+                        <h6>Invoice: INV20241011002 - Milling Process</h6>
                         <p>The coffee beans are being milled to remove the outer husk, producing green coffee beans.</p>
                         <button class="btn btn-secondary" data-toggle="collapse" data-target="#qualityControlStage" aria-expanded="false">Next Step</button>
                     </div>
@@ -99,7 +99,7 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Quality Control</h6>
+                        <h6>Invoice: INV20241003001 - Quality Control</h6>
                         <p>The milled coffee beans are undergoing quality control to ensure they meet export or roasting standards.</p>
                         <button class="btn btn-secondary" data-toggle="collapse" data-target="#exportStage" aria-expanded="false">Next Step</button>
                     </div>
@@ -113,7 +113,7 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Export Readiness</h6>
+                        <h6>Invoice: INV20241004001 - Export Readiness</h6>
                         <p>The coffee beans have passed quality control and are ready to be exported or sent to roasters.</p>
                         <button class="btn btn-secondary" data-toggle="collapse" data-target="#finalProductStage" aria-expanded="false">Next Step</button>
                     </div>
@@ -127,12 +127,12 @@
                         <i class="fas fa-circle"></i>
                     </div>
                     <div class="timeline-content">
-                        <h6>Stage: Final Product</h6>
+                        <h6>Final Product - Coffee Beans Ready</h6>
                         <p>The coffee beans have been roasted, packaged, and are now ready for distribution to retailers and consumers.</p>
                     </div>
                 </div>
             </div>
-            
+
         </div>
     </div>
 </div>
@@ -172,7 +172,7 @@
         top: 0;
         bottom: 0;
         width: 2px;
-        background: #007bff;
+        background: #28a745; /* Change line color to green */
     }
 
     .timeline-item {
@@ -191,7 +191,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: #007bff;
+        background: #28a745; /* Change dot color to green */
         text-align: center;
         line-height: 20px;
         color: white;
