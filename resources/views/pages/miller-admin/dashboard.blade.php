@@ -333,18 +333,6 @@ $total_gender_distribution = 0;
 
 <!-- dashgrid -->
 <div class="dashgrid">
-    
-
-    
-    
-    <!-- <div class="card span-6">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-basket-outline" style="font-size: 35px;color: #4bc0c0;"></i>
-                </div>
-                <div>Inventory vs Sales</div>
-            </div> -->
             <div class="row">
                 <div class="col-12 d-flex align-items-center">                      
                     <canvas id="InventoryVsSalesChart" class="mb-4 mb-md-0" data-inventory-series="{{ json_encode($data['inventory_series']) }}" 
@@ -352,17 +340,7 @@ $total_gender_distribution = 0;
                 </div>
             </div>
         </div>
-    </div>
-
-
-
-    
-
-    
-
-
-
-   
+    </div>   
 </div>
 <!-- orders vs delivery -->
 
@@ -704,7 +682,7 @@ $total_gender_distribution = 0;
             genderChartImg,
             collectionsBarChartImg,
             gradeDistributionChartImg
-        }
+        }
 
         fetch('/miller-admin/dashboard/export', {
                 method: 'POST',
