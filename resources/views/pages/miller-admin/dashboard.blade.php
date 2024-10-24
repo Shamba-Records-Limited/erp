@@ -3,43 +3,6 @@
 @section('content')
     @include('layouts.headers.cards')
 
-<!-- <style>
-    .grid {
-        display: grid;
-    }
-
-    .grid-cols-2 {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .dashgrid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 10px;
-    }
-
-    .span-8 {
-        grid-column: span 8;
-    }
-
-    .span-4 {
-        grid-column: span 4;
-    }
-
-    .span-2 {
-        grid-column: span 2;
-    }
-
-    .span-6 {
-        grid-column: span 6;
-    }
-
-
-    .row-span-2 {
-        grid-row: span 2;
-    }
-</style> -->
-
 @php
 $total_gender_distribution = 0;
 @endphp
