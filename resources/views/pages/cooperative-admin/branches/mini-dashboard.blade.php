@@ -46,15 +46,23 @@ let wetMillCollectionsLabels = wetMillCollectionsData.map(c => c.name);
 let wetMillCollectionsValues = wetMillCollectionsData.map(c => c.quantity);
 
 let wetMillCollectionsBarChartCanvas = document.getElementById("WetMillCollectionsBarChart");
+let ctx = wetMillCollectionsBarChartCanvas.getContext("2d"); // Get the 2D context
 
+// Create a gradient fill for the area below the line
+let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+
+// Define gradient stops: Darker at the top, lighter at the bottom
+gradient.addColorStop(0, 'rgba(244, 216, 240, 1)'); // Darker shade at the top
+gradient.addColorStop(0.5, 'rgba(244, 216, 240, 0.5)'); // Mid-point lighter shade
+gradient.addColorStop(1, 'rgba(244, 216, 240, 0.1)'); // Lightest shade at the bottom
 let wetMillCollectionsBarData = {
     labels: wetMillCollectionsLabels,
     datasets: [{
         label: 'Weight in KGs',
         data: wetMillCollectionsValues,
         borderColor: '#2dce89',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
+        backgroundColor: gradient,
+        fill: true,
         tension: 0.4,
     }],
 };

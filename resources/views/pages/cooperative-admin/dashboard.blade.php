@@ -114,7 +114,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 <div class="form-group">
                     <select name="date_range" placeholder="Select Date Range" class="form-control form-select"
                         onchange="this.form.submit()" id="dateRange">
-                        <option value="week" @if($date_range=="week" ) selected @endif)>This Week</option>
+                        <option value="week" @if($date_range=="week" ) selected @endif>This Week</option>
                         <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>
                         <option value="year" @if($date_range=="year" ) selected @endif>This Year</option>
                         <option value="custom" @if($date_range=="custom" ) selected @endif>Custom</option>
@@ -497,7 +497,7 @@ let wetMillCollectionsBarData = {
 };
 
 let wetMillCollectionsBarOptions = {
-      animationEasing: "easeOutBounce",
+    animationEasing: "easeOutBounce",
     animateScale: true,
     responsive: true,
     maintainAspectRatio: false,
