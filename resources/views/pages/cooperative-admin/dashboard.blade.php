@@ -483,19 +483,25 @@ let wetMillCollectionsValues = wetMillCollectionsData.map(c => c.quantity);
 
 let wetMillCollectionsBarChartCanvas = document.getElementById("WetMillCollectionsBarChart");
 
+
 let wetMillCollectionsBarData = {
     labels: wetMillCollectionsLabels,
     datasets: [{
         label: 'Weight in KGs',
         data: wetMillCollectionsValues,
         borderColor: '#2dce89',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
+        backgroundColor: gradient,
+        fill: true,
         tension: 0.4,
     }],
 };
 
 let wetMillCollectionsBarOptions = {
+      animationEasing: "easeOutBounce",
+    animateScale: true,
+    responsive: true,
+    maintainAspectRatio: false,
+    showScale: true,
     scales: {
         yAxes: [{
             gridLines: {
