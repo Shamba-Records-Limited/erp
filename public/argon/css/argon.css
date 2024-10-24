@@ -1787,9 +1787,9 @@ pre code {
 
     vertical-align: top;
 
-    word-wrap: break-word;
+    /* word-wrap: break-word;
     word-break: break-word;
-    white-space: normal !important;
+    white-space: normal !important; */
     border-top: 1px solid #e9ecef;
 }
 
@@ -16249,9 +16249,15 @@ a.btn-icon-only {
 .main-content {
     /* position: relative; */
     min-height: 100vh;
-    /* margin-left: 300px; */
-    /* padding-left: 15%; */
+    margin-left: 250px;
+    /* Match this to the sidebar's width */
+    padding: 20px;
+    /* Add some padding for content */
+    flex-grow: 1;
     overflow-x: hidden;
+    flex-grow: 1;
+    /* Make the main content take the remaining space */
+
 }
 
 .main-content .navbar-top {
@@ -16269,7 +16275,9 @@ a.btn-icon-only {
 @media (min-width: 768px) {
     .main-content .container-fluid {
         /* padding-right: 139px !important; */
-        padding-left: 339px !important;
+        /* padding-left: 339px !important; */
+        /* margin-left: 300px; */
+
     }
 }
 
@@ -20347,6 +20355,8 @@ hr.horizontal.light {
     height: calc(100vh - 70px);
     background-color: #fff;
     border-radius: 15px;
+    width: 250px;
+    /* Adjust this width as necessary */
 
     box-shadow:
         0 1px 3px rgba(0, 0, 0, 0.2),
@@ -20361,7 +20371,18 @@ hr.horizontal.light {
     padding-bottom: 20px;
 }
 
+/* Responsive styles */
+@media (max-width: 768px) {
+    #sidenav-main {
+        width: 200px;
+        /* Adjust width for smaller screens */
+    }
 
+    .main-content {
+        margin-left: 200px;
+        /* Match this to the sidebar's width */
+    }
+}
 
 .nav-profile-wrapper {
     position: fixed;
@@ -20429,7 +20450,7 @@ hr.horizontal.light {
 }
 
 .avatar {
-    position: absolute; 
-    top: -60px;         
-    right: 10px;        
+    position: absolute;
+    top: -60px;
+    right: 10px;
 }
