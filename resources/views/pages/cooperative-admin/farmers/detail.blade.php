@@ -75,7 +75,7 @@
                         <th>#</th>
                         <th>Collection Number</th>
                         <th>Lot Number</th>
-                        <th>Name</th>
+                        <th>Product</th>
                         <th>Quantity</th>
                         <th>Collection Date</th>
                         <th></th>
