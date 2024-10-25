@@ -17,7 +17,7 @@
                 <div class="form-group col-lg-4 col-md-6 col-sm-12">
                     <label for="main_product_id" class="font-weight-bold">Main Product</label>
                     <select name="main_product_id" id="main_product_id"
-                        class="form-control form-select {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}"
+                        class="form-control  form-select{{ $errors->has('main_product_id') ? ' is-invalid' : '' }}"
                         required>
                         <option value="">-- Select Main Product --</option>
                         @foreach($products as $product)
