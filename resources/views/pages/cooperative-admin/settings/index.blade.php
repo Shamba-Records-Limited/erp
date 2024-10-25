@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css">
 @endpush
 
 @section('content')
@@ -46,17 +45,8 @@
 @endsection
 
 @push('plugin-scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 @endpush
 
 @push('custom-scripts')
-<script>
-$(document).ready(function() {
-    // Initialize Select2 for better UI
-    $('#main_product_id').select2({
-        theme: 'bootstrap4',
-        width: '100%'
-    });
-});
-</script>
+
 @endpush
