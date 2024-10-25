@@ -125,8 +125,18 @@ class BranchesController extends Controller
         ORDER BY quantity DESC
     "), ["coop_id" => $coop_id]);
 
+    // Calculate average collection over time
+    $average_collection_over_time = DB::select(DB::raw("
+        SELECT DATE(c.created_at) AS date, AVG(c.quantity) AS average_quantity
+        FROM collections c
+        WHERE c.cooperative_id = :coop_id
+        GROUP BY DATE(c.created_at)
+        ORDER BY DATE(c.created_at) ASC
+    "), ["coop_id" => $coop_id]);
+
     $data = [
         "collections_by_wet_mills" => $collections_by_wet_mills,
+        "average_collection_over_time" => $average_collection_over_time, // Add this line
     ];
 
     // Fetch branches for the view
@@ -152,6 +162,7 @@ class BranchesController extends Controller
 
     return view('pages.cooperative-admin.branches.mini-dashboard', compact("data", "branches"));
 }
+
 
 
 }
