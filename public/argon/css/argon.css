@@ -5320,7 +5320,7 @@ input[type='button'].btn-block {
 
     word-wrap: break-word;
 
-    border: 1px solid rgba(0, 0, 0, .05);
+    /* border: 1px solid rgba(0, 0, 0, .05); */
     border-radius: .375rem;
     background-color: #fff;
     background-clip: border-box;
@@ -20260,7 +20260,7 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 .custom-border {
     border: 1px solid #ddd;
     border-top: none;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
     padding: 15px;
     border-radius: 5px;
 }
