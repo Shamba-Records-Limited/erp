@@ -85,7 +85,7 @@ $countries = get_countries();
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="country_code">Country</label>
                                 <select name="country_code" id="country_code"
-                                    class=" form-control form-select {{ $errors->has('country_code') ? ' is-invalid' : '' }}"
+                                    class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}"
                                     value="Kenya">
                                     <option value=""> -Select Country-</option>
                                     @foreach($countries as $country)
@@ -104,7 +104,7 @@ $countries = get_countries();
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="county_id">Select County</label>
                                 <select name="county_id" id="county_id"
-                                    class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select County-</option>
                                     @foreach($counties as $county)
                                     <option value="{{$county->id}}"> {{ $county->name }}</option>
@@ -121,7 +121,7 @@ $countries = get_countries();
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="sub_county">Select Sub County</label>
                                 <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id"
-                                    class=" form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select Sub County-</option>
 
                                     @if ($errors->has('sub_county_id'))

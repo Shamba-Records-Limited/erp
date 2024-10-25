@@ -44,7 +44,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="farmer">Farmers</label>
                                     <select name="farmer" id="farmer"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($farmers as $farmer)
                                             <option value="{{$farmer->farmer->id}}"
@@ -67,7 +67,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="quality">Quality Standards</label>
                                     <select name="quality" id="quality"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($quality_stds as $std)
                                             <option value="{{$std->id}}"
@@ -89,7 +89,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="agent">Agent</label>
                                     <select name="agent" id="agent"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($agents as $agent)
                                             <option value="{{$agent->id}}"
@@ -280,7 +280,7 @@
                                                                         <select name="agent"
                                                                                 id="agent_{{$item->id}}"
                                                                                 class="form-control
-                          form-select {{ $errors->has('agent') ? ' is-invalid' : '' }}">
+                          select2bs4 {{ $errors->has('agent') ? ' is-invalid' : '' }}">
                                                                             @foreach( $agents as $agent)
                                                                                 <option value="{{$agent->id}}">
                                                                                     {{ ucwords(strtolower($agent->first_name.' '.$agent->other_names)) }}

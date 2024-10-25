@@ -30,7 +30,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="farmer">Farmer</label>
                                         <select name="farmer" id="farmer" required
-                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
                                             <option value=""> Select Type</option>
                                             @foreach($farmers as $farmer)
                                                 <option value="{{ $farmer->id }}" {{ $farmer->id == old('farmer') ? 'selected' : '' }}>
@@ -48,7 +48,7 @@
                                     <div class="form-group col-lg-4 col-md-6 col-12">
                                         <label for="period">Type</label>
                                         <select name="type" id="type" required
-                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value=""> Select Type</option>
                                             @foreach($saving_types as $type)
                                                 <option value="{{ $type->id }}" {{ $type->id == old('type') ? 'selected' : '' }}>
@@ -117,7 +117,7 @@
                                         <div class="form-group col-lg-4 col-md-6 col-12">
                                             <label for="w-farmer">Farmer</label>
                                             <select name="farmer" id="w-farmer" required
-                                                    class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                                    class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                                     onchange="getMaturedSavingTypes()">
                                                 <option value=""> Select Type</option>
                                                 @foreach($farmers as $farmer)
@@ -134,7 +134,7 @@
                                         <div class="form-group col-lg-4 col-md-6 col-12">
                                             <label for="w-saving_type">Saving Type</label>
                                             <select name="saving_type" id="w-saving_type" required
-                                                    class=" form-control form-select {{ $errors->has('saving_type') ? ' is-invalid' : '' }}">
+                                                    class=" form-control select2bs4 {{ $errors->has('saving_type') ? ' is-invalid' : '' }}">
                                             </select>
                                             @if ($errors->has('saving_type'))
                                                 <span class="help-block text-danger">

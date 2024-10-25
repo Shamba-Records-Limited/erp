@@ -34,7 +34,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="type">Type</label>
                                         <select name="type" id="type"
-                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                                 onchange="changeStageType()">
                                             <option value="">--Select Type--</option>
                                             <option value="1">Crop</option>
@@ -50,7 +50,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="showLivestock">
                                         <label for="livestock">Livestock/Poultry</label>
                                         <select name="livestock" id="livestock"
-                                                class=" form-control form-select {{ $errors->has('livestock') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('livestock') ? ' is-invalid' : '' }}">
                                             <option value="">--Select Livestock/Poultry--</option>
                                             @foreach($livestock as $animal)
                                                 <option value="{{$animal->id}}">{{ucwords(strtolower($animal->name.'( '.$animal->breed.' '.$animal->animal_type.')'))}}</option>
@@ -66,7 +66,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 d-none" id="showCrop">
                                         <label for="crop">Crop</label>
                                         <select name="crop" id="crop"
-                                                class=" form-control form-select {{ $errors->has('crop') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('crop') ? ' is-invalid' : '' }}">
                                             <option value="">--Select Crop--</option>
                                             @foreach($crops as $crop)
                                                 @if($crop->product_id)
@@ -142,7 +142,7 @@
                                                             <div class="form-group col-12">
                                                                 <label for="period_measure">Period Measure</label>
                                                                 <select name="period_measure" id="period_measure"
-                                                                        class="form-control form-select">
+                                                                        class="form-control select2bs4">
                                                                     @foreach(config('enums')["crop_calendar_period_measure"][0] as $period_measure)
                                                                         <option value="{{$period_measure}}">{{ucwords($period_measure)}}</option>
                                                                     @endforeach

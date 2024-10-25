@@ -27,7 +27,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="subscription">Subscription</label>
                                     <select name="subscription" id="subscription"
-                                            class=" form-control form-select {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('subscription') ? ' is-invalid' : '' }}">
                                         @foreach($subscriptions as $s)
                                             <option value="{{$s->id}}"> {{$s->insurance_product->name}}</option>
                                         @endforeach
@@ -43,7 +43,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="type">Transaction Type</label>
                                     <select name="type" id="type"
-                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                         <option value="">--Select Type--</option>
                                         <option value="1" {{ old('type') == 1 ? 'selected' : '' }}>Claim</option>
                                         <option value="2" {{ old('type') == 2 ? 'selected' : '' }}>Installment</option>

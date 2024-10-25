@@ -24,7 +24,7 @@
                 <div class="form-row">
                     <div class="form-group col-lg-3 col-md-6 col-12">
                         <label for="manager_id">Manager</label>
-                        <select name="manager_id" id="manager_id" class="form-control form-select {{ $errors->has('manager_id') ? ' is-invalid' : '' }}" required>
+                        <select name="manager_id" id="manager_id" class="form-control select2bs4 {{ $errors->has('manager_id') ? ' is-invalid' : '' }}" required>
                             <option value="">-- Select Manager --</option>
                             @foreach($employees as $employee)
                             <option value="{{$employee->user_id}}" @if($employee->user_id == $branch->manager_id) selected @endif>{{$employee->username}} - {{$employee->first_name}} {{$employee->other_names}}</option>

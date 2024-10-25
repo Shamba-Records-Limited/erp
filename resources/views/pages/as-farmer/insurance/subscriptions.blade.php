@@ -30,7 +30,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Product---</option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}" {{ old('valuation') == $product->id ? 'selected' : '' }}>{{ $product->name }}</option>
@@ -46,7 +46,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="valuation">Valuation</label>
                                     <select name="valuation" id="valuation"
-                                            class=" form-control form-select {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('valuation') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Valuation---</option>
                                         @foreach($valuations as $v)
                                             <option value="{{$v->id}}" {{ old('valuation') == $v->id ? 'selected' : '' }}>{{ $v->type }}</option>
@@ -62,7 +62,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="payment_mode">Mode</label>
                                     <select name="payment_mode" id="payment_mode"
-                                            class=" form-control form-select {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('payment_mode') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Mode---</option>
                                         <option value="{{\App\InsuranceSubscriber::MODE_WEEKLY}}" {{ old('payment_mode') == \App\InsuranceSubscriber::MODE_WEEKLY ? 'selected' : '' }}>Weekly</option>
                                         <option value="{{\App\InsuranceSubscriber::MODE_MONTHLY}}" {{ old('payment_mode') == \App\InsuranceSubscriber::MODE_MONTHLY ? 'selected' : '' }}>Monthly</option>

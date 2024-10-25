@@ -25,7 +25,7 @@
                                             <div class="form-group col-lg-6 col-md-10 col-12">
                                                 <label for="module">Module</label>
                                                 <select name="module" id="module"
-                                                        class=" form-control form-select">
+                                                        class=" form-control select2bs4">
                                                     @foreach($modules as $module)
                                                         <option value="{{$module->id}}" {{ request()->get('module')  == $module->id ? 'selected' : '' }}>{{$module->name}}</option>
                                                     @endforeach

@@ -107,7 +107,7 @@
                                 <div class="form-group col-lg-4 col-md-6 col-12">
                                     <label for="period">Type</label>
                                     <select name="type" id="type" required
-                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                         <option value=""> Select Type</option>
                                         @foreach($loan_configs as $config)
                                             <option value="{{$config}}"> {{ $config->type }}</option>
@@ -124,7 +124,7 @@
                                 <div class="form-group col-lg-4 col-md-6 col-12">
                                     <label for="mode_of_repayment">Repayment Mode</label>
                                     <select name="mode_of_repayment" id="mode_of_repayment"
-                                            class=" form-control form-select {{ $errors->has('mode_of_repayment') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('mode_of_repayment') ? ' is-invalid' : '' }}">
                                         <option value="1">One Off Auto Deduction</option>
                                         <option value="2">Monthly Deductions</option>
                                         @if ($errors->has('mode_of_repayment'))

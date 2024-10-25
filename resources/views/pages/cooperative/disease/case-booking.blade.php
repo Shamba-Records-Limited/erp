@@ -31,7 +31,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="vet">Vet</label>
                                         <select name="vet" id="vet"
-                                                class=" form-control form-select {{ $errors->has('vet') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('vet') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Vet---</option>
                                             @foreach($vets as $vet)
                                                 <option value="{{$vet->id}}"> {{ ucwords(strtolower($vet->first_name).' '.strtolower($vet->other_names) )}}</option>

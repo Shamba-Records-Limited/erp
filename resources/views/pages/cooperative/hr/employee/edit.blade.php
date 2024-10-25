@@ -70,7 +70,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="country">Country</label>
                                     <select name="country" id="country"
-                                            class=" form-control form-select {{ $errors->has('country') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('country') ? ' is-invalid' : '' }}">
                                         <option value="{{ $employee->country->id}}"> {{ $employee->country->name }}</option>
                                         @foreach($countries as $country)
                                             <option value="{{$country->id}}"> {{ $country->name }}</option>
@@ -123,7 +123,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="gender">Gender</label>
                                     <select name="gender" id="gender"
-                                            class=" form-control form-select {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('gender') ? ' is-invalid' : '' }}">
                                             <option value="{{ $employee->gender }}"> {{ $employee->gender }}</option>
                                             <option value="Female"> Female</option>
                                             <option value="Male"> Male</option>
@@ -138,7 +138,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="marital_status">Marital Status</label>
                                     <select name="marital_status" id="marital_status"
-                                        class=" form-control form-select {{ $errors->has('marital_status') ? ' is-invalid' : '' }}">
+                                        class=" form-control select2bs4 {{ $errors->has('marital_status') ? ' is-invalid' : '' }}">
                                         <option value="{{ $employee->marital_status }}"> {{ $employee->marital_status }}</option>
                                         <option value="Married"> Married</option>
                                         <option value="Divorced"> Divorced</option>
@@ -164,7 +164,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="bank_id">Bank</label>
                                     <select name="bank_id" id="bank_id"
-                                            class=" form-control form-select {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
                                         <option value="">---Select Bank---</option>
                                         @foreach($banks as $bank)
                                             <option value="{{$bank->id}}"> {{ $bank->name }}</option>
@@ -180,7 +180,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="bank_branch_id">Bank Branch</label>
                                     <select name="bank_branch_id" id="bank_branch_id"
-                                            class=" form-control form-select {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
 
                                     </select>
                                     @if ($errors->has('bank_branch_id'))
@@ -251,7 +251,7 @@
 {{--                                    <label for="employee_number">Employee Type</label>--}}
 {{--                                    <input type="hidden" class="form-control" value="{{ $employee->employmentType->id}}" name="type_id"/>--}}
 {{--                                    <select name="employment_type" id="employment_type"--}}
-{{--                                            class=" form-control form-select {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">--}}
+{{--                                            class=" form-control select2bs4 {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">--}}
 {{--                                        <option value="{{ $employee->employmentType->employeeType->id }}">{{ $employee->employmentType->employeeType->type }}</option>--}}
 {{--                                        @foreach($types as $type)--}}
 {{--                                            <option value="{{$type->id}}"> {{ $type->type }}</option>--}}
@@ -268,7 +268,7 @@
 {{--                                    <label for="employee_number">Position</label>--}}
 {{--                                    <input type="hidden" class="form-control" value="{{ $employee->position->id}}" name="position_id"/>--}}
 {{--                                    <select name="position" id="position"--}}
-{{--                                            class=" form-control form-select {{ $errors->has('position') ? ' is-invalid' : '' }}">--}}
+{{--                                            class=" form-control select2bs4 {{ $errors->has('position') ? ' is-invalid' : '' }}">--}}
 {{--                                            <option value="{{$employee->position->position->id}}"> {{ $employee->position->position->position }}</option>--}}
 {{--                                        @foreach($positions as $position)--}}
 {{--                                            <option value="{{$position->id}}"> {{ $position->position }}</option>--}}
@@ -286,7 +286,7 @@
 {{--                                    <label for="employee_number">Department</label>--}}
 {{--                                    --}}
 {{--                                    <select name="department" id="department"--}}
-{{--                                            class=" form-control form-select {{ $errors->has('department') ? ' is-invalid' : '' }}">--}}
+{{--                                            class=" form-control select2bs4 {{ $errors->has('department') ? ' is-invalid' : '' }}">--}}
 {{--                                        <option value="{{ $employee->department->id }}">{{ $employee->department->name }}</option>--}}
 {{--                                        @foreach($departments as $department)--}}
 {{--                                            <option value="{{$department->id}}"> {{ $department->name }}</option>--}}

@@ -78,7 +78,7 @@
                 </div>
                 <div class="form-group col-lg-3 col-md-6 col-12">
                     <label for="bank_id">Select milling warehouse</label>
-                    <select name="miller_warehouse_id" id="miller_warehouse_id" class="form-control form-select {{ $errors->has('miller_warehouse_id') ? ' is-invalid' : '' }}">
+                    <select name="miller_warehouse_id" id="miller_warehouse_id" class="form-control select2bs4 {{ $errors->has('miller_warehouse_id') ? ' is-invalid' : '' }}">
                         <option value="">-- Select Warehouse --</option>
                         @foreach($warehouses as $warehouse)
                         <option value="{{$warehouse->id}}"> {{ $warehouse->name }}</option>

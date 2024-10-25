@@ -37,7 +37,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                     <label for="debit_ledger">Debit Ledger</label>
                                     <select name="debit_ledger" id="debit_ledger"
-                                            class=" form-control form-select {{ $errors->has('debit_ledger') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('debit_ledger') ? ' is-invalid' : '' }}">
                                         <option value="" selected>---Select Debit Ledger---</option>
                                         @foreach($ledgers as $l)
                                             <option value={{$l->id}}>{{$l->name}}</option>
@@ -53,7 +53,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                     <label for="credit_ledger">Credit Ledger</label>
                                     <select name="credit_ledger" id="credit_ledger"
-                                            class=" form-control form-select {{ $errors->has('credit_ledger') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('credit_ledger') ? ' is-invalid' : '' }}">
                                         <option value="" selected>---Select Credit Ledger---</option>
                                         @foreach($ledgers as $l)
                                             <option value={{$l->id}}>{{$l->name}}</option>
@@ -175,7 +175,7 @@
                                                                         Ledger</label>
                                                                     <select name="edit_debit_ledger"
                                                                             id="edit_debit_ledger_{{$r->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_debit_ledger') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_debit_ledger') ? ' is-invalid' : '' }}">
                                                                         @foreach($ledgers as $l)
                                                                             <option value={{$l->id}}  {{ $r->debit_ledger_id == $l->id ? 'selected' : null }}>{{$l->name}}</option>
                                                                         @endforeach
@@ -192,7 +192,7 @@
                                                                         Ledger</label>
                                                                     <select name="edit_credit_ledger"
                                                                             id="edit_credit_ledger_{{$r->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_credit_ledger') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_credit_ledger') ? ' is-invalid' : '' }}">
                                                                         @foreach($ledgers as $l)
                                                                             <option value={{$l->id}}  {{ $r->credit_ledger_id == $l->id ? 'selected' : null }}>{{$l->name}}</option>
                                                                         @endforeach

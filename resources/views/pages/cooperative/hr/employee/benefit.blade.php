@@ -44,7 +44,7 @@
                                 <div class="form-group col-lg-6 col-md-12 col-12">
                                     <label for="type">Type</label>
                                     <select name="type" id="type"
-                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}" required>
+                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}" required>
                                         @foreach(config('enums.hr_deduction_types') as $key => $benefit)
                                             <option value="{{$key}}" {{ $allowance->type == $key ? 'select' : '' }}>{{config('enums.hr_deduction_types')[$key]}}</option>
                                         @endforeach

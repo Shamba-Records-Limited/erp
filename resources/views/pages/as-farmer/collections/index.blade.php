@@ -30,7 +30,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                         <option value=""> {{ '- Select Product -'}}</option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}"> {{ $product->name }} ( in {{ $product->unit }}) </option>
@@ -47,7 +47,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="standard_id">Quality Standard</label>
                                     <select name="standard_id" id="standard_id"
-                                            class=" form-control form-select {{ $errors->has('standard_id') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('standard_id') ? ' is-invalid' : '' }}">
                                         <option value=""> {{ '- Select Product -'}}</option>
                                         @foreach($quality_standards as $qs)
                                             <option value="{{$qs->id}}"> {{ $qs->name }}</option>

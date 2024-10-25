@@ -29,7 +29,7 @@
 
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="approach">Approach</label>
-                                        <select name="approach" id="approach" class=" form-control form-select"
+                                        <select name="approach" id="approach" class=" form-control select2bs4"
                                                 onchange="chooseApproach()">
                                             <option value="" selected>-- Select Approach ---</option>
                                             <option value="1" {{ old('approach') == "1" ? 'selected ' : ''}}>Accounting
@@ -44,7 +44,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 acc_rule {{!$errors->has('acc_rule') ? 'd-none' : '' }}">
                                         <label for="acc_rule">Accounting Rule</label>
                                         <select name="acc_rule" id="acc_rule"
-                                                class=" form-control form-select {{ $errors->has('acc_rule') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('acc_rule') ? ' is-invalid' : '' }}">
                                             <option value="" selected>-- Select Ledger ---</option>
                                             @foreach($rules as $r)
                                                 <option value="{{$r->id}}" {{ old('acc_rule') ==  $r->id ? 'selected ' : ''}}> {{ $r->name }}</option>
@@ -60,7 +60,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 {{!$errors->has('credit_ledger_account') ? 'd-none' : '' }} credit_ledger_account">
                                         <label for="credit_ledger_account">Credit Ledger Account</label>
                                         <select name="credit_ledger_account" id="credit_ledger_account"
-                                                class=" form-control form-select {{ $errors->has('credit_ledger_account') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('credit_ledger_account') ? ' is-invalid' : '' }}">
                                             <option value="" selected>-- Select Ledger ---</option>
                                             @foreach($ledgers as $l)
                                                 <option value="{{$l->id}}" {{ old('credit_ledger_account') ==  $l->id ? 'selected ' : ''}}> {{ $l->name }}</option>
@@ -76,7 +76,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12 debit_ledger_account {{!$errors->has('debit_ledger_account') ? 'd-none' : '' }}">
                                         <label for="debit_ledger_account">Debit Ledger Account</label>
                                         <select name="debit_ledger_account" id="debit_ledger_account"
-                                                class=" form-control form-select {{ $errors->has('debit_ledger_account') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('debit_ledger_account') ? ' is-invalid' : '' }}">
                                             <option value="" selected>-- Select Ledger ---</option>
                                             @foreach($ledgers as $l)
                                                 <option value="{{$l->id}}" {{ old('debit_ledger_account') ==  $l->id ? 'selected ' : ''}}> {{ $l->name }}</option>

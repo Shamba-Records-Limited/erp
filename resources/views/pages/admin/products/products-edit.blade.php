@@ -33,7 +33,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="category_id">Category</label>
-                                <select name="category_id" id="category_id" class="form-control form-select {{ $errors->has('category_id') ? ' is-invalid' : '' }}" required>
+                                <select name="category_id" id="category_id" class="form-control select2bs4 {{ $errors->has('category_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Product Category --</option>
                                     @foreach($categories as $category)
                                     <option value="{{$category->id}}" @if($category->id == $product->category_id) selected @endif>{{$category->name}}</option>

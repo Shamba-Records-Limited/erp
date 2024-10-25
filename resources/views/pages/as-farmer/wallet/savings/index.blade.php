@@ -77,7 +77,7 @@
                                 <div class="form-group col-lg-4 col-md-6 col-12">
                                     <label for="period">Type</label>
                                     <select name="type" id="type" required
-                                            class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                         <option value=""> Select Type</option>
                                         @foreach($saving_types as $type)
                                             <option value="{{ $type->id }}"> {{ $type->type }} ({{$type->period}}Ms)
@@ -143,7 +143,7 @@
                                 <div class="form-group col-lg-4 col-md-6 col-12">
                                     <label for="saving_type_withdraw">Saving Type</label>
                                     <select name="saving_type" id="saving_type_withdraw" required
-                                            class=" form-control form-select {{ $errors->has('saving_type') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('saving_type') ? ' is-invalid' : '' }}">
                                         @foreach($matured_savings as $type)
                                             <option value="{{ $type->saving_type->id }}"> {{ $type->saving_type->type }}</option>
                                         @endforeach

@@ -43,7 +43,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="type">Product Type</label>
                                         <select name="type" id="type"
-                                                class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}">
                                             <option value="{{ \App\InsuranceProduct::TYPE_SERVICE }}" selected>Service
                                             </option>
                                             <option value="{{ \App\InsuranceProduct::TYPE_SAVING }}">Saving</option>
@@ -72,7 +72,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="benefits">Benefits</label>
                                         <select name="benefits[]" id="benefits" multiple
-                                                class=" form-control form-select {{ $errors->has('benefits') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('benefits') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Benefit---</option>
                                             @foreach($benefits as $benefit)
                                                 <option value="{{$benefit->id}}">{{$benefit->name}}</option>

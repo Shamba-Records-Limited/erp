@@ -54,7 +54,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="expiry_status">Expiry Status</label>
                                     <select name="expiry_status" id="expiry_status"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach(config('enums')["expiry_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->expiry_status ? 'selected' : ''}}>

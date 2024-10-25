@@ -30,7 +30,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farmer">Farmer</label>
                                         <select name="farmer" id="farmer"
-                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Farmer---</option>
                                             @foreach($farmers as $farmer)
                                                 <option value="{{$farmer->id}}">{{ucwords(strtolower($farmer->first_name.' '.$farmer->other_names))}}</option>

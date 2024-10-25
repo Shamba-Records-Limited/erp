@@ -8,7 +8,7 @@
     <div class="card-body">
         <div class="card-title">Farmers</div>
         <div class="d-flex justify-content-end">
-            <select class="form-select">
+            <select class="select2bs4">
                 <option>All</option>
                 <option>Coop x</option>
             </select>

@@ -63,7 +63,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="country_code">Country</label>
-                            <select name="country_code" id="country_code" class=" form-control form-select {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="Kenya">
+                            <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="Kenya">
                                 <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
                                 <option value="{{$country['code']}}" @if($country['name']=='Kenya' ) selected @endif> {{ $country['name'] }}</option>
@@ -79,7 +79,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="county_id">Select County</label>
-                            <select name="county_id" id="county_id" class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                            <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select County-</option>
                                 @foreach($counties as $county)
                                 <option value="{{$county->id}}"> {{ $county->name }}</option>
@@ -95,7 +95,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="sub_county">Select Sub County</label>
-                            <select name="sub_county_id" id="sub_county_id" class="form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                            <select name="sub_county_id" id="sub_county_id" class="form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
                                 <option value="">-Select Sub County-</option>
                                 @foreach ($sub_counties as $sub_county)
                                     <option value="{{ $sub_county->id }}">{{ $sub_county->name }}</option>
@@ -146,7 +146,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="gender">Gender</label>
-                            <select name="gender" id="gender" class=" form-control form-select {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+                            <select name="gender" id="gender" class=" form-control select2bs4 {{ $errors->has('gender') ? ' is-invalid' : '' }}">
                                 <option value=""> -Select Gender-</option>
                                 @foreach($gender_options as $key => $option)
                                 <option value="{{$option}}" @if($option == old('gender', '')) selected @endif> {{ $option}}</option>
@@ -244,7 +244,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
 <script>
     $('.select2').select2();
 
-    $('.form-select').select2({
+    $('.select2bs4').select2({
         theme: 'bootstrap4'
     });
 </script>

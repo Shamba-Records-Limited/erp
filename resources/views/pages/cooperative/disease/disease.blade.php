@@ -43,7 +43,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="category_id">Category</label>
                                         <select name="category_id" id="category_id"
-                                                class=" form-control form-select {{ $errors->has('category_id') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('category_id') ? ' is-invalid' : '' }}">
                                             @foreach($disease_categories as $category)
                                                 <option value="{{$category->id}}"> {{ $category->name }}</option>
                                             @endforeach
@@ -135,7 +135,7 @@
                                                                     <label for="disease_category_id{{$disease->id}}">Category</label>
                                                                     <select name="disease_category_id"
                                                                             id="disease_category_id{{$disease->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('disease_category_id') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('disease_category_id') ? ' is-invalid' : '' }}">
                                                                         @foreach($disease_categories as $category)
                                                                             <option value="{{$category->id}}"
                                                                                     {{ $category->id == $disease->disease_category_id ? 'selected' : null }}>

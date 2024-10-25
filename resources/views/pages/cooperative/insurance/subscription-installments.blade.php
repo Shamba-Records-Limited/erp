@@ -89,7 +89,7 @@
                                                                         <label for="source_{{$i->id}}">Source</label>
                                                                         <select name="source"
                                                                                 id="source_{{$i->id}}"
-                                                                                class=" form-control form-select {{ $errors->has('source') ? ' is-invalid' : '' }}">
+                                                                                class=" form-control select2bs4 {{ $errors->has('source') ? ' is-invalid' : '' }}">
                                                                             <option value="">---Select Source---
                                                                             </option>
                                                                             <option value="{{\App\InsuranceInstallment::SOURCE_WALLET}}">

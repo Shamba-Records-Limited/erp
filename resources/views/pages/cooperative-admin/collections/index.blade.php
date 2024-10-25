@@ -97,9 +97,9 @@ $collection_time_options = config('enums.collection_time');
                                 <label for="coop_branch_id">Coop Branch</label>
                                 <select name="coop_branch_id" id="coop_branch_id"
 <<<<<<< Updated upstream
-                                    class="form-control form-select{{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4{{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
 =======
-                                    class="form-control form-select {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4 {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}"
 >>>>>>> Stashed changes
                                     required>
                                     <option value="">-- Select Branch --</option>
@@ -117,7 +117,7 @@ $collection_time_options = config('enums.collection_time');
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="farmer_id">Farmer</label>
                                 <select name="farmer_id" id="farmer_id"
-                                    class="form-control form-select {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4 {{ $errors->has('farmer_id') ? ' is-invalid' : '' }}"
                                     required>
                                     <option value="">-- Select Farmer --</option>
                                     @foreach($farmers as $farmer)
@@ -134,7 +134,7 @@ $collection_time_options = config('enums.collection_time');
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="product_id">Product</label>
                                 <select name="product_id" id="product_id"
-                                    class="form-control form-select {{ $errors->has('product_id') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4 {{ $errors->has('product_id') ? ' is-invalid' : '' }}"
                                     required onchange="set_unit_id()">
                                     <option value="">-- Select Product --</option>
                                     @foreach($products as $product)
@@ -163,7 +163,7 @@ $collection_time_options = config('enums.collection_time');
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="unit">Unit</label>
-                                <!-- <select name="unit" id="unit" class="form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
+                                <!-- <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required disabled>
                                     <option value="">-- Select Unit --</option>
                                     @foreach(config('enums.units') as $key => $unit)
                                     <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>
@@ -181,7 +181,7 @@ $collection_time_options = config('enums.collection_time');
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="collection_time">Collection Time</label>
                                 <select name="collection_time" id="collection_time"
-                                    class="form-control form-select {{ $errors->has('collection_time') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4 {{ $errors->has('collection_time') ? ' is-invalid' : '' }}"
                                     required>
                                     <option value="">-- Select Collection Time --</option>
                                     @foreach($collection_time_options as $key => $option)

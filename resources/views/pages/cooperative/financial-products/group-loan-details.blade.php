@@ -112,7 +112,7 @@
 
                                                                         <select name="source"
                                                                                 id="source_{{$i->id}}"
-                                                                                class=" form-control form-select {{ $errors->has('source') ? ' is-invalid' : '' }}"
+                                                                                class=" form-control select2bs4 {{ $errors->has('source') ? ' is-invalid' : '' }}"
                                                                                 onchange="showPhoneField('phone_{{$i->id}}', 'source_{{$i->id}}', '{{\App\LoanInstallment::MPESA_REPAYMENT_OPTION}}')"
                                                                         >
                                                                             <option value="">

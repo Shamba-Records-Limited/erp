@@ -27,7 +27,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="farmer">Employee</label>
                                     <select name="employee" id="employee"
-                                            class="form-control form-select"
+                                            class="form-control select2bs4"
                                     >
                                         <option value="">---Select Employee---</option>
                                         @foreach($employees as $employee)

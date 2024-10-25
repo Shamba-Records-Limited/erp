@@ -69,7 +69,7 @@
                             <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                 <label for="report_type">Report Type</label>
                                 <select id="report_type"
-                                        class=" form-control form-select {{ $errors->has('report_type') ? ' is-invalid' : '' }}">
+                                        class=" form-control select2bs4 {{ $errors->has('report_type') ? ' is-invalid' : '' }}">
                                     <option value="">--Select Type--</option>
                                     <option value="1">Trial Balance</option>
                                     <option value="2">Balance Sheet</option>
@@ -99,7 +99,7 @@
                             <div class="form-group col-lg-3 col-md-6 col-sm-12 ledger_accounts d-none">
                                 <label for="account_ledger">Account Ledgers</label>
                                 <select id="ledger_account"
-                                        class=" form-control form-select {{ $errors->has('ledger_account') ? ' is-invalid' : '' }}">
+                                        class=" form-control select2bs4 {{ $errors->has('ledger_account') ? ' is-invalid' : '' }}">
 
                                     <option value="">---Select Ledger Account---</option>
                                     @foreach($ledgers as $acc)
@@ -154,7 +154,7 @@
                             <div class="form-group col-lg-3 col-md-6 col-12 select_farmer d-none">
                                 <label for="farmer">Farmer</label>
                                 <select id="farmer"
-                                    class="form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
+                                    class="form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}"
                                     name="farmer">
                                     <option value="">---Select Farmer---</option>
 

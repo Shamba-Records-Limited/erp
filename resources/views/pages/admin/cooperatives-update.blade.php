@@ -62,7 +62,7 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="country_code">Country</label>
-                            <select name="country_code" id="country_code" class=" form-control form-select {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="KE">
+                            <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="KE">
                                 <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
                                 <option value="{{$country['code']}}" @if($country['name']=='Kenya' ) selected @endif> {{ $country['name'] }}</option>

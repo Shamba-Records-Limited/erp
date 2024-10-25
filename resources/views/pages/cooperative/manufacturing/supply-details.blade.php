@@ -55,7 +55,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="product">Product</label>
                                     <select name="product" id="product"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($products as $product)
                                             <option value="{{$product->id}}" {{$product->id == request()->product ?  'selected' : ''}}> {{ $product->name }}</option>
@@ -74,7 +74,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="supplier_type">Supplier Type</label>
                                     <select name="supplier_type" id="supplier_type"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach(config('enums')["supply_types"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->supplier_type ? 'selected' : ''}}>
@@ -87,7 +87,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="supplier">Supplier</label>
                                     <select name="supplier" id="supplier"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($suppliers as $supplier)
                                             <option value="{{$supplier->id}}" {{$supplier->id == request()->supplier ?  'selected' : ''}}> {{ $supplier->name }}</option>
@@ -98,7 +98,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="store">Store</label>
                                     <select name="store" id="store"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach($stores as $store)
                                             <option value="{{$store->id}}" {{$store->id == request()->store ?  'selected' : ''}}>
@@ -111,7 +111,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="payment_status">Payment Status</label>
                                     <select name="payment_status" id="payment_status"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach(config('enums')["supply_payment_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->payment_status ? 'selected' : ''}}>
@@ -125,7 +125,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="delivery_status">Delivery Status</label>
                                     <select name="delivery_status" id="delivery_status"
-                                            class=" form-control form-select">
+                                            class=" form-control select2bs4">
                                         <option value=""></option>
                                         @foreach(config('enums')["delivery_status"][0] as $k=>$v)
                                             <option value="{{$k}}" {{$k == request()->delivery_status ? 'selected' : ''}}>
@@ -444,7 +444,7 @@
                                                                             <label for="edit_store_{{$supply->id}}">Store</label>
                                                                             <select name="edit_store"
                                                                                     id="edit_store_{{$supply->id}}"
-                                                                                    class=" form-control form-select {{ $errors->has('store') ? ' is-invalid' : '' }}"
+                                                                                    class=" form-control select2bs4 {{ $errors->has('store') ? ' is-invalid' : '' }}"
                                                                             >
                                                                                 <option value=""></option>
                                                                                 @foreach($stores as $store)
@@ -463,7 +463,7 @@
                                                                                 Status</label>
                                                                             <select name="edit_delivery_status"
                                                                                     id="edit_delivery_status_{{$supply->id}}"
-                                                                                    class=" form-control form-select {{ $errors->has('store') ? ' is-invalid' : '' }}"
+                                                                                    class=" form-control select2bs4 {{ $errors->has('store') ? ' is-invalid' : '' }}"
                                                                             >
                                                                                 <option value=""></option>
                                                                                 @foreach(config('enums')["delivery_status"][0] as $k=>$v)

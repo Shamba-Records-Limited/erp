@@ -30,7 +30,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="bank_id">Bank</label>
                                     <select name="bank_id" id="bank_id"
-                                            class=" form-control form-select {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
                                         @foreach($banks as $bank)
                                             <option value="{{$bank->id}}"> {{ $bank->name }}</option>
                                         @endforeach

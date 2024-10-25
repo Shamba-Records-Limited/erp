@@ -30,7 +30,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="disease">Disease</label>
                                         <select name="disease" id="disease"
-                                                class=" form-control form-select {{ $errors->has('disease') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('disease') ? ' is-invalid' : '' }}">
                                             <option value="">---- Select Disease----</option>
                                             @foreach($diseases as $disease)
                                                 <option value="{{$disease->id}}"> {{ $disease->name.' ('.$disease->disease_category->name.')' }}</option>
@@ -46,7 +46,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farmer">Farmer</label>
                                         <select name="farmer" id="farmer"
-                                                class=" form-control form-select {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('farmer') ? ' is-invalid' : '' }}">
                                             <option value="">---- Select Farmer ----</option>
                                             @foreach($farmers as $farmer)
                                                 <option value="{{$farmer->id}}"> {{ ucwords(strtolower($farmer->first_name.' '.$farmer->other_names)) }}</option>
@@ -76,7 +76,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="status">Status</label>
                                         <select name="status" id="status"
-                                                class=" form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}">
                                             <option value="">---- Select Status ----</option>
                                             @foreach(config('enums.disease_status')[0] as $status)
                                                 <option value="{{$status}}"> {{ $status }}</option>
@@ -195,7 +195,7 @@
                                                                     <label for="edit_disease_{{$case->id}}">Disease</label>
                                                                     <select name="edit_disease"
                                                                             id="edit_disease_{{$case->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_disease') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_disease') ? ' is-invalid' : '' }}">
                                                                         @foreach($diseases as $disease)
                                                                             <option value="{{$disease->id}}" {{ $case->disease_id == $disease->id ? 'selected' : '' }}> {{ $disease->name.' ('.$disease->disease_category->name.')' }}</option>
                                                                         @endforeach
@@ -211,7 +211,7 @@
                                                                     <label for="edit_farmer_{{$case->id}}">Farmer</label>
                                                                     <select name="edit_farmer"
                                                                             id="edit_farmer_{{$case->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_farmer') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_farmer') ? ' is-invalid' : '' }}">
                                                                         @foreach($farmers as $farmer)
                                                                             <option value="{{$farmer->id}}" {{ $case->farmer_id == $farmer->id ? 'selected' : '' }}> {{ ucwords(strtolower($farmer->first_name.' '.$farmer->other_names)) }}</option>
                                                                         @endforeach
@@ -242,7 +242,7 @@
                                                                     <label for="edit_status_{{$case->id}}">Status</label>
                                                                     <select name="edit_status"
                                                                             id="edit_status_{{$case->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_status') ? ' is-invalid' : '' }}">edit_
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_status') ? ' is-invalid' : '' }}">edit_
                                                                         @foreach(config('enums.disease_status')[0] as $status)
                                                                             <option value="{{$status}}" {{ $case->status == $status  ? 'selected' : '' }}> {{ $status }}</option>
                                                                         @endforeach

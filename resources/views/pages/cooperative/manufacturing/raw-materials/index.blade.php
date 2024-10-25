@@ -61,7 +61,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="units">Units</label>
                                         <select name="units" id="units"
-                                                class=" form-control form-select {{ $errors->has('units') ? ' is-invalid' : '' }}"
+                                                class=" form-control select2bs4 {{ $errors->has('units') ? ' is-invalid' : '' }}"
                                         >
                                             <option value=""></option>
                                             @foreach($units as $unit)
@@ -203,7 +203,7 @@
                                                                         <label for="units_{{$material->id}}">Units</label>
                                                                         <select name="edit_units"
                                                                                 id="units_{{$material->id}}"
-                                                                                class=" form-control form-select {{ $errors->has('edit_units') ? ' is-invalid' : '' }}"
+                                                                                class=" form-control select2bs4 {{ $errors->has('edit_units') ? ' is-invalid' : '' }}"
                                                                         >
                                                                             @foreach($units as $unit)
                                                                                 <option value="{{$unit->id}} {{$unit->id == $material->unit_id ? 'selected' : ''}}">{{$unit->name}}</option>

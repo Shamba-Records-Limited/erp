@@ -15,7 +15,7 @@
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">
-                <select name="date_range" placeholder="Select Date Range" class="form-control form-select"
+                <select name="date_range" placeholder="Select Date Range" class="form-control select2bs4"
                     onchange="this.form.submit()" id="dateRange">
                     <option value="week" @if($date_range=="week" ) selected @endif)>This Week</option>
                     <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>

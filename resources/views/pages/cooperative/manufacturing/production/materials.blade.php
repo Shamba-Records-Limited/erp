@@ -33,7 +33,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="material">Raw Materials</label>
                                         <select name="material" id="material"
-                                                class="form-control form-select {{ $errors->has('material') ? ' is-invalid' : '' }}">
+                                                class="form-control select2bs4 {{ $errors->has('material') ? ' is-invalid' : '' }}">
                                             <option value="">-Select Material-</option>
                                             @foreach($raw_materials as $material)
                                                 <option value="{{$material->id}}"> {{ $material->name }} ({{$material->available_quanity}})</option>
@@ -154,7 +154,7 @@
                                                                         <div class="form-group col-12">
                                                                             <label for="material_{{$prod->id}}">Raw Materials</label>
                                                                             <select name="edit_material" id="material_{{$prod->id}}"
-                                                                                    class="form-control form-select {{ $errors->has('edit_material') ? ' is-invalid' : '' }}">
+                                                                                    class="form-control select2bs4 {{ $errors->has('edit_material') ? ' is-invalid' : '' }}">
                                                                                 <option value="">-Select Material-</option>
                                                                                 @foreach($raw_materials as $material)
                                                                                     <option value="{{$material->id}}" {{$material->id == $prod->raw_material_id ? 'selected' : ''}}>

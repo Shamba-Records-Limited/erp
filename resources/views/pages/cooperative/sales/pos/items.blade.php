@@ -37,7 +37,7 @@
                                         <label for="product">What to sell</label>
 
                                         <select id="whatToSell" name="what_to_sell"
-                                                class="form-control form-select ">
+                                                class="form-control select2bs4 ">
                                             <option value=""> {{ '- Select what to sell -'}}</option>
                                             <option value="1"> {{ 'Collections'}}</option>
                                             <option value="2"> {{ 'Manufactured Products'}}</option>
@@ -48,7 +48,7 @@
                                         <label for="product">Collected Product</label>
 
                                         <select name="product" id="product"
-                                                class="form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                class="form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                             <option value=""> {{ '- Select Product -'}}</option>
                                             @foreach($collections as $product)
                                                 <option value="{{$product->collections[0]->id}}"> {{ $product->name }}
@@ -67,7 +67,7 @@
                                          id="manufacturedP">
                                         <label for="manufactured">Manufactured Product</label>
                                         <select name="manufactured" id="manufactured"
-                                                class="form-control form-select {{ $errors->has('manufactured') ? ' is-invalid' : '' }}">
+                                                class="form-control select2bs4 {{ $errors->has('manufactured') ? ' is-invalid' : '' }}">
                                             <option value=""> {{ '- Select Manufactured Product -'}}</option>
                                             @foreach($productions as $product)
                                                 <option value="{{$product->id}}"> {{ $product->finalProduct->name }}{{ '@'.$product->final_selling_price }} </option>

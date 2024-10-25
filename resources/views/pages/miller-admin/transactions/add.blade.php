@@ -11,7 +11,7 @@
             @csrf
             <div id="for_single_payment" class="form-group">
                 <label for="">Cooperative</label>
-                <select class="form-control form-select" id="cooperative_id" name="cooperative_id" onchange="retrieveLotSelector()">
+                <select class="form-control select2bs4" id="cooperative_id" name="cooperative_id" onchange="retrieveLotSelector()">
                     <option value="" disabled selected>-- SELECT COOPERATIVE --</option>
                     @foreach($cooperatives as $cooperative)
                     <option value="{{$cooperative->id}}">{{$cooperative->name}}</option>
@@ -20,7 +20,7 @@
             </div>
             <div id="for_bulk_payment" class="form-group">
                 <label for="">Lot</label>
-                <select class="form-control form-select" multiple name="lot_ids[]" id="lot_ids" onchange="retrieveLotWeights()">
+                <select class="form-control select2bs4" multiple name="lot_ids[]" id="lot_ids" onchange="retrieveLotWeights()">
                     <option value="">All Lots</option>
                     <option disabled>Select Miller First</option>
                 </select>

@@ -31,7 +31,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="stage">Stage</label>
                                         <select name="stage" id="stage"
-                                                class=" form-control form-select {{ $errors->has('stage') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('stage') ? ' is-invalid' : '' }}">
                                             <option value="">--None--</option>
                                             @foreach($stages as $stage)
                                                 <option value="{{$stage->id}}"> {{ ucwords( strtolower($stage->name)) }}</option>
@@ -60,7 +60,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="next_stage">Next Stage</label>
                                         <select name="next_stage" id="next_stage"
-                                                class=" form-control form-select {{ $errors->has('next_stage') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('next_stage') ? ' is-invalid' : '' }}">
                                             <option value="">--None--</option>
                                             @foreach($stages as $stage)
                                                 <option value="{{$stage->id}}"> {{ ucwords( strtolower($stage->name)) }}</option>
@@ -76,7 +76,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="status">Status</label>
                                         <select name="status" id="status"
-                                                class=" form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}">
                                             @foreach(config('enums')["farmer_crop_status"][0] as $status)
                                                 <option value="{{$status}}">{{ucwords($status)}}</option>
                                             @endforeach
@@ -253,7 +253,7 @@
                                                                     <label for="stage_{{$tracker->id}}">Stage</label>
                                                                     <select name="edit_stage"
                                                                             id="stage_{{$tracker->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_stage') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_stage') ? ' is-invalid' : '' }}">
                                                                         @foreach($stages as $stage)
                                                                             <option value="{{$stage->id}}" {{ $tracker->stage_id == $stage->id ? 'selected' : ''}}> {{ ucwords( strtolower($stage->name)) }}</option>
                                                                         @endforeach
@@ -285,7 +285,7 @@
                                                                         Stage</label>
                                                                     <select name="edit_next_stage"
                                                                             id="next_stage_{{$tracker->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_next_stage') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_next_stage') ? ' is-invalid' : '' }}">
                                                                         <option value="">--None--</option>
                                                                         @foreach($stages as $stage)
                                                                             <option value="{{$stage->id}}" {{ $tracker->next_stage_id == $stage->id ? 'selected' : ''}}> {{ ucwords( strtolower($stage->name)) }}</option>
@@ -303,7 +303,7 @@
                                                                     <label for="status_{{$tracker->id}}">Status</label>
                                                                     <select name="edit_status"
                                                                             id="status_{{$tracker->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_status') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_status') ? ' is-invalid' : '' }}">
                                                                         @foreach(config('enums')["farmer_crop_status"][0] as $status)
                                                                             <option value="{{$status}}" {{ $tracker->status == $status ? 'selected' : ''}}>{{ucwords($status)}}</option>
                                                                         @endforeach

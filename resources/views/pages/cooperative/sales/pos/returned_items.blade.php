@@ -28,7 +28,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-2 col-md-6 col-12">
                                         <label for="invoice">Invoice Number</label>
-                                        <select class="form-control form-select" name="invoice"
+                                        <select class="form-control select2bs4" name="invoice"
                                                 id="invoice"
                                                 onchange="loadProductsGivenSaleId('invoice', 'manufactured_product', 'collection')">
                                             <option value=""></option>
@@ -47,7 +47,7 @@
                                     <div class="form-group col-lg-2 col-md-6 col-12 d-none"
                                          id="type_div">
                                         <label for="type">Product Type</label>
-                                        <select class="form-control form-select" name="type"
+                                        <select class="form-control select2bs4" name="type"
                                                 id="type"
                                                 onchange="showInputField('type','manufactured_div', 'collection_div')">
                                             <option value=""></option>
@@ -65,7 +65,7 @@
                                          id="manufactured_div">
                                         <label for="manufactured_product">Manufactured
                                             Products</label>
-                                        <select class="form-control form-select"
+                                        <select class="form-control select2bs4"
                                                 name="manufactured_product_prefix"
                                                 id="manufactured_product"
                                                 onchange="setHiddenValues('manufactured_product','manufactured_product_hidden')"
@@ -82,7 +82,7 @@
                                     <div class="form-group col-lg-2 col-md-6 col-12 d-none"
                                          id="collection_div">
                                         <label for="collection">Collection</label>
-                                        <select class="form-control form-select" name="collection_prefix"
+                                        <select class="form-control select2bs4" name="collection_prefix"
                                                 id="collection"
                                         onchange="setHiddenValues('collection','collection_hidden')"
                                         >
@@ -185,7 +185,7 @@
 
                                     <div class="form-group col-lg-2 col-md-3 col-12">
                                         <label for="farmer-filter">Farmer</label>
-                                        <select class="form-control form-select" name="farmer[]"
+                                        <select class="form-control select2bs4" name="farmer[]"
                                                 id="farmer-filter" multiple>
                                             <option value=""></option>
                                             @foreach($farmers as $farmer)
@@ -196,7 +196,7 @@
 
                                     <div class="form-group col-lg-2 col-md-3 col-12">
                                         <label for="customer-filter">Customer</label>
-                                        <select class="form-control form-select" name="customer[]"
+                                        <select class="form-control select2bs4" name="customer[]"
                                                 id="customer-filter" multiple>
                                             <option value=""></option>
                                             @foreach($customers as $customer)

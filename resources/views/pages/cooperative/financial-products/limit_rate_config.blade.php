@@ -47,7 +47,7 @@
                                         <label for="needs_approval">Needs Approval</label>
 
                                         <select name="needs_approval" id="needs_approval"
-                                                class=" form-control form-select {{ $errors->has('needs_approval') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('needs_approval') ? ' is-invalid' : '' }}">
                                             <option value="">--- Select Option ---</option>
                                             <option value="0" {{ $config ? ($config->needs_approval == 0 || old('needs_approval') == 0 ? 'selected' : '' ) : ''  }}>
                                                 No

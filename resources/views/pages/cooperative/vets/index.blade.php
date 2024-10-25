@@ -150,7 +150,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="category">Service Category</label>
                                         <select name="category" id="category"
-                                                class=" form-control form-select {{ $errors->has('category') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('category') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Category---</option>
                                             @foreach(config('enums.vet_service_types')[0] as $type)
                                                 <option value="{{$type}}"> {{$type}}</option>

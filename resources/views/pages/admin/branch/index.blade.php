@@ -25,7 +25,7 @@
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="cooperative_id">Cooperative</label>
-                                <select name="cooperative_id" id="cooperative_id" class="form-control form-select {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
+                                <select name="cooperative_id" id="cooperative_id" class="form-control select2bs4 {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
                                     @foreach($cooperatives as $coop)
                                     <option value="{{$coop->id}}">{{$coop->name}}</option>
                                     @endforeach
@@ -69,7 +69,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="main_product_id">Main Product</label>
-                                <select name="main_product_id" id="main_product_id" class="form-control form-select {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
+                                <select name="main_product_id" id="main_product_id" class="form-control select2bs4 {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Main Product --</option>
                                     @foreach($products as $product)
                                     <option value="{{$product->id}}" @if($product->id == old('main_product_id')) selected @endif>{{$product->name}}</option>
@@ -84,7 +84,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="county_id">Select County</label>
-                                <select name="county_id" id="county_id" class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select County-</option>
                                     @foreach($counties as $county)
                                     <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id')==$county->id) selected @endif> {{ $county->name }}</option>
@@ -101,7 +101,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="sub_county">Select Sub County</label>
-                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select Sub County-</option>
 
                                     @if ($errors->has('sub_county_id'))

@@ -38,7 +38,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="mode">Payment Mode</label>
-                                        <select name="mode" class="form-control form-select "
+                                        <select name="mode" class="form-control select2bs4 "
                                                 id="mode"
                                                 required
                                                 onchange="alterDisplay('mode', 'mpesa-1', 'mpesa-2', '{{$phone}}')">

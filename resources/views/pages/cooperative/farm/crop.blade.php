@@ -28,7 +28,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="product">Product</label>
                                         <select name="product" id="product"
-                                                class=" form-control form-select {{ $errors->has('product') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('product') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Product---</option>
                                             @foreach( $products as $product)
                                                 <option value="{{$product->id}}">{{ $product->name.'( '.$product->category->name.')'}}</option>
@@ -58,7 +58,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="farm_unit">Farm Unit</label>
                                         <select name="farm_unit" id="farm_unit"
-                                                class=" form-control form-select {{ $errors->has('farm_unit') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('farm_unit') ? ' is-invalid' : '' }}">
                                             <option value="">---Select Farm Unit---</option>
                                             @foreach( $farm_units as $fu)
                                                 <option value="{{$fu->id}}">{{ $fu->name }}</option>
@@ -187,7 +187,7 @@
                                                                     <label for="edit_product_{{$crop->id}}">Product</label>
                                                                     <select name="edit_product"
                                                                             id="edit_product_{{$crop->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_product') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_product') ? ' is-invalid' : '' }}">
                                                                         @foreach( $products as $product)
                                                                             <option value="{{$product->id}}" {{ $crop->product_id == $product->id ? "selected" : '' }}>
                                                                                 {{ $product->name.'( '.$product->category->name.')'}}
@@ -220,7 +220,7 @@
                                                                         Unit</label>
                                                                     <select name="edit_farm_unit"
                                                                             id="edit_farm_unit_{{$crop->id}}"
-                                                                            class=" form-control form-select {{ $errors->has('edit_farm_unit') ? ' is-invalid' : '' }}">
+                                                                            class=" form-control select2bs4 {{ $errors->has('edit_farm_unit') ? ' is-invalid' : '' }}">
                                                                         @foreach( $farm_units as $fu)
                                                                             <option value="{{$fu->id}}" {{ $crop->farm_unit_id == $fu->id ? 'selected': null }}>{{ $fu->name }}</option>
                                                                         @endforeach

@@ -29,7 +29,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="customer_type">Customer Type</label>
                                         <select name="customer_type" id="customer_type"
-                                                class=" form-control form-select {{ $errors->has('customer_type') ? ' is-invalid' : '' }}"
+                                                class=" form-control select2bs4 {{ $errors->has('customer_type') ? ' is-invalid' : '' }}"
                                                 onchange="showTitle('customer_type', 'title-select')"
                                         >
                                             <option value=""></option>
@@ -49,7 +49,7 @@
                                          id="title-select">
                                         <label for="title">Title</label>
                                         <select name="title" id="title"
-                                                class=" form-control form-select {{ $errors->has('title') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('title') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach(config('enums')["titles"][0] as $title)
                                                 <option value="{{$title}}">{{$title}}</option>

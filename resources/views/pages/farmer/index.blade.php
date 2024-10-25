@@ -123,7 +123,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="country_id">Country</label>
-                                <select name="country_id" id="country_id" class=" form-control form-select
+                                <select name="country_id" id="country_id" class=" form-control select2bs4
                                                 {{ $errors->has('country_id') ? ' is-invalid' : '' }}">
                                     @foreach($countries as $country)
                                     <option value="{{$country->id}}"
@@ -185,7 +185,7 @@ config('enums.system_permissions')['create']))
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="route_id">Route</label>
                                 <select name="route_id" id="route_id"
-                                    class=" form-control form-select {{ $errors->has('route_id') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('route_id') ? ' is-invalid' : '' }}">
                                     @foreach($routes as $route)
                                     <option value="{{$route->id}}"> {{ $route->name }}</option>
                                     @endforeach
@@ -213,7 +213,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="bank_id">Bank</label>
-                                <select name="bank_id" id="bank_id" class=" form-control form-select
+                                <select name="bank_id" id="bank_id" class=" form-control select2bs4
                                                  {{ $errors->has('bank_id') ? ' is-invalid' : '' }}"
                                     onchange="loadBankBranches('bank_id','bank_branch_id', {{ old('bank_id') }})">
                                     <option value="">---Select Bank---</option>
@@ -231,7 +231,7 @@ config('enums.system_permissions')['create']))
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="bank_branch_id">Bank Branch</label>
                                 <select name="bank_branch_id" id="bank_branch_id"
-                                    class=" form-control form-select {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
 
                                 </select>
                                 @if ($errors->has('bank_branch_id'))
@@ -259,7 +259,7 @@ config('enums.system_permissions')['create']))
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="customer_type">Customer Type</label>
                                 <select name="customer_type" id="customer_type"
-                                    class=" form-control form-select {{ $errors->has('customer_type') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('customer_type') ? ' is-invalid' : '' }}">
 
                                     <option value=""></option>
                                     @foreach(config('enums.farmer_customer_types') as $key => $type)
@@ -277,7 +277,7 @@ config('enums.system_permissions')['create']))
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="products">Products</label>
                                 <select name="products[]" multiple="multiple" id="products"
-                                    class=" form-control form-select {{ $errors->has('products') ? ' is-invalid' : '' }}">
+                                    class=" form-control select2bs4 {{ $errors->has('products') ? ' is-invalid' : '' }}">
                                     @foreach($products as $product)
                                     <option value="{{$product->id}}"> {{ $product->name }}</option>
                                     @endforeach
@@ -453,7 +453,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_country">Country</label>
-                                <select name="country" id="filter_country" class=" form-control form-select">
+                                <select name="country" id="filter_country" class=" form-control select2bs4">
                                     <option value=""></option>
                                     @foreach($countries as $country)
                                     <option value="{{$country->id}}"
@@ -466,7 +466,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_location">Location</label>
-                                <select name="location" id="filter_location" class="form-control form-select">
+                                <select name="location" id="filter_location" class="form-control select2bs4">
                                     <option value=""></option>
                                     @foreach($locations as $location)
                                     <option value="{{$location->id}}"
@@ -480,7 +480,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_route">Route</label>
-                                <select name="route" id="filter_route" class=" form-control form-select">
+                                <select name="route" id="filter_route" class=" form-control select2bs4">
                                     <option value=""></option>
                                     @foreach($routes as $route)
                                     <option value="{{$route->id}}"
@@ -494,7 +494,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_bank">Bank</label>
-                                <select name="bank" id="filter_bank" class=" form-control form-select">
+                                <select name="bank" id="filter_bank" class=" form-control select2bs4">
                                     <option value=""></option>
                                     @foreach($banks as $bank)
                                     <option value="{{$bank->id}}" {{ request()->bank == $bank->id ? 'selected' : '' }}>
@@ -506,7 +506,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_customer_type">Customer Type</label>
-                                <select name="customer_type" id="filter_customer_type" class=" form-control form-select">
+                                <select name="customer_type" id="filter_customer_type" class=" form-control select2bs4">
                                     <option value=""></option>
                                     @foreach(config('enums.farmer_customer_types') as $key => $type)
                                     <option value="{{$key}}" {{ $key == request()->customer_type ? 'selected' : '' }}>

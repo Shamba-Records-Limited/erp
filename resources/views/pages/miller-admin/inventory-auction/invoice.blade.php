@@ -37,7 +37,7 @@
                         <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
                         <div class="form-group">
                             <label for="">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control form-select {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
+                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
                                 <option value="">-- Select Customer --</option>
                                 @foreach($customers as $customer)
                                 <option value="{{$customer->id}}" @if(old('customer_id',$draftInvoice->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>
@@ -75,14 +75,14 @@
                             <div class="form-row">
                                 <div class="form-group col-12">
                                     <label>Item Type</label>
-                                    <select name="item_type" id="item_type" class="form-control form-select {{ $errors->has('item_type') ? ' is-invalid' : '' }}">
+                                    <select name="item_type" id="item_type" class="form-control select2bs4 {{ $errors->has('item_type') ? ' is-invalid' : '' }}">
                                         <option>Final Product</option>
                                         <option>Milled Inventory</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-12">
                                     <label>Final Product</label>
-                                    <select name="final_product_item_id" id="final_product_item_id" class="form-control form-select {{ $errors->has('final_product_item_id') ? ' is-invalid' : '' }}">
+                                    <select name="final_product_item_id" id="final_product_item_id" class="form-control select2bs4 {{ $errors->has('final_product_item_id') ? ' is-invalid' : '' }}">
                                         <option value="">-- Select Item --</option>
                                         @foreach($finalProducts as $finalProduct)
                                         <option value="{{$finalProduct->id}}">{{$finalProduct->product_number}} {{$finalProduct->name}} {{$finalProduct->quantity}} {{$finalProduct->unit}}</option>
@@ -98,7 +98,7 @@
 
                                 <div class="form-group col-12 d-none">
                                     <label>Milled Inventory</label>
-                                    <select name="milled_item_id" id="milled_item_id" class="form-control form-select {{ $errors->has('milled_item_id') ? ' is-invalid' : '' }}">
+                                    <select name="milled_item_id" id="milled_item_id" class="form-control select2bs4 {{ $errors->has('milled_item_id') ? ' is-invalid' : '' }}">
                                         <option value="">-- Select Item --</option>
                                         @foreach($milledInventories as $milledInventory)
                                         <option value="{{$milledInventory->id}}">{{$milledInventory->inventory_number}}</option>

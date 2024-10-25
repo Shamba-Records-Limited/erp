@@ -33,7 +33,7 @@ $collection_time_options = config('enums.collection_time');
             <form class="d-flex justify-content-end">
                 <div class="d-flex align-items-center">
                     Product Filter: 
-                    <select name="product_id" class="form-control form-select" onchange="this.form.submit()">
+                    <select name="product_id" class="form-control select2bs4" onchange="this.form.submit()">
                         <option value="">All</option>
                         @foreach($selectableProducts as $product)
                         <option value="{{$product->id}}" @if($product->id == $productId) selected @endif> {{ $product->name }}</option>

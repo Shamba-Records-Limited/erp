@@ -28,7 +28,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="products">Products</label>
                                         <select name="products[]" multiple="multiple" id="products"
-                                                class=" form-control form-select {{ $errors->has('products') ? ' is-invalid' : '' }}">
+                                                class=" form-control select2bs4 {{ $errors->has('products') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($new_products as $product)
                                                 <option value="{{$product->id}}" > {{ucwords($product->name)}}</option>

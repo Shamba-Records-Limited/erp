@@ -37,7 +37,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="unit">Unit</label>
-                                <select name="unit" id="unit" class="form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
+                                <select name="unit" id="unit" class="form-control select2bs4 {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Unit --</option>
                                     @foreach(config('enums.units') as $key => $unit)
                                     <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>

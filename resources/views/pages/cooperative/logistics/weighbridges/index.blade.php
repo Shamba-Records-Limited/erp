@@ -60,7 +60,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="status">Status</label>
                                         <select name="status"
-                                                class="form-control form-select {{ $errors->has('status') ? ' is-invalid' : '' }}"
+                                                class="form-control select2bs4 {{ $errors->has('status') ? ' is-invalid' : '' }}"
                                                 id="status" value="{{ old('status')}}" required>
                                             <option value="1">Active</option>
                                             <option value="2">Service</option>
@@ -224,7 +224,7 @@
                                                                 <div class="form-group col-12 col-md-6">
                                                                     <label for="status_edit_{{$weighbridge->id}}">Status</label>
                                                                     <select name="status_edit"
-                                                                            class="form-control form-select {{ $errors->has('status_edit') ? ' is-invalid' : '' }}"
+                                                                            class="form-control select2bs4 {{ $errors->has('status_edit') ? ' is-invalid' : '' }}"
                                                                             id="status_edit_{{$weighbridge->id}}"
                                                                             value="{{ $weighbridge->code }}" required>
                                                                         <option value="1"

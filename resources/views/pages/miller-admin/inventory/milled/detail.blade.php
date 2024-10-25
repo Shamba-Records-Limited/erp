@@ -27,7 +27,7 @@
                         <div class="row">
                             <div class="form-group col-12">
                                 <label for="product_grade_id">Select Grade</label>
-                                <select name="product_grade_id" id="product_grade_id" class="form-control form-select {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
+                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
                                     <option value="">-- Select Grade --</option>
                                     @foreach($grades as $grade)
                                     <option value="{{$grade->id}}" @if(old('product_grade_id') == $grade->id) selected @endif> {{ $grade->name }}</option>

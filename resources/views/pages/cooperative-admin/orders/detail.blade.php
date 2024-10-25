@@ -31,7 +31,7 @@
                             <div class="row">
                                 <div class="form-group col-lg-4 col-md-4 col-12">
                                     <label for="bank_id">Select Order Item</label>
-                                    <select name="order_item_id" id="order_item_id" class="form-control form-select {{ $errors->has('order_item_id') ? ' is-invalid' : '' }}" data-orderitems='@json($orderItems)'>
+                                    <select name="order_item_id" id="order_item_id" class="form-control select2bs4 {{ $errors->has('order_item_id') ? ' is-invalid' : '' }}" data-orderitems='@json($orderItems)'>
                                         <option value="">-- Select Order Item --</option>
                                         @foreach($orderItems as $item)
                                         <option value="{{$item->id}}" {{ old('order_item_id') == $item->id ? 'selected' : '' }}> {{ $item->lot_number }}</option>

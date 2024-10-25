@@ -68,7 +68,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="breed_id">Breed</label>
                                     <select name="breed_id" id="breed_id"
-                                            class=" form-control form-select {{ $errors->has('breed_id') ? ' is-invalid' : '' }}">
+                                            class=" form-control select2bs4 {{ $errors->has('breed_id') ? ' is-invalid' : '' }}">
                                         @foreach($breeds as $breed)
                                             <option value="{{$breed->id}}"> {{ $breed->name }}</option>
                                         @endforeach
