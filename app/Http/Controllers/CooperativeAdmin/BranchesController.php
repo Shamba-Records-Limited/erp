@@ -127,7 +127,7 @@ class BranchesController extends Controller
         $data = [
             "collections_by_wet_mills" => $collections_by_wet_mills,
         ];
-
-        return view('pages.cooperative-admin.branches.mini-dashboard', compact("data"));
+          $branches=CoopBranch::where("cooperative_id",$coop_id)->get();
+        return view('pages.cooperative-admin.branches.mini-dashboard', compact("data","branches"));
     }
 }

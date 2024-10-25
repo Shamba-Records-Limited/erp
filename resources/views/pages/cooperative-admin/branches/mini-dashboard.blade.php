@@ -11,7 +11,11 @@
 <div class="mb-5">
     <h2 class="mt-5 ml-5"> Mini Dashboard</h2>
 </div>
-<div class=" col-xl-8 mt-15 mb-xl-0">
+
+
+
+
+<div class=" col-xl-12 mt-15 mb-xl-0">
     <div class="card shadow">
 
         <div class="card-header bg-transparent">
@@ -27,6 +31,41 @@
             <div class="chart">
                 <!-- Chart wrapper -->
                 <canvas id="WetMillCollectionsBarChart" class="chart-canvas"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Registered Branches</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover dt">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Branch Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(isset($branches) && $branches->isNotEmpty())
+                                @foreach($branches as $key => $branch)
+                                <tr>
+                                    <td>{{ $key + 1 }}</td>
+                                    <td>{{ $branch->name }}</td>
+                                    <td>{{ $branch->code }}</td>
+                                </tr>
+                                @endforeach
+                                @else
+                                <tr>
+                                    <td colspan="3" class="text-center">No branches found.</td>
+                                </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
