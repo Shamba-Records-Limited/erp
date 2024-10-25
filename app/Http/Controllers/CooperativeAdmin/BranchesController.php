@@ -110,24 +110,48 @@ class BranchesController extends Controller
     }
 
     public function branches_mini_dashboard(Request $request)
-    {
-        $user = Auth::user();
-        $coop = $user->cooperative;
-        $coop_id = $coop->id;
-        // collections by wet mills
-        $collections_by_wet_mills = DB::select(DB::raw("
-            SELECT SUM(quantity) AS quantity, branch.name AS name
-            FROM collections c
-            JOIN coop_branches branch ON branch.id = c.coop_branch_id
-            WHERE c.cooperative_id = :coop_id
-            GROUP BY branch.id
-            ORDER BY quantity DESC
-        "), ["coop_id" => $coop_id]);
-    
-        $data = [
-            "collections_by_wet_mills" => $collections_by_wet_mills,
-        ];
-          $branches=CoopBranch::where("cooperative_id",$coop_id)->get();
-        return view('pages.cooperative-admin.branches.mini-dashboard', compact("data","branches"));
+{
+    $user = Auth::user();
+    $coop = $user->cooperative;
+    $coop_id = $coop->id;
+
+    // Fetch collections by branches
+    $collections_by_wet_mills = DB::select(DB::raw("
+        SELECT SUM(quantity) AS quantity, branch.name AS name, branch.code AS code
+        FROM collections c
+        JOIN coop_branches branch ON branch.id = c.coop_branch_id
+        WHERE c.cooperative_id = :coop_id
+        GROUP BY branch.id
+        ORDER BY quantity DESC
+    "), ["coop_id" => $coop_id]);
+
+    $data = [
+        "collections_by_wet_mills" => $collections_by_wet_mills,
+    ];
+
+    // Fetch branches for the view
+    $branches = CoopBranch::where("cooperative_id", $coop_id)->get();
+
+    // Add performance status to each branch
+    foreach ($branches as $branch) {
+        $branch->performance_status = 'Inactive'; // Default to Inactive
+
+        foreach ($collections_by_wet_mills as $collection) {
+            if ($branch->name === $collection->name) {
+                if ($collection->quantity > 1000) {
+                    $branch->performance_status = 'High Performing';
+                } elseif ($collection->quantity >= 100) {
+                    $branch->performance_status = 'Active';
+                } else {
+                    $branch->performance_status = 'Inactive';
+                }
+                break;
+            }
+        }
     }
+
+    return view('pages.cooperative-admin.branches.mini-dashboard', compact("data", "branches"));
+}
+
+
 }

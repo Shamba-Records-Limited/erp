@@ -46,6 +46,7 @@
                                     <th>#</th>
                                     <th>Name</th>
                                     <th>Branch Code</th>
+                                    <th>Performance Status</th> <!-- New column for performance status -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,15 +56,23 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $branch->name }}</td>
                                     <td>{{ $branch->code }}</td>
+                                    <td>
+                                        <span
+                                            class="badge badge-{{ $branch->performance_status === 'High Performing' ? 'success' : ($branch->performance_status === 'Active' ? 'warning' : 'danger') }}">
+                                            {{ $branch->performance_status }}
+                                        </span>
+                                    </td> <!-- New column data -->
                                 </tr>
                                 @endforeach
                                 @else
                                 <tr>
-                                    <td colspan="3" class="text-center">No branches found.</td>
+                                    <td colspan="4" class="text-center">No branches found.</td>
+                                    <!-- Adjusted colspan -->
                                 </tr>
                                 @endif
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
