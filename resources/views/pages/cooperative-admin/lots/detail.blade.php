@@ -21,12 +21,16 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="addDeliveryItemForm" class="border rounded p-2" action="{{route('cooperative-admin.lots.store-grade-distribution', $lot->lot_number)}}" method="POST">
+                    <form id="addDeliveryItemForm" class="border rounded p-2"
+                        action="{{route('cooperative-admin.lots.store-grade-distribution', $lot->lot_number)}}"
+                        method="POST">
                         @csrf
                         <div class="row">
                             <div class="form-group col-12">
                                 <label for="product_grade_id">Select Order Item</label>
-                                <select name="product_grade_id" id="product_grade_id" class="form-control select2bs4 {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}" required>
+                                <select name="product_grade_id" id="product_grade_id"
+                                    class="form-control form-select {{ $errors->has('product_grade_id') ? ' is-invalid' : '' }}"
+                                    required>
                                     <option value="">-- Select Grade --</option>
                                     @foreach($grades as $grade)
                                     <option value="{{$grade->id}}"> {{ $grade->name }}</option>
@@ -42,7 +46,10 @@
                             <div class="form-group col-12">
                                 <label for="quantity">Quantity</label>
                                 <div class="input-group">
-                                    <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}" required>
+                                    <input type="number" name="quantity"
+                                        class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}"
+                                        id="quantity" placeholder="Enter quantity" value="{{ old('quantity') }}"
+                                        required>
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{{$lot_unit}}</span>
                                     </div>
@@ -82,7 +89,8 @@
             </div>
             <div class="col-md-4 col-12 border rounded m-2">
                 <div>Graded</div>
-                <div><span class="font-weight-bold">{{$lot->total_graded_quantity ?? 0}} {{$lot_unit}}</span> OF <span class="font-weight-bold">{{$lot->total_collection_quantity}} {{$lot_unit}}</span></div>
+                <div><span class="font-weight-bold">{{$lot->total_graded_quantity ?? 0}} {{$lot_unit}}</span> OF <span
+                        class="font-weight-bold">{{$lot->total_collection_quantity}} {{$lot_unit}}</span></div>
             </div>
         </div>
         <ul class="nav nav-tabs">
@@ -90,7 +98,8 @@
                 <a class="nav-link {{ $tab == 'collections'?'active':'' }}" href="?tab=collections">Collections</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $tab == 'grade_distributions'?'active':'' }}" href="?tab=grade_distributions">Grade Distribution</a>
+                <a class="nav-link {{ $tab == 'grade_distributions'?'active':'' }}"
+                    href="?tab=grade_distributions">Grade Distribution</a>
             </li>
         </ul>
 
@@ -116,7 +125,8 @@
         </div>
         @elseif ($tab == 'grade_distributions')
         <div class="d-flex justify-content-end">
-            <a href="?tab=grade_distributions&action=add_grade_distribution" class="btn btn-primary">Add Grade Distribution</a>
+            <a href="?tab=grade_distributions&action=add_grade_distribution" class="btn btn-primary">Add Grade
+                Distribution</a>
         </div>
         <div class="table-responsive mt-3">
             <table class="table table-hover dt">
