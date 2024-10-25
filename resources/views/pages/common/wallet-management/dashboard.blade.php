@@ -33,7 +33,6 @@
 
 @section('content')
 <div class="d-flex justify-content-between w-100">
-    <div>Dashboard</div>
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">

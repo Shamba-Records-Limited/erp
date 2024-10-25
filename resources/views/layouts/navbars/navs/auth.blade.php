@@ -16,7 +16,9 @@
             <!-- Back Button (only displayed if not on the miller or cooperative dashboard) -->
             @if (!in_array(Route::currentRouteName(), ['miller-admin.dashboard', 'cooperative-admin.dashboard']))
             <div class="mt-3">
-                <button class="btn btn-secondary" onclick="history.back()">Back</button>
+                <button class="btn btn-secondary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> <!-- Left Arrow Icon -->
+                </button>
             </div>
             @endif
 
