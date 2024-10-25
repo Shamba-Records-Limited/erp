@@ -79,17 +79,17 @@
             </div>
             <div class="items-subgrid">
                 <div>
-                    <select class="form-control select2bs4">
+                    <select class="form-control form-select">
                         <option value="">-- Select Product --</option>
                     </select>
                 </div>
                 <div>
-                    <select class="form-control select2bs4">
+                    <select class="form-control form-select">
                         <option value="">-- Select Product Type --</option>
                     </select>
                 </div>
                 <div>
-                    <select class="form-control select2bs4">
+                    <select class="form-control form-select">
                         <option value="">-- Select Lot Number --</option>
                     </select>
                 </div>
@@ -102,7 +102,7 @@
                         <input class="form-control" type="text" style="width: 70px;" >
                     </div>
                     <div style="width: 70px;">
-                        <select class="form-control select2bs4">
+                        <select class="form-control form-select">
                             <option value="">Unit</option>
                         </select>
                     </div>

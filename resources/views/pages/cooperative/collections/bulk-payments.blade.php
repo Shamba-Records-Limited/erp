@@ -245,7 +245,7 @@
                                                             <label for="employee">Mode of
                                                                 Payment</label>
                                                             <select name="mode" id="pmode"
-                                                                    class="form-control select2bs4">
+                                                                    class="form-control form-select">
                                                                 @foreach(config('enums.bulk_payment_modes') as $k => $v)
                                                                     <option value="{{$k}}">
                                                                         {{$v}}

@@ -98,7 +98,7 @@
                                                             <div class="form-group col-12">
                                                                 <label for="period_measure">Period Measure</label>
                                                                 <select name="period_measure" id="period_measure"
-                                                                        class="form-control select2bs4">
+                                                                        class="form-control form-select">
                                                                     @foreach(config('enums')["crop_calendar_period_measure"][0] as $period_measure)
                                                                         <option value="{{$period_measure}}">{{ucwords($period_measure)}}</option>
                                                                     @endforeach

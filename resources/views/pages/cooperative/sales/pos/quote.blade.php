@@ -70,7 +70,7 @@
 
                                     <div class="form-group col-lg-3 col-md-4 col-12">
                                         <label for="farmer-filter">Farmer</label>
-                                        <select class="form-control select2bs4" name="farmer"
+                                        <select class="form-control form-select" name="farmer"
                                                 id="farmer-filter">
                                             <option value=""></option>
                                             @foreach($farmers as $farmer)
@@ -83,7 +83,7 @@
 
                                     <div class="form-group col-lg-3 col-md-4 col-12">
                                         <label for="customer-filter">Customer</label>
-                                        <select class="form-control select2bs4" name="customer"
+                                        <select class="form-control form-select" name="customer"
                                                 id="customer-filter">
                                             <option value=""></option>
                                             @foreach($customers as $customer)

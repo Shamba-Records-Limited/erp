@@ -466,7 +466,7 @@ config('enums.system_permissions')['create']))
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="filter_location">Location</label>
-                                <select name="location" id="filter_location" class="form-control select2bs4">
+                                <select name="location" id="filter_location" class="form-control form-select">
                                     <option value=""></option>
                                     @foreach($locations as $location)
                                     <option value="{{$location->id}}"
