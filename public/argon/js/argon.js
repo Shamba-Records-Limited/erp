@@ -985,64 +985,77 @@ var InventoryVsSalesChart = (function() {
       };
 
       var inventoryVsSalesOptions = {
-          scales: {
-              yAxes: [{
-                  gridLines: {
-                      color: Charts.colors.gray[900],
-                      zeroLineColor: Charts.colors.gray[900]
-                  },
-                  ticks: {
-                      callback: function(value) {
-                          if (!(value % 10)) {
-                              return '$' + value + 'k';
-                          }
-                      }
-                  }
-              }]
-          },
-          tooltips: {
-              callbacks: {
-                  label: function(item, data) {
-                      var label = data.datasets[item.datasetIndex].label || '';
-                      var yLabel = item.yLabel;
-                      var content = '';
-
-                      if (data.datasets.length > 1) {
-                          content += '<span class="popover-body-label mr-auto">' + label + '</span>';
-                      }
-
-                      content += '<span class="popover-body-value">$' + yLabel + 'k</span>';
-                      return content;
-                  }
-              }
-          },
-          animationEasing: "easeOutBounce",
-          responsive: true,
-          maintainAspectRatio: true,
-          showScale: true,
-          legend: {
-              display: true
-          },
-          layout: {
-              padding: {
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  bottom: 0
-              }
-          }
-      };
-
-      var inventoryVsSalesChart = new Chart($chart, {
-          type: 'line',
-          data: inventoryVsSalesData,
-          options: inventoryVsSalesOptions
-      });
-
-      // Save to jQuery object
-      $chart.data('chart', inventoryVsSalesChart);
-  };
-
+        responsive: true,  // Ensures the chart scales properly
+        maintainAspectRatio: false,  // Avoids stretching and locking the aspect ratio
+        scales: {
+            yAxes: [{
+                gridLines: {
+                    color: Charts.colors.gray[900],
+                    zeroLineColor: Charts.colors.gray[900]
+                },
+                ticks: {
+                    callback: function(value) {
+                        if (!(value % 10)) {
+                            return '$' + value + 'k';  // Format the y-axis ticks with '$' and 'k'
+                        }
+                    }
+                }
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false  // Optionally hide grid lines on x-axis
+                },
+                ticks: {
+                    autoSkip: true,  // Automatically skip ticks to avoid clutter
+                    maxTicksLimit: 6  // Maximum number of ticks to show on x-axis
+                }
+            }]
+        },
+        tooltips: {
+            callbacks: {
+                label: function(item, data) {
+                    var label = data.datasets[item.datasetIndex].label || '';
+                    var yLabel = item.yLabel;
+                    var content = '';
+    
+                    if (data.datasets.length > 1) {
+                        content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                    }
+    
+                    content += '<span class="popover-body-value">$' + yLabel + 'k</span>';  // Format tooltips
+                    return content;
+                }
+            }
+        },
+        animation: {
+            easing: "easeOutBounce",  // Add easing for smooth animation
+            duration: 1000  // Animation duration in milliseconds
+        },
+        legend: {
+            display: true  // Display chart legend
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0 // X-axis position on the graph
+            }
+        }
+    };
+    
+    // Initialize the chart
+    var inventoryVsSalesChart = new Chart($chart, {
+        type: 'line',  // Define chart type as 'line'
+        data: inventoryVsSalesData,  // Pass data object to the chart
+        options: inventoryVsSalesOptions  // Pass the defined options
+    });
+    
+    // Save to jQuery object (if needed for further manipulation)
+    $chart.data('chart', inventoryVsSalesChart);
+   
+    
+  }    
   // Events
 
   if ($chart.length) {
@@ -1053,75 +1066,75 @@ var InventoryVsSalesChart = (function() {
 
 
 
-
-//
 // Orders chart
-//
+var OrdersChart = (function() {
 
-// var OrdersChart = (function () {
+	// Variables
+	var $chart = $('#chart-orders');
+	var $ordersSelect = $('[name="ordersSelect"]');
+
+	// Methods
 
 
-//   var $chart = $('#GradeDistributionBarChart');
-//   var $GradeDistributionBarChart = $('[name="ordersSelect"]');
+	// Init chart
+	function initChart($chart) {
+
+		// Create chart
+		var ordersChart = new Chart($chart, {
+			type: 'bar',
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							callback: function(value) {
+								if (!(value % 10)) {
+									//return '$' + value + 'k'
+									return value
+								}
+							}
+						}
+					}]
+				},
+				tooltips: {
+					callbacks: {
+						label: function(item, data) {
+							var label = data.datasets[item.datasetIndex].label || '';
+							var yLabel = item.yLabel;
+							var content = '';
+
+							if (data.datasets.length > 1) {
+								content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+							}
+
+							content += '<span class="popover-body-value">' + yLabel + '</span>';
+							
+							return content;
+						}
+					}
+				}
+			},
+			data: {
+				labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+				datasets: [{
+					label: 'Sales',
+					data: [0, 18, 12, 23, 0, 0]
+				}]
+			}
+		});
+
+		// Save to jQuery object
+		$chart.data('chart', ordersChart);
+	}
+
+	// Init chart
+	if ($chart.length) {
+		initChart($chart);
+	}
+
+})();
 
 
-//   function initChart($chart) {
-//     var GradeDistributionBarChart = new Chart($chart, {
-//       type: 'bar',
-//       options: {
-//         scales: {
-//           yAxes: [
-//             {
-//               ticks: {
-//                 callback: function (value) {
-//                   if (!(value % 10)) {
-//                     return value;
-//                   }
-//                 },
-//               },
-//             },
-//           ],
-//         },
-//         tooltips: {
-//           callbacks: {
-//             label: function (item, data) {
-//               var label = data.datasets[item.datasetIndex].label || '';
-//               var yLabel = item.yLabel;
-//               var content = '';
 
-//               if (data.datasets.length > 1) {
-//                 content +=
-//                   '<span class="popover-body-label mr-auto">' +
-//                   label +
-//                   '</span>';
-//               }
-
-//               content +=
-//                 '<span class="popover-body-value">' + yLabel + '</span>';
-
-//               return content;
-//             },
-//           },
-//         },
-//       },
-//       data: {
-//         labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-//         datasets: [
-//           {
-//             label: 'Sales',
-//             data: [25, 20, 30, 22, 17, 29],
-//           },
-//         ],
-//       },
-//     });
-
-//     $chart.data('chart', GradeDistributionBarChart);
-//   }
-
-//   if ($chart.length) {
-//     initChart($chart);
-//   }
-// })();
 
 //
 // Charts

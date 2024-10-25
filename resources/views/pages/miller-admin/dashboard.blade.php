@@ -146,7 +146,7 @@ $total_gender_distribution = 0;
     </div>
 </div>
 
-<div class="d-flex justify-content-end w-100 mt-6 pb-6">
+<div class="d-flex justify-content-start w-100 mt-6 pb-6">
     <div class="d-flex align-items-start">
         <form class="d-flex">
             <div class="form-group">
@@ -425,42 +425,6 @@ $total_gender_distribution = 0;
                                     </div>
                                 </td>
                             </tr>
-                            <!-- <tr>
-                                    <th scope="row">
-                                        Instagram
-                                    </th>
-                                    <td>
-                                        3,678
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="mr-2">75%</span>
-                                            <div>
-                                                <div class="progress">
-                                                    <div class="progress-bar bg-gradient-info" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">
-                                        twitter
-                                    </th>
-                                    <td>
-                                        2,645
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="mr-2">30%</span>
-                                            <div>
-                                                <div class="progress">
-                                                <div class="progress-bar bg-gradient-warning" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" style="width: 30%;"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -486,41 +450,7 @@ $total_gender_distribution = 0;
 
 
 
-<!-- dashgrid -->
-<div class="dashgrid">
 
-
-
-
-    <!-- <div class="card span-6">
-        <div class="card-body">
-            <div class="d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-basket-outline" style="font-size: 35px;color: #4bc0c0;"></i>
-                </div>
-                <div>Inventory vs Sales</div>
-            </div> -->
-    <!-- <div class="row">
-        <div class="col-12 d-flex align-items-center">
-            <canvas id="InventoryVsSalesChart" class="mb-4 mb-md-0"
-                data-inventory-series="{{ json_encode($data['inventory_series']) }}"
-                data-sales-series="{{ json_encode($data['sales_series']) }}" style="height: 200px;"></canvas>
-        </div>
-    </div> -->
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-</div>
-<!-- orders vs delivery -->
 
 @endsection
 
@@ -645,61 +575,7 @@ let incomeVsExpensesChart = new Chart(incomeVsExpensesChartCanvas, {
 });
 
 
-// let inventorySeries = @json($data['inventory_series']);
-// let salesSeries = @json($data['sales_series']);
-// let inventoryVsSalesLables = inventorySeries.map(c => c.x)
-// let inventoryValues = inventorySeries.map(c => c.y)
-// let salesValues = salesSeries.map(c => c.y)
-// let inventoryVsSalesChartCanvas = document.getElementById("InventoryVsSalesChart")
-// let inventoryVsSalesData = {
-//     labels: inventoryVsSalesLables,
-//     datasets: [{
-//         label: 'Inventory',
-//         data: inventoryValues,
-//         backgroundColor: [
-//             'rgba(54, 162, 235, 1)',
-//             'rgba(255, 99, 132, 1)',
-//         ],
-//         borderColor: [
-//             'rgba(54, 162, 235, 1)',
-//             'rgba(255, 99, 132, 1)',
-//         ]
-//     }, {
-//         label: 'Sales',
-//         data: salesValues,
-//         backgroundColor: [
-//             'rgba(255, 99, 132, 1)',
-//             'rgba(54, 162, 235, 1)',
-//         ],
-//         borderColor: [
-//             'rgba(255, 99, 132, 1)',
-//             'rgba(54, 162, 235, 1)',
-//         ]
-//     }]
-// };
 
-// let inventoryVsSalesOptions = {
-//     animationEasing: "easeOutBounce",
-//     responsive: true,
-//     maintainAspectRatio: true,
-//     showScale: true,
-//     legend: {
-//         display: true
-//     },
-//     layout: {
-//         padding: {
-//             left: 0,
-//             right: 0,
-//             top: 0,
-//             bottom: 0
-//         }
-//     }
-// };
-// let inventoryVsSalesChart = new Chart(inventoryVsSalesChartCanvas, {
-//     type: "line",
-//     data: inventoryVsSalesData,
-//     options: inventoryVsSalesOptions
-// });
 
 let gradeDistribution = @json($data['grade_distribution']);
 let gradeDistributionLables = gradeDistribution.map(c => c.name)
