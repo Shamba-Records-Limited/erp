@@ -309,7 +309,10 @@ class CollectionsController extends Controller
                 ]);
             }
         }
-
+// Calculate KPIs
+$totalCollections = count($collections);
+$totalQuantityCollected = array_sum(array_column($collections, 'y')); // Use 'y' from the query result
+$averageCollectionPerLot = $totalCollections > 0 ? $totalQuantityCollected / $totalCollections : 0;
     // Update this mapping to match your database values
 $collectionTimeLabels = [
     1 => 'Morning',
@@ -326,10 +329,13 @@ $collectionTimeLabels = [
         })
         ->toArray();
 
-    $data = [
-        "collections" => $collections,
-        "collectionTimeData" => $collectionTimeData,
-    ];
+   $data = [
+    "collections" => $collections,
+    "collectionTimeData" => $collectionTimeData,
+    "totalCollections" => $totalCollections,
+    "totalQuantityCollected" => $totalQuantityCollected,
+    "averageCollectionPerLot" => $averageCollectionPerLot,
+];
 
     return view("pages.cooperative-admin.collections.mini-dashboard", compact(
         'data', 'date_range', 'from_date', 'to_date'
