@@ -310,15 +310,30 @@ class CollectionsController extends Controller
             }
         }
 
-        $data = [
-            "collections" => $collections,
-        ];
+    // Update this mapping to match your database values
+$collectionTimeLabels = [
+    1 => 'Morning',
+    2 => 'Afternoon',
+    3 => 'Evening',
+];
+    // Retrieve and format `collection_time` data with labels
+    $collectionTimeData = DB::table('collections')
+        ->select('collection_time', DB::raw('count(*) as count'))
+        ->groupBy('collection_time')
+        ->get()
+        ->mapWithKeys(function ($item) use ($collectionTimeLabels) {
+            return [$collectionTimeLabels[$item->collection_time] ?? $item->collection_time => $item->count];
+        })
+        ->toArray();
 
-        return view("pages.cooperative-admin.collections.mini-dashboard", compact('data',
-            'date_range',
-            'from_date',
-            'to_date'
-        ));
+    $data = [
+        "collections" => $collections,
+        "collectionTimeData" => $collectionTimeData,
+    ];
+
+    return view("pages.cooperative-admin.collections.mini-dashboard", compact(
+        'data', 'date_range', 'from_date', 'to_date'
+    ));
     }
 
     function import_bulk(Request $request)

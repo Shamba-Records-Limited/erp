@@ -54,20 +54,18 @@
         </div>
     </div>
 </div>
-<!-- <div class="row">
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="card-title">
-                    Collections Weight (KGs)
-                </div>
-                <div>
-                    <canvas id="CollectionsBarChart" class="mb-4 mb-md-0" data-collections="{{ json_encode($data['collections']) }}" height="250"></canvas>
-                </div>
-            </div>
+<!-- Pie Chart for Collection Time Distribution -->
+<div class="col-xl-4 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-transparent">
+            <h6 class="text-uppercase text-light ls-1 mb-1">Distribution</h6>
+            <h2 class="mb-0">Collection Time Distribution</h2>
+        </div>
+        <div class="card-body">
+            <canvas id="CollectionTimePieChart"></canvas>
         </div>
     </div>
-</div> -->
+</div>
 @endsection
 
 @push('plugin-scripts')
@@ -76,6 +74,33 @@
 
 @push('custom-scripts')
 <script>
+// Prepare data for collection time pie chart with readable labels
+let collectionTimeData = @json($data['collectionTimeData']);
+let collectionTimeLabels = Object.keys(collectionTimeData).map(label => `${label}: ${collectionTimeData[label]}`);
+let collectionTimeCounts = Object.values(collectionTimeData);
+
+let collectionTimePieChartCanvas = document.getElementById("CollectionTimePieChart").getContext("2d");
+new Chart(collectionTimePieChartCanvas, {
+    type: 'pie',
+    data: {
+        labels: collectionTimeLabels,
+        datasets: [{
+            data: collectionTimeCounts,
+            backgroundColor: [
+                '#4dc9f6', '#f67019', '#f53794', '#537bc4', '#acc236',
+                '#166a8f', '#00a950', '#58595b', '#8549ba'
+            ],
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {
+            display: true,
+            position: 'bottom',
+        },
+    }
+});
 // collections  chart
 let collectionsData = @json($data['collections']);
 let collectionsLabels = collectionsData.map(c => c.x);
