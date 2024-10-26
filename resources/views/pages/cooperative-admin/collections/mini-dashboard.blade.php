@@ -153,6 +153,19 @@
         </div>
     </div>
 </div>
+<div class="col-xl-12 mb-5">
+    <div class="card shadow">
+        <div class="card-header bg-transparent">
+            <h6 class="text-uppercase text-light ls-1 mb-1">Grading Status</h6>
+            <h2 class="mb-0">Grading Status by Lot</h2>
+        </div>
+        <div class="card-body">
+            <div class="chart">
+                <canvas id="GradingStatusStackedBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('plugin-scripts')
@@ -161,6 +174,55 @@
 
 @push('custom-scripts')
 <script>
+// Prepare data for the stacked bar chart
+let gradingStatusData = @json($data['gradingStatusData']);
+let lotLabels = gradingStatusData.map(item => item.lot_number);
+let gradedData = gradingStatusData.map(item => item.graded);
+let ungradedData = gradingStatusData.map(item => item.ungraded);
+let remainingData = gradingStatusData.map(item => item.remaining);
+
+let gradingStatusStackedBarChartCanvas = document.getElementById("GradingStatusStackedBarChart").getContext("2d");
+
+// Create the stacked bar chart
+new Chart(gradingStatusStackedBarChartCanvas, {
+    type: 'bar',
+    data: {
+        labels: lotLabels,
+        datasets: [{
+                label: 'Graded',
+                data: gradedData,
+                backgroundColor: '#2dce89',
+            },
+            {
+                label: 'Ungraded',
+                data: ungradedData,
+                backgroundColor: '#f67019',
+            },
+            {
+                label: 'Remaining',
+                data: remainingData,
+                backgroundColor: '#f53794',
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            x: {
+                stacked: true,
+            },
+            y: {
+                stacked: true,
+                beginAtZero: true
+            }
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+            }
+        }
+    }
+});
 // Prepare data for collection time pie chart with readable labels
 let collectionTimeData = @json($data['collectionTimeData']);
 let collectionTimeLabels = Object.keys(collectionTimeData).map(label => `${label}: ${collectionTimeData[label]}`);

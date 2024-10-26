@@ -211,6 +211,8 @@ class CollectionsController extends Controller
 
     public function collections_mini_dashboard(Request $request)
     {
+            $coop_id = Auth::user()->cooperative->id;
+
         // collection over time
         $date_range = $request->query("date_range", "week");
         $from_date = $request->query("from_date", "");
@@ -329,18 +331,47 @@ $collectionTimeLabels = [
         })
         ->toArray();
 
-   $data = [
-    "collections" => $collections,
-    "collectionTimeData" => $collectionTimeData,
-    "totalCollections" => $totalCollections,
-    "totalQuantityCollected" => $totalQuantityCollected,
-    "averageCollectionPerLot" => $averageCollectionPerLot,
-];
+ // Grading status data for stacked bar chart
+        $gradingStatusData = DB::select(DB::raw("
+            SELECT 
+                l.lot_number,
+                (SELECT SUM(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as total_quantity,
+                (SELECT SUM(d.quantity) FROM lot_grade_distributions d WHERE d.lot_number = l.lot_number) as graded_quantity
+            FROM lots l
+            WHERE l.cooperative_id = :coop_id
+        "), ['coop_id' => $coop_id]);
 
-    return view("pages.cooperative-admin.collections.mini-dashboard", compact(
-        'data', 'date_range', 'from_date', 'to_date'
-    ));
+        // Format grading status data for the stacked bar chart
+        $formattedGradingStatusData = [];
+        foreach ($gradingStatusData as $lot) {
+            $totalQuantity = $lot->total_quantity ?? 0;
+            $gradedQuantity = $lot->graded_quantity ?? 0;
+            $ungradedQuantity = max($totalQuantity - $gradedQuantity, 0);
+
+            $formattedGradingStatusData[] = [
+                'lot_number' => $lot->lot_number,
+                'graded' => $gradedQuantity,
+                'ungraded' => $ungradedQuantity,
+                'remaining' => $ungradedQuantity,
+            ];
+        }
+
+        // Prepare final data to send to view
+        $data = [
+            "collections" => $collections,
+            "totalCollections" => $totalCollections,
+            "totalQuantityCollected" => $totalQuantityCollected,
+            "averageCollectionPerLot" => $averageCollectionPerLot,
+                    "collectionTimeData" => $collectionTimeData, // Include collectionTimeData here
+
+            "gradingStatusData" => $formattedGradingStatusData, // Pass grading data to view
+        ];
+
+        return view("pages.cooperative-admin.collections.mini-dashboard", compact(
+            'data', 'date_range', 'from_date', 'to_date'
+        ));
     }
+    
 
     function import_bulk(Request $request)
     {
