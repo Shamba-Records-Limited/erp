@@ -7,8 +7,8 @@
                 <th>Sender</th>
                 <th>Recipient</th>
                 <th>Amount</th>
-                <th>Status</th>
                 <th>Timestamp</th>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         </thead>
