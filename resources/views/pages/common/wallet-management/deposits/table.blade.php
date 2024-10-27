@@ -15,7 +15,17 @@
                 <td>{{$transaction->transaction_number}}</td>
                 <td>{{$transaction->formatted_amount}}</td>
                 <td>{{$transaction->amount_source}}</td>
-                <td>{{$transaction->status}}</td>
+                @php
+                $statusCls = 'text-warning';
+                if($transaction->status == 'COMPLETE'){
+                $statusCls = 'text-success';
+                } elseif($transaction->status == 'PENDING') {
+                $statusCls = 'text-warning';
+                } else {
+                $statusCls = 'text-danger'; // Example for other statuses
+                }
+                @endphp
+                <td class="{{ $statusCls }}">{{$transaction->status}}</td>
                 <td>{{$transaction->created_at}}</td>
             </tr>
             @endforeach
