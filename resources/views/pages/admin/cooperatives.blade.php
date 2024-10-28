@@ -216,7 +216,7 @@ $countries = get_countries();
                             </div>
                         </div>
                         <hr class="mt-1 mb-1">
-                        <h6 class="h6 mt-2 semi-bold">Contact Person</h6>
+                        <h4 class=" mt-2 semi-bold">Contact Person</h4>
                         <div class="form-row">
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
