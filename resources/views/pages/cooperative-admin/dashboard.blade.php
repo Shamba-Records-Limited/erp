@@ -146,9 +146,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                             <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
                             <h2 class=" mb-0">Collections Weight (KGs)</h2>
                         </div>
-                        <div class="col">
+                        <!-- <div class="col">
                             <ul class="nav nav-pills justify-content-end">
-                                <!-- All Option -->
                                 <li class="nav-item mr-2 mr-md-0" data-toggle="chart"
                                     data-target="#CollectionsBarChart">
                                     <a href="#" class="nav-link py-2 px-3 active bg-custom-gradient-green"
@@ -157,7 +156,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                         <span class="d-md-none">All</span>
                                     </a>
                                 </li>
-                                <!-- Month Option -->
                                 <li class="nav-item mr-2 mr-md-0 " data-toggle="chart"
                                     data-target="#CollectionsBarChart">
                                     <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
@@ -165,7 +163,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                         <span class="d-md-none">M</span>
                                     </a>
                                 </li>
-                                <!-- Week Option -->
                                 <li class="nav-item" data-toggle="chart" data-target="#CollectionsBarChart"><a href="#"
                                         class="nav-link py-2 px-3" data-toggle="tab">
                                         <span class="d-none d-md-block">Week</span>
@@ -173,7 +170,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                     </a>
                                 </li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="card-body">
@@ -364,7 +361,8 @@ let collectionsBarOptions = {
     },
     scales: {
         y: {
-            beginAtZero: true
+            beginAtZero: true,
+
         }
     }
 };
@@ -399,8 +397,8 @@ let collectionsGenderBarData = {
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: '#ff5ece',
-        backgroundColor: '#ff5ece',
+        borderColor: '#f53794',
+        backgroundColor: '#f53794',
         tension: 0.4,
         fill: true,
     }],
@@ -415,9 +413,8 @@ let collectionsGenderBarOptions = {
             },
             ticks: {
                 callback: function(value) {
-                    if (value % 10 === 0) {
-                        return value + ' KGs'; // y-axis tick label
-                    }
+                    return value.toLocaleString() +
+                        ' KGs'; // Format y-axis labels with commas and "KGs"
                 },
                 beginAtZero: true,
             },
@@ -672,12 +669,12 @@ let genderPieData = {
         data: genderData,
         backgroundColor: [
             'rgba(54, 162, 235, 1)', //male
-            '#ff5ece', //female
+            '#f53794', //female
             "172B4D", //others
         ],
         borderColor: [
             'rgba(54, 162, 235, 1)',
-            '#ff5ece ',
+            '#f53794 ',
             "172B4D",
         ]
 
