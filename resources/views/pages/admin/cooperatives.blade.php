@@ -31,7 +31,7 @@ $countries = get_countries();
                         <!-- {{ $errors }} -->
                         <div class="form-row">
                             <div class="form-group col-12">
-                                <h6 class="mb-3">Cooperative Details</h6>
+                                <h5 class="mb-3">Cooperative Details</h5>
                             </div>
                             <div class=" form-group col-lg-3 col-md-6 col-12">
                                 <label for="CompanyName">Name</label>
