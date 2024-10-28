@@ -294,7 +294,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                     <div class="row align-items-center">
                         <div class="col">
                             <h6 class="text-uppercase text-light ls-1 mb-1">Collection By Wet Mills (KGs)</h6>
-                            <h2 class=" mb-0">Wet Mills</h2>
+                            <h2 class=" mb-0">Wet Mills By KGs</h2>
                         </div>
                     </div>
                 </div>
@@ -362,7 +362,13 @@ let collectionsBarOptions = {
     scales: {
         y: {
             beginAtZero: true,
-
+            ticks: {
+                // Format y-axis labels with commas and add "KGs"
+                callback: function(value) {
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                },
+                beginAtZero: true,
+            },
         }
     }
 };
@@ -413,8 +419,7 @@ let collectionsGenderBarOptions = {
             },
             ticks: {
                 callback: function(value) {
-                    return value.toLocaleString() +
-                        ' KGs'; // Format y-axis labels with commas and "KGs"
+                    return value.toLocaleString()
                 },
                 beginAtZero: true,
             },
@@ -508,7 +513,7 @@ let wetMillCollectionsBarOptions = {
             ticks: {
                 // Format y-axis labels with commas and add "KGs"
                 callback: function(value) {
-                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' KGs';
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 },
                 beginAtZero: true,
             },
