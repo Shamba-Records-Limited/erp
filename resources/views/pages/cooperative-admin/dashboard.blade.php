@@ -201,7 +201,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
 
                             <!-- Female count -->
                             <div class="p-2 ">
-                                <div class=" d-flex ">
+                                <div class=" d-flex justify-content-between ">
                                     <div class="">Female:</div>
                                     <div>
                                         <h3 class="" id=" femaleCount">{{$data["gender"]->female}}</h3>
