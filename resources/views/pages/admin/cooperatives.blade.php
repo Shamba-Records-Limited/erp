@@ -303,7 +303,7 @@ $countries = get_countries();
                                 </td>
                                 <td>{{$cop->location }}</td>
                                 <td>{{$cop->address }}</td>
-                                <td>{{$cop->currency }} {{ $cop->deactivated_at}}</td>
+                                <td>{{ strtoupper ($cop->currency ) }} {{ $cop->deactivated_at}}</td>
                                 <td>
                                     @if (is_null($cop->deactivated_at))
                                     <a href="{{ route('cooperative.setup.deactivate', $cop->id) }}"
