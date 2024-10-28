@@ -17,11 +17,13 @@
                     <input type="hidden" name="id" value="{{$cooperative->id}}">
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <h6 class="mb-3">Cooperative Details</h6>
+                            <h4 class="mb-3">Cooperative Details</h4>
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="CompanyName">Name</label>
-                            <input type="text" value="{{$cooperative->name}}" name="cooperative_name" class="form-control {{ $errors->has('cooperative_name') ? ' is-invalid' : '' }}" id="CompanyName" placeholder="ABC" value="{{ old('cooperative_name')}}" required>
+                            <input type="text" value="{{$cooperative->name}}" name="cooperative_name"
+                                class="form-control {{ $errors->has('cooperative_name') ? ' is-invalid' : '' }}"
+                                id="CompanyName" placeholder="ABC" value="{{ old('cooperative_name')}}" required>
 
                             @if ($errors->has('cooperative_name'))
                             <span class="help-block text-danger">
@@ -32,7 +34,9 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="abbreviation">Abbreviation</label>
-                            <input type="text" value="{{$cooperative->abbreviation}}" name="abbr" class="form-control  {{ $errors->has('abbr') ? ' is-invalid' : '' }}" id="abbreviation" placeholder="A.B.C" value="{{ old('abbr')}}">
+                            <input type="text" value="{{$cooperative->abbreviation}}" name="abbr"
+                                class="form-control  {{ $errors->has('abbr') ? ' is-invalid' : '' }}" id="abbreviation"
+                                placeholder="A.B.C" value="{{ old('abbr')}}">
 
                             @if ($errors->has('abbr'))
                             <span class="help-block text-danger">
@@ -42,7 +46,9 @@
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="location">Location</label>
-                            <input type="text" name="location" value="{{$cooperative->location}}" class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}" value="{{ old('location')}}" id="location" placeholder="Nairobi" required>
+                            <input type="text" name="location" value="{{$cooperative->location}}"
+                                class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}"
+                                value="{{ old('location')}}" id="location" placeholder="Nairobi" required>
                             @if ($errors->has('location'))
                             <span class="help-block text-danger">
                                 <strong>{{ $errors->first('location')  }}</strong>
@@ -52,7 +58,9 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="address">Address</label>
-                            <input type="text" name="address" value="{{$cooperative->address}}" class="form-control  {{ $errors->has('address') ? ' is-invalid' : '' }}" id="address" placeholder="Nairobi" value="{{ old('address')}}" required>
+                            <input type="text" name="address" value="{{$cooperative->address}}"
+                                class="form-control  {{ $errors->has('address') ? ' is-invalid' : '' }}" id="address"
+                                placeholder="Nairobi" value="{{ old('address')}}" required>
                             @if ($errors->has('address'))
                             <span class="help-block text-danger">
                                 <strong>{{ $errors->first('address')  }}</strong>
@@ -62,10 +70,13 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="country_code">Country</label>
-                            <select name="country_code" id="country_code" class=" form-control select2bs4 {{ $errors->has('country_code') ? ' is-invalid' : '' }}" value="KE">
+                            <select name="country_code" id="country_code"
+                                class=" form-control form-select {{ $errors->has('country_code') ? ' is-invalid' : '' }}"
+                                value="KE">
                                 <option value=""> -Select Country-</option>
                                 @foreach($countries as $country)
-                                <option value="{{$country['code']}}" @if($country['name']=='Kenya' ) selected @endif> {{ $country['name'] }}</option>
+                                <option value="{{$country['code']}}" @if($country['name']=='Kenya' ) selected @endif>
+                                    {{ $country['name'] }}</option>
                                 @endforeach
 
                                 @if ($errors->has('country_code'))
@@ -78,7 +89,10 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="company_email">Cooperative Email</label>
-                            <input type="email" name="cooperative_email" value="{{$cooperative->email}}" class="form-control {{ $errors->has('cooperative_email') ? ' is-invalid' : '' }}" id="company_email" placeholder="info@abc.com" value="{{ old('cooperative_email')}}" required>
+                            <input type="email" name="cooperative_email" value="{{$cooperative->email}}"
+                                class="form-control {{ $errors->has('cooperative_email') ? ' is-invalid' : '' }}"
+                                id="company_email" placeholder="info@abc.com" value="{{ old('cooperative_email')}}"
+                                required>
 
 
                             @if ($errors->has('cooperative_email'))
@@ -90,7 +104,10 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="company_contact">Cooperative Contacts</label>
-                            <input type="text" name="cooperative_contact" value="{{$cooperative->contact_details}}" class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}" id="company_contact" placeholder="07....." value="{{ old('cooperative_contact')}}" required>
+                            <input type="text" name="cooperative_contact" value="{{$cooperative->contact_details}}"
+                                class="form-control {{ $errors->has('address') ? ' is-invalid' : '' }}"
+                                id="company_contact" placeholder="07....." value="{{ old('cooperative_contact')}}"
+                                required>
 
                             @if ($errors->has('cooperative_contact'))
                             <span class="help-block text-danger">
@@ -102,7 +119,10 @@
 
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <label for="company_currency">Currency</label>
-                            <input type="text" name="cooperative_currency" value="{{$cooperative->currency}}" class="form-control {{ $errors->has('cooperative_currency') ? ' is-invalid' : '' }}" id="company_currency" placeholder="Ksh." value="{{ old('cooperative_currency')}}" required>
+                            <input type="text" name="cooperative_currency" value="{{$cooperative->currency}}"
+                                class="form-control {{ $errors->has('cooperative_currency') ? ' is-invalid' : '' }}"
+                                id="company_currency" placeholder="Ksh." value="{{ old('cooperative_currency')}}"
+                                required>
 
                             @if ($errors->has('cooperative_currency'))
                             <span class="help-block text-danger">
