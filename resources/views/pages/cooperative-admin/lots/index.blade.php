@@ -24,10 +24,12 @@
                     @foreach($lots as $key => $lot)
                     <tr>
                         <td>{{++$key }}</td>
-                        <td><a href="{{route('cooperative-admin.lots.detail', $lot->lot_number)}}">{{$lot->lot_number}}</a></td>
-                        <td>{{$lot->quantity}} KG</td>
-                        <td>{{$lot->collections_count}}</td>
-                        <td>{{$lot->quantity - ($lot->graded ?? 0)}} KG</td>
+                        <td><a
+                                href="{{route('cooperative-admin.lots.detail', $lot->lot_number)}}">{{$lot->lot_number}}</a>
+                        </td>
+                        <td>{{ number_format($lot->quantity) }} KG</td>
+                        <td>{{ $lot->collections_count }}</td>
+                        <td>{{ number_format($lot->quantity - ($lot->graded ?? 0)) }} KG</td>
                         <td></td>
                     </tr>
                     @endforeach
