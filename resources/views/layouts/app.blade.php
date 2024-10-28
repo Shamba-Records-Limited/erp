@@ -19,6 +19,7 @@
     <!-- Argon CSS -->
     <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
+    @toastr_css
 
     <!-- htmx -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -126,7 +127,8 @@
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- argon js -->
     <script src="{{ asset('argon') }}/js/argon.js"></script>
-
+@toastr_js
+    @toastr_render
     <script>
     document.body.addEventListener('htmx:configRequest', (event) => {   
         event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]')

@@ -33,7 +33,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                 <div class="col">
                                     <h5 class=" text-muted mb-0" style="font-size:1rem">Collection Total Weight</h5>
                                     <span class="h2 font-weight-bold mb-0">
-                                        {{ isset($data['total_collection_weight']) ? $data['total_collection_weight'] : "0" }}
+                                        {{ isset($data['total_collection_weight']) ? number_format($data['total_collection_weight']) : "0" }}
                                         KG
                                     </span>
                                 </div>
