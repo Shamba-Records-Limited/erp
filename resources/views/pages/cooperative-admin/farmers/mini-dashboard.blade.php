@@ -12,9 +12,9 @@
 @php
 $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $data["gender"]->other
 @endphp
-<div class="ml-3">
+<!-- <div class="ml-3">
     <h2>Mini Dashboard</h2>
-</div>
+</div> -->
 
 <!-- New Row for Ages & Gender and Farmers Gender Distribution Charts -->
 <div class="row custom-border">
@@ -54,7 +54,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                             </div>
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
-                                    style="background-color:#F4D8F0;width: {{ $total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}%"
+                                    style="background-color:#f53794;width: {{ $total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}%"
                                     aria-valuenow="{{$total_gender_distribution ? (($data["gender"]->female / $total_gender_distribution) * 100) : 0}}"
                                     aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
@@ -143,12 +143,12 @@ let genderPieData = {
         data: genderData,
         backgroundColor: [
             'rgba(54, 162, 235, 1)', //male
-            '#F4D8F0 ', //female
+            '#f53794 ', //female
             "172B4D", //others
         ],
         borderColor: [
             'rgba(54, 162, 235, 1)',
-            '#F4D8F0 ',
+            '#f53794 ',
             "172B4D",
         ]
 
@@ -203,8 +203,8 @@ let collectionsGenderBarData = {
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: '#F4D8F0',
-        backgroundColor: '#F4D8F0',
+        borderColor: '#f53794',
+        backgroundColor: '#f53794',
         tension: 0.4,
         fill: true,
     }],
@@ -218,10 +218,9 @@ let collectionsGenderBarOptions = {
                 zeroLineColor: 'rgba(77, 77, 77, 0.5)',
             },
             ticks: {
+                // Format y-axis labels with commas and add "KGs"
                 callback: function(value) {
-                    if (value % 10 === 0) {
-                        return value + ' KGs'; // y-axis tick label
-                    }
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 },
                 beginAtZero: true,
             },
@@ -301,8 +300,8 @@ let agesGenderBarData = {
     }, {
         label: 'Female',
         data: femaleAgesValues,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: '#f53794',
+        backgroundColor: '#f53794',
         borderWidth: 2,
         barPercentage: 0.6, // Make bars narrower
     }],
