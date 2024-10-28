@@ -371,35 +371,35 @@ config('enums.system_permissions')['create']))
                         <tbody>
                             @foreach($officials as $key => $official)
                             <tr>
-                                <td>{{++$key }}</td>
+                                <td>{{ ++$key }}</td>
                                 <td>
-                                    <a>{{ ucwords(strtolower( $official->username))}}</a>
+                                    <a>{{ ucwords(strtolower($official->username)) }}</a>
                                 </td>
-                                <td> {{$official->country_code }} <span class="mr-2 table-flag"></span>
+                                <td>
+                                    {{ $official->country_code }}
+                                    <span class="mr-2 table-flag"></span>
                                 </td>
-                                <td>{{$official->county_name}} - {{$official->sub_county_name}}</td>
-                                <td>{{$official->employee_no}}</td>
-                                <td>{{$official->id_no}}</td>
-                                <td>{{$official->phone_no}}</td>
+                                <td>{{ $official->county_name }} - {{ $official->sub_county_name }}</td>
+                                <td>{{ $official->employee_no }}</td>
+                                <td>{{ $official->id_no }}</td>
+                                <td>{{ $official->phone_no }}</td>
                                 <td>
                                     @if($official->status == \App\CoopEmployee::STATUS_ACTIVE)
-                                    <badge class="badge badge-success text-white">
+                                    <span class="badge badge-success badge-status">
                                         {{ config('enums.employment_status')[$official->status] }}
-                                    </badge>
+                                    </span>
                                     @elseif($official->status == \App\CoopEmployee::STATUS_DEACTIVATED)
-                                    <badge class="badge badge-danger text-white">
+                                    <span class="badge badge-danger badge-status">
                                         {{ config('enums.employment_status')[$official->status] }}
-                                    </badge>
+                                    </span>
                                     @elseif($official->status == \App\CoopEmployee::STATUS_SUSPENDED_WITH_PAY)
-                                    <badge class="badge badge-warning text-white">
+                                    <span class="badge badge-warning badge-status">
                                         {{ config('enums.employment_status')[$official->status] }}
-                                    </badge>
+                                    </span>
                                     @elseif($official->status == \App\CoopEmployee::STATUS_SUSPENSION_WITHOUT_PAY)
-
-                                    <badge class="badge badge-dark text-white">
+                                    <span class="badge badge-dark badge-status">
                                         {{ config('enums.employment_status')[$official->status] }}
-                                    </badge>
-
+                                    </span>
                                     @endif
                                 </td>
                                 <td>
@@ -416,7 +416,8 @@ config('enums.system_permissions')['create']))
                                             <a onclick="return confirm('Sure to Delete?')"
                                                 href="/admin/county-govt-officials/delete/{{ $official->id }}"
                                                 class="text-danger dropdown-item">
-                                                <i class="fa fa-trash-alt"></i>Delete</a>
+                                                <i class="fa fa-trash-alt"></i>Delete
+                                            </a>
                                         </div>
                                     </div>
                                 </td>
