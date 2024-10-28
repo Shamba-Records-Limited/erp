@@ -22,7 +22,8 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-muted mb-0" style="font-size:1rem">Total Collections</h5>
-                                    <span class="h2 font-weight-bold mb-0">{{ $data['totalCollections'] }}</span>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{number_format( $data['totalCollections'] )}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -45,8 +46,10 @@
                                 <div class="col">
                                     <h5 class="text-muted mb-0" style="font-size:1rem">Total Quantity Collected (kg)
                                     </h5>
-                                    <span class="h2 font-weight-bold mb-0">{{ $data['totalQuantityCollected'] }}
+                                    <span
+                                        class="h2 font-weight-bold mb-0">{{ number_format($data['totalQuantityCollected']) }}
                                         kg</span>
+
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
