@@ -10,7 +10,9 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addBranchAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addBranchAccordion"><span class="mdi mdi-plus"></span>Add Branch
+                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse"
+                    data-target="#addBranchAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif"
+                    aria-controls="addBranchAccordion"><span class="mdi mdi-plus"></span>Add Branch
                 </button>
                 <div class="collapse @if ($errors->count() > 0) show @endif " id="addBranchAccordion">
                     <div class="row mt-5">
@@ -25,7 +27,8 @@
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="cooperative_id">Cooperative</label>
-                                <select name="cooperative_id" id="cooperative_id" class="form-control select2bs4 {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
+                                <select name="cooperative_id" id="cooperative_id"
+                                    class="form-control form-select {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
                                     @foreach($cooperatives as $coop)
                                     <option value="{{$coop->id}}">{{$coop->name}}</option>
                                     @endforeach
@@ -38,7 +41,9 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="productName">Name</label>
-                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="productName" placeholder="XYZ Branch" value="{{ old('name')}}" required>
+                                <input type="text" name="name"
+                                    class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}"
+                                    id="productName" placeholder="XYZ Branch" value="{{ old('name')}}" required>
 
                                 @if ($errors->has('name'))
                                 <span class="help-block text-danger">
@@ -49,7 +54,9 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="code">Code</label>
-                                <input type="text" name="code" class="form-control  {{ $errors->has('code') ? ' is-invalid' : '' }}" id="code" placeholder="AB12#" value="{{ old('code')}}">
+                                <input type="text" name="code"
+                                    class="form-control  {{ $errors->has('code') ? ' is-invalid' : '' }}" id="code"
+                                    placeholder="AB12#" value="{{ old('code')}}">
 
                                 @if ($errors->has('code'))
                                 <span class="help-block text-danger">
@@ -59,7 +66,9 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="location">Location</label>
-                                <input type="text" name="location" class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}" value="{{ old('location')}}" id="location" placeholder="Uplands" required>
+                                <input type="text" name="location"
+                                    class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}"
+                                    value="{{ old('location')}}" id="location" placeholder="Uplands" required>
                                 @if ($errors->has('location'))
                                 <span class="help-block text-danger">
                                     <strong>{{ $errors->first('location')  }}</strong>
@@ -69,10 +78,13 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="main_product_id">Main Product</label>
-                                <select name="main_product_id" id="main_product_id" class="form-control select2bs4 {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}" required>
+                                <select name="main_product_id" id="main_product_id"
+                                    class="form-control form-select {{ $errors->has('main_product_id') ? ' is-invalid' : '' }}"
+                                    required>
                                     <option value="">-- Select Main Product --</option>
                                     @foreach($products as $product)
-                                    <option value="{{$product->id}}" @if($product->id == old('main_product_id')) selected @endif>{{$product->name}}</option>
+                                    <option value="{{$product->id}}" @if($product->id == old('main_product_id'))
+                                        selected @endif>{{$product->name}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('main_product_id'))
@@ -84,10 +96,12 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="county_id">Select County</label>
-                                <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                <select name="county_id" id="county_id"
+                                    class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select County-</option>
                                     @foreach($counties as $county)
-                                    <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id')==$county->id) selected @endif> {{ $county->name }}</option>
+                                    <option value="{{$county->id}}" @if(!empty(old('county_id')) &&
+                                        old('county_id')==$county->id) selected @endif> {{ $county->name }}</option>
                                     @endforeach
 
                                     @if ($errors->has('county_id'))
@@ -101,7 +115,8 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="sub_county">Select Sub County</label>
-                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id"
+                                    class=" form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select Sub County-</option>
 
                                     @if ($errors->has('sub_county_id'))
@@ -143,10 +158,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                            $canEdit = has_right_permission(config('enums.system_modules')['HR Management']['branches'], config('enums.system_permissions')['edit']);
-                            $canDelete = has_right_permission(config('enums.system_modules')['HR Management']['branches'], config('enums.system_permissions')['delete'])
-                            @endphp
+
                             @foreach($branches as $key => $prod)
                             <tr>
                                 <td>{{++$key }}</td>
@@ -157,14 +169,18 @@
                                 <td>{{$prod->location }}</td>
                                 <td>
                                     <div class="btn-group dropdown">
-                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Actions
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="text-info dropdown-item" href="{{ route('branches.detail', $prod->id) }}">
+                                            <a class="text-info dropdown-item"
+                                                href="{{ route('branches.detail', $prod->id) }}">
                                                 <i class="fa fa-edit"></i>Edit
                                             </a>
-                                            <a onclick="return confirm('sure to delete?')" href="/admin/branches/delete/{{ $prod->id }}" class="text-danger dropdown-item">
+                                            <a onclick="return confirm('sure to delete?')"
+                                                href="/admin/branches/delete/{{ $prod->id }}"
+                                                class="text-danger dropdown-item">
                                                 <i class="fa fa-trash-alt"></i>Delete</a>
                                         </div>
                                     </div>
@@ -190,30 +206,30 @@
 
 @push('custom-scripts')
 <script>
-    function deleteBranch(id) {
-        shouldDelete = confirm("Are you sure you want to delete this cooperative branch?")
-        if (!shouldDelete) {
-            return
-        }
-
-
-        window.location = "/branches/delete/" + id
+function deleteBranch(id) {
+    shouldDelete = confirm("Are you sure you want to delete this cooperative branch?")
+    if (!shouldDelete) {
+        return
     }
-    $("#county_id").change(function(e) {
-        $("#sub_county_id").value = "";
-        $("#sub_county_id").empty();
 
-        $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
 
-        let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
-        let filteredSubCounties = []
-        for (let subCounty of subCounties) {
-            console.log(subCounty)
-            if (subCounty.county_id == e.target.value) {
-                elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
-                $("#sub_county_id").append(elem)
-            }
+    window.location = "/branches/delete/" + id
+}
+$("#county_id").change(function(e) {
+    $("#sub_county_id").value = "";
+    $("#sub_county_id").empty();
+
+    $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
+
+    let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
+    let filteredSubCounties = []
+    for (let subCounty of subCounties) {
+        console.log(subCounty)
+        if (subCounty.county_id == e.target.value) {
+            elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
+            $("#sub_county_id").append(elem)
         }
-    });
+    }
+});
 </script>
 @endpush
