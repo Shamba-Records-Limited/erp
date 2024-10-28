@@ -85,7 +85,7 @@ $cooperative = null;
         </ul>
     </div>
     <div class="nav-items-wrapper">
-        <ul class="nav flex-column">
+        <ul class="navbar-nav flex-column">
             <!-- Added flex-column to enforce vertical stacking -->
             @if($user && $user->hasRole('admin'))
             <li class="nav-item {{ active_class(['admin/dashboard']) }} mb-3">
