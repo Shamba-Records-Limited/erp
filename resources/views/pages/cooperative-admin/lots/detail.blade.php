@@ -74,7 +74,8 @@
                             <h5 class="font-weight-bold mb-0 text-white">Total Collection Quantity</h5>
                         </div>
                         <div class="card-body text-center">
-                            <h2 class="font-weight-bold text-primary display-4">{{ $lot->total_collection_quantity }}
+                            <h2 class="font-weight-bold text-primary display-4">
+                                {{ number_format($lot->total_collection_quantity )}}
                             </h2>
                             <p class="font-weight-bold text-muted">{{ $lot_unit }}</p>
                         </div>
@@ -87,9 +88,11 @@
                             <h5 class="font-weight-bold mb-0">Graded</h5>
                         </div>
                         <div class="card-body text-center">
-                            <h2 class="font-weight-bold text-success display-4">{{ $lot->total_graded_quantity ?? 0 }}
+                            <h2 class="font-weight-bold text-success display-4">
+                                {{ number_format($lot->total_graded_quantity ?? 0) }}
                             </h2>
-                            <p class="mb-0">of <strong>{{ $lot->total_collection_quantity }} {{ $lot_unit }}</strong>
+                            <p class="mb-0">of <strong>{{ number_format($lot->total_collection_quantity) }}
+                                    {{ $lot_unit }}</strong>
                             </p>
 
                             <!-- Progress Bar -->
@@ -114,7 +117,9 @@
                             <h5 class="font-weight-bold mb-0 text-white">Remaining Quantity</h5>
                         </div>
                         <div class="card-body text-center">
-                            <h2 class="font-weight-bold text-warning display-4">{{ $lot->remaining_quantity ?? 0 }}</h2>
+                            <h2 class="font-weight-bold text-warning display-4">
+                                {{number_format( $lot->remaining_quantity ?? 0) }}
+                            </h2>
                             <p class="font-weight-bold text-muted">{{ $lot_unit }}</p>
                         </div>
                     </div>
@@ -147,7 +152,7 @@
                     @foreach ($collections as $collection)
                     <tr>
                         <td>{{ $collection->collection_number }}</td>
-                        <td>{{ $collection->quantity }} {{ $collection->unit }}</td>
+                        <td>{{ number_format($collection->quantity) }} {{ $collection->unit }}</td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -170,7 +175,7 @@
                     @foreach ($gradeDistributions as $grade)
                     <tr>
                         <td>{{ $grade->grade }}</td>
-                        <td>{{ $grade->quantity }} {{ $grade->unit }}</td>
+                        <td>{{ number_format($grade->quantity) }} {{ $grade->unit }}</td>
                     </tr>
                     @endforeach
                 </tbody>
