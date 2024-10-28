@@ -245,14 +245,15 @@ $cooperative = null;
                         <i class="ni ni-chart-pie-35 text-custom-green"></i> {{ __('Dashboard') }}
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="navbar-examples">
-                        <i class="ni ni-building text-custom-green"></i>
-                        <span class=" nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
-                    </a>
 
-                    <div class="collapse show" id="navbar-examples">
+                <!-- Wet Mills CRM Dropdown -->
+                <li class="nav-item">
+                    <a class="nav-link active" href="#wetmills-crm" data-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="wetmills-crm">
+                        <i class="ni ni-building text-custom-green"></i>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
+                    </a>
+                    <div class="collapse" id="wetmills-crm">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
@@ -260,21 +261,20 @@ $cooperative = null;
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}
-                                </a>
+                                <a class="nav-link" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}</a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
+                <!-- Farmer / Suppliers CRM Dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="navbar-examples">
+                    <a class="nav-link active" href="#farmers-crm" data-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="farmers-crm">
                         <i class="ni ni-single-02 text-custom-green"></i>
-                        <span class=" nav-link-text" style="color: #f4645f;">{{ __('Farmer / Suppliers CRM') }}</span>
+                        <span class="nav-link-text" style="color: #f4645f;">{{ __('Farmer / Suppliers CRM') }}</span>
                     </a>
-
-                    <div class="collapse show" id="navbar-examples">
+                    <div class="collapse" id="farmers-crm">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
@@ -289,14 +289,15 @@ $cooperative = null;
                         </ul>
                     </div>
                 </li>
+
+                <!-- Collection CRM Dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="navbar-examples">
+                    <a class="nav-link active" href="#collections-crm" data-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="collections-crm">
                         <i class="ni ni-archive-2 text-custom-green"></i>
                         <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
                     </a>
-
-                    <div class="collapse show" id="navbar-examples">
+                    <div class="collapse" id="collections-crm">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
@@ -304,8 +305,8 @@ $cooperative = null;
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}"> {{ __('Lots') }}
-                                </a>
+                                <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
+                                    {{ __('Lots') }}</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
@@ -315,14 +316,15 @@ $cooperative = null;
                         </ul>
                     </div>
                 </li>
+
+                <!-- Wallet Management Dropdown -->
                 <li class="nav-item">
-                    <a class="nav-link active" href="#navbar-examples" data-toggle="collapse" role="button"
-                        aria-expanded="true" aria-controls="navbar-examples">
+                    <a class="nav-link active" href="#wallet-management" data-toggle="collapse" role="button"
+                        aria-expanded="false" aria-controls="wallet-management">
                         <i class="ni ni-money-coins text-custom-green"></i>
                         <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
                     </a>
-
-                    <div class="collapse show" id="navbar-examples">
+                    <div class="collapse" id="wallet-management">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
@@ -366,37 +368,47 @@ $cooperative = null;
                     </div>
                 </li>
 
+                <!-- Products / Raw Materials -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
                         <i class="ni ni-tag text-custom-green"></i> {{ __('Products / Raw Materials ') }}
                     </a>
                 </li>
+
+                <!-- Transactions Reports -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.transactions.show') }}">
                         <i class="ni ni-sound-wave text-custom-green"></i> {{ __('Transactions Reports') }}
                     </a>
                 </li>
+
+                <!-- Orders -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.orders.show') }}">
                         <i class="ni ni-cart text-custom-green"></i> {{ __('Orders') }}
                     </a>
                 </li>
+
+                <!-- Settings -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.settings.show') }}">
                         <i class="ni ni-settings text-custom-green"></i> {{ __('Settings') }}
                     </a>
                 </li>
+
+                <!-- Support -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cooperative-admin.support.show') }}">
                         <i class="ni ni-support-16 text-custom-green"></i> {{ __('Support') }}
                     </a>
                 </li>
+
+                <!-- Chat -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('chat.index') }}">
                         <i class="ni ni-chat-round text-custom-green"></i> {{ __('Chat') }}
                     </a>
                 </li>
-
 
 
                 @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
