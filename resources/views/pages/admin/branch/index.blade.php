@@ -16,8 +16,8 @@
                 </button>
                 <div class="collapse @if ($errors->count() > 0) show @endif " id="addBranchAccordion">
                     <div class="row mt-5">
-                        <div class="col-lg-12 grid-margin stretch-card col-12">
-                            <h4>Register Branch</h4>
+                        <div class="col-lg-12 grid-margin stretch-card col-12 mb-4">
+                            <h3>Register Branch</h3>
                         </div>
                     </div>
 
