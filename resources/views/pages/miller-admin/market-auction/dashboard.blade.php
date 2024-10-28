@@ -32,6 +32,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <!-- Dairy Products Sold -->
                 <div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
@@ -44,7 +45,7 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-glass-milk"></i>
+                                        <i class="fas fa-boxes"></i> <!-- Updated icon for clarity -->
                                     </div>
                                 </div>
                             </div>
@@ -55,6 +56,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <!-- Active Product Listings -->
                 <div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
@@ -77,6 +79,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <!-- Orders Placed -->
                 <div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
@@ -98,7 +101,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div>                    
             </div> <!-- End of row -->
         </div>
     </div>
