@@ -83,6 +83,9 @@
 
         @yield('content')
 
+    </div>
+    <div class="ml-10" style="margin-left:330px">
+
         @include('layouts.footers.auth')
     </div>
 
