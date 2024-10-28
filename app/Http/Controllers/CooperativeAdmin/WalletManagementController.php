@@ -1413,6 +1413,8 @@ class WalletManagementController extends Controller
 
     public function expenses_table(Request $request)
     {
+                $acc_type = "cooperative-admin";
+
         \Debugbar::disable();
 
         $user = Auth::user();
@@ -1540,7 +1542,7 @@ class WalletManagementController extends Controller
         // $expensesTotal = DB::select(DB::raw("SELECT FORMAT(sum(t.amount), 2) AS total FROM transactions t WHERE $condition"), ["coop_id" => $coop_id])[0]->total;
 
 
-        return view("pages.common.wallet-management.expenses_partials.table", compact('expenses', 'expensesTotal', "totalItems", "page", "lastPage"));
+        return view("pages.common.wallet-management.expenses_partials.table", compact('expenses', 'expensesTotal', "totalItems", "page", "lastPage","acc_type"));
     }
 
     public function export_expenses(Request $request, $type)
