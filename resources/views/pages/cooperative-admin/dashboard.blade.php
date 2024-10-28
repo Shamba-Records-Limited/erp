@@ -506,10 +506,9 @@ let wetMillCollectionsBarOptions = {
                 zeroLineColor: 'rgba(77, 77, 77, 0.5)',
             },
             ticks: {
+                // Format y-axis labels with commas and add "KGs"
                 callback: function(value) {
-                    if (value % 10 === 0) {
-                        return value + ' KGs';
-                    }
+                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' KGs';
                 },
                 beginAtZero: true,
             },
