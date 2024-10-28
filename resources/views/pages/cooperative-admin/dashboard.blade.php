@@ -399,8 +399,8 @@ let collectionsGenderBarData = {
     }, {
         label: 'Female',
         data: femaleCollectionValues,
-        borderColor: '#F4D8F0',
-        backgroundColor: '#F4D8F0',
+        borderColor: '#ff5ece',
+        backgroundColor: '#ff5ece',
         tension: 0.4,
         fill: true,
     }],
@@ -672,12 +672,12 @@ let genderPieData = {
         data: genderData,
         backgroundColor: [
             'rgba(54, 162, 235, 1)', //male
-            '#F4D8F0 ', //female
+            '#ff5ece', //female
             "172B4D", //others
         ],
         borderColor: [
             'rgba(54, 162, 235, 1)',
-            '#F4D8F0 ',
+            '#ff5ece ',
             "172B4D",
         ]
 
