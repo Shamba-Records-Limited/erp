@@ -23,7 +23,7 @@
 
                     <form action="{{ route('branches.add') }}" method="post">
                         @csrf
-                        {{ $errors }}
+                        <!-- {{ $errors }} -->
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="cooperative_id">Cooperative</label>
