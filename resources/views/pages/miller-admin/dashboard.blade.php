@@ -242,8 +242,8 @@ $total_gender_distribution = 0;
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1">Grade Distribution</h6>
-                            <h2 class="mb-0">Grade Distribution KGs</h2>
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Income Vs Expenses</h6>
+                            <h2 class="mb-0">Income Vs Expenses</h2>
                         </div>
                     </div>
                 </div>
@@ -276,9 +276,9 @@ $total_gender_distribution = 0;
                     <table class="table align-items-center table-flush">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">Milled</th>
-                                <th scope="col">Pre Milled</th>
-                                <th scope="col"></th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Milled(kg)</th>
+                                <th scope="col">Percentage</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -494,49 +494,6 @@ let incomeVsExpensesChart = new Chart(incomeVsExpensesChartCanvas, {
 
 
 
-let gradeDistribution = @json($data['grade_distribution']);
-let gradeDistributionLables = gradeDistribution.map(c => c.name)
-let gradeDistributionValues = gradeDistribution.map(c => c.quantity)
-
-let gradeDistributionChartCanvas = document.getElementById("GradeDistributionChart")
-let gradeDistributionChartData = {
-    labels: gradeDistributionLables,
-    datasets: [{
-        label: 'Milled',
-        data: gradeDistributionValues,
-        backgroundColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ],
-        borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ]
-    }]
-};
-
-let gradeDistributionChartOptions = {
-    animationEasing: "easeOutBounce",
-    responsive: true,
-    maintainAspectRatio: true,
-    showScale: true,
-    legend: {
-        display: true
-    },
-    layout: {
-        padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
-        }
-    }
-};
-let gradeDistributionChart = new Chart(gradeDistributionChartCanvas, {
-    type: "horizontalBar",
-    data: gradeDistributionChartData,
-    options: gradeDistributionChartOptions
-});
 
 // Grade distribution chart
 let gradeDistributionData = @json($data['grade_distribution']);

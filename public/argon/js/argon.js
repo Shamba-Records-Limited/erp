@@ -1064,6 +1064,103 @@ var InventoryVsSalesChart = (function() {
 
 })();
 
+// Income Vs Expense
+var IncomeVsExpensesChart = (function() {
+
+  // Variables
+  var $chart = $('#IncomeVsExpenseChart');
+
+  // Methods
+  function init($chart) {
+      // Parse data attributes
+      var incomeSeries = JSON.parse($chart.attr('data-income-series'));
+      var expensesSeries = JSON.parse($chart.attr('data-expenses-series'));
+
+      // Map data to labels and values
+      var incomeVsExpensesLabels = incomeSeries.map(c => c.x);
+      var incomeValues = incomeSeries.map(c => c.y);
+      var expensesValues = expensesSeries.map(c => c.y);
+
+      // Chart data
+      var incomeVsExpensesData = {
+          labels: incomeVsExpensesLabels,
+          datasets: [{
+              label: 'Income',
+              data: incomeValues,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              fill: false // Avoid filling the area under the line
+          }, {
+              label: 'Expenses',
+              data: expensesValues,
+              borderColor: 'rgba(192, 75, 192, 1)',
+              backgroundColor: 'rgba(192, 75, 192, 0.2)',
+              fill: false
+          }]
+      };
+
+      // Chart options
+      var incomeVsExpensesOptions = {
+          responsive: true,
+          maintainAspectRatio: true,
+          animation: {
+              easing: "easeOutBounce",
+              duration: 1000 // Animation duration in milliseconds
+          },
+          scales: {
+              yAxes: {
+                  beginAtZero: true,
+                  ticks: {
+                      callback: function(value) {
+                          return '$' + value + 'k'; // Format y-axis ticks with "$k"
+                      }
+                  }
+              },
+              xAxes: {
+                  ticks: {
+                      autoSkip: true,
+                      maxTicksLimit: 6 // Maximum number of ticks to show on x-axis
+                  }
+              }
+          },
+          tooltips: {
+              callbacks: {
+                  label: function(item, data) {
+                      var label = data.datasets[item.datasetIndex].label || '';
+                      var yLabel = item.yLabel;
+                      return label + ': $' + yLabel + 'k'; // Tooltip formatting
+                  }
+              }
+          },
+          plugins: {
+              legend: {
+                  display: true // Display chart legend
+              }
+          },
+          layout: {
+              padding: {
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  bottom: 0
+              }
+          }
+      };
+
+      // Initialize the chart
+      new Chart($chart, {
+          type: 'line', // Define chart type as 'line'
+          data: incomeVsExpensesData, // Pass data object to the chart
+          options: incomeVsExpensesOptions // Pass the defined options
+      });
+  }    
+
+  // Execute the initialization if the chart element exists
+  if ($chart.length) {
+      init($chart);
+  }
+
+})();
 
 
 // Orders chart
