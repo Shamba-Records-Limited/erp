@@ -20352,7 +20352,7 @@ hr.horizontal.light {
     top: 20px;
     left: 20px;
     /* width: 980px; */
-    height: calc(100vh - 70px);
+    /* height: calc(85vh - 70px); */
     background-color: #fff;
     border-radius: 15px;
     width: 250px;
