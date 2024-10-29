@@ -40,7 +40,7 @@
 
         <tfoot id="tfoot">
             <tr>
-                <th colspan="4">Total</th>
+                <th colspan="1">Total</th>
                 <th colspan="1">KSH. {{number_format($withdrawalsTotal)}}</th>
             </tr>
         </tfoot>
