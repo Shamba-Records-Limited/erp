@@ -24,7 +24,7 @@
                         <div class="form-row">
                             <div class="form-group col-lg-4 col-md-6 col-12">
                                 <label for="cooperative_id">Cooperative</label>
-                                <select name="cooperative_id" id="cooperative_id" class="form-control select2bs4 {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
+                                <select name="cooperative_id" id="cooperative_id" class="form-control form-select {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
                                     <option value="">-- Select Cooperative --</option>
                                     @foreach($cooperatives as $coop)
                                     <option value="{{$coop->id}}">{{$coop->name}}</option>
