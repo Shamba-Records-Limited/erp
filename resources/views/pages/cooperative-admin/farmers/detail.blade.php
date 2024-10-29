@@ -82,18 +82,31 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $totalQuantity = 0;
+                    @endphp
                     @foreach($farmerCollections as $key => $collection)
+                    @php
+                    $totalQuantity += $collection->quantity;
+                    @endphp
                     <tr>
-                        <td>{{++$key}}</td>
-                        <td>{{$collection->collection_number}}</td>
-                        <td>{{$collection->lot_number}}</td>
-                        <td>{{$collection->name}}</td>
-                        <td>{{$collection->quantity}} KG</td>
-                        <td>{{$collection->date_collected}}</td>
+                        <td>{{ ++$key }}</td>
+                        <td>{{ $collection->collection_number }}</td>
+                        <td>{{ $collection->lot_number }}</td>
+                        <td>{{ $collection->name }}</td>
+                        <td>{{ $collection->quantity }} KG</td>
+                        <td>{{ $collection->date_collected }}</td>
                         <td></td>
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="text-right">Total:</th>
+                        <th>{{ number_format($totalQuantity) }} KG</th>
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         @endif

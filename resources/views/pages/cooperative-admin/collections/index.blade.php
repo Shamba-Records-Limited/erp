@@ -229,19 +229,27 @@ $collection_time_options = config('enums.collection_time');
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            $totalQuantity = 0;
+                            @endphp
                             @foreach($collections as $key => $collection)
+                            @php
+                            $totalQuantity += $collection->quantity;
+                            @endphp
                             <tr>
-                                <td>{{++$key }}</td>
-                                <td>{{$collection->collection_number}}</td>
-                                <td>{{$collection->lot_number}}</td>
+                                <td>{{ ++$key }}</td>
+                                <td>{{ $collection->collection_number }}</td>
+                                <td>{{ $collection->lot_number }}</td>
                                 <td>
-                                    <a href="{{route('cooperative-admin.farmers.detail', $collection->farmer_id)}}">{{$collection->first_name}}
-                                        {{$collection->other_names}} - {{$collection->member_no}}</a>
+                                    <a href="{{ route('cooperative-admin.farmers.detail', $collection->farmer_id) }}">
+                                        {{ $collection->first_name }} {{ $collection->other_names }} -
+                                        {{ $collection->member_no }}
+                                    </a>
                                 </td>
-                                <td>{{$collection->product_name}}</td>
-                                <td>{{$collection->quantity}}</td>
-                                <td>{{$collection->unit}}</td>
-                                <td>{{ $collection_time_options[$collection->collection_time]}}</td>
+                                <td>{{ $collection->product_name }}</td>
+                                <td>{{ number_format($collection->quantity) }}</td>
+                                <td>{{ $collection->unit }}</td>
+                                <td>{{ $collection_time_options[$collection->collection_time] }}</td>
                                 <td>
                                     <div class="btn-group dropdown">
                                         <button type="button" class="btn btn-default dropdown-toggle btn-sm"
@@ -258,12 +266,20 @@ $collection_time_options = config('enums.collection_time');
                             </tr>
                             @endforeach
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5" class="text-right">Total:</th>
+                                <th>{{ number_format($totalQuantity) }}</th>
+                                <th colspan="3"></th>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('plugin-scripts')
