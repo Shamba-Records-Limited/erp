@@ -36,7 +36,7 @@
 
                 <div class="col-md-8">
                     <div class="bio-data detail-card mb-4">
-                        <h4>Bio Data</h4>
+                        <h4 class="card-heading"><i class="fas fa-user-circle"></i> Bio Data</h4>
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-envelope"></i></span>
                             <span class="label">Email:</span>
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="economic-data detail-card mb-4">
-                        <h4>Economic Data</h4>
+                        <h4 class="card-heading"><i class="fas fa-chart-line"></i> Economic Data</h4>
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-id-card"></i></span>
                             <span class="label">ID Number:</span>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="production-data detail-card">
-                        <h4>Production Data</h4>
+                        <h4 class="card-heading"><i class="fas fa-seedling"></i> Production Data</h4>
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-tractor"></i></span>
                             <span class="label">Total Collection Quantity:</span>
@@ -102,6 +102,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
