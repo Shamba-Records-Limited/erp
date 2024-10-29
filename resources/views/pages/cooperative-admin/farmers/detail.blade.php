@@ -11,7 +11,7 @@
         <div class="container farmer-profile">
             <div class="row mt-4">
                 <div class="col-md-4 profile-info">
-                    <div class="profile-picture mb-3">
+                    <div class="profile-picture mb-3 position-relative">
                         @if($farmer->profile_picture)
                         <img src="{{ url('storage/' . $farmer->profile_picture) }}" alt="Profile Picture"
                             class="img-fluid rounded-circle">
@@ -19,15 +19,20 @@
                         <img src="{{ url('assets/images/avatar.png') }}" alt="Default Avatar"
                             class="img-fluid rounded-circle">
                         @endif
+                        <div class="online-status"></div> <!-- Add online status indicator -->
                     </div>
-                    <div class="info-card text-center p-3">
+                    <div class="info-card text-center p-3 shadow">
                         <h3 class="farmer-name">{{$farmer->first_name}} {{$farmer->other_names}}</h3>
-                        <div class="total-collection">
-                            <p>Total Collection Quantity</p>
+                        <div class="location-info">
+                            <i class="fas fa-map-marker-alt"></i> {{$farmer->county_name}}, {{$farmer->country_code}}
+                        </div>
+                        <div class="total-collection mt-3">
+                            <p>Total Collection</p>
                             <h4 class="font-weight-bold">{{$farmer->total_collection_quantity}} KG</h4>
                         </div>
                     </div>
                 </div>
+
 
                 <div class="col-md-8">
                     <div class="bio-data detail-card mb-4">
