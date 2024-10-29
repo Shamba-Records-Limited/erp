@@ -764,7 +764,7 @@ $cooperative = null;
                             <!-- Products Item -->
                             <li class="nav-item {{ active_class(['market-auction/products']) }}">
                                 <a class="nav-link" href="{{ route('miller-admin.marketplace-products') }}">
-                                    {{ __('Products') }}
+                                    {{ __('Raw Materials Market') }}
                                 </a>
                             </li>
                             <!-- Market Auction Item -->
@@ -824,7 +824,7 @@ $cooperative = null;
                         aria-expanded="{!! is_active_route(['miller-admin/inventory-auction*']) !!}"
                         aria-controls="navbar-auction">
                         <i class="ni ni-cart text-green"></i>
-                        <span class="nav-link-text">{{ __('Inventory Auction') }}</span>
+                        <span class="nav-link-text">{{ __('Sales Management/Auction') }}</span>
                     </a>
                     <div class="collapse {{ show_class(['miller-admin/inventory-auction*']) }}" id="navbar-auction">
                         <ul class="nav nav-sm flex-column">
