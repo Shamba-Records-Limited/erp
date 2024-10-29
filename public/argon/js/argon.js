@@ -1032,7 +1032,10 @@ var InventoryVsSalesChart = (function() {
             duration: 1000  // Animation duration in milliseconds
         },
         legend: {
-            display: true  // Display chart legend
+            display: true,  // Display chart legend
+            labels: {
+              fontColor: '#FFFFFF' // Set text color of legend labels to white
+          }
         },
         layout: {
             padding: {

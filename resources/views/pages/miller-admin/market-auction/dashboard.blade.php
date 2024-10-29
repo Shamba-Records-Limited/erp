@@ -15,7 +15,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Coffee In Marketplace</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Products Available</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['coffee_in_marketplace'] ?? '0' }}</span>
                                     <span class="small text-muted">KG</span>
                                 </div>
@@ -39,7 +39,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Dairy Products Sold</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Products Sold</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['dairy_products_sold'] ?? '0' }}</span>
                                     <span class="small text-muted">Units</span>
                                 </div>
@@ -63,7 +63,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Active Product Listings</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Value of Quantity Available</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['active_products'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
@@ -86,7 +86,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Orders Placed</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0">Value of Quantity Sold</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['orders_placed'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
