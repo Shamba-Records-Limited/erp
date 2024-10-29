@@ -824,7 +824,7 @@ $cooperative = null;
                         aria-expanded="{!! is_active_route(['miller-admin/inventory-auction*']) !!}"
                         aria-controls="navbar-auction">
                         <i class="ni ni-cart text-green"></i>
-                        <span class="nav-link-text">{{ __('Sales Management/Auction') }}</span>
+                        <span class="nav-link-text">{{ __('Sales Management') }}</span>
                     </a>
                     <div class="collapse {{ show_class(['miller-admin/inventory-auction*']) }}" id="navbar-auction">
                         <ul class="nav nav-sm flex-column">
