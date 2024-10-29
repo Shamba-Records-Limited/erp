@@ -52,7 +52,7 @@
                                     <div class="form-group col-lg-6">
                                         <label for="unit_id">Pricing Unit</label>
                                         <select name="unit_id" id="unit_id"
-                                            class="form-control select2bs4 {{ $errors->has('unit_id') ? ' is-invalid' : '' }}"
+                                            class="form-control form-select {{ $errors->has('unit_id') ? ' is-invalid' : '' }}"
                                             required>
                                             <option value="">-- Select Unit --</option>
                                             @foreach($units as $unit)
