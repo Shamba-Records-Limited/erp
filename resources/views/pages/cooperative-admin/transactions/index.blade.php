@@ -12,7 +12,7 @@
             <a class="btn btn-primary" href="{{route('cooperative-admin.transactions.view-add')}}">Add</a>
         </div>
         <div class="table-responsive p-2">
-            <table class="table table-hover dt">
+            <table class="table table-hover dt mb-3">
                 <thead>
                     <tr>
                         <th>Transaction Number</th>
@@ -25,7 +25,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $totalAmount = 0;
+                    @endphp
                     @foreach($transactions as $transaction)
+                    @php
+                    $totalAmount += $transaction->amount;
+                    @endphp
                     <tr>
                         <td>{{$transaction->transaction_number}}</td>
                         <td>{{$transaction->subject}}</td>
@@ -45,20 +51,24 @@
                         </td>
                         <td>
                             <div class="btn-group dropdown">
-                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button type="button" class="btn btn-default dropdown-toggle btn-sm"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
+                                    <a class="text-primary dropdown-item"
+                                        href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> View Details
                                     </a>
                                     @if($transaction->status == 'PENDING')
-                                    <a class="text-success dropdown-item" href="{{route('cooperative-admin.transactions.complete', $transaction->id )}}">
+                                    <a class="text-success dropdown-item"
+                                        href="{{route('cooperative-admin.transactions.complete', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> Complete
                                     </a>
                                     @endif
                                     @if($transaction->status == 'COMPLETE')
-                                    <button class="text-info dropdown-item" onclick="printReceipt('{{$transaction->id}}')">
+                                    <button class="text-info dropdown-item"
+                                        onclick="printReceipt('{{$transaction->id}}')">
                                         <i class="fa fa-edit"></i> Print Receipt
                                     </button>
                                     @endif
@@ -68,6 +78,13 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="4" class="text-right">Total:</th>
+                        <th>KES {{ number_format($totalAmount, 2) }}</th> <!-- Total amount with two decimal places -->
+                        <th colspan="2"></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -78,18 +95,18 @@
 
 @push('custom-scripts')
 <script>
-    function printReceipt(transactionId){
-        $.ajax({
-            url: `/transaction-receipts/${transactionId}/print`,
-            method: 'GET',
-            success: function(resp) {
-                // alert(resp);
-                printContent(resp);
-            },
-            error: function(errResp) {
-                alert(errResp);
-            }
-        })
-    }
+function printReceipt(transactionId) {
+    $.ajax({
+        url: `/transaction-receipts/${transactionId}/print`,
+        method: 'GET',
+        success: function(resp) {
+            // alert(resp);
+            printContent(resp);
+        },
+        error: function(errResp) {
+            alert(errResp);
+        }
+    })
+}
 </script>
 @endpush
