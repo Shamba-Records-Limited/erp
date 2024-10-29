@@ -46,7 +46,7 @@
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{$product->id}}">
 
-                                <h6 class="mb-3">Pricing Details</h6>
+                                <h4 class="mb-3">Pricing Details</h4>
                                 <div class="row">
                                     <!-- Pricing Unit -->
                                     <div class="form-group col-lg-6">
