@@ -97,6 +97,7 @@ body {
 
     color: #18191b;
     background-color: #f8f9fe;
+    overflow-x: hidden;
 }
 
 [tabindex='-1']:focus {
