@@ -26,8 +26,8 @@ class TrackingTreeController extends Controller
 
     public function root_details(Request $request)
     {
-           
-        return response($elem, 200)->header('Content-Type', 'text/html');
+       
+        return response(200)->header('Content-Type', 'text/html');
     }
 
     public function root_identifier($root_type)
