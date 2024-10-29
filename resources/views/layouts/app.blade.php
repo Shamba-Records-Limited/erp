@@ -16,6 +16,9 @@
     <!-- Icons -->
     <link href="{{ asset('argon') }}/vendor/nucleo/css/nucleo.css" rel="stylesheet">
     <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        integrity="sha384-DyZUVKj1X+FE2C7x5fDc7gCmO5l6uhUwxMl4CvDPUh1vGcUuYu6bLBCa1rXGgB2" crossorigin="anonymous">
+
     <!-- Argon CSS -->
     <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/5.4.55/css/materialdesignicons.min.css">
@@ -26,7 +29,7 @@
 
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
-    
+
     <style>
     .skeleton {
 
@@ -127,10 +130,10 @@
     <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
     <!-- argon js -->
     <script src="{{ asset('argon') }}/js/argon.js"></script>
-@toastr_js
+    @toastr_js
     @toastr_render
     <script>
-    document.body.addEventListener('htmx:configRequest', (event) => {   
+    document.body.addEventListener('htmx:configRequest', (event) => {
         event.detail.headers['X-CSRF-TOKEN'] = document.querySelector('meta[name="_token"]')
             .content;
     });
