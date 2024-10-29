@@ -1796,7 +1796,9 @@ pre code {
 
 .table thead th {
     vertical-align: bottom;
-
+background-color: #f2f2f7; /* Light gray background for header */
+    color: #333; /* Darker text color for contrast */
+    font-weight: bold; /* Bold font for emphasis */
     border-bottom: 2px solid #e9ecef;
 }
 
