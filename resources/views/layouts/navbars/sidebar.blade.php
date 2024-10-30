@@ -758,27 +758,27 @@ $cooperative = null;
                 </li>
 
                 <!-- Marketplace Dropdown -->
-                <li class="nav-item {!! active_class(['miller-admin/market-auction/*']) !!}">
+                <li class="nav-item {{ request()->is('miller-admin/market-auction/*') ? 'active' : '' }}">
                     <a class="nav-link" href="#navbar-marketplace" data-toggle="collapse" role="button"
-                        aria-expanded="{!! is_active_route(['miller-admin/market-auction/*']) !!}"
+                        aria-expanded="{{ request()->is('miller-admin/market-auction/*') ? 'true' : 'false' }}"
                         aria-controls="navbar-marketplace">
                         <i class="ni ni-basket text-green"></i> {{ __('Marketplace') }}
                     </a>
-                    <div class="collapse {{ show_class(['miller-admin/market-auction/*']) }}" id="navbar-marketplace">
+                    <div class="collapse {{ request()->is('miller-admin/market-auction/*') ? 'show' : '' }}" id="navbar-marketplace">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ active_class(['market-auction/dashboard']) }}">
+                            <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.marketplace-dashboard') }}">
                                     {{ __('Dashboard') }}
                                 </a>
                             </li>
                             <!-- Products Item -->
-                            <li class="nav-item {{ active_class(['market-auction/products']) }}">
+                            <li class="nav-item {{ request()->is('market-auction/products') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.marketplace-products') }}">
                                     {{ __('Raw Materials Market') }}
                                 </a>
                             </li>
                             <!-- Market Auction Item -->
-                            <li class="nav-item {{ active_class(['miller-admin/market-auction/show']) }}">
+                            <li class="nav-item {{ request()->is('miller-admin/market-auction/show') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.market-auction.show') }}">
                                     {{ __('Market Auction') }}
                                 </a>
@@ -786,7 +786,6 @@ $cooperative = null;
                         </ul>
                     </div>
                 </li>
-
 
                 <li class="nav-item {{ active_class(['miller-admin/orders*']) }}">
                     <a class="nav-link" href="{{ route('miller-admin.orders.show') }}">
