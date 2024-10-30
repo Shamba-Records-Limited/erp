@@ -9,13 +9,19 @@
         <div class="header-body">
             <!-- Card stats -->
             <div class="row">
+                <!-- Card template example with adjustments -->
+                @php
+                    $cardHeight = '170px';  // Define a uniform height for all cards
+                    $h5FontSize = '0.9rem'; // Define a smaller font size for h5 titles
+                @endphp
+
                 <!-- Coffee In Marketplace -->
                 <div class="col-xl-3 col-lg-6">
-                    <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Products Available</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Available Stock</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['coffee_in_marketplace'] ?? '0' }}</span>
                                     <span class="small text-muted">KG</span>
                                 </div>
@@ -35,17 +41,17 @@
                 
                 <!-- Dairy Products Sold -->
                 <div class="col-xl-3 col-lg-6">
-                    <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Products Sold</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Sold Stock</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['dairy_products_sold'] ?? '0' }}</span>
                                     <span class="small text-muted">Units</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-boxes"></i> <!-- Updated icon for clarity -->
+                                        <i class="fas fa-boxes"></i>
                                     </div>
                                 </div>
                             </div>
@@ -59,11 +65,11 @@
                 
                 <!-- Active Product Listings -->
                 <div class="col-xl-3 col-lg-6">
-                    <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Value of Quantity Available</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Current Stock Value</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['active_products'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
@@ -82,11 +88,11 @@
                 
                 <!-- Orders Placed -->
                 <div class="col-xl-3 col-lg-6">
-                    <div class="card card-stats mb-4 mb-xl-0">
+                    <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0">Value of Quantity Sold</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Sales</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['orders_placed'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">

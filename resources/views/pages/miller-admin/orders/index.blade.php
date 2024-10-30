@@ -39,16 +39,19 @@
                         <td><a href="{{route('miller-admin.orders.detail', $order->id)}}">{{$order->batch_number}}</a></td>
                         <td>{{$order->cooperative->name}}</td>
                         @php
-                        if($order->deliveredQuantity == 0 || $order->quantity == 0) {
+                        $deliveredQuantity = $order->deliveredQuantity ?? 0;
+                        $totalQuantity = $order->quantity ?? 0;
+                        
+                        if($deliveredQuantity == 0 || $totalQuantity == 0) {
                             $percentage = 0;
                         } else {
-                            $percentage = number_format(($order->deliveredQuantity / $order->quantity) * 100, 1);
+                            $percentage = number_format(($deliveredQuantity / $totalQuantity) * 100, 1);
                         }
                         
-                        $orderStatus = $order->deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
-                        $statusClass = $order->deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
+                        $orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+                        $statusClass = $deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
                         @endphp
-                        <td>(<span class="text-{{$statusClass}}">{{$percentage}} %</span>) {{$order->deliveredQuantity}} / {{$order->quantity}} KGs </td>
+                        <td>{{ $deliveredQuantity }} / {{ $totalQuantity }} KGs (<span class="text-{{$statusClass}}">{{$percentage}}%</span>)</td>
                         <td class="text-{{$statusClass}}">{{$orderStatus}}</td>
                         <td></td>
                     </tr>

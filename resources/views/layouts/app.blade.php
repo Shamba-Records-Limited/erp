@@ -328,9 +328,13 @@
           <div class="wallet-info">
             <h5 class="card-title text-primary mb-2"><i class="fas fa-wallet"></i> Wallet</h5>
             <div class="d-flex align-items-center">
-              <p class="mb-0">Acc No: <span class="font-weight-bold text-dark">${wallet.acc_number}</span></p>
-              <span class="mx-3 text-muted">|</span>
-              <p class="mb-0">Balance: <span class="font-weight-bold text-success">KES ${balance}</span></p>
+                <p class="mb-0" style="font-size: 1.25rem; font-weight: 600;">Acc No: 
+                    <span class="font-weight-bold text-dark" style="font-size: 1.25rem;">${wallet.acc_number}</span>
+                </p>
+                <span class="mx-3 text-muted" style="font-size: 1.25rem;">|</span>
+                <p class="mb-0" style="font-size: 1.25rem; font-weight: 600;">Balance: 
+                    <span class="font-weight-bold text-success" style="font-size: 1.25rem;">KES ${balance}</span>
+                </p>
             </div>
           </div>
         </div>
