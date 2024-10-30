@@ -20303,9 +20303,10 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle {
 
 .wallet-info p {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     color: #495057;
 }
+
 
 @media (max-width: 768px) {
 
