@@ -10,32 +10,59 @@
         <div class="row">
             <!-- Left Section: Product Name and Category -->
             <div class="col-12 col-md-4">
-                <div class="card bg-light shadow border-0 rounded-3 mb-4">
-                    <div class="card-body p-4">
-                        <h5 class="card-title text-success mb-4 text-center">Product Details</h5>
-                        <div class="product-detail mb-3">
-                            <div class="d-flex align-items-center bg-white border rounded p-3">
-                                <i class="fas fa-box-open fa-2x text-primary me-3"></i>
+                <div class="card border-0 rounded-4 overflow-hidden" style="background: #F3F4F6;">
+                    <div class="card-body p-5">
+                        <div class="text-center mb-5">
+                            <h5 class="card-title">Product Overview</h5>
+                        </div>
+
+                        <div class=" product-detail mb-4 d-flex align-items-center justify-content-between bg-white
+                                border rounded-3 p-4 shadow-sm transition-shadow">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-container me-3"
+                                    style="width: 40px; height: 40px; border-radius: 50%; background:#4CAF50; display: flex; align-items: center; justify-content: center; margin-right:2px;">
+                                    <i class="fas fa-box-open text-white fa-lg" style="font-size: 1em;"></i>
+                                </div>
                                 <div>
-                                    <span class="font-weight-bold text-dark">Name:</span>
-                                    <span class="font-weight-normal ml-2"
-                                        style="color:#1B5E20; font-size: 1.1em;">{{$product->name}}</span>
+                                    <span class="font-weight-bold text-dark ml-2" style="font-size: 1.2em;">Product
+                                        Name:</span>
+                                    <span class="font-weight-normal ms-2 ml-1"
+                                        style="color: #1B5E20; font-size: 1.2rem;">{{$product->name}}</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="product-detail mb-3">
-                            <div class="d-flex align-items-center bg-white border rounded p-3">
-                                <i class="fas fa-tags fa-2x text-success me-3"></i>
+
+                        <div
+                            class="product-detail mb-4 d-flex align-items-center justify-content-between bg-white border rounded-3 p-4 shadow-sm transition-shadow">
+                            <div class="d-flex align-items-center">
+                                <div class="icon-container me-3"
+                                    style="width: 40px; height: 40px; border-radius: 50%; background: #FF9800; display: flex; align-items: center; justify-content: center; margin-right:2px;">
+                                    <i class="fas fa-tags text-white fa-lg" style="font-size: 1em;"></i>
+                                </div>
                                 <div>
-                                    <span class="font-weight-bold text-dark">Category:</span>
-                                    <span class="font-weight-normal ml-2"
-                                        style="color:#1B5E20; font-size: 1.1em;">{{$product->category_name}}</span>
+                                    <span class="font-weight-bold text-dark ml-2"
+                                        style="font-size: 1.2em;">Category:</span>
+                                    <span class="font-weight-normal ms-2 ml-1"
+                                        style="color: #1B5E20; font-size: 1.2em;">{{$product->category_name}}</span>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <span class="badge rounded-pill text-bg-info" style="font-size: 1.2em;">Ready to Set
+                                Prices</span>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <p class="text-muted" style="font-size: 1.1em;">Please ensure the details above are correct
+                                before adding pricing information.</p>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
 
 
             <!-- Right Section: Button and Form -->
