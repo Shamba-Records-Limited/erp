@@ -93,6 +93,11 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot id="tfoot">
+                    <tr>
+                        <th colspan="2">Total</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
