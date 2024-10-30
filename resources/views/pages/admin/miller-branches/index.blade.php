@@ -29,7 +29,7 @@
                             </div>
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="miller_id">Miller</label>
-                                <select name="miller_id" id="miller_id" class="form-control select2bs4 {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
+                                <select name="miller_id" id="miller_id" class="form-control form-select {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -- Select Miller --</option>
                                     @foreach($millers as $miller)
                                     <option value="{{$miller->id}}" @if(!empty(old('miller_id')) && old('miller_id') == $miller->id) selected @endif>{{$miller->name}}</option>
@@ -86,7 +86,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="county_id">Select County</label>
-                                <select name="county_id" id="county_id" class=" form-control select2bs4 {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                <select name="county_id" id="county_id" class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select County-</option>
                                     @foreach($counties as $county)
                                     <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id') == $county->id) selected @endif> {{ $county->name }}</option>
@@ -103,7 +103,7 @@
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="sub_county">Select Sub County</label>
-                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control select2bs4 {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
+                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select Sub County-</option>
 
                                     @if ($errors->has('sub_county_id'))
