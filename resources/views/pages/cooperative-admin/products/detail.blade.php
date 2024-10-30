@@ -8,45 +8,57 @@
 <div class="card shadow-lg">
     <div class="card-body">
         <div class="row">
-            <!-- Left Section: Product Name and Category with reduced width and updated background and text styling -->
-            <div class="col-12 col-md-3">
-                <h5 class="card-title text-primary mb-4">Product Details</h5>
-                <div class="mb-3">
-                    <div class="border rounded p-3" style="background-color: #F3F1F1;">
-                        <span class="font-weight-bold text-dark">Name:</span>
-                        <span class="font-weight-normal ml-2" style="color:#172B4D">{{$product->name}}</span>
-                    </div>
-                </div>
-                <div class=" mb-3">
-                    <div class="border rounded p-3" style="background-color: #F3F1F1;">
-                        <span class="font-weight-bold text-dark">Category:</span>
-                        <span class="font-weight-normal ml-2" style="color:#172B4D">{{$product->category_name}}</span>
+            <!-- Left Section: Product Name and Category -->
+            <div class="col-12 col-md-4">
+                <div class="card bg-light shadow border-0 rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-success mb-4 text-center">Product Details</h5>
+                        <div class="product-detail mb-3">
+                            <div class="d-flex align-items-center bg-white border rounded p-3">
+                                <i class="fas fa-box-open fa-2x text-primary me-3"></i>
+                                <div>
+                                    <span class="font-weight-bold text-dark">Name:</span>
+                                    <span class="font-weight-normal ml-2"
+                                        style="color:#1B5E20; font-size: 1.1em;">{{$product->name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product-detail mb-3">
+                            <div class="d-flex align-items-center bg-white border rounded p-3">
+                                <i class="fas fa-tags fa-2x text-success me-3"></i>
+                                <div>
+                                    <span class="font-weight-bold text-dark">Category:</span>
+                                    <span class="font-weight-normal ml-2"
+                                        style="color:#1B5E20; font-size: 1.1em;">{{$product->category_name}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Right Section: Button and Form -->
-            <div class="col-12 col-md-9 d-flex flex-column">
-                <!-- Button container with flexbox alignment to right -->
+            <div class="col-12 col-md-8 d-flex flex-column">
                 <div class="d-flex justify-content-end mb-3">
-                    <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse"
+                    <button type="button" class="btn btn-success btn-lg" data-toggle="collapse"
                         data-target="#addPricingAccordion"
                         aria-expanded="@if ($errors->count() > 0) true @else false @endif"
                         aria-controls="addPricingAccordion">
-                        <i class="mdi mdi-plus"></i> Add Product Pricing
+                        <i class="fas fa-plus-circle"></i> Add Product Pricing
                     </button>
                 </div>
 
-                <!-- Collapsible Pricing Form appears to the right -->
+                <!-- Collapsible Pricing Form -->
                 <div class="collapse @if($errors->count() > 0) show @endif" id="addPricingAccordion">
-                    <div class="card shadow-lg">
+                    <div class="card shadow-lg mb-4">
                         <div class="card-body">
                             <form action="{{ route('cooperative-admin.products.store_product_pricing') }}" method="post"
                                 enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="product_id" value="{{$product->id}}">
 
-                                <h4 class="mb-3">Pricing Details</h4>
+                                <h4 class="mb-3 text-success">Pricing Details</h4>
                                 <div class="row">
                                     <!-- Pricing Unit -->
                                     <div class="form-group col-lg-6">
@@ -69,7 +81,7 @@
 
                                     <!-- Min Quantity -->
                                     <div class="form-group col-lg-6">
-                                        <label for="min">Min</label>
+                                        <label for="min">Min Quantity</label>
                                         <input type="number" name="min"
                                             class="form-control {{ $errors->has('min') ? ' is-invalid' : '' }}" id="min"
                                             placeholder="Min Quantity" value="{{ old('min')}}" required>
@@ -82,7 +94,7 @@
 
                                     <!-- Max Quantity -->
                                     <div class="form-group col-lg-6">
-                                        <label for="max">Max</label>
+                                        <label for="max">Max Quantity</label>
                                         <input type="number" name="max"
                                             class="form-control {{ $errors->has('max') ? ' is-invalid' : '' }}" id="max"
                                             placeholder="Max Quantity" value="{{ old('max')}}">
@@ -122,13 +134,16 @@
                                     </div>
                                 </div>
 
-
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button type="submit" class="btn btn-primary">Submit Pricing</button>
+                                </div>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
         <!-- Pricing Table (unchanged) -->
         <div class="table-responsive mt-4">
