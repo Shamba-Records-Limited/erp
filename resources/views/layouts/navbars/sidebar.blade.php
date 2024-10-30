@@ -252,15 +252,15 @@ $cooperative = null;
                     <i class="ni ni-building text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
                 </a>
-                <div class="collapse" id="wetmills-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') || request()->routeIs('hr.branches.show') ? 'show' : '' }}" id="wetmills-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}</a>
+                            <a class="nav-link {{ request()->routeIs('hr.branches.show') ? 'active' : '' }}" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -273,15 +273,15 @@ $cooperative = null;
                     <i class="ni ni-single-02 text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Farmer / Suppliers CRM') }}</span>
                 </a>
-                <div class="collapse" id="farmers-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') || request()->routeIs('cooperative-admin.farmers.show') ? 'show' : '' }}" id="farmers-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.farmers.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.farmers.show') }}">
                                 {{ __('Farmers') }}
                             </a>
                         </li>
@@ -296,19 +296,20 @@ $cooperative = null;
                     <i class="ni ni-archive-2 text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
                 </a>
-                <div class="collapse" id="collections-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') || request()->routeIs('cooperative-admin.lots.show') || request()->routeIs('cooperative-admin.collections.show') ? 'show' : '' }}" id="collections-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.lots.show') }}">
-                                {{ __('Lots') }}</a>
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.lots.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.lots.show') }}">
+                                {{ __('Lots') }}
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.collections.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.collections.show') }}">
                                 {{ __('Collections') }}
                             </a>
                         </li>
@@ -323,42 +324,40 @@ $cooperative = null;
                     <i class="ni ni-money-coins text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
                 </a>
-                <div class="collapse" id="wallet-management">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.wallet-management.*') ? 'show' : '' }}" id="wallet-management">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link"
-                                href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-receivables') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
                                 {{ __('Account Receivables') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link"
-                                href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-payables') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
                                 {{ __('Account Payables') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.income') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.income') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.income') }}">
                                 {{ __('Income') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.expenses') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.expenses') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.expenses') }}">
                                 {{ __('Expenses') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.deposits') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.deposits') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.deposits') }}">
                                 {{ __('Deposits') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.withdrawals') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
                                 {{ __('Withdrawals') }}
                             </a>
                         </li>
@@ -373,10 +372,10 @@ $cooperative = null;
                     <i class="ni ni-money-coins text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Products / Raw Materials') }}</span>
                 </a>
-                <div class="collapse" id="product-management">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.products.show') ? 'show' : '' }}" id="product-management">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.products.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.products.show') }}">
                                 <i class="ni ni-tag text-custom-green"></i> {{ __('Price-setup ') }}
                             </a>
                         </li>
