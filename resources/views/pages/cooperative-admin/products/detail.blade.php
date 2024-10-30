@@ -10,7 +10,7 @@
         <div class="row">
             <!-- Left Section: Product Name and Category -->
             <div class="col-12 col-md-4">
-                <div class="card border-0 rounded-4 overflow-hidden" style="background: #F3F4F6;">
+                <div class="card border-0 rounded-4 overflow-hidden" style="background: #F3F4F6; border-radius:15px;">
                     <div class="card-body p-5">
                         <div class="text-center mb-5">
                             <h5 class="card-title">Product Overview</h5>
