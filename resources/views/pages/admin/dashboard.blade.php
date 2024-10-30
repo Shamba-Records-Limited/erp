@@ -1,37 +1,129 @@
 @extends('layouts.app')
-
-@push('plugin-styles')
-<style>
-    .dashgrid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 10px;
-    }
-
-    .span-8 {
-        grid-column: span 8;
-    }
-
-    .span-4 {
-        grid-column: span 4;
-    }
-
-    .span-2 {
-        grid-column: span 2;
-    }
-
-    .span-6 {
-        grid-column: span 6;
-    }
-
-
-    .row-span-2 {
-        grid-row: span 2;
-    }
-</style>
+@push('js')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js">
+</script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 @endpush
 
 @section('content')
+@include('layouts.headers.cards')
+<div class="header bg-custom-green pb-8 pt-5 pt-md-5">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Collection Total Weight</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Farmer Count
+                                        <br>
+                                        <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["farmer_count"]}}</h3>
+                                        </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-chart-pie"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Collection Count</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["collection_count"]}}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                <span class="text-nowrap">Since yesterday</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Cooperatives Count</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["cooperatives_count"]}}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-percent"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Millers Count</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["collection_count"]}}</h3>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-percent"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+
+
 <div class="dashgrid">
     <div class="card span-8 row-span-2">
         <div class="card-body">
@@ -44,61 +136,8 @@
         </div>
     </div>
 
-    <div class="card border span-4">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-basket-outline" style="font-size: 35px;color: #4bc0c0;"></i>
-                </div>
-                <div>Collection Total Weight</div>
-            </div>
-            <h3 class="card-subtitle " id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</h3>
-        </div>
-    </div>
-
-    <div class="card span-2">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-account-group-outline" style="font-size: 30px;color: #36a2eb;"></i>
-                </div>
-                <div>
-                    Farmer Count
-                </div>
-
-            </div>
-            <h3 class="card-subtitle" id="farmerCount">{{$data["farmer_count"]}}</h3>
-        </div>
-    </div>
-
-    <div class="card span-2">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-basket-outline" style="font-size: 30px;color: #a57150;"></i>
-                </div>
-                <div>
-                    Collection Count
-                </div>
-            </div>
-            <h3 class="card-subtitle" id="collectionCount">{{$data["collection_count"]}}</h3>
-        </div>
-    </div>
-
-    <div class="card span-4">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-office-building" style="font-size: 30px;color: #ff6384;"></i>
-                </div>
-                <div>
-                    Cooperatives Count
-                </div>
-            </div>
-            <h3 class="card-subtitle" id="collectionCount">{{$data["cooperatives_count"]}}</h3>
-        </div>
-    </div>
-
+   
+              
 
 
     <div class="card span-8 row-span-2">
@@ -112,19 +151,7 @@
         </div>
     </div>
 
-    <div class="card span-4">
-        <div class="card-body">
-            <div class="card-title d-flex align-items-center">
-                <div class="mr-2">
-                    <i class="mdi mdi-factory" style="font-size: 30px;color: #c14a09;"></i>
-                </div>
-                <div>
-                    Millers Count
-                </div>
-            </div>
-            <h3 class="card-subtitle" id="collectionCount">{{$data["collection_count"]}}</h3>
-        </div>
-    </div>
+    
 
     <div class="card span-6" style="overflow-y: scroll; height:350px;">
         <div class="card-body">
