@@ -368,9 +368,20 @@ $cooperative = null;
 
             <!-- Products / Raw Materials -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
-                    <i class="ni ni-tag text-custom-green"></i> {{ __('Products / Raw Materials ') }}
+                <a class="nav-link active" href="#product-management" data-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="product-management">
+                    <i class="ni ni-money-coins text-custom-green"></i>
+                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Products / Raw Materials') }}</span>
                 </a>
+                <div class="collapse" id="product-management">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('cooperative-admin.products.show') }}">
+                                <i class="ni ni-tag text-custom-green"></i> {{ __('Price-setup ') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
 
             <!-- Transactions Reports -->
