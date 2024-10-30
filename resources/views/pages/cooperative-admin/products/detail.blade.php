@@ -122,10 +122,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Button at the bottom right of the form -->
-                                <div class="d-flex justify-content-end">
-                                    <button type="submit" class="btn btn-success">Add Pricing</button>
-                                </div>
+
                             </form>
                         </div>
                     </div>

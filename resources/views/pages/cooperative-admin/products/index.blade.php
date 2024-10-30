@@ -17,15 +17,23 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Category</th>
+                                <th>Actions</th> <!-- New column for actions -->
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($products as $key => $product)
                             <tr>
-                                <td>{{++$key }}</td>
-                                <td><a href="{{route('cooperative-admin.products.detail', $product->id)}}">{{$product->name }}</a></td>
-                                <td>{{$product->category_name}}</td>
+                                <td>{{ ++$key }}</td>
+                                <td><a
+                                        href="{{ route('cooperative-admin.products.detail', $product->id) }}">{{ $product->name }}</a>
                                 </td>
+                                <td>{{ $product->category_name }}</td>
+                                <td>
+                                    <a href="{{ route('cooperative-admin.products.detail', $product->id) }}"
+                                        class="btn btn-primary btn-sm">
+                                        <i class="mdi mdi-plus"></i> Add Pricing
+                                    </a>
+                                </td> <!-- Button to redirect to details -->
                             </tr>
                             @endforeach
                         </tbody>
