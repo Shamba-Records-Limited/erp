@@ -463,7 +463,7 @@ class FarmersController extends Controller
             $farmer->sub_county_id = $request->sub_county_id;
             $farmer->member_no = $request->member_no;
             $farmer->id_no = $request->id_no;
-            $farmer->member_no = $request->id_no;
+            $farmer->kra = $request->kra;
             $farmer->gender = $request->gender[0];
             $farmer->phone_no = $request->phone_no;
             $farmer->dob = $request->dob;
@@ -516,7 +516,6 @@ class FarmersController extends Controller
             LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
             WHERE f.id = :id;
         "), ["id" => $id]);
-
         $farmer = null;
         if (count($farmers) > 0) {
             $farmer = $farmers[0];
@@ -532,7 +531,6 @@ class FarmersController extends Controller
             WHERE c.farmer_id = :farmer_id;
         "), ["farmer_id" => $id]);
         
-
         return view('pages.cooperative-admin.farmers.detail', compact('farmer', 'tab', 'farmerCollections'));
     }
 

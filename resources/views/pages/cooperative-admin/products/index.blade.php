@@ -32,7 +32,7 @@
                                     <a href="{{ route('cooperative-admin.products.detail', $product->id) }}"
                                         class="btn btn-default btn-sm ">
                                         <i class="mdi mdi-plus"></i>
-                                        Set-up Price
+                                        Set Price
                                     </a>
                                 </td> <!-- Button to redirect to details -->
                             </tr>
