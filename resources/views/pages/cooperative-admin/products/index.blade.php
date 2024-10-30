@@ -30,8 +30,9 @@
                                 <td>{{ $product->category_name }}</td>
                                 <td>
                                     <a href="{{ route('cooperative-admin.products.detail', $product->id) }}"
-                                        class="btn btn-primary btn-sm">
-                                        <i class="mdi mdi-plus"></i> Set-up Price
+                                        class="btn btn-default btn-sm ">
+                                        <i class="mdi mdi-plus"></i>
+                                        Set-up Price
                                     </a>
                                 </td> <!-- Button to redirect to details -->
                             </tr>
