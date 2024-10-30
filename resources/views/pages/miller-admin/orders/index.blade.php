@@ -6,7 +6,6 @@
         color: #0F9D58;
     }
 </style>
-
 @endpush
 
 @section('content')
@@ -14,11 +13,12 @@
     <div class="card-body">
         <div class="card-title">Orders</div>
         <div class="d-flex justify-content-end">
-            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.orders.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.orders.export', 'xlsx')}}">
+                <span class="mdi mdi-file-excel"></span>Export Excel
             </a>
-            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.orders.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.orders.export', 'pdf')}}">
+                <span class="mdi mdi-file-pdf"></span>Export Pdf
             </a>
-
         </div>
         <div class="table-responsive">
             <table class="table table-hover dt clickable">
@@ -42,7 +42,7 @@
                         if($order->deliveredQuantity == 0 || $order->quantity == 0) {
                             $percentage = 0;
                         } else {
-                            $percentage = ($order->deliveredQuantity/$order->quantity) * 100;
+                            $percentage = number_format(($order->deliveredQuantity / $order->quantity) * 100, 1);
                         }
                         
                         $orderStatus = $order->deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
