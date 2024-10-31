@@ -557,5 +557,55 @@ class FarmersController extends Controller
             toastr()->error('Upload was  not successful');
             return redirect()->back()->with(['uploadErrors' => $uploadErrors]);
         }
+        
     }
+    public function edit_farmer($farmerId)
+    {
+        $farmer = Farmer::findOrFail($farmerId);
+        $coop = $farmer->user->cooperative_id;
+       
+        $countries = get_countries();
+        return view('pages.cooperative-admin.farmers.edit', compact('farmer', 'countries'));
+    }
+
+    public function update_farmer_profile(Request $request, $farmerId)
+    {
+        $this->validate($request, [
+            'country_id' => 'required|string',
+            'county' => 'required|string',
+            'sub_county' => 'required',
+            'id_no' => 'required|string',
+            'phone_no' => 'required|regex:/^[0-9]{12}$/|unique:farmers,phone_no',
+            'member_no' => 'required|string',
+            'kra' => 'required|string',
+            'first_name' => 'required|string',
+            'other_names' => 'required|string',
+            'user_email' => 'required|email',
+            'username' => 'required',
+            'dob' => 'required',
+            'gender' => 'required',
+            'farm_size' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+            'profile_picture' => "sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072",
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $user = User::findOrFail($farmerId);
+            $this->update_profile($user, $request);
+            $auth_user = Auth::user();
+
+          dd($user);
+            DB::commit();
+            toastr()->success("Profile updated successfully");
+            return redirect()->back();
+
+        } catch (Exception $ex) {
+            Log::error("Error occured: " . $ex->getMessage());
+            DB::rollBack();
+            toastr()->error("Oops! Error occurred");
+            return redirect()->back();
+        }
+    }
+
 }

@@ -81,6 +81,7 @@
                             <span class="label">Gender:</span>
                             <span class="value">{{$farmer->gender}}</span>
                         </div>
+
                     </div>
 
                     <div class="production-data detail-card">

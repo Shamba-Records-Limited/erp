@@ -211,7 +211,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.add');
     Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
         ->name('admin.farmers.detail');
-
+   
     // products
     Route::get('/products/dash', 'Admin\ProductsController@dash')
         ->name('admin.products.dash');
@@ -359,6 +359,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     Route::post('/farmers/import-bulk', 'CooperativeAdmin\FarmersController@import_bulk')
         ->name('cooperative-admin.farmers.import-bulk');
 
+    Route::get('/farmers/edit_farmer/{id}', 'CooperativeAdmin\FarmersController@edit_farmer')
+        ->name('cooperative-admin.farmers.edit_farmer');
 
     // lots
     Route::get('/lots', 'CooperativeAdmin\LotsController@index')
@@ -2727,4 +2729,3 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
-

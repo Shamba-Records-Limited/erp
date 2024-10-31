@@ -321,7 +321,7 @@ $countries = get_countries();
                                 <th>County</th>
                                 <th>Sub County</th>
                                 <th>Total Collections</th>
-                                <th></th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -336,7 +336,34 @@ $countries = get_countries();
                                 <td>{{$farmer->county_name}}</td>
                                 <td>{{$farmer->sub_county_name}}</td>
                                 <td>{{$farmer->total_collection_quantity}} KG</td>
-                                <td></td>
+                                <td>
+
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="text-info dropdown-item"
+                                                href="{{ route('cooperative-admin.farmers.detail', $farmer->id) }}">
+                                                <i class="fa fa-edit"></i>View Details
+                                            </a>
+                                            <a class="text-info dropdown-item"
+                                                href="{{ route('cooperative-admin.farmers.edit_farmer', $farmer->id) }}">
+                                                <i class="fa fa-edit"></i>Edit
+                                            </a>
+
+
+                                            @METHOD('DELETE')
+                                            <a onclick="return confirm('Sure to Delete?')"
+                                                href="/cooperative-admin/farmers/detail/delete/{{ $farmer->id }}"
+                                                class="text-danger dropdown-item">
+                                                <i class="fa fa-trash-alt"></i>Delete</a>
+
+                                        </div>
+
+                                    </div>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
