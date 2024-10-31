@@ -232,11 +232,6 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 </div>
             </div>
         </div>
-
-
-
-
-
     </div>
 
 

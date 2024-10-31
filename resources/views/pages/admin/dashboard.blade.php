@@ -17,11 +17,11 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Collection Total Weight</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</h3>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                                        <i class="fas fa-chart-bar"></i>
+                                        <i class="fas fa-weight-hanging"></i>
                                     </div>
                                 </div>
                             </div>
@@ -37,13 +37,12 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Farmer Count
-                                        <br>
-                                        <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["farmer_count"]}}</h3>
-                                        </div>
+                                    <h5 class="text-uppercase text-muted mb-0">Farmer Count</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="farmerCount">{{$data["farmer_count"]}}</span>
+                                </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                        <i class="fas fa-chart-pie"></i>
+                                        <i class="fas fa-user-friends"></i>
                                     </div>
                                 </div>
                             </div>
@@ -60,11 +59,11 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Collection Count</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["collection_count"]}}</h3>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionCount">{{$data["collection_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                                        <i class="fas fa-users"></i>
+                                        <i class="fas fa-box"></i>
                                     </div>
                                 </div>
                             </div>
@@ -81,32 +80,11 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Cooperatives Count</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["cooperatives_count"]}}</h3>
+                                    <span class="h2 font-weight-bold mb-0" id="cooperativesCount">{{$data["cooperatives_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-percent"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-6 pt-5">
-                    <div class="card card-stats mb-4 mb-xl-0">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Millers Count</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["collection_count"]}}</h3>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-percent"></i>
+                                        <i class="fas fa-people-carry"></i>
                                     </div>
                                 </div>
                             </div>
@@ -122,43 +100,50 @@
     </div>
 </div>
 
-
-
-<div class="dashgrid">
-    <div class="card span-8 row-span-2">
-        <div class="card-body">
-            <div class="card-title">
-                Collections Weight (KGs)
+<div class="row">
+    <div class="col-12 mb-5 pl-5 pr-5 mt--7">
+        <div class="card shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class=" mb-0">Collections Weight (KGs)</h2>
+                    </div>
+                </div>
             </div>
-            <div>
-                <canvas id="CollectionsBarChart" class="mb-4 mb-md-0" height="250"></canvas>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row pl-4 pr-4">
+    <div class="col-lg-6">
+        <div class="card" style="height: 100%;">
+            <div class="card-body">
+                <div class="col pb-2">
+                    <h2 class="mb-0">Collections Weight Per Cooperative (KGs)</h2>
+                </div>
+                <div>
+                    <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
+                </div>
             </div>
         </div>
     </div>
 
-   
-              
-
-
-    <div class="card span-8 row-span-2">
-        <div class="card-body">
-            <div class="card-title">
-                Collections Weight By Cooperatives (KGs)
-            </div>
-            <div>
-                <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-
-    
-
-    <div class="card span-6" style="overflow-y: scroll; height:350px;">
-        <div class="card-body">
-            <div class="card-title">Grade Distribution KGs</div>
-            <div class="row">
-                <div class="col-12 d-flex align-items-center">
-                    <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 200px;"></canvas>
+    <div class="col-lg-6 pt-2">
+        <div class="card" style="overflow-y: scroll; height: 500px;">
+            <div class="card-body">
+                <div class="col">
+                    <h2 class="mb-0">Grade Distribution KGs</h2>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex align-items-center">
+                        <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,26 +171,13 @@
             borderColor: 'rgba(75, 192, 192, 1)',
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
         }],
-        // labels: ["Male", "Female", "Other"]
     };
     let collectionsBarOptions = {
         animationEasing: "easeOutBounce",
-        animateScale: true,
         responsive: true,
         maintainAspectRatio: false,
         showScale: true,
-        legend: {
-            display: true
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }
-        }
-        // y axis is KGs
+        legend: { display: true },
     };
     let collectionsBarChart = new Chart(collectionsBarChartCanvas, {
         type: "line",
@@ -213,48 +185,50 @@
         options: collectionsBarOptions
     });
 
-    // coop collections chart
+    // cooperative collections chart
     let coopCollectionsArrData = @json($data['collections_by_cooperative']);
     let coopCollectionsLabels = [];
     let firstKey = Object.keys(coopCollectionsArrData)[0];
     if (coopCollectionsArrData.length != 0) {
         coopCollectionsLabels = coopCollectionsArrData[firstKey].map(c => c.x)
     }
-    let coopCollectionsBarChartCanvas = document.getElementById("CooperativeCollectionsLineChart")
+    let coopCollectionsBarChartCanvas = document.getElementById("CooperativeCollectionsLineChart");
+
+    // Generate a unique color for each cooperative line
+    const colors = [
+        'rgba(255, 99, 132, 0.8)',
+        'rgba(54, 162, 235, 0.8)',
+        'rgba(75, 192, 192, 0.8)',
+        'rgba(153, 102, 255, 0.8)',
+        'rgba(255, 159, 64, 0.8)'
+    ];
 
     let coopCollectionsBarData = {
-        labels: collectionsLabels,
+        labels: coopCollectionsLabels,
         datasets: [],
-        // labels: ["Male", "Female", "Other"]
     };
+
+    let colorIndex = 0;
     for (let key in coopCollectionsArrData) {
         let coopCollections = coopCollectionsArrData[key];
-        let values = coopCollections.map(c => c.y)
+        let values = coopCollections.map(c => c.y);
+        let color = colors[colorIndex % colors.length];
         coopCollectionsBarData.datasets.push({
             label: key,
             data: values,
+            borderColor: color,
+            backgroundColor: color.replace('0.8', '0.3'), // Transparent background
+            fill: false
         });
+        colorIndex++;
     }
-
 
     let coopCollectionsBarOptions = {
         animationEasing: "easeOutBounce",
-        animateScale: true,
         responsive: true,
         maintainAspectRatio: false,
         showScale: true,
-        legend: {
-            display: true
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }
-        }
-        // y axis is KGs
+        legend: { display: true },
     };
     let coopCollectionsBarChart = new Chart(coopCollectionsBarChartCanvas, {
         type: "line",
@@ -284,17 +258,7 @@
         responsive: true,
         maintainAspectRatio: true,
         showScale: true,
-        legend: {
-            display: false
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
-            }
-        }
+        legend: { display: false },
     };
     let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
         type: "horizontalBar",
