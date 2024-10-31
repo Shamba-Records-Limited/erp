@@ -129,10 +129,19 @@ class OrdersController extends Controller
                 $draft_delivery = $draft_deliveries[0];
             }
         }
+// Calculate delivered and pending counts
+    $deliveredCount = DB::table('auction_order_delivery')
+        ->where('order_id', $id)
+        ->whereNotNull('published_at')
+        ->count();
+
+    $pendingCount = DB::table('auction_order_delivery')
+        ->where('order_id', $id)
+        ->whereNull('published_at')
+        ->count();
 
 
-
-        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items', 'totalInOrder', 'aggregateGradeDistribution'));
+        return view('pages.cooperative-admin.orders.detail', compact('order', 'tab', 'action', 'orderItems', 'orderDeliveries', 'units', 'draft_delivery', 'draft_delivery_items', 'totalInOrder', 'aggregateGradeDistribution','deliveredCount','pendingCount' ));
     }
 
     public function add_delivery_item(Request $request, $order_id)
