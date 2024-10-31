@@ -379,8 +379,14 @@ $cooperative = null;
                                 <i class="ni ni-tag text-custom-green"></i> {{ __('Price-setup ') }}
                             </a>
                         </li>
+                        <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('cooperative-admin.stock-levels.index') ? 'active' : '' }}" href="{{ route('cooperative-admin.stock-levels.index') }}">
+                    <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
+                </a>
+            </li>
                     </ul>
                 </div>
+             
             </li>
 
             <!-- Transactions Reports -->

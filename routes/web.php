@@ -337,6 +337,10 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
 
     Route::post('/products/product-pricing', 'CooperativeAdmin\ProductsController@store_product_pricing')
         ->name('cooperative-admin.products.store_product_pricing');
+     
+    // Stock Levels Routes
+    Route::get('/stock-levels', 'CooperativeAdmin\StockLevelsController@index')->name('cooperative-admin.stock-levels.index');
+    Route::get('/stock-levels/{productId}', 'CooperativeAdmin\StockLevelsController@show')->name('cooperative-admin.stock-levels.show');    
 
     // farmers
     Route::get('/farmers-mini-dashboard', 'CooperativeAdmin\FarmersController@farmer_mini_dashboard')
