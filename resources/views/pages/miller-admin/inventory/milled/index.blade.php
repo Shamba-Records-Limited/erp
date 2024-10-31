@@ -8,11 +8,11 @@
 $units = config('enums.units')
 @endphp
 @if($isGrading == "1")
-<div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; min-height: 100vh;">
+<div style="position: absolute; z-index: 1050; background-color: rgba(34, 34, 34, 0.2); width: 100vw; min-height: 100vh;">
     <div class="container-fluid h-100 w-100">
         <div class="row h-100">
             <div class="col"></div>
-            <div class="col-6 card h-100">
+            <div class="col-6 card h-100 pr-10">
                 <div class="card-header">
                     <div class="card-title position-relative">
                         <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?is_creating_final_product=0">
@@ -51,16 +51,15 @@ $units = config('enums.units')
 @endif
 @endsection
 
-
 @section('content')
 <div class="card">
     <div class="card-body">
         <div class="card-title">Milled Inventory</div>
 
         <div class="d-flex justify-content-end">
-            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.milled-inventory.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+            <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.milled-inventory.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Export Excel
             </a>
-            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.milled-inventory.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+            <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.milled-inventory.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span> Export PDF
             </a>
         </div>
 
@@ -78,6 +77,11 @@ $units = config('enums.units')
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $totalQuantity = 0;
+                        $totalMilledQuantity = 0;
+                        $totalWasteQuantity = 0;
+                    @endphp
                     @foreach($milledInventories as $key => $inventory)
                     <tr>
                         <td>{{$key+1}}</td>
@@ -93,27 +97,39 @@ $units = config('enums.units')
                                 </button>
                                 <div class="dropdown-menu">
                                     <a class="text-primary dropdown-item" href="{{route('miller-admin.milled-inventory.detail', $inventory->id )}}">
-                                        <i class="fa fa-edit"></i>View Details
+                                        <i class="fa fa-edit"></i> View Details
                                     </a>
                                     <a class="text-warning dropdown-item" href="?is_grading=1&milled_inventory_id={{$inventory->id}}">
-                                        <i class="fa fa-edit"></i>Grade The Coffee
+                                        <i class="fa fa-edit"></i> Grade The Coffee
                                     </a>
                                 </div>
                             </div>
                         </td>
                     </tr>
+                    @php
+                        $totalQuantity += $inventory->milled_quantity + $inventory->waste_quantity;
+                        $totalMilledQuantity += $inventory->milled_quantity;
+                        $totalWasteQuantity += $inventory->waste_quantity;
+                    @endphp
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-right">Total</th>
+                        <th>{{ $totalQuantity }} KG</th>
+                        <th>{{ $totalMilledQuantity }} KG</th>
+                        <th>{{ $totalWasteQuantity }} KG</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 </div>
 @endsection
 
-
 @push('plugin-scripts')
 @endpush
-
 
 @push('custom-scripts')
 @endpush
