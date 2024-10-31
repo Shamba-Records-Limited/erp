@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('content')
@@ -9,6 +8,23 @@
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
+            <div class="container my-5">
+                <div class="row">
+                    <!-- Number of Miller Branches Card -->
+                    <div class="col-md-4 col-12 mb-4">
+                        <div class="card shadow-lg border-0 rounded">
+                            <div class="card-header text-center bg-gradient-success text-white">
+                                <h5 class="font-weight-bold mb-0">Number of Miller Branches</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 id="branch-count" class="font-weight-bold text-success display-4">0</h2>
+                                <p class="font-weight-bold text-muted">Unique Branches</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card-body">
                 <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addComapnyAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addComapnyAccordion"><span class="mdi mdi-plus"></span>Add Miller Branch
                 </button>
@@ -18,7 +34,6 @@
                             <h4>Register Miller Branch</h4>
                         </div>
                     </div>
-
 
                     <form action="{{ route('admin.miller-branches.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -113,8 +128,6 @@
                                     @endif
                                 </select>
                             </div>
-
-
                         </div>
                         <div class="form-row">
                             <div class="form-group col-lg-3 col-md-6 col-12">
@@ -172,24 +185,27 @@
         if (!shouldDelete) {
             return
         }
-
         window.location = "/admin/cooperative/setup/delete/" + id
     }
-    $("#county_id").change(function(e) {
-        $("#sub_county_id").value = "";
-        $("#sub_county_id").empty();
 
+    $("#county_id").change(function(e) {
+        $("#sub_county_id").val("");
+        $("#sub_county_id").empty();
         $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
 
         let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
-        let filteredSubCounties = []
         for (let subCounty of subCounties) {
-            console.log(subCounty)
             if (subCounty.county_id == e.target.value) {
-                elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`
-                $("#sub_county_id").append(elem)
+                let elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`;
+                $("#sub_county_id").append(elem);
             }
         }
+    });
+
+    // Update Number of Miller Branches dynamically from DataTable
+    $(document).ready(function() {
+        const branchesCount = $('.dt').DataTable().page.info().recordsTotal;
+        $('#branch-count').text(branchesCount);
     });
 </script>
 @endpush

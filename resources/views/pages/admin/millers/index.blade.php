@@ -1,19 +1,40 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
-
 @endpush
 
 @section('content')
 @php
 $countries = get_countries();
 @endphp
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="container my-5">
+                <div class="row">
+                    <!-- Number of Millers Card -->
+                    <div class="col-md-4 col-12 mb-4">
+                        <div class="card shadow-lg border-0 rounded">
+                            <div class="card-header text-center bg-gradient-success text-white">
+                                <h5 class="font-weight-bold mb-0">Number of Millers</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 id="miller-count" class="font-weight-bold text-success display-4">0</h2>
+                                <p class="font-weight-bold text-muted">Unique Millers</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse"
+                <button type="button" class="btn btn-primary btn-fw btn-sm float-left" data-toggle="collapse"
                     data-target="#addComapnyAccordion"
                     aria-expanded="@if ($errors->count() > 0) true @else false @endif"
                     aria-controls="addComapnyAccordion"><span class="mdi mdi-plus"></span>Add Miller
@@ -24,7 +45,6 @@ $countries = get_countries();
                             <h4>Register Miller</h4>
                         </div>
                     </div>
-
 
                     <form action="{{ route('admin.millers.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
@@ -139,7 +159,6 @@ $countries = get_countries();
                                     id="miller_email" placeholder="info@abc.com" value="{{ old('miller_email')}}"
                                     required>
 
-
                                 @if ($errors->has('miller_email'))
                                 <span class="help-block text-danger">
                                     <strong>{{ $errors->first('miller_email')  }}</strong>
@@ -159,7 +178,6 @@ $countries = get_countries();
                                 </span>
                                 @endif
                             </div>
-
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="miller_logo">Logo</label>
@@ -307,6 +325,12 @@ $("#county_id").change(function(e) {
             $("#sub_county_id").append(elem)
         }
     }
+});
+
+// Update Number of Millers dynamically from DataTable
+$(document).ready(function() {
+    const millersCount = $('.dt').DataTable().page.info().recordsTotal;
+    $('#miller-count').text(millersCount);
 });
 </script>
 @endpush
