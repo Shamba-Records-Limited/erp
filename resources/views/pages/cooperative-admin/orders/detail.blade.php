@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap">
 @endpush
+@push('js')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+
+@endpush
+
 
 @section('topItem')
 @if($action == 'add_delivery')
@@ -106,20 +111,35 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h5>Order Details</h5>
-        <div class="info-box">
-            Batch Number: <strong>{{$order->batch_number}}</strong>
-        </div>
-        <div class="aggregate-info">
-            <div>Total: <strong>{{$totalInOrder}}KG</strong></div>
-            <button class="btn btn-toggle" data-toggle="collapse" data-target="#aggregateDistribution" aria-controls="aggregateDistribution">
-                <i class="mdi mdi-chevron-down"></i>
-            </button>
-            <div class="collapse" id="aggregateDistribution">
-                <h6>Grading Distribution</h6>
-                @foreach ($aggregateGradeDistribution as $distribution)
-                <div>{{$distribution->total}}KG of {{ $distribution->grade }}</div>
-                @endforeach
+        <h4 class="card-title">Order Details</h4>
+        <div class="row ">
+            <!-- Left Column: Batch Info and Grade Distribution -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Order Details</h5>
+                        <div class="info-box">
+                            Batch Number: <strong>{{$order->batch_number}}</strong>
+                        </div>
+                        <div class="aggregate-info">
+                            <h6>Grading Distribution</h6>
+                            @foreach ($aggregateGradeDistribution as $distribution)
+                                <div>{{$distribution->total}}KG of {{ $distribution->grade }}</div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Pie Chart -->
+            <div class="col-md-6 ml-10" >
+                    <!-- Pie Chart Section -->
+                <div class="chart" style="width:200px; height:200px;">
+                    <h5>Delivery Status</h5>
+                    <canvas id="deliveryStatusChart" class=chart-canvas></canvas>
+                </div>
+
+
             </div>
         </div>
         <ul class="nav nav-tabs">
@@ -187,16 +207,28 @@
                             <div class="text-warning">Not Approved</div>
                             @endif
                         </td>
-                        <td class="d-flex">
+                        <td>
                             @if(is_null($delivery->published_at))
-                            <a title="publish" href="?tab=deliveries&action=add_delivery" class="btn btn-outline-primary mr-1"><i class="mdi mdi-check-all"></i></a>
-                            <form action="{{route('cooperative-admin.order-delivery.discard-delivery-draft', $delivery->id)}}" method="POST">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                                <button title="discard" class="btn btn-outline-danger" onclick="return confirm('This will permanently delete changes')"><i class="mdi mdi-delete-forever-outline"></i></button>
-                            </form>
+                            <div class="btn-group dropdown">
+                                <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="text-success dropdown-item" href="?tab=deliveries&action=add_delivery">
+                                        <i class="mdi mdi-check-all"></i> Publish
+                                    </a>
+                                    <form action="{{ route('cooperative-admin.order-delivery.discard-delivery-draft', $delivery->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        {{ method_field('DELETE') }}
+                                        <a onclick="event.preventDefault(); this.closest('form').submit();" class="text-danger dropdown-item">
+                                            <i class="mdi mdi-delete-forever-outline"></i> Discard
+                                        </a>
+                                    </form>
+                                </div>
+                            </div>
                             @endif
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
@@ -208,9 +240,11 @@
 @endsection
 
 @push('plugin-scripts')
+
 @endpush
 
 @push('custom-scripts')
+
 <script>
  $("#addDeliveryItemForm [name='order_item_id']").change(function(e) {
     let rawOrderItems = $(this).attr("data-orderitems");
@@ -224,7 +258,48 @@
     }
 });
 
+
 </script>
+<script>
+    var deliveredCount = {{ $deliveredCount }};
+    var pendingCount = {{ $pendingCount }};
+    
+    var ctx = document.getElementById('deliveryStatusChart').getContext('2d');
+    var deliveryStatusChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Delivered', 'Pending'], 
+            datasets: [{
+                data: [deliveredCount, pendingCount],
+                backgroundColor: ['#4CAF50', '#FF9800'], 
+                hoverBackgroundColor: ['#45a049', '#f39c12']
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                
+                display: true,  
+
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Delivery Status'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
 @endpush
 
 <style>
