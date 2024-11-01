@@ -32,27 +32,11 @@
             <a href="{{route('admin.support.resolve-ticket', $ticket->number )}}" class="btn btn-primary">Resolve</a>
         </div>
         @endif
-        <div class="card-title mt-4">
-            Comments
-        </div>
-        <hr />
-        @if (count($comments) > 0)
-        @foreach ($comments as $comment)
-        <div class="border rounded p-2 mb-2">
-            <div class="d-flex justify-content-between align-items-start border-bottom p-2 text-muted">
-                <div>{{$comment->user_name}}</div>
-                <div>{{$comment->created_at}}</div>
+                            <div class="card-title mt-4">
+                Comments
             </div>
-            <div class="p-2">{{$comment->comment}}</div>
-        </div>
-        @endforeach
-        @else
-        <div class="alert alert-info">
-            No comments yet.
-        </div>
-        @endif
-        <hr />
-        <form action="{{route('admin.support.add-ticket-comment')}}" method="POST">
+            <hr />
+             <form action="{{route('admin.support.add-ticket-comment')}}" method="POST">
             @csrf
             <input type="hidden" name="ticket_id" value="{{$ticket->id}}" />
             <div class="form-group">
@@ -68,6 +52,45 @@
             </div>
 
         </form>
+            @if (count($comments) > 0)
+                @foreach ($comments as $comment)
+                    <div class="border rounded p-3 mb-3  shadow-lg"> <!-- Added bg-light and shadow for distinction -->
+                        <div class="d-flex">
+                            <!-- Left Section for User Info -->
+                            <div class="flex-shrink-0 me-3 p-5">
+                                <div class="font-weight-bold mb-3">{{ $comment->user_name }}</div>
+                                <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;"> <!-- Increased margin-bottom -->
+                                    <span class="badge mb-3 text-white" style="background-color:#EF6883;">User Role</span> <!-- Added badge with color -->
+                                </div>
+                                <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 0.5rem;">
+                                    {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
+                                </div>
+                            </div>
+                            
+                            <!-- Vertical Divider -->
+                            <div class="vr mx-3"></div> <!-- This adds a vertical line -->
+
+                            <!-- Right Section for Comment -->
+                            <div class="flex-grow-1">
+                                <div class="p-2 text-wrap">
+                                    <p class="m-0">{{ $comment->comment }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            @else
+                <div class="alert alert-info">
+                    No comments yet.
+                </div>
+            @endif
+
+
+
+
+       
+        <hr />
+       
     </div>
 </div>
 @endsection
@@ -77,3 +100,10 @@
 
 @push('custom-scripts')
 @endpush
+<style>
+ .vr {
+    border-left: 2px solid #ddd; /* Adjust the color and width as needed */
+    height: auto; /* Let it adjust automatically */
+    margin: 0 15px; /* Spacing around the line */
+}
+</style>

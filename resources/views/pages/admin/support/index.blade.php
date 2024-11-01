@@ -5,8 +5,104 @@
 @endpush
 
 @section('content')
+<div class="header bg-custom-green  pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row">
+                <!-- Card for each ticket status -->
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Open</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $ticketCounts['open'] }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                        <i class="fas fa-folder-open"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="row">
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">In Progress</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $ticketCounts['in_progress'] }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-spinner"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Answered</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $ticketCounts['answered'] }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">On Hold</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $ticketCounts['on_hold'] }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-pause-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 mb-4">
+                    <div class="card card-stats">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Closed</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $ticketCounts['closed'] }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-times-circle"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">

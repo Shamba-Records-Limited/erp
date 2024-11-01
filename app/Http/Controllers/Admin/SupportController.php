@@ -16,15 +16,27 @@ class SupportController extends Controller
         return $this->middleware('auth');
     }
 
-    public function index(){
-        $tickets = DB::select(DB::raw("
-            SELECT t.* FROM system_tickets t
-            WHERE t.status != 'draft'
-            ORDER BY t.created_at DESC
-        "));
+public function index()
+{
+    // Retrieve counts of tickets grouped by status
+    $ticketCounts = [
+        'open' => SystemTicket::where('status', 'open')->count(),
+        'in_progress' => SystemTicket::where('status', 'in_progress')->count(),
+        'answered' => SystemTicket::where('status', 'answered')->count(),
+        'on_hold' => SystemTicket::where('status', 'on_hold')->count(),
+        'closed' => SystemTicket::where('status', 'closed')->count(),
+    ];
 
-        return view("pages.admin.support.index", compact('tickets'));
-    }
+    // Retrieve all tickets except for those in 'draft' status for the main table
+    $tickets = SystemTicket::where('status', '!=', 'draft')
+        ->orderBy('created_at', 'DESC')
+        ->get();
+
+    // Pass both $ticketCounts and $tickets to the view
+    return view("pages.admin.support.index", compact('ticketCounts', 'tickets'));
+}
+
+
 
     public function view_ticket($ticket_number){
         $ticket = SystemTicket::where("number", $ticket_number)->first();
@@ -54,6 +66,27 @@ class SupportController extends Controller
         $comment->save();
 
         toastr()->success('Comment added successfully.');
+        return redirect()->back();
+    }
+    public function update_ticket_status(Request $request, $ticket_number)
+    {
+        $user_id = Auth::id();
+
+        // Validate that a valid status is provided
+        $request->validate([
+            'status' => 'required|in:open,in_progress,answered,on_hold,closed',
+        ]);
+
+        // Find the ticket by its number
+        $ticket = SystemTicket::where("number", $ticket_number)->first();
+
+        // Update the ticket status and who updated it
+        $ticket->status = $request->status;
+        $ticket->solved_at = $request->status === 'closed' ? now() : null; // Set solved_at only if status is closed
+        $ticket->solved_by_id = $user_id;
+        $ticket->save();
+
+        toastr()->success('Ticket status updated successfully.');
         return redirect()->back();
     }
 
