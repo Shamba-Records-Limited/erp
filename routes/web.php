@@ -127,6 +127,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/cooperative/setup/delete/{id}', 'CooperativeController@delete_company')->name('cooperative.setup.delete');
     Route::get('/cooperative/setup/deactivate/{id}', 'CooperativeController@deactivate_company')->name('cooperative.setup.deactivate');
     Route::get('/cooperative/setup/activate/{id}', 'CooperativeController@activate_company')->name('cooperative.setup.activate');
+    Route::get('/cooperatives/{id}', 'CooperativeController@showDetail')->name('cooperative.detail');
 
 
     //branches

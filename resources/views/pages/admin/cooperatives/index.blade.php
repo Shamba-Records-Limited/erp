@@ -293,7 +293,9 @@ $countries = get_countries();
 
                             <tr>
                                 <td>{{++$key }}</td>
-                                <td>{{$cop->name }} ({{$cop->abbreviation}})</td>
+                                <td>
+                                    <a href="{{ route('cooperative.detail', $cop->id) }}">{{$cop->name }} ({{$cop->abbreviation}})</a>
+                                </td>
                                 <td>{{$cop->email }}</td>
                                 <td>{{$cop->contact_details }}</td>
                                 <td> {{$cop->country_code }}

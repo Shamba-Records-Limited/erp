@@ -428,4 +428,31 @@ class CooperativeController extends Controller
         toastr()->success("Deleted successfully");
         return redirect()->back();
     }
+
+ 
+public function showDetail($id)
+{
+    // Fetch the cooperative details
+    $cooperative = DB::table('cooperatives')->where('id', $id)->first();
+
+    // Fetch farmers associated with the cooperative
+    $farmers = DB::table('farmer_cooperative')
+        ->join('farmers', 'farmers.id', '=', 'farmer_cooperative.farmer_id')
+        ->join('users', 'users.id', '=', 'farmers.user_id')
+        ->where('farmer_cooperative.cooperative_id', $id)
+        ->select('farmers.id', 'farmers.member_no', 'users.username', 'users.first_name', 'users.other_names')
+        ->get();
+
+    // Check if the cooperative exists
+    if (!$cooperative) {
+        abort(404, 'Cooperative not found');
+    }
+
+    return view('pages.admin.cooperatives.detail', compact('cooperative', 'farmers'));
+}
+
+
+
+
+
 }
