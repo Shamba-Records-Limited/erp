@@ -8,8 +8,13 @@
                 <h4 class="mb-3">Cooperative Details: {{ $cooperative->name }}</h4>
                 <!-- Display cooperative information -->
                 <p><strong>Cooperative ID:</strong> {{ $cooperative->id }}</p>
-                <!-- Add other cooperative details as needed -->
 
+                <!-- Display Cooperative Admin Information -->
+                <h4 class="mt-4">Cooperative Admin Information</h4>
+                <p><strong>Name:</strong> {{ $admin->first_name }} {{ $admin->other_names }}</p>
+                <p><strong>Email:</strong> {{ $admin->email }}</p>
+                <p><strong>Username:</strong> {{ $admin->username }}</p>
+                
                 <h4 class="mt-5">Farmers in Cooperative</h4>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -37,15 +42,18 @@
                                             Actions
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="text-info dropdown-item" href="{{ route('admin.farmers.detail', $farmer->id) }}', $farmer->id) }}">
-                                                <i class="fa fa-edit"></i>View Details
-                                            </a>
                                             <a class="text-info dropdown-item" href="{{ route('admin.farmers.detail', $farmer->id) }}">
-                                                <i class="fa fa-edit"></i>Edit
+                                                <i class="fa fa-edit"></i> View Details
                                             </a>
-                                            @METHOD('DELETE')
-                                            <a onclick="return confirm('Sure to Delete?')" href="{{ route('admin.farmers.detail', $farmer->id) }}" class="text-danger dropdown-item">
-                                                <i class="fa fa-trash-alt"></i>Delete</a>
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                            <form style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <a onclick="return confirm('Sure to Delete?')" href="#" class="text-danger dropdown-item" onclick="this.closest('form').submit();">
+                                                    <i class="fa fa-trash-alt"></i> Delete
+                                                </a>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>

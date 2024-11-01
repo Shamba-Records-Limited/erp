@@ -443,13 +443,17 @@ public function showDetail($id)
         ->select('farmers.id', 'farmers.member_no', 'users.username', 'users.first_name', 'users.other_names')
         ->get();
 
+    // Fetch the cooperative admin details
+    $admin = DB::table('users')->where('cooperative_id', $id)->first(['first_name', 'other_names', 'email', 'username']);
+
     // Check if the cooperative exists
     if (!$cooperative) {
         abort(404, 'Cooperative not found');
     }
 
-    return view('pages.admin.cooperatives.detail', compact('cooperative', 'farmers'));
+    return view('pages.admin.cooperatives.detail', compact('cooperative', 'farmers', 'admin'));
 }
+
 
 
 
