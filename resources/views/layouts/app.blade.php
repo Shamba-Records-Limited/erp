@@ -66,6 +66,12 @@
     }
     </style>
     <script src="https://unpkg.com/htmx.org@1.9.3"></script>
+
+    <!-- Script to do away with error message on login page -->
+    <script>
+        const isAuthenticated = @json(Auth::check());
+    </script>
+
     @stack('style')
 
 </head>
@@ -343,30 +349,34 @@
   `;
     }
 
-    // Load wallet details via AJAX
-    $.ajax({
-        url: '{{route("wallet.details")}}',
-        method: 'get',
-        success: function(resp) {
-            if (resp.has_wallet) {
-                const wallets = resp.wallets;
-                const walletContainer = $("#wallet_cont");
+    // Do away with unauthenticated error on login page
+    $(document).ready(function() {
+        if (isAuthenticated) {
+            // Load wallet details via AJAX
+            $.ajax({
+                url: '{{ route("wallet.details") }}',
+                method: 'get',
+                success: function(resp) {
+                    if (resp.has_wallet) {
+                        const wallets = resp.wallets;
+                        const walletContainer = $("#wallet_cont");
 
-                // Clear existing content
-                walletContainer.empty();
+                        // Clear existing content
+                        walletContainer.empty();
 
-                // Append wallet elements
-                wallets.forEach((wallet) => {
-                    const walletElement = generateWalletElement(wallet);
-                    walletContainer.append(walletElement);
-                });
-            }
-        },
-        error: function(errResp) {
-            alert(errResp.responseText || "Failed to load wallet details.");
+                        // Append wallet elements
+                        wallets.forEach((wallet) => {
+                            const walletElement = generateWalletElement(wallet);
+                            walletContainer.append(walletElement);
+                        });
+                    }
+                },
+                error: function(errResp) {
+                    alert(errResp.responseText || "Failed to load wallet details.");
+                }
+            });
         }
     });
-
 
     function printContent(content) {
         var originalContent = document.body.innerHTML;

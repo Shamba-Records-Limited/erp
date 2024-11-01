@@ -21,13 +21,12 @@
                                     src="{{ asset('argon') }}/img/icons/common/google.svg"></span>
                             <span class="btn-inner--text">{{ __('Google') }}</span>
                         </a>
-                    </div>
+                    </div>  
                 </div> -->
                 <div class="card-body px-lg-5 py-lg-5">
                     <div class="text-center text-muted mb-4">
                         <small>
-                            <a href="{{ route('register') }}">{{ __('Create new account') }}</a>
-                            {{ __('OR Sign in with these credentials:') }}
+                            {{ __('Sign in with your credentials:') }}
                         </small>
                         <br>
 
@@ -82,7 +81,7 @@
                 </div>
             </div>
             <div class="row mt-3">
-                <div class="col-6">
+                <!-- <div class="col-6">
                     @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}" class="text-light">
                         <small>{{ __('Forgot password?') }}</small>
@@ -93,7 +92,7 @@
                     <a href="{{ route('register') }}" class="text-light">
                         <small>{{ __('Create new account') }}</small>
                     </a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
