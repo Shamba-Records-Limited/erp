@@ -43,7 +43,7 @@ class CooperativeController extends Controller
             SELECT p.id, p.name FROM products p;
         "));
 
-        return view('pages.admin.cooperatives', compact('cooperatives', 'counties', 'sub_counties', 'products'));
+        return view('pages.admin.cooperatives.index', compact('cooperatives', 'counties', 'sub_counties', 'products'));
     }
 
 
