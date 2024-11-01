@@ -112,36 +112,49 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Order Details</h4>
-        <div class="row ">
-            <!-- Left Column: Batch Info and Grade Distribution -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Order Details</h5>
-                        <div class="info-box">
-                            Batch Number: <strong>{{$order->batch_number}}</strong>
-                        </div>
-                        <div class="aggregate-info">
-                            <h6>Grading Distribution</h6>
+        <div class="container">
+    <div class="row justify-content-center mb-6">
+        <!-- Left Column: Order Details -->
+        <div class="col-md-5">
+            <div class="card order-details">
+                <div class="card-header text-center">
+                    <h5>Order Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="info-box">
+                        <strong>Batch Number:</strong> <span class="batch-number">{{$order->batch_number}}</span>
+                    </div>
+                    <div class="aggregate-info mt-3">
+                        <h6 class="text-muted">Grading Distribution</h6>
+                        <ul class="list-group">
                             @foreach ($aggregateGradeDistribution as $distribution)
-                                <div>{{$distribution->total}}KG of {{ $distribution->grade }}</div>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {{ $distribution->grade }}
+                                    <span class="badge " style="background-color:#FFD89D">{{ $distribution->total }} KG</span>
+                                </li>
                             @endforeach
-                        </div>
+                        </ul>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Column: Pie Chart -->
-            <div class="col-md-6 ml-10" >
-                    <!-- Pie Chart Section -->
-                <div class="chart" style="width:200px; height:200px;">
+        <!-- Right Column: Pie Chart -->
+        <div class="col-md-5">
+            <div class="card delivery-status">
+                <div class="card-header text-center">
                     <h5>Delivery Status</h5>
-                    <canvas id="deliveryStatusChart" class=chart-canvas></canvas>
                 </div>
-
-
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="deliveryStatusChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
+
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <a class="nav-link {{ $tab == 'items'?'active':'' }}" href="?tab=items">Items</a>
@@ -376,6 +389,58 @@
         gap: 10px;
         margin-top: 20px;
     }
+.container {
+    margin-top: 30px;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.order-details {
+    background-color: #f8f9fa;
+}
+
+.delivery-status {
+    background-color: #ffffff;
+}
+
+.info-box {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.batch-number {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.aggregate-info {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: none;
+}
+
+.list-group-item:hover {
+    background-color: #e9ecef;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
 
     /* Additional styles for buttons, etc. */
 </style>
