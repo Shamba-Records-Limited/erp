@@ -5,16 +5,33 @@
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="mb-3">Cooperative Details: {{ $cooperative->name }}</h4>
-                <!-- Display cooperative information -->
-                <p><strong>Cooperative ID:</strong> {{ $cooperative->id }}</p>
+                <div class="coop-info container-fluid mt-5">
+                    <div class="coop-header text-center">
+                        <h4 class="coop-title">Cooperative Details</h4>
+                        <p class="coop-name">{{ $cooperative->name }}</p>
+                    </div>
+                    
+                    <div class="coop-details card shadow mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary"><i class="fas fa-id-badge"></i> Cooperative ID</h5>
+                            <p class="card-text">{{ $cooperative->id }}</p>
+                        </div>
+                    </div>
 
-                <!-- Display Cooperative Admin Information -->
-                <h4 class="mt-4">Cooperative Admin Information</h4>
-                <p><strong>Name:</strong> {{ $admin->first_name }} {{ $admin->other_names }}</p>
-                <p><strong>Email:</strong> {{ $admin->email }}</p>
-                <p><strong>Username:</strong> {{ $admin->username }}</p>
-                
+                    <div class="admin-header text-center">
+                        <h4 class="admin-title">Cooperative Admin Information</h4>
+                    </div>
+                    
+                    <div class="admin-info card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title text-success"><i class="fas fa-user"></i> Admin Details</h5>
+                            <p class="card-text"><strong class="key-label">Name:</strong> {{ $admin->first_name }} {{ $admin->other_names }}</p>
+                            <p class="card-text"><strong class="key-label">Email:</strong> {{ $admin->email }}</p>
+                            <p class="card-text"><strong class="key-label">Username:</strong> {{ $admin->username }}</p>
+                        </div>
+                    </div>
+                </div>
+
                 <h4 class="mt-5">Farmers in Cooperative</h4>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -71,3 +88,72 @@
     </div>
 </div>
 @endsection
+<style>
+.coop-info {
+    max-width: 600px;
+    background: linear-gradient(135deg, #e2e2e2 30%, #ffffff 90%);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    margin: auto;
+}
+
+.coop-title {
+    font-size: 1rem;
+    color: #3e50b4;
+    margin-bottom: 5px;
+}
+
+.coop-name {
+    font-size: 1rem;
+    color: #1976d2;
+    font-weight: bold;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.2);
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.admin-header, .coop-header {
+    margin-bottom: 10px;
+}
+
+.admin-title, .coop-title {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #3e50b4;
+}
+
+.card-title {
+    font-size: 1rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+
+.key-label {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.card-title i {
+    margin-right: 8px;
+}
+
+
+
+</style>
