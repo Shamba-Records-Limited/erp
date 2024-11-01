@@ -208,7 +208,7 @@ class CooperativeController extends Controller
     {
         $countries = get_countries();
         $cooperative = Cooperative::find($request->id);
-        return view('pages.admin.cooperatives-update', compact('countries', 'cooperative'));
+        return view('pages.admin.cooperatives.update', compact('countries', 'cooperative'));
     }
 
     public function edit_company(Request $request)
