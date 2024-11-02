@@ -1,12 +1,13 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
+<!-- Add custom styles here if needed -->
 @endpush
 
 @section('content')
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
+        <div class="card shadow-sm p-4 mb-5 bg-white rounded">
             <div class="container my-5">
                 <div class="row">
                     <!-- Total Number of Warehouses Card -->
@@ -38,95 +39,85 @@
             </div>
 
             <div class="card-body">
-                <div>
-                    <button type="button" class="btn btn-primary btn-fw btn-sm" data-toggle="collapse" data-target="#addCollectionForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Add Warehouse
+                <div class="d-flex justify-content-between mb-3">
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#addWarehouseForm" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addWarehouseForm">
+                        <span class="mdi mdi-plus"></span> Add Warehouse
                     </button>
-                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.warehouses.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Download Excel Sheet
-                    </a>
-                    <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.warehouses.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Download PDF
-                    </a>
+                    <div>
+                        <a class="btn btn-primary btn-sm" href="{{route('miller-admin.warehouses.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Download Excel Sheet</a>
+                        <a class="btn btn-primary btn-sm" href="{{route('miller-admin.warehouses.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span> Download PDF</a>
+                    </div>
                 </div>
 
-                <div class="collapse @if ($errors->count() > 0) show @endif" id="addCollectionForm">
-                    <div class="row mt-5">
-                        <div class="col-lg-12 grid-margin stretch-card col-12">
-                            <h4>Add Warehouse</h4>
-                        </div>
+                <div class="collapse @if($errors->count() > 0) show @endif" id="addWarehouseForm">
+                    <div class="card p-4 mt-4 shadow-sm">
+                        <h4 class="text-primary mb-4">Add Warehouse</h4>
+                        <form action="{{ route('miller-admin.warehouses.store') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="name" class="font-weight-bold">Warehouse Name</label>
+                                    <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="Warehouse ABC" value="{{ old('name') }}" required>
+                                    @if ($errors->has('name'))
+                                    <div class="invalid-feedback">{{ $errors->first('name') }}</div>
+                                    @endif
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="location" class="font-weight-bold">Location</label>
+                                    <input type="text" name="location" class="form-control {{ $errors->has('location') ? ' is-invalid' : '' }}" id="location" placeholder="Nairobi" value="{{ old('location') }}" required>
+                                    @if ($errors->has('location'))
+                                    <div class="invalid-feedback">{{ $errors->first('location') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+                            <h5 class="text-primary mb-3">Warehouse Admin</h5>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="f_name" class="font-weight-bold">First Name</label>
+                                    <input type="text" name="f_name" class="form-control {{ $errors->has('f_name') ? ' is-invalid' : '' }}" id="f_name" placeholder="John" value="{{ old('f_name') }}" required>
+                                    @if ($errors->has('f_name'))
+                                    <div class="invalid-feedback">{{ $errors->first('f_name') }}</div>
+                                    @endif
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="o_names" class="font-weight-bold">Other Names</label>
+                                    <input type="text" name="o_names" class="form-control {{ $errors->has('o_names') ? ' is-invalid' : '' }}" id="o_names" placeholder="Doe" value="{{ old('o_names') }}" required>
+                                    @if ($errors->has('o_names'))
+                                    <div class="invalid-feedback">{{ $errors->first('o_names') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="u_name" class="font-weight-bold">Username</label>
+                                    <input type="text" name="u_name" class="form-control {{ $errors->has('u_name') ? ' is-invalid' : '' }}" id="u_name" placeholder="j_doe" value="{{ old('u_name') }}" required>
+                                    @if ($errors->has('u_name'))
+                                    <div class="invalid-feedback">{{ $errors->first('u_name') }}</div>
+                                    @endif
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="user_email" class="font-weight-bold">Email</label>
+                                    <input type="email" name="user_email" class="form-control {{ $errors->has('user_email') ? ' is-invalid' : '' }}" id="user_email" placeholder="johndoe@abc.com" value="{{ old('user_email') }}" required>
+                                    @if ($errors->has('user_email'))
+                                    <div class="invalid-feedback">{{ $errors->first('user_email') }}</div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary btn-block mt-3">Add Warehouse</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-
-                    <form action="{{ route('miller-admin.warehouses.store') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-row">
-                            <div class="form-group col-12">
-                                <h6 class="mb-3">Warehouse Details</h6>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="ABC" value="{{ old('name')}}" required>
-                                @if ($errors->has('name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="location">Location</label>
-                                <input type="text" name="location" class="form-control {{ $errors->has('location') ? ' is-invalid' : '' }}" value="{{ old('location')}}" id="location" placeholder="Nairobi" required>
-                                @if ($errors->has('location'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('location')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1">
-                        <h6 class="h6 mt-2">Warehouse Admin</h6>
-                        <div class="form-row">
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="f_name">First Name</label>
-                                <input type="text" name="f_name" class="form-control {{ $errors->has('f_name') ? ' is-invalid' : '' }}" id="f_name" placeholder="John" value="{{ old('f_name')}}" required>
-                                @if ($errors->has('f_name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('f_name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="o_name">Other Names</label>
-                                <input type="text" name="o_names" value="{{ old('o_names')}}" class="form-control {{ $errors->has('o_names') ? ' is-invalid' : '' }}" id="o_name" placeholder="Doe" required>
-                                @if ($errors->has('o_names'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('o_names')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="u_name">User Name</label>
-                                <input type="text" name="u_name" class="form-control {{ $errors->has('u_name') ? ' is-invalid' : '' }}" id="u_name" placeholder="j_doe" value="{{ old('u_name')}}" required>
-                                @if ($errors->has('u_name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('u_name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="user_email">Email</label>
-                                <input type="email" name="user_email" class="form-control {{ $errors->has('user_email') ? ' is-invalid' : '' }}" id="user_email" placeholder="johndoe@abc.com" value="{{ old('user_email')}}" required>
-                                @if ($errors->has('user_email'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('user_email')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
-                            </div>
-                        </div>
-                    </form>
                 </div>
             </div>
         </div>
@@ -136,7 +127,7 @@
 <!-- Warehouse Table -->
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
+        <div class="card shadow-sm p-4 mb-5 bg-white rounded">
             <div class="card-body">
                 <h4 class="card-title">Warehouses</h4>
                 <div class="table-responsive">
@@ -190,4 +181,3 @@
     });
 </script>
 @endpush
-
