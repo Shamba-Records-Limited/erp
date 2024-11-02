@@ -125,7 +125,7 @@
                                     <span class="h2 font-weight-bold mb-0" id="finalProductsCount">1,234</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
                                         <i class="fas fa-box"></i>
                                     </div>
                                 </div>
@@ -147,7 +147,7 @@
                                     <span class="h2 font-weight-bold mb-0" id="milledCoffeeQuantity">4,560 KG</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
                                         <i class="fas fa-coffee"></i>
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@
                                     <span class="h2 font-weight-bold mb-0" id="preMilledCoffeeQuantity">3,200 KG</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
                                         <i class="fas fa-seedling"></i>
                                     </div>
                                 </div>
@@ -191,7 +191,7 @@
                                     <span class="h2 font-weight-bold mb-0" id="productsAvailableCount">890</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
                                         <i class="fas fa-cube"></i>
                                     </div>
                                 </div>
@@ -213,7 +213,7 @@
                                     <span class="h2 font-weight-bold mb-0" id="totalSales">$12,345</span>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                    <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
                                         <i class="fas fa-dollar-sign"></i>
                                     </div>
                                 </div>
