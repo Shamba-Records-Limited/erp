@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Collection Total Weight</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Collection Total Quantity</h5>
                                     <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</span>
                                 </div>
                                 <div class="col-auto">
@@ -116,6 +116,115 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Number of Final Products</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="finalProductsCount">1,234</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 15%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Milled Coffee Quantity</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="milledCoffeeQuantity">4,560 KG</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="fas fa-coffee"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 10%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Pre-Milled Coffee Quantity</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="preMilledCoffeeQuantity">3,200 KG</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-seedling"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 8%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Number of Products Available</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="productsAvailableCount">890</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-cube"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 5%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6 pt-5">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-uppercase text-muted mb-0">Total Sales</h5>
+                                    <span class="h2 font-weight-bold mb-0" id="totalSales">$12,345</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div> 
         </div>
     </div>
@@ -128,7 +237,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                        <h2 class=" mb-0">Collections Weight (KGs)</h2>
+                        <h2 class=" mb-0">Collection Quantity (KGs)</h2>
                     </div>
                 </div>
             </div>
@@ -146,7 +255,7 @@
         <div class="card" style="height: 100%;">
             <div class="card-body">
                 <div class="col pb-2">
-                    <h2 class="mb-0">Collections Weight Per Cooperative (KGs)</h2>
+                    <h2 class="mb-0">Collection Quantity Per Cooperative (KGs)</h2>
                 </div>
                 <div>
                     <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
