@@ -12,7 +12,203 @@
 $gender_options = config('enums.employee_configs')['gender'];
 $marital_status_options = config('enums.employee_configs')['marital_status'];
 $countries = get_countries();
+
+
+// Convert array to collection if needed
+$officials = collect($officials);
+
+// Stats calculations
+$total_officials = $officials->count();
+$active_officials = $officials->where('status', \App\CoopEmployee::STATUS_ACTIVE)->count();
+$inactive_officials = $officials->where('status', \App\CoopEmployee::STATUS_DEACTIVATED)->count();
+$suspended_officials = $officials->whereIn('status', [
+\App\CoopEmployee::STATUS_SUSPENDED_WITH_PAY,
+\App\CoopEmployee::STATUS_SUSPENSION_WITHOUT_PAY
+])->count();
+
+// New stats
+$officials_by_gender = $officials->groupBy('gender')->map(function($group) {
+return $group->count();
+})->toArray();
+
+$officials_by_county = $officials->groupBy('county_name')->map(function($group) {
+return $group->count();
+})->toArray();
+
+$total_counties = count($officials_by_county);
+$total_cooperatives = $officials->groupBy('cooperative_id')->count();
+
+// Find max county
+$max_county = 0;
+$max_county_name = '';
+foreach ($officials_by_county as $county => $count) {
+if ($count > $max_county) {
+$max_county = $count;
+$max_county_name = $county;
+}
+}
 @endphp
+<div class="header bg-custom-green pb-5 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Gender Distribution</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        Male: {{ $officials_by_gender['Male'] ?? 0 }} <br>
+                                        Female: {{ $officials_by_gender['Female'] ?? 0 }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-genderless"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">County Coverage</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $total_counties }}/47</span>
+                                    <p class="text-muted mb-0">Counties Represented</p>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Cooperatives Coverage</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $total_cooperatives }}</span>
+                                    <p class="text-muted mb-0">Total Cooperatives</p>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Highest Officials Count</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $max_county }}</span>
+                                    <p class="text-muted mb-0">{{ $max_county_name }}</p>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-chart-bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Stats Section -->
+            <div class="row mt-3">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Total Officials</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $total_officials }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-user-friends"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Active Officials</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $active_officials }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Inactive Officials</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $inactive_officials }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-user-times"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Suspended Officials</h5>
+                                    <span class="h2 font-weight-bold mb-0">{{ $suspended_officials }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-user-lock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -480,5 +676,6 @@ $("#county_id").change(function(e) {
         }
     }
 });
+
 </script>
 @endpush
