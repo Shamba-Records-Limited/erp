@@ -1,109 +1,200 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 @endpush
 
 @section('content')
-<div class="card">
-    <div class="card-body">
-
-        <div class="d-flex justify-content-between align-items-start">
-            <h4 class="card-title">View Ticket: {{$ticket->number}}</h4>
-            @if ($ticket->status == "open")
-            <span class="badge badge-warning">Open</span>
-            @elseif ($ticket->status == "solved")
-            <span class="badge badge-success">Solved</span>
-            @elseif ($ticket->status == "closed")
-            <span class="badge badge-secondary">Closed</span>
-            @endif
-        </div>
-        <div>
-            @foreach (json_decode($ticket->labels) as $label)
-            <span class="border rounded p-1 mr-2">{{$label}}</span>
-            @endforeach
-        </div>
-        <div class="card-subtitle">{{$ticket->title}}</div>
-        <div class="card-text">
-            <p>{{$ticket->description}}</p>
-        </div>
-        @if ($ticket->status == "open")
-        <div>
-            <a href="{{route('admin.support.resolve-ticket', $ticket->number )}}" class="btn btn-primary">Resolve</a>
-        </div>
-        @endif
-                            <div class="card-title mt-4">
-                Comments
-            </div>
-            <hr />
-             <form action="{{route('admin.support.add-ticket-comment')}}" method="POST">
-            @csrf
-            <input type="hidden" name="ticket_id" value="{{$ticket->id}}" />
-            <div class="form-group">
-                <label for="comment">Comment</label>
-                <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="3"></textarea>
-
-                @if ($errors->has('comment'))
-                <span class="text-danger">{{$errors->first('comment')}}</span>
-                @endif
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </div>
-
-        </form>
-            @if (count($comments) > 0)
-                @foreach ($comments as $comment)
-                    <div class="border rounded p-3 mb-3  shadow-lg"> <!-- Added bg-light and shadow for distinction -->
-                        <div class="d-flex">
-                            <!-- Left Section for User Info -->
-                            <div class="flex-shrink-0 me-3 p-5">
-                                <div class="font-weight-bold mb-3">{{ $comment->user_name }}</div>
-                                <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;"> <!-- Increased margin-bottom -->
-                                    <span class="badge mb-3 text-white" style="background-color:#EF6883;">User Role</span> <!-- Added badge with color -->
-                                </div>
-                                <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 0.5rem;">
-                                    {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
-                                </div>
-                            </div>
-                            
-                            <!-- Vertical Divider -->
-                            <div class="vr mx-3"></div> <!-- This adds a vertical line -->
-
-                            <!-- Right Section for Comment -->
-                            <div class="flex-grow-1">
-                                <div class="p-2 text-wrap">
-                                    <p class="m-0">{{ $comment->comment }}</p>
-                                </div>
-                            </div>
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Main Ticket Card -->
+            <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                <!-- Ticket Header -->
+                <div class="card-header text-white p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="card-title">
+                            <h4 class="mb-1">#{{ $ticket->number }}</h4>
+                            <h5 class="mb-0 opacity-8">{{ $ticket->title }}</h5>
+                        </div>
+                        <div class="ticket-status">
+                            <span class="px-4 py-2 rounded-pill @if($ticket->status == 'open') bg-warning @elseif($ticket->status == 'solved') bg-success @else bg-secondary @endif text-white">
+                                <i class="fas @if($ticket->status == 'open') fa-exclamation-circle @elseif($ticket->status == 'solved') fa-check-circle @else fa-times-circle @endif"></i>
+                                {{ ucfirst($ticket->status) }}
+                            </span>
                         </div>
                     </div>
-                @endforeach
-            @else
-                <div class="alert alert-info">
-                    No comments yet.
                 </div>
-            @endif
 
+                <div class="card-body p-4">
+                    <!-- Labels -->
+                    <div class="mb-4">
+                        @php
+                            $labels = json_decode($ticket->labels);
+                        @endphp
 
+                        @if (is_array($labels) && !empty($labels))
+                            @foreach ($labels as $label)
+                                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
+                                    <i class="fas fa-tag mr-1"></i> {{ $label }}
+                                </span>
+                            @endforeach
+                        @else
+                            <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
+                                <i class="fas fa-tag mr-1"></i> No Labels
+                            </span>
+                        @endif
+                    </div>
 
+                    <!-- Ticket Description -->
+                    <div class="ticket-details p-4 rounded mb-4">
+                        <p class="mb-4">{{ $ticket->description }}</p>
+                    </div>
 
-       
-        <hr />
-       
+                    @if ($ticket->status == "open")
+                    <div class="text-center mb-4">
+                        <a href="{{ route('admin.support.resolve-ticket', $ticket->number) }}" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm">
+                            <i class="fas fa-check-circle mr-2"></i>Resolve Ticket
+                        </a>
+                    </div>
+                    @endif
+
+                    <!-- Comments Section -->
+                    <div class="comments-section mt-5">
+                        <h5 class="d-flex align-items-center mb-4">
+                            <i class="fas fa-comments text-primary mr-2"></i>
+                            <span>Discussion</span>
+                            <span class="badge badge-primary ml-2">{{ count($comments) }}</span>
+                        </h5>
+
+                        <div class="comments-container custom-scrollbar mb-4">
+                            @if (count($comments) > 0)
+                                @foreach ($comments as $comment)
+                                <div class="comment-card mb-4">
+                                    <div class="comment-header d-flex align-items-center mb-3">
+                                        <div class="comment-avatar">
+                                            <div class="avatar-circle">
+                                                {{ strtoupper(substr($comment->user_name, 0, 1)) }}
+                                            </div>
+                                        </div>
+                                        <div class="comment-meta ml-3">
+                                            <h6 class="mb-0 font-weight-bold">{{ $comment->user_name }}</h6>
+                                            <small class="text-muted">
+                                                <i class="far fa-clock mr-1"></i>
+                                                {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="comment-body">
+                                        {{ $comment->comment }}
+                                    </div>
+                                </div>
+                                @endforeach
+                            @else
+                                <div class="text-center py-5">
+                                    <i class="fas fa-comments text-muted fa-3x mb-3"></i>
+                                    <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Comment Form -->
+                        <div class="comment-form bg-light p-4 rounded-lg">
+                            <form action="{{ route('admin.support.add-ticket-comment') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
+                                <div class="form-group mb-4">
+                                    <label class="font-weight-bold mb-2">
+                                        <i class="fas fa-reply text-primary mr-2"></i>Add Your Response
+                                    </label>
+                                    <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="4" placeholder="Type your message here..." style="border-radius: 15px;"></textarea>
+                                    @if ($errors->has('comment'))
+                                    <div class="invalid-feedback">{{ $errors->first('comment') }}</div>
+                                    @endif
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary px-4 rounded-pill">
+                                        <i class="fas fa-paper-plane mr-2"></i>Send Response
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
-@push('plugin-scripts')
-@endpush
-
 @push('custom-scripts')
-@endpush
 <style>
- .vr {
-    border-left: 2px solid #ddd; /* Adjust the color and width as needed */
-    height: auto; /* Let it adjust automatically */
-    margin: 0 15px; /* Spacing around the line */
+.custom-scrollbar {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.comment-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background: #4e73df;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.ticket-details {
+    border-left: 4px solid #4e73df;
+    background-color: #ced4da54;
+}
+
+.opacity-8 {
+    opacity: 0.8;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+textarea.form-control:focus {
+    box-shadow: none;
+    border-color: #4e73df;
+}
+
+.btn-primary {
+    background: #4e73df;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background: #224abe;
+    transform: translateY(-1px);
 }
 </style>
+@endpush

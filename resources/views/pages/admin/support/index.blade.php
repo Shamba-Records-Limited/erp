@@ -3,6 +3,9 @@
 @push('plugin-styles')
 
 @endpush
+@php
+    use Illuminate\Support\Str;
+@endphp
 
 @section('content')
 <div class="header bg-custom-green  pt-5 pt-md-8">
@@ -114,7 +117,7 @@
                                 <th>#</th>
                                 <th>Number</th>
                                 <th>Ticket</th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -124,8 +127,11 @@
                                 <td>{{$ticket->number}}</td>
                                 <td>
                                     <div>{{$ticket->title}}</div>
-                                    <div>{{$ticket->description}}</div>
-                                </td>
+                                    <div>
+                                    
+                                    {{ Str::words($ticket->description, 7, '...') }}
+                                </div>                               
+                             </td>
                                 <td>
                                     <a href="{{route('admin.support.view-ticket', $ticket->number)}}" class="btn btn-sm btn-info"><i class="mdi mdi-eye"></i></a>
                                 </td>
