@@ -18,104 +18,152 @@ class SupportController extends Controller
     }
 
     public function index()
-    {
-        $user_id = Auth::id();
+{
+    $user_id = Auth::id();
 
-        $tickets = DB::select(DB::raw("
-            SELECT t.* FROM system_tickets t
-            WHERE t.created_by_id = '$user_id'
-                AND t.published_at IS NOT NULL
-            ORDER BY t.created_at DESC
+    // Adjust query to fetch all tickets created by the user, regardless of their published status
+    $tickets = DB::select(DB::raw("
+        SELECT t.* FROM system_tickets t
+        WHERE t.created_by_id = '$user_id'
+        ORDER BY t.created_at DESC
+    "));
+
+    return view("pages.cooperative-admin.support.index", compact('tickets'));
+}
+
+
+public function view_add_ticket()
+{
+    $user_id = Auth::id();
+
+    // Retrieve or create draft
+    $ticket = null;
+    try {
+        $ticket = DB::select(DB::raw("
+            SELECT * FROM system_tickets
+            WHERE created_by_id = '$user_id'
+                AND status='Draft'
+            ORDER BY created_at DESC
+            LIMIT 1
+        "))[0];
+    } catch (\Throwable $th) {
+        // Create new ticket
+        $now = Carbon::now();
+        $now_str = strtoupper($now->format('Ymd'));
+
+        // Get the highest existing ticket number for the user
+        $lastTicket = DB::select(DB::raw("
+            SELECT number FROM system_tickets
+            WHERE created_by_id = '$user_id'
+            ORDER BY created_at DESC
+            LIMIT 1
         "));
 
-        return view("pages.cooperative-admin.support.index", compact('tickets'));
-    }
-
-    public function view_add_ticket()
-    {
-        $user_id = Auth::id();
-
-        // retrieve or create draft
-        $ticket = null;
-        try {
-            $ticket = DB::select(DB::raw("
-                SELECT * FROM system_tickets
-                WHERE created_by_id = '$user_id'
-                    AND status='Draft'
-                ORDER BY created_at DESC
-                LIMIT 1
-            "))[0];
-        } catch (\Throwable $th) {
-            // create new ticket
-            $now = Carbon::now();
-            $now_str = strtoupper($now->format('Ymd'));
-
-            $totalTickets = DB::select(DB::raw("
-                SELECT COUNT(*) AS total FROM system_tickets
-                WHERE DATE(created_at) = CURDATE() 
-            "))[0]->total;
-
-            $ticket_number = "T$now_str-$totalTickets";
-
-            $ticket = new SystemTicket();
-            $ticket->number = $ticket_number;
-            $ticket->created_by_id = $user_id;
-            $ticket->save();
-
-            $ticket = DB::select(DB::raw("
-                SELECT * FROM system_tickets
-                WHERE created_by_id = '$user_id'
-                    AND status='Draft'
-                ORDER BY created_at DESC
-                LIMIT 1
-            "))[0];
+        // If there's a last ticket, extract the number and increment
+        $ticket_number = "T$now_str-1"; // Default to the first ticket number
+        if (!empty($lastTicket)) {
+            $lastNumber = (int)substr($lastTicket[0]->number, -1); // Assuming the format TYYYYMMDD-X
+            $ticket_number = "T$now_str-" . ($lastNumber + 1);
         }
 
-        return view("pages.cooperative-admin.support.add_ticket", compact('ticket'));
-    }
-
-    public function add_ticket(Request $request)
-    {
-        $request->validate([
-            "ticket_number" => "required",
-        ]);
-
-        $ticket = SystemTicket::where("number", $request->ticket_number)->first();
-        $ticket->title = $request->title;
-        $ticket->description = $request->description;
-        $ticket->labels = $request->labels;
+        $ticket = new SystemTicket();
+        $ticket->number = $ticket_number;
+        $ticket->created_by_id = $user_id;
         $ticket->save();
+
+        $ticket = DB::select(DB::raw("
+            SELECT * FROM system_tickets
+            WHERE created_by_id = '$user_id'
+                AND status='Draft'
+            ORDER BY created_at DESC
+            LIMIT 1
+        "))[0];
     }
 
-    public function publish_ticket(Request $request)
-    {
-        $request->validate([
-            "number" => "required",
-            "title" => "required",
-            "description" => "required",
-            "labels" => "sometimes"
-        ]);
+    return view("pages.cooperative-admin.support.add_ticket", compact('ticket'));
+}
 
-        $ticket = SystemTicket::where("number", $request->number)->first();
-        if (!$ticket) {
-            toastr()->error('Ticket not found.');
-            return response()->json([
-                "success" => false
-            ]);
+
+public function add_ticket(Request $request)
+{
+    $request->validate([
+        "ticket_number" => "required",
+        "subject" => "required|string",
+        "module" => "nullable|string",
+        "submodule" => "nullable|string",
+        "link" => "nullable|url",          // Separate 'link' validation
+        "description" => "required|string",
+        "labels" => "sometimes|nullable|string",
+        "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Image validation
+    ]);
+
+    $ticket = SystemTicket::where("number", $request->ticket_number)->first() ?: new SystemTicket();
+
+    // Process the image upload
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('ticket_images', 'public');
+        $ticket->image = $imagePath; // Save image path
+    }
+
+    // Set other ticket fields
+    $ticket->title = $request->subject;
+    $ticket->module = $request->module;
+    $ticket->submodule = $request->submodule;
+    $ticket->link = $request->link;   // Store only the link here
+    $ticket->description = $request->description;
+    $ticket->labels = $request->labels;
+    $ticket->status = 'Draft';
+    $ticket->created_by_id = Auth::id();
+    $ticket->save();
+
+    return response()->json(['success' => true, 'message' => 'Ticket saved successfully.']);
+}
+
+
+public function publish_ticket(Request $request)
+{
+    $request->validate([
+        "number" => "required",
+        "subject" => "required|string",
+        "module" => "nullable|string",
+        "submodule" => "nullable|string",
+        "link" => "nullable|url",
+        "description" => "required|string",
+        "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Add validation for image
+    ]);
+
+    $ticket = SystemTicket::where("number", $request->number)->first();
+    if (!$ticket) {
+        return response()->json(["success" => false, "message" => 'Ticket not found.']);
+    }
+
+   // Process the image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('ticket_images', 'public');
+            \Log::info('Image uploaded:', ['path' => $imagePath]);
+            $ticket->image = $imagePath; // Store the image path
         }
+    // Update other ticket fields
+    $ticket->title = $request->subject;
+    $ticket->module = $request->module;
+    $ticket->submodule = $request->submodule;
+    $ticket->link = $request->link;
+    $ticket->description = $request->description;
 
-        $ticket->title = $request->title;
-        $ticket->description = $request->description;
-        $ticket->labels = $request->labels;
-        $ticket->status = "open";
-        $ticket->published_at = Carbon::now();
-        $ticket->save();
+    $ticket->status = "open";
+    $ticket->published_at = Carbon::now();
+    $ticket->save();
 
-        toastr()->success('Ticket published successfully.');
-    }
+    return response()->json(["success" => true, "message" => "Ticket published successfully."]);
+}
 
-    public function view_ticket($ticket_number){
+
+
+
+    public function view_ticket($ticket_number)
+    {
         $ticket = SystemTicket::where("number", $ticket_number)->first();
+    \Log::info('Ticket Data:', ['ticket' => $ticket]);
 
         $comments = DB::select(DB::raw("
             SELECT c.*, u.username AS user_name FROM system_ticket_comment c
@@ -132,7 +180,7 @@ class SupportController extends Controller
         $user_id = Auth::id();
         $request->validate([
             "ticket_id" => "required",
-            "comment" => "required",
+            "comment" => "required|string",
         ]);
 
         $comment = new SystemTicketComment();

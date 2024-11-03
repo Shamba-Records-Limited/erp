@@ -5,14 +5,11 @@
 @endpush
 
 @section('content')
-<!-- <div class="container mt-4"> -->
 <div class="card shadow-sm border-light">
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-title font-weight-bold">View Ticket: <span class="text-primary">{{ $ticket->number }}</span>
-            </h4>
-            <span
-                class="badge @if($ticket->status == 'open') badge-warning @elseif($ticket->status == 'solved') badge-success @elseif($ticket->status == 'closed') badge-secondary @endif">
+            <h4 class="card-title font-weight-bold">View Ticket: <span class="text-primary">{{ $ticket->number }}</span></h4>
+            <span class="badge @if($ticket->status == 'open') badge-warning @elseif($ticket->status == 'solved') badge-success @elseif($ticket->status == 'closed') badge-secondary @endif">
                 {{ ucfirst($ticket->status) }}
             </span>
         </div>
@@ -24,16 +21,32 @@
         <div class="card-subtitle mb-2 text-muted font-italic">{{ $ticket->title }}</div>
         <div class="card-text">
             <p>{{ $ticket->description }}</p>
+            @if($ticket->module)
+            <p><strong class="semi-bold">Module:</strong> {{ $ticket->module }}</p>
+            @endif
+            @if($ticket->submodule)
+            <p><strong class="semi-bold">Submodule:</strong> {{ $ticket->submodule }}</p>
+            @endif
+            @if($ticket->link)
+            <p><strong class="semi-bold">Link:</strong> <a href="{{ $ticket->link }}">{{ $ticket->link }}</a></p>
+            @endif
+               @if($ticket->image)
+                <div class="mt-3">
+                    <strong>Uploaded Image:</strong>
+                    <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" class=" mt-2" style="width: 200px; height: 200px;">
+                </div>
+            @else
+                <p>No image available.</p>
+            @endif
+
+
         </div>
         @if ($ticket->status == "solved")
         <div class="mt-3">
-            <a href="{{ route('cooperative-admin.support.confirm-ticket-resolved', $ticket->number) }}"
-                class="btn btn-success">Confirm Resolved</a>
+            <a href="{{ route('cooperative-admin.support.confirm-ticket-resolved', $ticket->number) }}" class="btn btn-success">Confirm Resolved</a>
         </div>
         @endif
-        <div class="card-title mt-4 font-weight-bold">
-            Comments
-        </div>
+        <div class="card-title mt-4 font-weight-bold">Comments</div>
         <hr />
         @if (count($comments) > 0)
         @foreach ($comments as $comment)
@@ -56,9 +69,7 @@
             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
             <div class="form-group">
                 <label for="comment">Add a Comment</label>
-                <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="3"
-                    placeholder="Write your comment here..."></textarea>
-
+                <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="3" placeholder="Write your comment here..."></textarea>
                 @if ($errors->has('comment'))
                 <span class="text-danger">{{ $errors->first('comment') }}</span>
                 @endif
@@ -69,7 +80,6 @@
         </form>
     </div>
 </div>
-<!-- </div> -->
 @endsection
 
 @push('plugin-scripts')
