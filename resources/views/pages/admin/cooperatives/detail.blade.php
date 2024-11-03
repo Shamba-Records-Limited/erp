@@ -509,8 +509,8 @@
 }
 
 .member-avatar {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     background: var(--primary-color);
     border-radius: 10px;
     display: flex;
