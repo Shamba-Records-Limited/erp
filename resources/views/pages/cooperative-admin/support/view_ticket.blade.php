@@ -5,85 +5,255 @@
 @endpush
 
 @section('content')
-<div class="card shadow-sm border-light">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-            <h4 class="card-title font-weight-bold">View Ticket: <span class="text-primary">{{ $ticket->number }}</span></h4>
-            <span class="badge @if($ticket->status == 'open') badge-warning @elseif($ticket->status == 'solved') badge-success @elseif($ticket->status == 'closed') badge-secondary @endif">
-                {{ ucfirst($ticket->status) }}
-            </span>
-        </div>
-        <div class="mb-3">
-            @foreach (json_decode($ticket->labels) as $label)
-            <span class="badge badge-light border border-secondary  mr-2">{{ $label }}</span>
-            @endforeach
-        </div>
-        <div class="card-subtitle mb-2 text-muted font-italic">{{ $ticket->title }}</div>
-        <div class="card-text">
-            <p>{{ $ticket->description }}</p>
-            @if($ticket->module)
-            <p><strong class="semi-bold">Module:</strong> {{ $ticket->module }}</p>
-            @endif
-            @if($ticket->submodule)
-            <p><strong class="semi-bold">Submodule:</strong> {{ $ticket->submodule }}</p>
-            @endif
-            @if($ticket->link)
-            <p><strong class="semi-bold">Link:</strong> <a href="{{ $ticket->link }}">{{ $ticket->link }}</a></p>
-            @endif
-               @if($ticket->image)
-                <div class="mt-3">
-                    <strong>Uploaded Image:</strong>
-                    <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" class=" mt-2" style="width: 200px; height: 200px;">
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <!-- Main Ticket Card -->
+            <div class="card shadow-lg border-0 rounded-lg overflow-hidden">
+                <!-- Ticket Header -->
+                <div class="card-header  text-white p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="card-title">
+                            <h4 class="mb-1">#{{ $ticket->number }}</h4>
+                            <h5 class="mb-0 opacity-8">{{ $ticket->title }}</h5>
+                        </div>
+                        <div class="ticket-status">
+                            <span class="px-4 py-2 rounded-pill @if($ticket->status == 'open') bg-warning @elseif($ticket->status == 'solved') bg-success @else bg-secondary @endif text-white">
+                                <i class="fas @if($ticket->status == 'open') fa-exclamation-circle @elseif($ticket->status == 'solved') fa-check-circle @else fa-times-circle @endif"></i>
+                                {{ ucfirst($ticket->status) }}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            @else
-                <p>No image available.</p>
-            @endif
 
+                <div class="card-body p-4">
+                    <!-- Labels -->
+                    <div class="mb-4">
+                        @foreach (json_decode($ticket->labels) as $label)
+                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
+                            <i class="fas fa-tag mr-1"></i> {{ $label }}
+                        </span>
+                        @endforeach
+                    </div>
 
-        </div>
-        @if ($ticket->status == "solved")
-        <div class="mt-3">
-            <a href="{{ route('cooperative-admin.support.confirm-ticket-resolved', $ticket->number) }}" class="btn btn-success">Confirm Resolved</a>
-        </div>
-        @endif
-        <div class="card-title mt-4 font-weight-bold">Comments</div>
-        <hr />
-        @if (count($comments) > 0)
-        @foreach ($comments as $comment)
-        <div class="border rounded p-3 mb-3 shadow-sm">
-            <div class="d-flex justify-content-between align-items-start border-bottom pb-2 text-muted">
-                <div class="font-weight-bold">{{ $comment->user_name }}</div>
-                <div>{{ \Carbon\Carbon::parse($comment->created_at)->format('d M Y, H:i') }}</div>
+                    <!-- Ticket Details -->
+                    <div class="ticket-details  p-4 rounded mb-4">
+                        <p class=" mb-4">{{ $ticket->description }}</p>
+                        
+                        <div class="row">
+                            @if($ticket->module)
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-cube text-primary mr-2"></i>
+                                    <span class="font-weight-bold mr-2">Module:</span>
+                                    {{ $ticket->module }}
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($ticket->submodule)
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-cubes text-primary mr-2"></i>
+                                    <span class="font-weight-bold mr-2">Submodule:</span>
+                                    {{ $ticket->submodule }}
+                                </div>
+                            </div>
+                            @endif
+
+                            @if($ticket->link)
+                            <div class="col-12 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-link text-primary mr-2"></i>
+                                    <span class="font-weight-bold mr-2">Link:</span>
+                                    <a href="{{ $ticket->link }}" class="text-primary">{{ $ticket->link }}</a>
+                                </div>
+                            </div>
+                            @endif
+                        </div>
+
+                        @if($ticket->image)
+                        <div class="mt-4">
+                            <h6 class="font-weight-bold mb-3"><i class="fas fa-image text-primary mr-2"></i>Attached Image</h6>
+                            <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" class="img-fluid rounded-lg shadow-sm" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                        </div>
+                        @endif
+                    </div>
+
+                    @if ($ticket->status == "solved")
+                    <div class="text-center mb-4">
+                        <a href="{{ route('cooperative-admin.support.confirm-ticket-resolved', $ticket->number) }}" 
+                           class="btn btn-success btn-lg px-5 rounded-pill shadow-sm">
+                            <i class="fas fa-check-circle mr-2"></i>Confirm Resolution
+                        </a>
+                    </div>
+                    @endif
+
+                    <!-- Comments Section -->
+                    <div class="comments-section mt-5">
+                        <h5 class="d-flex align-items-center mb-4">
+                            <i class="fas fa-comments text-primary mr-2"></i>
+                            <span>Discussion</span>
+                            <span class="badge badge-primary ml-2">{{ count($comments) }}</span>
+                        </h5>
+
+                        <div class="comments-container custom-scrollbar mb-4">
+                            @if (count($comments) > 0)
+                                @foreach ($comments as $comment)
+                                <div class="comment-card @if($loop->first) first-comment @endif mb-4">
+                                    <div class="comment-header d-flex align-items-center mb-3">
+                                        <div class="comment-avatar">
+                                            <div class="avatar-circle">
+                                                {{ strtoupper(substr($comment->user_name, 0, 1)) }}
+                                            </div>
+                                        </div>
+                                        <div class="comment-meta ml-3">
+                                            <h6 class="mb-0 font-weight-bold">{{ $comment->user_name }}</h6>
+                                            <small class="text-muted">
+                                                <i class="far fa-clock mr-1"></i>
+                                                {{ \Carbon\Carbon::parse($comment->created_at)->format('d M Y, H:i') }}
+                                            </small>
+                                        </div>
+                                    </div>
+                                    <div class="comment-body">
+                                        {{ $comment->comment }}
+                                    </div>
+                                </div>
+                                @endforeach
+                            @else
+                                <div class="text-center py-5">
+                                    <i class="fas fa-comments text-muted fa-3x mb-3"></i>
+                                    <p class="text-muted">No comments yet. Be the first to comment!</p>
+                                </div>
+                            @endif
+                        </div>
+
+                        <!-- Comment Form -->
+                        <div class="comment-form bg-light p-4 rounded-lg">
+                            <form action="{{ route('cooperative-admin.support.add-ticket-comment') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
+                                <div class="form-group mb-4">
+                                    <label class="font-weight-bold mb-2">
+                                        <i class="fas fa-reply text-primary mr-2"></i>Add Your Response
+                                    </label>
+                                    <textarea name="comment" 
+                                              class="form-control @error('comment') is-invalid @enderror" 
+                                              rows="4" 
+                                              placeholder="Type your message here..."
+                                              style="border-radius: 15px;"></textarea>
+                                    @if ($errors->has('comment'))
+                                    <div class="invalid-feedback">{{ $errors->first('comment') }}</div>
+                                    @endif
+                                </div>
+                                <div class="text-right">
+                                    <button type="submit" class="btn btn-primary px-4 rounded-pill">
+                                        <i class="fas fa-paper-plane mr-2"></i>Send Response
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="p-2 mt-2">{{ $comment->comment }}</div>
         </div>
-        @endforeach
-        @else
-        <div class="alert alert-info">
-            <i class="fas fa-comments"></i> No comments yet.
-        </div>
-        @endif
-        <hr />
-        <form action="{{ route('cooperative-admin.support.add-ticket-comment') }}" method="POST">
-            @csrf
-            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}" />
-            <div class="form-group">
-                <label for="comment">Add a Comment</label>
-                <textarea name="comment" class="form-control @error('comment') is-invalid @enderror" rows="3" placeholder="Write your comment here..."></textarea>
-                @if ($errors->has('comment'))
-                <span class="text-danger">{{ $errors->first('comment') }}</span>
-                @endif
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Submit</button>
-            </div>
-        </form>
     </div>
 </div>
 @endsection
 
-@push('plugin-scripts')
-@endpush
-
 @push('custom-scripts')
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.ticket-status .rounded-pill {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.custom-scrollbar {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.comment-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.comment-card:hover {
+    transform: translateY(-2px);
+}
+
+.first-comment {
+    border-left: 4px solid #4e73df;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    background: #4e73df;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.comment-body {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-left: 53px;
+}
+
+.ticket-details {
+    border-left: 4px solid #4e73df;
+    background-color: #ced4da54;
+}
+
+.opacity-8 {
+    opacity: 0.8;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+textarea.form-control:focus {
+    box-shadow: none;
+    border-color: #4e73df;
+}
+
+.btn-primary {
+    background: #4e73df;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background: #224abe;
+    transform: translateY(-1px);
+}
+</style>
 @endpush
