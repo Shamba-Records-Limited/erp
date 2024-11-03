@@ -17,16 +17,16 @@ class SupportController extends Controller
         return $this->middleware('auth');
     }
 
-    public function index()
+
+public function index()
 {
     $user_id = Auth::id();
 
-    // Adjust query to fetch all tickets created by the user, regardless of their published status
-    $tickets = DB::select(DB::raw("
-        SELECT t.* FROM system_tickets t
-        WHERE t.created_by_id = '$user_id'
-        ORDER BY t.created_at DESC
-    "));
+    // Modified query to properly order tickets
+    $tickets = DB::table('system_tickets')
+        ->where('created_by_id', $user_id)
+        ->orderBy('created_at', 'DESC')
+        ->get();
 
     return view("pages.cooperative-admin.support.index", compact('tickets'));
 }
@@ -36,52 +36,36 @@ public function view_add_ticket()
 {
     $user_id = Auth::id();
 
-    // Retrieve or create draft
-    $ticket = null;
-    try {
-        $ticket = DB::select(DB::raw("
-            SELECT * FROM system_tickets
-            WHERE created_by_id = '$user_id'
-                AND status='Draft'
-            ORDER BY created_at DESC
-            LIMIT 1
-        "))[0];
-    } catch (\Throwable $th) {
-        // Create new ticket
-        $now = Carbon::now();
-        $now_str = strtoupper($now->format('Ymd'));
+    // Get the current date format
+    $now = Carbon::now();
+    $now_str = strtoupper($now->format('Ymd'));
 
-        // Get the highest existing ticket number for the user
-        $lastTicket = DB::select(DB::raw("
-            SELECT number FROM system_tickets
-            WHERE created_by_id = '$user_id'
-            ORDER BY created_at DESC
-            LIMIT 1
-        "));
+    // Get the highest ticket number for today
+    $lastTicket = DB::select(DB::raw("
+        SELECT number 
+        FROM system_tickets 
+        WHERE number LIKE 'T$now_str%'
+        ORDER BY number DESC 
+        LIMIT 1
+    "));
 
-        // If there's a last ticket, extract the number and increment
-        $ticket_number = "T$now_str-1"; // Default to the first ticket number
-        if (!empty($lastTicket)) {
-            $lastNumber = (int)substr($lastTicket[0]->number, -1); // Assuming the format TYYYYMMDD-X
-            $ticket_number = "T$now_str-" . ($lastNumber + 1);
-        }
-
-        $ticket = new SystemTicket();
-        $ticket->number = $ticket_number;
-        $ticket->created_by_id = $user_id;
-        $ticket->save();
-
-        $ticket = DB::select(DB::raw("
-            SELECT * FROM system_tickets
-            WHERE created_by_id = '$user_id'
-                AND status='Draft'
-            ORDER BY created_at DESC
-            LIMIT 1
-        "))[0];
+    // Generate new ticket number
+    $ticket_number = "T$now_str-1";
+    if (!empty($lastTicket)) {
+        $lastNumber = (int)substr($lastTicket[0]->number, strrpos($lastTicket[0]->number, '-') + 1);
+        $ticket_number = "T$now_str-" . ($lastNumber + 1);
     }
+
+    // Create new ticket
+    $ticket = new SystemTicket();
+    $ticket->number = $ticket_number;
+    $ticket->created_by_id = $user_id;
+    $ticket->status = 'Draft';
+    $ticket->save();
 
     return view("pages.cooperative-admin.support.add_ticket", compact('ticket'));
 }
+
 
 
 public function add_ticket(Request $request)

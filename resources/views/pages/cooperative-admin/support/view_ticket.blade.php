@@ -29,12 +29,22 @@
                 <div class="card-body p-4">
                     <!-- Labels -->
                     <div class="mb-4">
-                        @foreach (json_decode($ticket->labels) as $label)
-                        <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
-                            <i class="fas fa-tag mr-1"></i> {{ $label }}
-                        </span>
-                        @endforeach
-                    </div>
+                            @php
+                                $labels = json_decode($ticket->labels);
+                            @endphp
+
+                            @if (is_array($labels) && !empty($labels))
+                                @foreach ($labels as $label)
+                                    <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
+                                        <i class="fas fa-tag mr-1"></i> {{ $label }}
+                                    </span>
+                                @endforeach
+                            @else
+                                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill mr-2">
+                                    <i class="fas fa-tag mr-1"></i> No Labels
+                                </span>
+                            @endif
+                        </div>
 
                     <!-- Ticket Details -->
                     <div class="ticket-details  p-4 rounded mb-4">
