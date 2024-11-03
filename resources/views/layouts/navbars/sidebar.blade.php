@@ -84,7 +84,7 @@ $cooperative = null;
             </li>
         </ul>
     </div>
-    <div class="nav-items-wrapper">
+    <div class="nav-items-wrapper custom-scrollbar">
         <ul class="navbar-nav flex-column">
             <!-- Added flex-column to enforce vertical stacking -->
             @if($user && $user->hasRole('admin'))
@@ -1078,3 +1078,25 @@ $cooperative = null;
     </div>
     <!-- </div> -->
 </nav>
+
+<style>
+.custom-scrollbar {
+    /* max-height: 600px; */
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+</style>
