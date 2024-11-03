@@ -1,11 +1,163 @@
 @extends('layouts.app')
 
+
 @push('plugin-styles')
 
 @endpush
 
 @section('content')
 @if(auth()->user()->hasRole('admin'))
+<div class="header bg-custom-green pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <!-- Card stats -->
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Total Branches</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ is_array($branches) ? count($branches) : $branches->count() }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="mdi mdi-store stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                <span class="text-nowrap">Since yesterday</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Total Cooperatives</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ is_array($cooperatives) ? count($cooperatives) : $cooperatives->count() }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="mdi mdi-office-building stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem"> Counties Covered</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                       {{ is_array($counties) ? count($counties) : $counties->count() }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                       <i class="mdi mdi-map-marker stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem"> New Branches This Month</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                       {{ $branchesThisMonth }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-blue text-white rounded-circle shadow">
+                                       <i class="mdi mdi-calendar-clock stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- End Stats Section -->
+
+
+
+<!-- Cooperative Branch Distribution -->
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Branches per Cooperative</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Cooperative</th>
+                                <th>Number of Branches</th>
+                                <th>Counties Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $branchesCollection = collect($branches);
+                            $branchesPerCoop = $branchesCollection->groupBy('cooperative_id');
+                            @endphp
+                            @foreach($cooperatives as $coop)
+                            <tr>
+                                <td>{{ $coop['name'] }}</td>
+                                <td>
+                                    <span class="badge badge-primary" style="font-size:14px">
+                                        {{ $branchesPerCoop->get($coop['id'], collect())->count() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info" style="font-size:17px">
+                                        {{ $branchesPerCoop->get($coop['id'], collect())->unique('county_name')->count() }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">

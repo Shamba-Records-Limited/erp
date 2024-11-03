@@ -21,33 +21,83 @@ class CoopBranchController extends Controller
         return $this->middleware('auth');
     }
     //return branch view
-    public function index()
-    {
-        $branches = DB::select(DB::raw("
-                SELECT 
-                    b.*,
-                    c.name as coop_name,
-                    county.name as county_name,
-                    sub_county.name as sub_county_name
-                FROM coop_branches b
-                JOIN cooperatives c ON b.cooperative_id = c.id
-                LEFT JOIN counties county ON county.id = b.county_id
-                LEFT JOIN sub_counties sub_county ON sub_county.id = b.sub_county_id
-                WHERE b.deleted_at IS NULL
-                ORDER BY b.created_at DESC;
-            "));
+     public function index()
+{
+    // Get basic branch data
+    $branches = DB::select(DB::raw("
+        SELECT 
+            b.*,
+            c.name as coop_name,
+            county.name as county_name,
+            sub_county.name as sub_county_name
+        FROM coop_branches b
+        JOIN cooperatives c ON b.cooperative_id = c.id
+        LEFT JOIN counties county ON county.id = b.county_id
+        LEFT JOIN sub_counties sub_county ON sub_county.id = b.sub_county_id
+        WHERE b.deleted_at IS NULL
+        ORDER BY b.created_at DESC;
+    "));
 
-        $cooperatives = Cooperative::all();
+    // Add this calculation for branches registered this month
+    $branchesThisMonth = DB::select(DB::raw("
+        SELECT COUNT(*) as count 
+        FROM coop_branches 
+        WHERE MONTH(created_at) = MONTH(CURRENT_DATE())
+        AND YEAR(created_at) = YEAR(CURRENT_DATE())
+        AND deleted_at IS NULL
+    "))[0]->count;
 
-        $products = Product::all();
+    // Your existing code continues...
+    $branchesPerCooperative = DB::select(DB::raw("
+        SELECT 
+            c.id,
+            c.name as cooperative_name,
+            COUNT(b.id) as branch_count
+        FROM cooperatives c
+        LEFT JOIN coop_branches b ON c.id = b.cooperative_id
+        WHERE b.deleted_at IS NULL
+        GROUP BY c.id, c.name
+        ORDER BY branch_count DESC
+    "));
 
-        $counties = County::all();
-        $sub_counties = SubCounty::all();
+    $branchesPerCounty = DB::select(DB::raw("
+        SELECT 
+            county.name as county_name,
+            COUNT(b.id) as branch_count
+        FROM counties county
+        LEFT JOIN coop_branches b ON county.id = b.county_id
+        WHERE b.deleted_at IS NULL
+        GROUP BY county.id, county.name
+        ORDER BY branch_count DESC
+        LIMIT 5
+    "));
 
+    $performanceMetrics = [
+        'total_branches' => count($branches),
+        'total_cooperatives' => Cooperative::count(),
+        'total_counties' => County::count(),
+        'avg_branches_per_coop' => count($branches) / (Cooperative::count() ?: 1),
+        'most_active_county' => $branchesPerCounty[0]->county_name ?? 'N/A',
+        'branches_this_month' => $branchesThisMonth
+    ];
 
-        return view('pages.admin.branch.index', compact('branches', 'cooperatives', 'products', 'counties', 'sub_counties'));
-    }
+    $cooperatives = Cooperative::all();
+    $products = Product::all();
+    $counties = County::all();
+    $sub_counties = SubCounty::all();
 
+    return view('pages.admin.branch.index', compact(
+        'branches', 
+        'cooperatives', 
+        'products', 
+        'counties', 
+        'sub_counties',
+        'branchesPerCooperative',
+        'branchesPerCounty',
+        'performanceMetrics',
+        'branchesThisMonth'  // Add this line
+    ));
+}
     public function edit($id)
     {
         $coop = Auth::user()->cooperative->id;
