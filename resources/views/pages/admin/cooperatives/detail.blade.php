@@ -6,6 +6,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="coop-info container-fluid mt-5">
+                                            <p class="coop-logo">{{ $cooperative->logo }}</p>
+
                     <div class="coop-header text-center">
                         <h4 class="coop-title">Cooperative Details</h4>
                         <p class="coop-name">{{ $cooperative->name }}</p>
@@ -14,7 +16,10 @@
                     <div class="coop-details card shadow mb-4">
                         <div class="card-body">
                             <h5 class="card-title text-primary"><i class="fas fa-id-badge"></i> Cooperative ID</h5>
-                            <p class="card-text">{{ $cooperative->id }}</p>
+                            <p class="card-text"><strong class="key-label">Country:</strong>{{ $cooperative->country_code }}</p>
+                            <p class="card-text"><strong class="key-label">Contact:</strong>{{ $cooperative->contact_details }}</p>
+                            <p class="card-text"><strong class="key-label">Location:</strong>{{ $cooperative->location }}</p>
+                            <!-- <p class="card-text"><strong class="key-label">Main Product:</strong>{{ $cooperative->main_product_id }}</p> -->
                         </div>
                     </div>
 
