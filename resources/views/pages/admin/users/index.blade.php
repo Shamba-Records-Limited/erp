@@ -5,99 +5,83 @@
 
 @section('content')
 @if(auth()->user()->hasRole('admin'))
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addUserAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addUserAccordion"><span class="mdi mdi-plus"></span>Add User
-                </button>
-                <div class="collapse @if ($errors->count() > 0) show @endif" id="addUserAccordion">
-                    <div class="row mt-5">
-                        <div class="col-lg-12 grid-margin stretch-card col-12">
-                            <h4>Add User</h4>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary btn-sm mb-4 float-left" data-toggle="collapse" 
+                data-target="#addUserAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" 
+                aria-controls="addUserAccordion">
+            <span class="mdi mdi-plus"></span> Add User
+        </button>
+
+        <div class="collapse @if ($errors->count() > 0) show @endif" id="addUserAccordion">
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h4 class="text-primary font-weight-bold mb-4">Add User</h4>
+
+                <form action="{{ route('admin.users.add') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <!-- User Details Section -->
+                    <div class="section-header bg-light p-2 mb-3 rounded">
+                        <h6 class="text-muted mb-0">User Details</h6>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="cooperative_id" class="font-weight-bold">Cooperative</label>
+                            <select name="cooperative_id" id="cooperative_id" class="form-control rounded {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
+                                <option value="">-- Select Cooperative --</option>
+                                @foreach($cooperatives as $coop)
+                                    <option value="{{ $coop->id }}" @if(old('cooperative_id') == $coop->id) selected @endif>{{ $coop->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('cooperative_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="username" class="font-weight-bold">Username</label>
+                            <input type="text" name="username" class="form-control rounded {{ $errors->has('username') ? ' is-invalid' : '' }}" 
+                                   id="username" placeholder="Enter username" value="{{ old('username') }}" required>
+                            @error('username') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="first_name" class="font-weight-bold">First Name</label>
+                            <input type="text" name="first_name" class="form-control rounded {{ $errors->has('first_name') ? ' is-invalid' : '' }}" 
+                                   id="first_name" placeholder="John" value="{{ old('first_name') }}">
+                            @error('first_name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="other_names" class="font-weight-bold">Other Names</label>
+                            <input type="text" name="other_names" class="form-control rounded {{ $errors->has('other_names') ? ' is-invalid' : '' }}" 
+                                   id="other_names" placeholder="Doe" value="{{ old('other_names') }}" required>
+                            @error('other_names') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="email" class="font-weight-bold">Email</label>
+                            <input type="email" name="email" class="form-control rounded {{ $errors->has('email') ? ' is-invalid' : '' }}" 
+                                   id="email" placeholder="username@mail.com" value="{{ old('email') }}" required>
+                            @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="profile_picture" class="font-weight-bold">Profile Picture</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input {{ $errors->has('profile_picture') ? ' is-invalid' : '' }}" 
+                                       id="profile_picture" name="profile_picture">
+                                <label class="custom-file-label" for="profile_picture">Choose file</label>
+                            </div>
+                            @error('profile_picture') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.users.add') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-row">
-                            <div class="form-group col-lg-4 col-md-6 col-12">
-                                <label for="cooperative_id">Cooperative</label>
-                                <select name="cooperative_id" id="cooperative_id" class="form-control form-select {{ $errors->has('cooperative_id') ? ' is-invalid' : '' }}">
-                                    <option value="">-- Select Cooperative --</option>
-                                    @foreach($cooperatives as $coop)
-                                    <option value="{{$coop->id}}">{{$coop->name}}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('cooperative_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('cooperative_id')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                            <div class="form-group col-lg-4 col-md-6 col-12">
-                                <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" id="username" placeholder="Enter username" value="{{ old('username')}}" required>
-
-                                @if ($errors->has('username'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('username')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-4 col-md-6 col-12">
-                                <label for="first_name">First Name</label>
-                                <input type="text" name="first_name" class="form-control  {{ $errors->has('first_name') ? ' is-invalid' : '' }}" id="first_name" placeholder="John" value="{{ old('first_name')}}">
-
-                                @if ($errors->has('first_name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('first_name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-4 col-md-6 col-12">
-                                <label for="other_names">Other Names</label>
-                                <input type="text" name="other_names" class="form-control  {{ $errors->has('other_names') ? ' is-invalid' : '' }}" value="{{ old('other_names')}}" id="other_names" placeholder="Doe" required>
-                                @if ($errors->has('other_names'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('other_names')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-4 col-md-6 col-12">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control  {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email')}}" id="email" placeholder="username@mail.com" required>
-                                @if ($errors->has('email'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('email')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="mainImage">Profile Picture</label>
-                                <div class="input-group">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input @error('profile_picture') is-invalid @enderror" id="profile_picture" name="profile_picture" value="{{ old('profile_picture') }}">
-                                        <label class="custom-file-label" for="profile_picture">Image</label>
-                                    </div>
-                                </div>
-                                @if ($errors->has('profile_picture'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('profile_picture')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Submit Button -->
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="mdi mdi-check"></i> Complete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

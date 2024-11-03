@@ -25,121 +25,96 @@
                 </div>
             </div>
 
-            <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addComapnyAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addComapnyAccordion"><span class="mdi mdi-plus"></span>Add Miller Branch
-                </button>
-                <div class="collapse @if($errors->count() > 0) show @endif" id="addComapnyAccordion">
-                    <div class="row mt-5">
-                        <div class="col-lg-12 grid-margin stretch-card col-12">
-                            <h4>Register Miller Branch</h4>
+            <div class="card shadow-sm">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="collapse" data-target="#addMillerBranchAccordion" 
+                aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addMillerBranchAccordion">
+            <span class="mdi mdi-plus"></span> Add Miller Branch
+        </button>
+
+        <div class="collapse @if($errors->count() > 0) show @endif" id="addMillerBranchAccordion">
+            <div class="card border-0 shadow-sm p-4">
+                <h4 class="text-primary font-weight-bold mb-4">Register Miller Branch</h4>
+
+                <form action="{{ route('admin.miller-branches.add') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+
+                    <!-- Miller Branch Details Section -->
+                    <div class="section-header bg-light p-2 mb-3 rounded">
+                        <h6 class="text-muted mb-0">Miller Branch Details</h6>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="miller_id" class="font-weight-bold">Miller</label>
+                            <select name="miller_id" id="miller_id" class="form-control rounded {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
+                                <option value=""> -- Select Miller --</option>
+                                @foreach($millers as $miller)
+                                    <option value="{{ $miller->id }}" @if(old('miller_id') == $miller->id) selected @endif>{{ $miller->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('miller_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="name" class="font-weight-bold">Name</label>
+                            <input type="text" name="name" class="form-control rounded {{ $errors->has('name') ? ' is-invalid' : '' }}" 
+                                   id="name" placeholder="ABC" value="{{ old('name') }}" required>
+                            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="code" class="font-weight-bold">Code</label>
+                            <input type="text" name="code" class="form-control rounded {{ $errors->has('code') ? ' is-invalid' : '' }}" 
+                                   id="code" placeholder="AB12#" value="{{ old('code') }}">
+                            @error('code') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="location" class="font-weight-bold">Location</label>
+                            <input type="text" name="location" class="form-control rounded {{ $errors->has('location') ? ' is-invalid' : '' }}" 
+                                   id="location" placeholder="Nairobi" value="{{ old('location') }}" required>
+                            @error('location') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="address" class="font-weight-bold">Address</label>
+                            <input type="text" name="address" class="form-control rounded {{ $errors->has('address') ? ' is-invalid' : '' }}" 
+                                   id="address" placeholder="Nairobi" value="{{ old('address') }}" required>
+                            @error('address') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="county_id" class="font-weight-bold">Select County</label>
+                            <select name="county_id" id="county_id" class="form-control rounded {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
+                                <option value="">- Select County -</option>
+                                @foreach($counties as $county)
+                                    <option value="{{ $county->id }}" @if(old('county_id') == $county->id) selected @endif>{{ $county->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('county_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label for="sub_county_id" class="font-weight-bold">Select Sub County</label>
+                            <select name="sub_county_id" id="sub_county_id" class="form-control rounded {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}" data-subcounties="{{ $sub_counties }}">
+                                <option value="">- Select Sub County -</option>
+                            </select>
+                            @error('sub_county_id') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.miller-branches.add') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        {{ $errors }}
-                        <div class="form-row">
-                            <div class="form-group col-12">
-                                <h6 class="mb-3">Miller Branch Details</h6>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="miller_id">Miller</label>
-                                <select name="miller_id" id="miller_id" class="form-control form-select {{ $errors->has('miller_id') ? ' is-invalid' : '' }}">
-                                    <option value=""> -- Select Miller --</option>
-                                    @foreach($millers as $miller)
-                                    <option value="{{$miller->id}}" @if(!empty(old('miller_id')) && old('miller_id') == $miller->id) selected @endif>{{$miller->name}}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('miller_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('miller_id')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="ABC" value="{{ old('name')}}" required>
-
-                                @if ($errors->has('name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="code">Code</label>
-                                <input type="text" name="code" class="form-control  {{ $errors->has('code') ? ' is-invalid' : '' }}" id="code" placeholder="AB12#" value="{{ old('code')}}">
-
-                                @if ($errors->has('code'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('code')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="location">Location</label>
-                                <input type="text" name="location" class="form-control  {{ $errors->has('location') ? ' is-invalid' : '' }}" value="{{ old('location')}}" id="location" placeholder="Nairobi" required>
-                                @if ($errors->has('location'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('location')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="address">Address</label>
-                                <input type="text" name="address" class="form-control  {{ $errors->has('address') ? ' is-invalid' : '' }}" id="address" placeholder="Nairobi" value="{{ old('address')}}" required>
-                                @if ($errors->has('address'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('address')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="county_id">Select County</label>
-                                <select name="county_id" id="county_id" class=" form-control form-select {{ $errors->has('county_id') ? ' is-invalid' : '' }}">
-                                    <option value=""> -Select County-</option>
-                                    @foreach($counties as $county)
-                                    <option value="{{$county->id}}" @if(!empty(old('county_id')) && old('county_id') == $county->id) selected @endif> {{ $county->name }}</option>
-                                    @endforeach
-
-                                    @if ($errors->has('county_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('county_id')  }}</strong>
-                                        County Error
-                                    </span>
-                                    @endif
-                                </select>
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="sub_county">Select Sub County</label>
-                                <select data-subcounties="{{$sub_counties}}" name="sub_county_id" id="sub_county_id" class=" form-control form-select {{ $errors->has('sub_county_id') ? ' is-invalid' : '' }}">
-                                    <option value=""> -Select Sub County-</option>
-
-                                    @if ($errors->has('sub_county_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('sub_county_id')  }}</strong>
-                                    </span>
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <!-- Submit Button -->
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="mdi mdi-check"></i> Complete
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">

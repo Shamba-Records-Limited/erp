@@ -210,7 +210,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Total Sales</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="totalSales">$12,345</span>
+                                    <span class="h2 font-weight-bold mb-0" id="totalSales">Ksh 112,345</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
