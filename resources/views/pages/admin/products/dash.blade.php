@@ -56,7 +56,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Categories Count</h5>
-                                    <span class="h2 font-weight-bold mb-0">8</span>
+                                    <span class="h2 font-weight-bold mb-0">4</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
@@ -99,7 +99,7 @@
         <div class="col-xl-6">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h2 class=" mb-0">Available Stock</h2>
+                    <h2 class=" mb-0">Available Stock (Kgs)</h2>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -113,7 +113,7 @@
         <div class="col-xl-6">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h2 class="mb-0">Product Categories Distribution</h2>
+                    <h2 class="mb-0">Product Categories Distribution (Kgs)</h2>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -129,7 +129,7 @@
         <div class="col-lg-12">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
-                    <h2 class="mb-0">Grading Distribution</h2>
+                    <h2 class="mb-0">Grading Distribution (Kgs)</h2>
                 </div>
                 <div class="card-body">
                     <div class="chart">
@@ -149,7 +149,7 @@
     const availableStockData = {
         labels: ['Coffee', 'Cocoa', 'Tea', 'Dairy Products'],
         datasets: [{
-            label: 'Stock (Units)',
+            label: 'Stock (KG)',
             data: [3200, 1500, 1800, 2400],
             backgroundColor: 'rgba(75, 192, 192, 0.5)',
             borderColor: 'rgba(75, 192, 192, 1)',
@@ -164,7 +164,23 @@
                 beginAtZero: true,
                 ticks: {
                     callback: function(value) {
-                        return value.toLocaleString(); // Add comma formatting to y-axis values
+                        return value.toLocaleString() + ' KG'; // Add KG and comma formatting to y-axis values
+                    }
+                }
+            },
+            x: {
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString() + ' KG'; // Add KG and comma formatting to x-axis values
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + context.raw.toLocaleString() + ' KG'; // Add KG to tooltip
                     }
                 }
             }
@@ -178,7 +194,7 @@
 
     // Product Categories Distribution Chart
     const productCategoriesData = {
-        labels: ['Beverages', 'Dairy', 'Snacks', 'Bakery'],
+        labels: ['Beverages', 'Dairy', 'Farm Products', 'Vegetables'],
         datasets: [{
             data: [300, 500, 200, 100],
             backgroundColor: [
@@ -191,7 +207,16 @@
     };
     const productCategoriesOptions = {
         responsive: true,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.label + ': ' + context.raw.toLocaleString() + ' KG'; // Add KG to tooltip
+                    }
+                }
+            }
+        }
     };
     new Chart(document.getElementById("productCategoriesPieChart"), {
         type: 'pie',
@@ -217,7 +242,23 @@
                 beginAtZero: true,
                 ticks: {
                     callback: function(value) {
-                        return value.toLocaleString(); // Add comma formatting to x-axis values
+                        return value.toLocaleString() + ' KG'; // Add KG and comma formatting to x-axis values
+                    }
+                }
+            },
+            y: {
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString() + ' KG'; // Add KG and comma formatting to y-axis values
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + context.raw.toLocaleString() + ' KG'; // Add KG to tooltip
                     }
                 }
             }
