@@ -39,6 +39,7 @@
                         <th>Unit</th> <!-- Add a header for the unit -->
                         <th>Collection Time</th>
                         <th>Date Collected</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,17 +48,29 @@
                         <td>{{ $collection->collection_number }}</td>
                         <td>{{ $collection->first_name }} {{ $collection->other_names }}</td>
                         <td>{{ $collection->product_name }}</td>
-                        <td>
-                            {{ $collection->quantity }}
-                            <!-- Display individual quantity -->
-                        </td>
+                        <td>{{ $collection->quantity }}</td>
                         <td>{{ $collection->unit }}</td> <!-- Display the unit of measurement -->
                         <td>{{ $collectionTimeLabels[$collection->collection_time] ?? 'N/A' }}</td>
                         <td>{{ $collection->date_collected }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ route('admin.farmers.detail', $collection->farmer_id) }}"
+                                    class="btn-action view">
+                                    <!-- Use $collection->farmer_id -->
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <button class="btn-action edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="empty-state">
+                        <td colspan="8" class="empty-state">
                             <div class="empty-state-content">
                                 <i class="fas fa-clipboard-list"></i>
                                 <h3>No Collections Found</h3>
@@ -85,7 +98,6 @@
                             @endif
                         </td>
                         <td>{{ $footerUnits->count() === 1 ? $footerUnits->first() : 'Mixed' }}</td>
-                        <!-- Display unit in the same column -->
                         <td></td> <!-- Empty cell for collection time -->
                         <td></td> <!-- Empty cell for date collected -->
                     </tr>
@@ -251,5 +263,35 @@
         display: block;
         overflow-x: auto;
     }
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-action.view {
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--primary-color);
+}
+
+.btn-action.edit {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning-color);
+}
+
+.btn-action.delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+}
+
+.btn-action:hover {
+    transform: translateY(-2px);
 }
 </style>
