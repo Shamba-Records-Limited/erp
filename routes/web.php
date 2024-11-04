@@ -164,6 +164,9 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.millers.show');
     Route::post('/millers/add', 'Admin\MillersController@store')
         ->name('admin.millers.add');
+    Route::get('/millers/{id}', 'Admin\MillersController@showDetail')
+        ->name('millers.detail');
+
 
     // miller branches
     Route::get('/miller-branches', 'Admin\MillerBranchesController@index')

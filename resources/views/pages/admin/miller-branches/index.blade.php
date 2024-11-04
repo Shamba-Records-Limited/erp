@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm">
+<div class="card shadow-sm">
     <div class="card-body">
         <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="collapse" data-target="#addMillerBranchAccordion" 
                 aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addMillerBranchAccordion">

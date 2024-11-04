@@ -7,11 +7,9 @@ use Webpatser\Uuid\Uuid;
 
 class Miller extends Model
 {
-    //
     protected $keyType = 'string';
     public $incrementing = false;
     protected $table = "millers";
-
     protected $primaryKey = 'id';
 
     public function getRouteKeyName()
@@ -35,5 +33,13 @@ class Miller extends Model
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the branches associated with the miller.
+     */
+    public function branches()
+    {
+        return $this->hasMany(MillerBranch::class);
     }
 }

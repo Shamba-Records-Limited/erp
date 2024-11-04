@@ -8,7 +8,26 @@
 @php
 $countries = get_countries();
 @endphp
-
+<div class="row">
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="container my-5">
+                <div class="row">
+                    <!-- Number of Miller Branches Card -->
+                    <div class="col-md-4 col-12 mb-4">
+                        <div class="card shadow-lg border-0 rounded">
+                            <div class="card-header text-center bg-gradient-success text-white">
+                                <h5 class="font-weight-bold mb-0">Number of Registered Millers</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <h2 id="miller-count" class="font-weight-bold text-success display-4">0</h2>
+                                <p class="font-weight-bold text-muted">Miller Branches</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
 <div class="card shadow-sm">
     <div class="card-body">
         <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="collapse" data-target="#addMillerAccordion"
@@ -182,19 +201,25 @@ $countries = get_countries();
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Country</th>
+                                <th>County</th>
+                                <th>Sub County</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($millers as $key => $miller)
                             <tr>
-                                <td>{{++$key }}</td>
-                                <td>{{$miller->name }} ({{$miller->abbreviation}})</td>
-                                <td>{{$miller->email }}</td>
-                                <td>{{$miller->country_name }}
-                                </td>
+                                <td>{{ $key + 1 }}</td>
                                 <td>
+                                    <a href="{{ route('millers.detail', $miller->id) }}" class="text-primary">
+                                        {{ $miller->name }} ({{ $miller->abbreviation }})
+                                    </a>
+                                </td>
+                                <td>{{ $miller->email }}</td>
+                                <td>{{ $miller->county_name ?? 'N/A' }}</td>
+                                <td>{{ $miller->sub_county_name ?? 'N/A' }}</td>
+                                <td>
+                                    <!-- You can add action buttons here if needed, like Edit or Delete -->
                                 </td>
                             </tr>
                             @endforeach
@@ -205,6 +230,7 @@ $countries = get_countries();
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('plugin-scripts')
@@ -212,14 +238,6 @@ $countries = get_countries();
 
 @push('custom-scripts')
 <script>
-    function deleteCoop(id) {
-        shouldDelete = confirm("Are you sure you want to delete this cooperative?")
-        if (!shouldDelete) {
-            return
-        }
-
-        window.location = "/admin/cooperative/setup/delete/" + id
-    }
     $("#county_id").change(function(e) {
         $("#sub_county_id").value = "";
         $("#sub_county_id").empty();
@@ -235,6 +253,11 @@ $countries = get_countries();
                 $("#sub_county_id").append(elem)
             }
         }
+    });
+    // Update Number of Millers dynamically from DataTable
+    $(document).ready(function() {
+        const millerCount = $('.dt').DataTable().page.info().recordsTotal;
+        $('#miller-count').text(millerCount);
     });
 </script>
 @endpush
