@@ -228,10 +228,30 @@ public function view($id)
     // Fetch the branch details
     $branch = CoopBranch::findOrFail($id); // Assuming you have a Branch model
 
-    // Count the number of farmers in this branch
-    $totalFarmers = Farmer::where('branch_id', $id)->count(); // Adjust the condition based on your schema
+    // Fetch the farmers associated with this branch
+    $farmers = Farmer::where('branch_id', $id)->get(); // Adjust the condition based on your schema
+    $totalFarmers = $farmers->count(); // Count of farmers
 
-    return view('pages.admin.branch.view', compact('branch', 'totalFarmers'));
+    // Fetch collections associated with this branch, including product names
+    $collections = DB::table('collections')
+        ->where('coop_branch_id', $id)
+        ->join('farmers', 'farmers.id', '=', 'collections.farmer_id')
+        ->join('users', 'users.id', '=', 'farmers.user_id')
+        ->join('products', 'products.id', '=', 'collections.product_id') // Join with products to get the name
+        ->select('collections.*', 'users.username', 'products.name as product_name') // Select product name
+        ->get();
+
+    // Update total farmers based on collections
+    $totalFarmers = $collections->pluck('farmer_id')->unique()->count(); // Count unique farmers from collections
+
+    // Define collection time labels
+    $collectionTimeLabels = [
+        1 => 'Morning',
+        2 => 'Afternoon',
+        3 => 'Evening',
+    ];
+
+    return view('pages.admin.branch.view', compact('branch', 'farmers', 'totalFarmers', 'collections', 'collectionTimeLabels'));
 }
 // ... existing code ...
 }

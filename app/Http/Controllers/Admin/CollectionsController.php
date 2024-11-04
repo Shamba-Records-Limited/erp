@@ -29,4 +29,19 @@ class CollectionsController extends Controller
 
         return view('pages.admin.collections.index', compact('collections'));
     }
+    public function viewBranch($branchId) // New method to view branch details
+{
+    $branch = DB::table('coop_branches')->find($branchId);
+    $farmers = DB::select(DB::raw("
+        SELECT f.id, u.username
+        FROM farmers f
+        JOIN users u ON f.user_id = u.id
+        JOIN farmer_cooperative fc ON fc.farmer_id = f.id
+        WHERE fc.cooperative_id = :coop_id
+    "), ["coop_id" => $branch->cooperative_id]); // Fetch farmers for the branch
+
+    $totalFarmers = count($farmers); // Count of farmers
+
+    return view('pages.admin.branch.view', compact('branch', 'farmers', 'totalFarmers'));
+}
 }
