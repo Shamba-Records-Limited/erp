@@ -10,6 +10,9 @@ use App\County;
 use App\Events\AuditTrailEvent;
 use App\Product;
 use App\SubCounty;
+use App\Farmer;
+
+
 use Illuminate\Support\Facades\Auth;
 use DB;
 use Log;
@@ -219,4 +222,16 @@ class CoopBranchController extends Controller
             return redirect()->route('branches.show');
         }
     }
+    // ... existing code ...
+public function view($id)
+{
+    // Fetch the branch details
+    $branch = CoopBranch::findOrFail($id); // Assuming you have a Branch model
+
+    // Count the number of farmers in this branch
+    $totalFarmers = Farmer::where('branch_id', $id)->count(); // Adjust the condition based on your schema
+
+    return view('pages.admin.branch.view', compact('branch', 'totalFarmers'));
+}
+// ... existing code ...
 }

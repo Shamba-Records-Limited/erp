@@ -144,6 +144,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('branches.edit');
     Route::get('/branches/delete/{id}', 'Admin\CoopBranchController@delete')
         ->name('branches.delete');
+    Route::get('/branch/view/{id}', 'Admin\CoopBranchController@view')
+        ->name('branches.view');
 
     Route::get('/cooperative/payroll-config', 'CooperativeController@payroll_config')->name('cooperative.payroll-config');
     Route::post('/cooperative/payroll-config', 'CooperativeController@add_payroll_config')->name('cooperative.payroll-config.add');

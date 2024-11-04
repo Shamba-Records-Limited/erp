@@ -67,12 +67,12 @@
                                 <div class="col">
                                     <h5 class="text-muted mb-0" style="font-size:1rem"> Counties Covered</h5>
                                     <span class="h2 font-weight-bold mb-0">
-                                       {{ is_array($counties) ? count($counties) : $counties->count() }}
+                                        {{ is_array($counties) ? count($counties) : $counties->count() }}
                                     </span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                                       <i class="mdi mdi-map-marker stats-icon"></i>
+                                        <i class="mdi mdi-map-marker stats-icon"></i>
                                     </div>
                                 </div>
                             </div>
@@ -91,12 +91,12 @@
                                 <div class="col">
                                     <h5 class="text-muted mb-0" style="font-size:1rem"> New Branches This Month</h5>
                                     <span class="h2 font-weight-bold mb-0">
-                                       {{ $branchesThisMonth }}
+                                        {{ $branchesThisMonth }}
                                     </span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-blue text-white rounded-circle shadow">
-                                       <i class="mdi mdi-calendar-clock stats-icon"></i>
+                                        <i class="mdi mdi-calendar-clock stats-icon"></i>
                                     </div>
                                 </div>
                             </div>
@@ -315,7 +315,11 @@
                             <tr>
                                 <td>{{++$key }}</td>
                                 <td>{{$prod->coop_name}}</td>
-                                <td>{{$prod->name }} </td>
+                                <td>
+                                    <a href="{{ route('branches.view', $prod->id) }}" class="text-info">
+                                        {{$prod->name }}
+                                    </a>
+                                </td>
                                 <td>{{$prod->code }}</td>
                                 <td>{{$prod->sub_county_name}} - {{$prod->county_name}}</td>
                                 <td>{{$prod->location }}</td>
