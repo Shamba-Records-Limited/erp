@@ -37,7 +37,6 @@
                         <th>Product</th>
                         <th>Quantity</th>
                         <th>Unit</th> <!-- Add a header for the unit -->
-
                         <th>Collection Time</th>
                         <th>Date Collected</th>
                     </tr>
@@ -47,17 +46,18 @@
                     <tr>
                         <td>{{ $collection->collection_number }}</td>
                         <td>{{ $collection->first_name }} {{ $collection->other_names }}</td>
-                        <!-- Display farmer's full name -->
                         <td>{{ $collection->product_name }}</td>
-                        <td>{{ $collection->quantity }}</td>
+                        <td>
+                            {{ $collection->quantity }}
+                            <!-- Display individual quantity -->
+                        </td>
                         <td>{{ $collection->unit }}</td> <!-- Display the unit of measurement -->
-
                         <td>{{ $collectionTimeLabels[$collection->collection_time] ?? 'N/A' }}</td>
                         <td>{{ $collection->date_collected }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="empty-state">
+                        <td colspan="7" class="empty-state">
                             <div class="empty-state-content">
                                 <i class="fas fa-clipboard-list"></i>
                                 <h3>No Collections Found</h3>
@@ -67,12 +67,34 @@
                     </tr>
                     @endforelse
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="total-label">Total</td>
+                        <td>
+                            @php
+                            // Calculate total quantity for the footer
+                            $totalQuantity = $collections->sum('quantity');
+                            $footerUnits = $collections->pluck('unit')->unique();
+                            @endphp
+                            @if($footerUnits->count() === 1)
+                            {{ $totalQuantity }}
+                            <!-- Display total quantity with unit if all are the same -->
+                            @else
+                            {{ $totalQuantity }} (Mixed Unit Measure)
+                            <!-- Indicate mixed units -->
+                            @endif
+                        </td>
+                        <td>{{ $footerUnits->count() === 1 ? $footerUnits->first() : 'Mixed' }}</td>
+                        <!-- Display unit in the same column -->
+                        <td></td> <!-- Empty cell for collection time -->
+                        <td></td> <!-- Empty cell for date collected -->
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
 </div>
 @endsection
-
 <style>
 :root {
     --primary-color: #2563eb;
