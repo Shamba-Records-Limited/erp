@@ -123,6 +123,35 @@
     --transition: all 0.3s ease;
 }
 
+.collections-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Ensure borders are collapsed for continuity */
+}
+
+.collections-table th,
+.collections-table td {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    /* Add faint borders to cells */
+    padding: 1rem;
+    /* Ensure padding is consistent */
+    background-color: white;
+    /* Ensure background color is consistent */
+}
+
+.collections-table th {
+    background-color: rgba(0, 0, 0, 0.05);
+    /* Optional: Slightly different background for headers */
+}
+
+/* Remove any margin or padding that could affect vertical continuity */
+.collections-table tr {
+    margin: 0;
+    /* Ensure no margin on rows */
+    padding: 0;
+    /* Ensure no padding on rows */
+}
+
 .dashboard-container {
     padding: 2rem;
     background-color: var(--background-color);
