@@ -34,7 +34,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="role">Role</label>
                                         <select name="role" id="role"
-                                                class=" form-control select2bs4 {{ $errors->has('role') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('role') ? ' is-invalid' : '' }}">
                                             <option value=""></option>
                                             @foreach($roles as $role)
                                                 <option value="{{$role->id}}"> {{ $role->role }}</option>
@@ -50,7 +50,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="permissions">Permissions</label>
                                         <select name="permissions[]" multiple="multiple" id="permissions"
-                                                class="form-control select2bs4 {{ $errors->has('roles') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('roles') ? ' is-invalid' : '' }}">
                                             <option value="{{\App\InternalUserPermission::CAN_VIEW}}">Can View</option>
                                             <option value="{{\App\InternalUserPermission::CAN_CREATE}}">Can Create
                                             </option>

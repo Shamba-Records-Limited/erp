@@ -427,19 +427,19 @@ $cooperative = null;
 
             @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
             config('enums.system_permissions')['view']))
-            <!-- <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
+            <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
             <a class="nav-link" href="{{ route('hr.employees.show') }}">
-                <i class="menu-icon mdi mdi-television"></i>
+                <i class="menu-icon mdi mdi-television text-custom-green"></i>
                 <span class="menu-title">Employees</span>
                 {{config('enums.system_modules')['HR Management']['employees']}}
             </a>
-        </li> -->
+        </li>
             @endif
 
             @if(can_view_module('User Management'))
-            <!-- <li class="nav-item {!!  active_class(['cooperative/user-management/*']) !!} ">
+            <li class="nav-item {!!  active_class(['cooperative/user-management/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#userManagement" aria-expanded="{!!  is_active_route(['cooperative/user-management/*'])  !!}" aria-controls="userManagement">
-                <i class="menu-icon mdi mdi-account-multiple"></i>
+                <i class="menu-icon mdi mdi-account-multiple text-custom-green"></i>
                 <span class="menu-title">User Management</span>
                 <i class="menu-arrow"></i>
             </a>
@@ -489,11 +489,11 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li> -->
+        </li>
             @endif
 
             @if(can_view_module('HR Management'))
-            <!-- <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
+            <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#hrManagement" aria-expanded="{!!  is_active_route(['cooperative/hr/*'])  !!}" aria-controls="hrManagement">
                 <i class="menu-icon mdi mdi mdi-account-network"></i>
                 <span class="menu-title">HR Management</span>
@@ -590,7 +590,7 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li> -->
+        </li>
             @endif
 
             @if(can_view_module('Bank Management'))

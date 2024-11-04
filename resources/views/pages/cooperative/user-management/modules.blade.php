@@ -35,7 +35,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="module">Modules</label>
                                         <select name="module" id="module"
-                                                class=" form-control select2bs4 {{ $errors->has('module') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('module') ? ' is-invalid' : '' }}">
                                             @foreach($modules as $module)
                                                 <option value="{{$module->id}}"> {{ $module->name }}</option>
                                             @endforeach
@@ -50,7 +50,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="roles">Roles</label>
                                         <select name="roles[]" multiple="multiple" id="roles"
-                                                class="form-control select2bs4 {{ $errors->has('roles') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('roles') ? ' is-invalid' : '' }}">
                                             @foreach($roles as $role)
                                                 <option value="{{$role->id}}"> {{ $role->role }}</option>
                                             @endforeach

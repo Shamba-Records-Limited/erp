@@ -74,7 +74,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="branch">Branch</label>
                                     <select name="branch" id="branch"
-                                            class=" form-control select2bs4 {{ $errors->has('branch') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('branch') ? ' is-invalid' : '' }}">
                                         <option value=""> -Select Branch-</option>
                                         @foreach($branches as $branch)
                                             <option value="{{$branch->id}}"> {{ $branch->name }}</option>

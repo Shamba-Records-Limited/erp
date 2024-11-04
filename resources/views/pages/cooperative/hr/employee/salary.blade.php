@@ -58,7 +58,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="has_benefits">Has Benefits/Deductions</label>
                                     <select name="has_benefits" id="has_benefits"
-                                            class=" form-control select2bs4 {{ $errors->has('has_benefits') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('has_benefits') ? ' is-invalid' : '' }}">
                                         <option value=""></option>
                                         <option value="no" {{ $salary ? (strtolower($salary->has_benefits) == 'no' ? 'selected' : '') : ''}}>
                                             No
@@ -144,7 +144,7 @@
                                         <div class="form-group col-lg-3 col-md-6 col-12">
                                             <label for="type">Type</label>
                                             <select name="type" id="type"
-                                                    class=" form-control select2bs4 {{ $errors->has('type') ? ' is-invalid' : '' }}"
+                                                    class=" form-control form-select {{ $errors->has('type') ? ' is-invalid' : '' }}"
                                                     required>
                                                 <option value=""> - Select -</option>
                                                 @foreach(config('enums.hr_deduction_types') as $key => $benefit)

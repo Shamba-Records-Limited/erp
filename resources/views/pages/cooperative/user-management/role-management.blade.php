@@ -36,7 +36,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="employee">Employee</label>
                                         <select name="employee" id="employee"
-                                                class=" form-control select2bs4 {{ $errors->has('employee') ? ' is-invalid' : '' }}">
+                                                class=" form-control form-select {{ $errors->has('employee') ? ' is-invalid' : '' }}">
                                             @foreach($employees as $emp)
                                                 <option value="{{$emp->user->id}}"> {{ ucwords(strtolower($emp->user->first_name.' '.$emp->user->other_names)) }}</option>
                                             @endforeach
@@ -51,7 +51,7 @@
                                     <div class="form-group col-lg-3 col-md-6 col-12">
                                         <label for="roles">Roles</label>
                                         <select name="roles[]" multiple="multiple" id="roles"
-                                                class="form-control select2bs4 {{ $errors->has('roles') ? ' is-invalid' : '' }}">
+                                                class="form-control form-select {{ $errors->has('roles') ? ' is-invalid' : '' }}">
                                             @foreach($roles as $role)
                                                 <option value="{{$role->id}}"> {{ $role->role }}</option>
                                             @endforeach

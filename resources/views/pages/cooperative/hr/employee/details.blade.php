@@ -246,7 +246,7 @@
                                                 <select name="appraisal_type"
                                                         id="appraisal_type"
                                                         required
-                                                        class=" form-control select2bs4 {{ $errors->has('appraisal_type') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('appraisal_type') ? ' is-invalid' : '' }}">
 
                                                     <option value=""></option>
                                                     @foreach(config('enums.appraisal_types') as $key => $type)
@@ -266,7 +266,7 @@
                                                     Type</label>
                                                 <select name="employment_type"
                                                         id="employment_type"
-                                                        class=" form-control select2bs4 {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
 
                                                     @foreach($employment_types as $type)
                                                         <option value="{{$type->id}}"
@@ -314,7 +314,7 @@
                                                 <label for="department">Department</label>
                                                 <select name="department"
                                                         id="department"
-                                                        class=" form-control select2bs4 {{ $errors->has('department') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('department') ? ' is-invalid' : '' }}">
 
                                                     @foreach($departments as $department)
                                                         <option value="{{$department->id}}"
@@ -334,7 +334,7 @@
                                                 <label for="position">Position</label>
                                                 <select name="position"
                                                         id="position"
-                                                        class=" form-control select2bs4 {{ $errors->has('position') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('position') ? ' is-invalid' : '' }}">
 
                                                     @foreach($positions as $position)
                                                         <option value="{{$position->id}}"
@@ -447,7 +447,7 @@
                                                 <select name="disciplinary_type"
                                                         id="disciplinary_type"
                                                         required
-                                                        class=" form-control select2bs4 {{ $errors->has('disciplinary_type') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('disciplinary_type') ? ' is-invalid' : '' }}">
 
                                                     <option value=""></option>
                                                     @foreach(config('enums.disciplinary_types') as $key => $type)
@@ -528,7 +528,7 @@
                                                 <select name="deduction_type"
                                                         id="deduction_type"
                                                         required
-                                                        class=" form-control select2bs4 {{ $errors->has('deduction_type') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('deduction_type') ? ' is-invalid' : '' }}">
 
                                                     <option value=""></option>
                                                     @foreach(config('enums.advance_deduction_types') as $key => $type)
@@ -600,7 +600,7 @@
                                                 <select name="start_month"
                                                         id="start_month"
                                                         required
-                                                        class=" form-control select2bs4 {{ $errors->has('start_month') ? ' is-invalid' : '' }}">
+                                                        class=" form-control form-select {{ $errors->has('start_month') ? ' is-invalid' : '' }}">
 
                                                     <option value=""></option>
                                                     @foreach(config('enums.Months') as $key => $type)

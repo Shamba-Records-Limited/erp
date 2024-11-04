@@ -62,7 +62,7 @@ class CoopEmployee extends Model
 
     public function country()
     {
-        return $this->belongsTo(Country::class, 'country_id', 'id');
+        return $this->belongsTo(Country::class, 'country_code', 'id');
     }
 
     public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -115,7 +115,7 @@ class CoopEmployee extends Model
                    d.name as department
             FROM coop_employees emp
                 JOIN users u ON emp.user_id = u.id
-                JOIN countries c ON emp.country_id = c.id
+                JOIN countries c ON emp.country_code = c.id
                 JOIN employee_employment_types emp_type ON emp.id = emp_type.employee_id
                 JOIN employment_types et ON emp_type.employment_type_id = et.id
                 JOIN employee_positions ep ON emp.id = ep.employee_id
