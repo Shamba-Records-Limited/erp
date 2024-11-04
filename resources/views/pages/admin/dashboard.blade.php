@@ -16,7 +16,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Collection Total Quantity</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Raw Material Quantity</h5>
                                     <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</span>
                                 </div>
                                 <div class="col-auto">
@@ -79,7 +79,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Cooperatives Count</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Cooperative/Aggregator Count</h5>
                                     <span class="h2 font-weight-bold mb-0" id="cooperativesCount">{{$data["cooperatives_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
@@ -100,7 +100,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Millers Count</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Millers/Processors Count</h5>
                                     <span class="h2 font-weight-bold mb-0" id="millersCount">{{$data["collection_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
@@ -286,7 +286,7 @@
             <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
                 <div class="card-body">
                     <div class="col pb-2">
-                        <h2 class="mb-0">Collection Quantity Per Cooperative (KGs)</h2>
+                        <h2 class="mb-0">Collection Quantity Per Cooperative/Aggregator (KGs)</h2>
                     </div>
                     <div>
                         <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>

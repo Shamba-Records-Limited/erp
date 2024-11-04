@@ -136,7 +136,7 @@
                     <i class="mdi mdi-factory" style="font-size: 30px;color: orange;"></i>
                 </div>
                 <div>
-                    Millers Count
+                    Millers/Processors Count
                 </div>
 
             </div>
@@ -164,7 +164,7 @@
                     <i class="mdi mdi-domain" style="font-size: 30px;color: #a57150;"></i>
                 </div>
                 <div>
-                    Cooperatives Count
+                    Cooperative/Aggregator Count
                 </div>
 
             </div>

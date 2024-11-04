@@ -20,8 +20,7 @@ $cooperative = null;
                     <div class="user-wrapper p-4">
                         @php $user = Auth::user(); @endphp
                         <div class="coop-profile-image">
-                            <img class="coop-profile-image" src="{{ url('assets/images/avatar.jpg') }}"
-                                alt="profile image">
+                            <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg" alt="Profile Image">
                         </div>
                         <div class="text-wrapper">
                             <p class="profile-name">
@@ -96,22 +95,22 @@ $cooperative = null;
             </li>
             <li class="nav-item {{ active_class(['admin/cooperative/setup*']) }} mb-3">
                 <a class="nav-link" href="{{ route('cooperative') }}">
-                    <i class="ni ni-bullet-list-67 text-custom-green"></i> {{ __('Cooperatives') }}
+                    <i class="ni ni-bullet-list-67 text-custom-green"></i> {{ __('Cooperatives/Aggregators') }}
                 </a>
             </li>
             <li class="nav-item {{ active_class(['admin/branches']) }} mb-3">
                 <a class="nav-link" href="{{ route('branches.show') }}">
-                    <i class="ni ni-folder-17 text-custom-green"></i> {{ __('Cooperatives Branches') }}
+                    <i class="ni ni-folder-17 text-custom-green"></i> {{ __('Cooperatives/Aggregator Branches') }}
                 </a>
             </li>
             <li class="nav-item {{ active_class(['admin/millers*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.millers.show') }}">
-                    <i class="ni ni-basket text-custom-green"></i> {{ __('Millers') }}
+                    <i class="ni ni-basket text-custom-green"></i> {{ __('Millers/Processors') }}
                 </a>
             </li>
             <li class="nav-item {{ active_class(['admin/miller-branches*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.miller-branches.show') }}">
-                    <i class="ni ni-shop text-custom-green"></i> {{ __('Miller Branches') }}
+                    <i class="ni ni-shop text-custom-green"></i> {{ __('Miller/Processor Branches') }}
                 </a>
             </li>
             <li class="nav-item {{ active_class(['admin/users']) }} mb-3">

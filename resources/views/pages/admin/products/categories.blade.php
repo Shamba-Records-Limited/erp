@@ -5,61 +5,58 @@
 @endpush
 
 @section('content')
-<div class="row">
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <button type="button" class="btn btn-primary btn-fw btn-sm float-right" data-toggle="collapse" data-target="#addComapnyAccordion" aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addComapnyAccordion"><span class="mdi mdi-plus"></span>Add Product Category
-                </button>
-                <div class="collapse @if($errors->count() > 0) show @endif" id="addComapnyAccordion">
-                    <div class="row mt-5">
-                        <div class="col-lg-12 grid-margin stretch-card col-12">
-                            <h4>Register Category</h4>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary btn-sm mb-4 float-right" data-toggle="collapse" data-target="#addProductCategoryAccordion" 
+                aria-expanded="@if ($errors->count() > 0) true @else false @endif" aria-controls="addProductCategoryAccordion">
+            <span class="mdi mdi-plus"></span> Add Product Category
+        </button>
+
+        <div class="collapse @if($errors->count() > 0) show @endif" id="addProductCategoryAccordion">
+            <div class="card border-0 shadow-sm p-4">
+                <h4 class="text-primary font-weight-bold mb-4">Register Product Category</h4>
+
+                <form action="{{ route('admin.products.store_category') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+
+                    <!-- Product Category Details Section -->
+                    <div class="section-header bg-light p-2 mb-3 rounded">
+                        <h6 class="text-muted mb-0">Product Category Details</h6>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name" class="font-weight-bold">Category Name</label>
+                            <input type="text" name="name" class="form-control rounded {{ $errors->has('name') ? ' is-invalid' : '' }}" 
+                                   id="name" placeholder="Enter product category..." value="{{ old('name') }}" required>
+                            @error('name') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="unit" class="font-weight-bold">Unit</label>
+                            <select name="unit" id="unit" class="form-control rounded {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
+                                <option value="">-- Select Unit --</option>
+                                @foreach(config('enums.units') as $key => $unit)
+                                    <option value="{{ $key }}" @if($key == old('unit')) selected @endif>
+                                        {{ $unit['name'] }} ({{ $key }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('unit') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
 
-                    <form action="{{ route('admin.products.store_category') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-row">
-                            <div class="form-group col-12">
-                                <h6 class="mb-3">Product Category Details</h6>
-                            </div>
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="name">Name</label>
-                                <input type="text" name="name" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="Enter product category..." value="{{ old('name')}}" required>
-
-                                @if ($errors->has('name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="unit">Unit</label>
-                                <select name="unit" id="unit" class="form-control form-select {{ $errors->has('unit') ? ' is-invalid' : '' }}" required>
-                                    <option value="">-- Select Unit --</option>
-                                    @foreach(config('enums.units') as $key => $unit)
-                                    <option value="{{$key}}" @if($key==old('unit')) selected @endif>{{$unit['name']}} ({{$key}})</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('unit'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('unit')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-3 col-md-6 col-12">
-                            <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
-                        </div>
-
-                    </form>
-                </div>
+                    <!-- Submit Button -->
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3">
+                            <i class="mdi mdi-check"></i> Add Product Category
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
