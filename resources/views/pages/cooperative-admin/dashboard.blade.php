@@ -343,6 +343,7 @@ let collectionsBarOptions = {
     responsive: true,
     maintainAspectRatio: false,
     showScale: true,
+       
     legend: {
         display: true
     },
@@ -354,18 +355,25 @@ let collectionsBarOptions = {
             bottom: 0
         }
     },
-    scales: {
-        y: {
-            beginAtZero: true,
+     scales: {
+        yAxes: [{
+            gridLines: {
+                // color: 'rgb(251,99,64)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
             ticks: {
-                // Format y-axis labels with commas and add "KGs"
                 callback: function(value) {
-                    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    return value.toLocaleString()
                 },
                 beginAtZero: true,
             },
-        }
-    }
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
 };
 
 // Initialize the chart with the line type and gradient
@@ -626,7 +634,7 @@ let gradeDistributionBarOptions = {
                 }
 
                 content += '<span class="popover-body-value">' + yLabel +
-                    '%</span>'; // Format tooltip to show percentages
+                    'KG</span>'; // Format tooltip to show percentages
                 return content;
             },
         },
