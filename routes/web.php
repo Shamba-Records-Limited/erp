@@ -285,6 +285,9 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name("admin.support.view-ticket");
     Route::get("/support/resolve-ticket/{ticket_number}", "Admin\SupportController@resolve_ticket")
         ->name("admin.support.resolve-ticket");
+    Route::post('/support/update-ticket-status/{ticket_number}', 'Admin\SupportController@update_ticket_status')
+        ->name('admin.support.update-ticket-status');
+
 });
 
 

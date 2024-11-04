@@ -68,27 +68,28 @@ public function index()
         toastr()->success('Comment added successfully.');
         return redirect()->back();
     }
-    public function update_ticket_status(Request $request, $ticket_number)
-    {
-        $user_id = Auth::id();
+  public function update_ticket_status(Request $request, $ticket_number)
+{
+    $user_id = Auth::id();
 
-        // Validate that a valid status is provided
-        $request->validate([
-            'status' => 'required|in:open,in_progress,answered,on_hold,closed',
-        ]);
+    // Validate that a valid status is provided
+    $request->validate([
+        'status' => 'required|in:open,in_progress,answered,on_hold,closed',
+    ]);
 
-        // Find the ticket by its number
-        $ticket = SystemTicket::where("number", $ticket_number)->first();
+    // Find the ticket by its number
+    $ticket = SystemTicket::where("number", $ticket_number)->first();
 
-        // Update the ticket status and who updated it
-        $ticket->status = $request->status;
-        $ticket->solved_at = $request->status === 'closed' ? now() : null; // Set solved_at only if status is closed
-        $ticket->solved_by_id = $user_id;
-        $ticket->save();
+    // Update the ticket status
+    $ticket->status = $request->status;
+    $ticket->solved_at = $request->status === 'closed' ? now() : null;
+    $ticket->solved_by_id = $user_id;
+    $ticket->save();
 
-        toastr()->success('Ticket status updated successfully.');
-        return redirect()->back();
-    }
+    toastr()->success('Ticket status updated successfully.');
+    return redirect()->back();
+}
+
 
     public function resolve_ticket($ticket_number)
     {
