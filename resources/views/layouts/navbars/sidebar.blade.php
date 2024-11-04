@@ -495,7 +495,7 @@ $cooperative = null;
             @if(can_view_module('HR Management'))
             <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
             <a class="nav-link" data-toggle="collapse" href="#hrManagement" aria-expanded="{!!  is_active_route(['cooperative/hr/*'])  !!}" aria-controls="hrManagement">
-                <i class="menu-icon mdi mdi mdi-account-network"></i>
+                <i class="menu-icon mdi mdi mdi-account-network text-custom-green"></i>
                 <span class="menu-title">HR Management</span>
                 <i class="menu-arrow"></i>
             </a>
