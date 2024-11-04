@@ -281,8 +281,9 @@
     </div>
 
     <div class="row pl-4 pr-4">
+    <!-- Collection Quantity Per Cooperative (KGs) Card -->
         <div class="col-lg-6">
-            <div class="card" style="height: 100%;">
+            <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
                 <div class="card-body">
                     <div class="col pb-2">
                         <h2 class="mb-0">Collection Quantity Per Cooperative (KGs)</h2>
@@ -294,7 +295,25 @@
             </div>
         </div>
 
-        <div class="col-lg-6 pt-2">
+        <!-- Collection By Gender Card -->
+        <div class="col-lg-6">
+            <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
+                <div class="card-body">
+                    <div class="col">
+                        <h6 class="text-uppercase text-muted ls-1 mb-1">Collections Weight (KGs) By Gender</h6>
+                        <h2 class="mb-0">Collection By Gender</h2>
+                    </div>
+                    <div class="chart">
+                        <canvas id="CollectionsGenderBarChart" class="chart-canvas" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pl-4 pr-4 mt-4">
+        <!-- Grade Distribution KGs Card -->
+        <div class="col-lg-12">
             <div class="card" style="overflow-y: scroll; height: 500px;">
                 <div class="card-body">
                     <div class="col">
@@ -309,6 +328,7 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
 @endsection
 
@@ -318,11 +338,14 @@
 
 @push('custom-scripts')
 <script>
-    // collections chart
+    // collections chart with comma formatting on y-axis
     let collectionsData = @json($data['collections']);
-    let collectionsLabels = collectionsData.map(c => c.x)
-    let collectionsValues = collectionsData.map(c => c.y)
-    let collectionsBarChartCanvas = document.getElementById("CollectionsBarChart")
+    let collectionsLabels = collectionsData.map(c => c.x);
+   
+    let collectionsValues = collectionsData.map(c => c.y);
+    console.log(collectionsValues);
+   
+    let collectionsBarChartCanvas = document.getElementById("CollectionsBarChart");
 
     let collectionsBarData = {
         labels: collectionsLabels,
@@ -334,11 +357,27 @@
         }],
     };
     let collectionsBarOptions = {
-        animationEasing: "easeOutBounce",
+        scales: {
+        yAxes: [{
+            gridLines: {
+                // color: 'rgb(251,99,64)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
+            ticks: {
+                callback: function(value) {
+                    return value.toLocaleString()
+                },
+                beginAtZero: true,
+            },
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
         responsive: true,
-        maintainAspectRatio: false,
-        showScale: true,
-        legend: { display: true },
+        maintainAspectRatio: false
     };
     let collectionsBarChart = new Chart(collectionsBarChartCanvas, {
         type: "line",
@@ -346,12 +385,12 @@
         options: collectionsBarOptions
     });
 
-    // cooperative collections chart
+    // cooperative collections chart with comma formatting on y-axis
     let coopCollectionsArrData = @json($data['collections_by_cooperative']);
     let coopCollectionsLabels = [];
     let firstKey = Object.keys(coopCollectionsArrData)[0];
     if (coopCollectionsArrData.length != 0) {
-        coopCollectionsLabels = coopCollectionsArrData[firstKey].map(c => c.x)
+        coopCollectionsLabels = coopCollectionsArrData[firstKey].map(c => c.x);
     }
     let coopCollectionsBarChartCanvas = document.getElementById("CooperativeCollectionsLineChart");
 
@@ -365,7 +404,7 @@
 
     let coopCollectionsBarData = {
         labels: coopCollectionsLabels,
-        datasets: [],
+        datasets: []
     };
 
     let colorIndex = 0;
@@ -384,11 +423,27 @@
     }
 
     let coopCollectionsBarOptions = {
-        animationEasing: "easeOutBounce",
+        scales: {
+        yAxes: [{
+            gridLines: {
+                // color: 'rgb(251,99,64)',
+                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+            },
+            ticks: {
+                callback: function(value) {
+                    return value.toLocaleString()
+                },
+                beginAtZero: true,
+            },
+        }],
+        xAxes: [{
+            gridLines: {
+                display: false,
+            },
+        }],
+    },
         responsive: true,
-        maintainAspectRatio: false,
-        showScale: true,
-        legend: { display: true },
+        maintainAspectRatio: false
     };
     let coopCollectionsBarChart = new Chart(coopCollectionsBarChartCanvas, {
         type: "line",
@@ -396,11 +451,12 @@
         options: coopCollectionsBarOptions
     });
 
-    // grade distribution chart
+    // grade distribution chart with comma formatting on x-axis
     let gradeDistributionData = @json($data['grade_distribution']);
-    let gradeDistributionLabels = gradeDistributionData.map(c => c.name)
-    let gradeDistributionValues = gradeDistributionData.map(c => c.quantity)
-    let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart")
+    let gradeDistributionLabels = gradeDistributionData.map(c => c.name);
+    let gradeDistributionValues = gradeDistributionData.map(c => c.quantity);
+    let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart");
+
     let gradeDistributionBarData = {
         datasets: [{
             data: gradeDistributionValues,
@@ -414,16 +470,109 @@
         labels: gradeDistributionLabels
     };
     let gradeDistributionBarOptions = {
-        animationEasing: "easeOutBounce",
         responsive: true,
         maintainAspectRatio: true,
-        showScale: true,
-        legend: { display: false },
     };
     let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
         type: "horizontalBar",
         data: gradeDistributionBarData,
         options: gradeDistributionBarOptions
+    });
+
+    // Collections gender chart data
+    let maleCollectionsData = @json($data['male_collections']);
+    let maleCollectionValues = maleCollectionsData.map(c => c.y);
+
+    let collectionsGenderLabels = maleCollectionsData.map(c => c.x);
+    let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart");
+
+    let femaleCollectionsData = @json($data['female_collections']);
+    let femaleCollectionValues = femaleCollectionsData.map(c => c.y);
+
+    let collectionsGenderBarData = {
+        labels: collectionsGenderLabels,
+        datasets: [{
+            label: 'Male',
+            data: maleCollectionValues,
+            borderColor: 'rgba(54, 162, 235, 1)', //male
+            backgroundColor: 'rgba(54, 162, 235, 1)', //male
+            tension: 0.4,
+            fill: true,
+        }, {
+            label: 'Female',
+            data: femaleCollectionValues,
+            borderColor: '#f53794',
+            backgroundColor: '#f53794',
+            tension: 0.4,
+            fill: true,
+        }],
+    };
+
+    let collectionsGenderBarOptions = {
+        scales: {
+            yAxes: [{
+                gridLines: {
+                    // color: 'rgb(251,99,64)',
+                    zeroLineColor: 'rgba(77, 77, 77, 0.5)',
+                },
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString()
+                    },
+                    beginAtZero: true,
+                },
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false,
+                },
+            }],
+        },
+        tooltips: {
+            callbacks: {
+                label: function(item, data) {
+                    var label = data.datasets[item.datasetIndex].label || '';
+                    var yLabel = item.yLabel;
+                    var content = '';
+
+                    if (data.datasets.length > 1) {
+                        content += '<span class="popover-body-label mr-auto">' + label + '</span>';
+                    }
+
+                    content += '<span class="popover-body-value">' + yLabel + ' KGs</span>';
+                    return content;
+                },
+            },
+            mode: 'index',
+            intersect: true,
+        },
+        maintainAspectRatio: false,
+        legend: {
+            display: true,
+            position: 'top',
+            labels: {
+                boxWidth: 10,
+                padding: 15,
+            },
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+            },
+        },
+        animation: {
+            easing: 'easeOutBounce',
+            duration: 1000,
+        },
+    };
+
+    let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, {
+        type: 'bar',
+        data: collectionsGenderBarData,
+        options: collectionsGenderBarOptions,
     });
 </script>
 @endpush

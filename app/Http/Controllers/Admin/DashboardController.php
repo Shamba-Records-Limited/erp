@@ -281,6 +281,8 @@ class DashboardController extends Controller
             "collections_by_cooperative" => $collectionsByCooperative,
             "cooperatives_count" => $cooperativesCount,
             "grade_distribution" => $grade_distribution,
+            "male_collections" => $maleCollections,
+            "female_collections" => $femaleCollections,
         ];
 
 

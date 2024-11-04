@@ -15,7 +15,7 @@
 
         <div class="collapse @if ($errors->count() > 0) show @endif" id="addUserAccordion">
             <div class="card border-0 shadow-sm p-4 mb-4">
-                <h4 class="text-primary font-weight-bold mb-4">Add User</h4>
+                <h4 class="text-primary font-weight-bold mb-4">Add a New User</h4>
 
                 <form action="{{ route('admin.users.add') }}" method="post" enctype="multipart/form-data">
                     @csrf
@@ -101,7 +101,6 @@
     </div>
 </div>
 
-
 <!-- Card Layout for Registered Users with Pagination -->
 <div class="row pl-4" id="userCardsContainer"></div>
 
@@ -136,26 +135,30 @@
         usersToDisplay.forEach((user, index) => {
             const cardHtml = `
                 <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="mr-3"></div>
-                                <div>
-                                    <h5 class="card-title mb-1">${user.username}</h5>
-                                    <p class="card-text"><small class="text-muted">${user.coop_name}</small></p>
+                    <div class="card shadow-sm" style="height: 320px;"> <!-- Fixed height for uniform size -->
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="d-flex align-items-center">
+                                    <div class="mr-3"></div>
+                                    <div>
+                                        <h5 class="card-title mb-1">${user.username}</h5>
+                                        <p class="card-text"><small class="text-muted">${user.coop_name}</small></p>
+                                    </div>
                                 </div>
+                                <hr>
+                                <p class="mb-1"><strong>Name:</strong> ${user.first_name} ${user.other_names}</p>
+                                <p class="mb-1"><strong>Email:</strong> ${user.email}</p>
                             </div>
-                            <hr>
-                            <p class="mb-1"><strong>Name:</strong> ${user.first_name} ${user.other_names}</p>
-                            <p class="mb-1"><strong>Email:</strong> ${user.email}</p>
-                            <div class="dropdown mt-3">
-                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Actions
-                                </button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item text-info" href="/admin/users/detail/${user.id}"><i class="fa fa-eye"></i> View Details</a>
-                                    <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
-                                    <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
+                            <div>
+                                <div class="dropdown mt-3">
+                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Actions
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item text-info" href="/admin/users/detail/${user.id}"><i class="fa fa-eye"></i> View Details</a>
+                                        <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
+                                        <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

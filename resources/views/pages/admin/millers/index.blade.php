@@ -181,10 +181,8 @@ $countries = get_countries();
                                 <td>{{++$key }}</td>
                                 <td>{{$miller->name }} ({{$miller->abbreviation}})</td>
                                 <td>{{$miller->email }}</td>
-                                <td> {{$miller->country_name }}
-                                </td>
-                                <td>
-                                </td>
+                                <td>{{$miller->country_name }}</td>
+                                <td></td>
                             </tr>
                             @endforeach
                         </tbody>
