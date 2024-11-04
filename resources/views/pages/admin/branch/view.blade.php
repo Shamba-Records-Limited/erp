@@ -36,6 +36,8 @@
                         <th>Farmer</th>
                         <th>Product</th>
                         <th>Quantity</th>
+                        <th>Unit</th> <!-- Add a header for the unit -->
+
                         <th>Collection Time</th>
                         <th>Date Collected</th>
                     </tr>
@@ -48,6 +50,8 @@
                         <!-- Display farmer's full name -->
                         <td>{{ $collection->product_name }}</td>
                         <td>{{ $collection->quantity }}</td>
+                        <td>{{ $collection->unit }}</td> <!-- Display the unit of measurement -->
+
                         <td>{{ $collectionTimeLabels[$collection->collection_time] ?? 'N/A' }}</td>
                         <td>{{ $collection->date_collected }}</td>
                     </tr>

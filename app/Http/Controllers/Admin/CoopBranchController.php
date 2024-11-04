@@ -226,22 +226,29 @@ class CoopBranchController extends Controller
 public function view($id)
 {
     // Fetch the branch details
-    $branch = CoopBranch::findOrFail($id); // Assuming you have a Branch model
+    $branch = CoopBranch::findOrFail($id); // Fetch branch by ID
 
     // Fetch the farmers associated with this branch
-    $farmers = Farmer::where('branch_id', $id)->get(); // Adjust the condition based on your schema
+    $farmers = Farmer::where('branch_id', $id)->get(); // Get farmers of the branch
     $totalFarmers = $farmers->count(); // Count of farmers
 
-    // Fetch collections associated with this branch, including product names and farmer names
+    // Fetch collections with product names, farmer names, and unit
     $collections = DB::table('collections')
         ->where('coop_branch_id', $id)
         ->join('farmers', 'farmers.id', '=', 'collections.farmer_id')
         ->join('users', 'users.id', '=', 'farmers.user_id')
-        ->join('products', 'products.id', '=', 'collections.product_id') // Join with products to get the name
-        ->select('collections.*', 'users.first_name', 'users.other_names', 'products.name as product_name') // Select product name and farmer names
+        ->join('products', 'products.id', '=', 'collections.product_id')
+        ->join('product_categories', 'product_categories.id', '=', 'products.category_id') // Join with product_categories
+        ->select(
+            'collections.*', 
+            'users.first_name', 
+            'users.other_names', 
+            'products.name as product_name', 
+            'product_categories.unit as unit' // Fetch the unit from product_categories
+        )
         ->get();
 
-    // Update total farmers based on collections
+    // Update total farmers based on unique farmer IDs in collections
     $totalFarmers = $collections->pluck('farmer_id')->unique()->count(); // Count unique farmers from collections
 
     // Define collection time labels
@@ -253,5 +260,6 @@ public function view($id)
 
     return view('pages.admin.branch.view', compact('branch', 'farmers', 'totalFarmers', 'collections', 'collectionTimeLabels'));
 }
+
 // ... existing code ...
 }
