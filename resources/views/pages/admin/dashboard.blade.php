@@ -143,7 +143,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Milled Coffee Quantity</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Processed Product Quantity</h5>
                                     <span class="h2 font-weight-bold mb-0" id="milledCoffeeQuantity">4,560 KG</span>
                                 </div>
                                 <div class="col-auto">
@@ -165,7 +165,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Pre-Milled Coffee Quantity</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Pre-Processed Product Quantity</h5>
                                     <span class="h2 font-weight-bold mb-0" id="preMilledCoffeeQuantity">3,200 KG</span>
                                 </div>
                                 <div class="col-auto">

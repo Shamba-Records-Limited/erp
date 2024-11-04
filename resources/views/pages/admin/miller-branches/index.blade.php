@@ -18,7 +18,7 @@
                             </div>
                             <div class="card-body text-center">
                                 <h2 id="branch-count" class="font-weight-bold text-success display-4">0</h2>
-                                <p class="font-weight-bold text-muted">Unique Branches</p>
+                                <p class="font-weight-bold text-muted">Miller Branches</p>
                             </div>
                         </div>
                     </div>
