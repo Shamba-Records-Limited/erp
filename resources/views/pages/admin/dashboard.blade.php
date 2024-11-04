@@ -230,49 +230,80 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-12 mb-5 pl-5 pr-5 mt--7">
-        <div class="card shadow">
-            <div class="card-header bg-transparent">
-                <div class="row align-items-center">
-                    <div class="col">
-                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                        <h2 class=" mb-0">Collection Quantity (KGs)</h2>
+<div class="container-fluid mt--7">
+    <!-- Global Filter for Date Range and Export -->
+    <div class="d-flex justify-content-between w-100 mb-4">
+        <div></div>
+        <div class="d-flex align-items-start">
+            <form class="d-flex">
+                <div class="form-group mr-2">
+                    <select name="date_range" placeholder="Select Date Range" class="form-control form-select"
+                        onchange="this.form.submit()" id="dateRange">
+                        <option value="week" @if($date_range=="week" ) selected @endif>This Week</option>
+                        <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>
+                        <option value="year" @if($date_range=="year" ) selected @endif>This Year</option>
+                        <option value="custom" @if($date_range=="custom" ) selected @endif>Custom</option>
+                    </select>
+                </div>
+                <div class="form-group mr-2">
+                    <input type="date" class="form-control" name="from_date" value="{{ $from_date }}"
+                        onchange="this.form.submit()" id="fromDate" />
+                </div>
+                <div class="form-group mr-2">
+                    <input type="date" class="form-control" name="to_date" value="{{ $to_date }}"
+                        onchange="this.form.submit()" id="toDate" />
+                </div>
+            </form>
+            <a class="btn btn-warning mt-1 ml-2" href="{{ route('admin.dashboard.export') }}"
+                onclick="exportChart()">Export</a>
+        </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="row">
+        <div class="col-12 mb-5 pl-5 pr-5 mt--4">
+            <div class="card shadow">
+                <div class="card-header bg-transparent">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                            <h2 class=" mb-0">Collection Quantity (KGs)</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="chart">
-                    <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row pl-4 pr-4">
-    <div class="col-lg-6">
-        <div class="card" style="height: 100%;">
-            <div class="card-body">
-                <div class="col pb-2">
-                    <h2 class="mb-0">Collection Quantity Per Cooperative (KGs)</h2>
-                </div>
-                <div>
-                    <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
-                </div>
-            </div>
         </div>
     </div>
 
-    <div class="col-lg-6 pt-2">
-        <div class="card" style="overflow-y: scroll; height: 500px;">
-            <div class="card-body">
-                <div class="col">
-                    <h2 class="mb-0">Grade Distribution KGs</h2>
+    <div class="row pl-4 pr-4">
+        <div class="col-lg-6">
+            <div class="card" style="height: 100%;">
+                <div class="card-body">
+                    <div class="col pb-2">
+                        <h2 class="mb-0">Collection Quantity Per Cooperative (KGs)</h2>
+                    </div>
+                    <div>
+                        <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 d-flex align-items-center">
-                        <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
+            </div>
+        </div>
+
+        <div class="col-lg-6 pt-2">
+            <div class="card" style="overflow-y: scroll; height: 500px;">
+                <div class="card-body">
+                    <div class="col">
+                        <h2 class="mb-0">Grade Distribution KGs</h2>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 d-flex align-items-center">
+                            <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -324,7 +355,6 @@
     }
     let coopCollectionsBarChartCanvas = document.getElementById("CooperativeCollectionsLineChart");
 
-    // Generate a unique color for each cooperative line
     const colors = [
         'rgba(255, 99, 132, 0.8)',
         'rgba(54, 162, 235, 0.8)',
@@ -347,7 +377,7 @@
             label: key,
             data: values,
             borderColor: color,
-            backgroundColor: color.replace('0.8', '0.3'), // Transparent background
+            backgroundColor: color.replace('0.8', '0.3'),
             fill: false
         });
         colorIndex++;

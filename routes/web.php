@@ -129,6 +129,9 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/cooperative/setup/activate/{id}', 'CooperativeController@activate_company')->name('cooperative.setup.activate');
     Route::get('/cooperatives/{id}', 'CooperativeController@showDetail')->name('cooperative.detail');
 
+    // dashboard
+    Route::post("admin/dashboard/export", "Admin\DashboardController@export_dashboard")
+        ->name("admin.dashboard.export");
 
     //branches
     Route::get('/branches', 'Admin\CoopBranchController@index')
