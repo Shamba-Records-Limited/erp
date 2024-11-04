@@ -44,7 +44,8 @@
                     @forelse($collections as $collection)
                     <tr>
                         <td>{{ $collection->collection_number }}</td>
-                        <td>{{ $collection->username }}</td>
+                        <td>{{ $collection->first_name }} {{ $collection->other_names }}</td>
+                        <!-- Display farmer's full name -->
                         <td>{{ $collection->product_name }}</td>
                         <td>{{ $collection->quantity }}</td>
                         <td>{{ $collectionTimeLabels[$collection->collection_time] ?? 'N/A' }}</td>

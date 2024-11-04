@@ -232,13 +232,13 @@ public function view($id)
     $farmers = Farmer::where('branch_id', $id)->get(); // Adjust the condition based on your schema
     $totalFarmers = $farmers->count(); // Count of farmers
 
-    // Fetch collections associated with this branch, including product names
+    // Fetch collections associated with this branch, including product names and farmer names
     $collections = DB::table('collections')
         ->where('coop_branch_id', $id)
         ->join('farmers', 'farmers.id', '=', 'collections.farmer_id')
         ->join('users', 'users.id', '=', 'farmers.user_id')
         ->join('products', 'products.id', '=', 'collections.product_id') // Join with products to get the name
-        ->select('collections.*', 'users.username', 'products.name as product_name') // Select product name
+        ->select('collections.*', 'users.first_name', 'users.other_names', 'products.name as product_name') // Select product name and farmer names
         ->get();
 
     // Update total farmers based on collections
