@@ -76,7 +76,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
+                                <th>Branch Name</th>
                                 <th>Branch Code</th>
                                 <th>Location</th>
                                 <th>Actions</th>

@@ -98,7 +98,7 @@
     </div>
 </div>
 
-  <div class="col-md-12 grid-margin">
+  <!-- <div class="col-md-12 grid-margin">
     <div class="card">
       <div class="card-body">
         <div class="d-sm-flex justify-content-between align-items-center mb-4">
@@ -109,7 +109,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 grid-margin stretch-card">
     <div class="card card-statistics">
       <div class="card-body">
@@ -119,8 +119,8 @@
               <thead>
                 <tr>
                     <th>#</th>
-                    <th>Employee No</th>
                     <th>Name</th>
+                    <th>Employee No</th>
                     <th>Activity</th>
                 </tr>
               </thead>
@@ -128,8 +128,9 @@
                   @foreach($data['employees'] as $key => $item)
                       <tr>
                         <td>{{++$key }}</td>
+                        <td>{{$item->first_name }} {{$item->other_names }}</td>
                         <td>{{$item->employee->employee_no }}</td>
-                        <td>{{$item->first_name }} {{$item->last_name }}</td>
+                        
                         <td>
                           @if($item->employee->employeeLeave->count() > 0)
                             {{ $item->employee->employeeLeave[0]->status }}

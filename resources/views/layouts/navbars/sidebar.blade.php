@@ -138,6 +138,30 @@ $cooperative = null;
                     <i class="ni ni-key-25 text-custom-green"></i> {{ __('Roles') }}
                 </a>
             </li>
+         <!-- Module Management Dropdown -->
+            <li class="nav-item mb-3">
+                <!-- Added margin-bottom for spacing -->
+                <a class="nav-link" href="#moduleManagement" data-toggle="collapse" role="button"
+                    aria-expanded="{!! is_active_route(['admin/modules*']) !!}" aria-controls="moduleManagement">
+                    <i class="ni ni-archive-2 text-custom-green"></i> <!-- Using the same icon style -->
+                    <span class="nav-link-text" style="color: #f4645f;">{{__('Module Management')}}</span> <!-- Matching text color -->
+                    <i class="menu-arrow"></i> <!-- Keeping the arrow icon -->
+                </a>
+                <div class="collapse {{ show_class(['admin/manage/*']) }}" id="moduleManagement">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item {{ active_class(['admin/manage/modules']) }}">
+                            <a class="nav-link" href="{{ route('modules') }}">
+                                {{__('Modules')}}
+                            </a>
+                        </li>
+                        <li class="nav-item {{ active_class(['admin/manage/sub-modules']) }}">
+                            <a class="nav-link" href="{{ route('sub-modules') }}">
+                                {{__('Submodules')}}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 
             <!-- Product Management Dropdown -->
             <li class="nav-item mb-3">

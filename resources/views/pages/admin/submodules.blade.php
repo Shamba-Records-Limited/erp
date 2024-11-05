@@ -25,7 +25,7 @@
                                             <div class="form-group col-lg-6 col-md-10 col-12">
                                                 <label for="module">Module</label>
                                                 <select name="module" id="module"
-                                                        class=" form-control select2bs4">
+                                                        class=" form-control form-select">
                                                     @foreach($modules as $module)
                                                         <option value="{{$module->id}}" {{ request()->get('module')  == $module->id ? 'selected' : '' }}>{{$module->name}}</option>
                                                     @endforeach
@@ -133,14 +133,14 @@
 
                                                 </div>
                                             </div>
-                                            <div class="form-row">
+                                            <!-- <div class="form-row">
                                                 <div class="form-group col-lg-6 col-md-6 col-12">
                                                     <label for="moduleBtn"></label>
                                                     <button type="submit" class="btn btn-primary btn-fw btn-block">Add
                                                         Sub Modules
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </form>
                                     </div>
                                 </div>
