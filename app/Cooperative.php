@@ -81,4 +81,8 @@ class Cooperative extends Model
         
         return $admin;
     }
+
+    public function employees(){
+        return $this->hasMany(User::class, 'cooperative_id', 'id');
+    }
 }

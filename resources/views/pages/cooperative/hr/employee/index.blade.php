@@ -159,7 +159,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 </span>
                                 @endif
                             </div>
-<!--  -->
+
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="kra">KRA PIN</label>
@@ -197,7 +197,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 <select name="department" id="department" class=" form-control form-select {{ $errors->has('department') ? ' is-invalid' : '' }}">
                                     <option value="">-Select Department-</option>
                                     @foreach($departments as $department)
-                                    <option value="{{$department->id}}"> {{ $department->name }}</option>
+                                    <option value="{{$department->id}}" {{ old('department->id') == $department->id ? 'selected' : '' }}> {{ $department->name }}</option>
                                     @endforeach
 
 
@@ -208,6 +208,23 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 </span>
                                 @endif
                             </div>
+                        <div class="form-group col-lg-3 col-md-6 col-12">
+                            <label for="coop_branch">Branches</label>
+                            <select name="coop_branch_id" id="coop_branch_id" class="form-control form-select {{ $errors->has('coop_branch_id') ? ' is-invalid' : '' }}">
+                                <option value="">-Select Branch-</option>
+                                @foreach($coop_branches as $coop_branch)
+                                    <option value="{{$coop_branch->id}}" {{ old('coop_branch_id') == $coop_branch->id ? 'selected' : '' }}>
+                                        {{ $coop_branch->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('coop_branch_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('coop_branch_id') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="employee_number">Employee No.</label>
                                 <input type="text" name="employee_number" class="form-control {{ $errors->has('employee_number') ? ' is-invalid' : '' }}" id="employee_number" placeholder="EM1234" value="{{ old('employee_number')}}">
@@ -478,25 +495,25 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
         })
     })
 
-    $("#bank_id").change(() => {
-        $("#bank_branch_id").empty()
-        const bank = $("#bank_id").val();
-        let url = '{{ route("bank_branches-by-bank",":bank_id") }}';
-        url = url.replace(':bank_id', bank);
-        let htmlCode = '';
-        axios.post(url).then(res => {
-            const data = res.data
-            htmlCode += `<option value="">---Select Bank Branch---</option>`;
-            data.forEach(d => {
-                htmlCode += `<option value="${d.id}">${d.name}</option>`;
-            })
+    // $("#bank_id").change(() => {
+    //     $("#bank_branch_id").empty()
+    //     const bank = $("#bank_id").val();
+    //     let url = '{{ route("bank_branches-by-bank",":bank_id") }}';
+    //     url = url.replace(':bank_id', bank);
+    //     let htmlCode = '';
+    //     axios.post(url).then(res => {
+    //         const data = res.data
+    //         htmlCode += `<option value="">---Select Bank Branch---</option>`;
+    //         data.forEach(d => {
+    //             htmlCode += `<option value="${d.id}">${d.name}</option>`;
+    //         })
 
-            $("#bank_branch_id").append(htmlCode)
-        }).catch(() => {
-            htmlCode += `<option value="">---Select Bank Branch---</option>`;
-            $("#bank_branch_id").append(htmlCode);
-        })
-    })
+    //         $("#bank_branch_id").append(htmlCode)
+    //     }).catch(() => {
+    //         htmlCode += `<option value="">---Select Bank Branch---</option>`;
+    //         $("#bank_branch_id").append(htmlCode);
+    //     })
+    // })
 
     $('#profile_picture').change(function() {
         previewImage(this, 'picturePreview', 'imagePreviewContainer');

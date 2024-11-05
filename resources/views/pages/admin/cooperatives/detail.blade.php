@@ -177,9 +177,9 @@
                                 <a href="{{ route('admin.farmers.detail', $farmer->id) }}" class="btn-action view">
                                     <i class="fas fa-eye"></i>
                                 </a>
-                                <button class="btn-action edit">
+                                <!-- <button class="btn-action edit">
                                     <i class="fas fa-edit"></i>
-                                </button>
+                                </button> -->
                                 <button class="btn-action delete">
                                     <i class="fas fa-trash"></i>
                                 </button>

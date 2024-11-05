@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\CoopEmployee;
 use App\Http\Controllers\Controller;
+use App\CoopBranchDepartment;
+use App\CoopBranch;
 use App\User;
+use Illuminate\Support\Facades\Auth;
+
 use DB;
 use Log;
 use Request;
@@ -18,21 +22,23 @@ class EmployeesController extends Controller
 
     public function index()
     {
-        // $employees = CoopEmployee::get_employees($coop, null, 100);
+                $coop = Auth::user()->cooperative->id;
+
+        $employees = CoopEmployee::get_employees($coop, null, 100);
         // $banks = Bank::where('cooperative_id', $coop)->get();
-        // $coop_branches = CoopBranch::where('cooperative_id', $coop)->pluck('id');
-        // $departments = CoopBranchDepartment::whereIn('branch_id', $coop_branches)->latest()->get();
+        $coop_branches = CoopBranch::where('cooperative_id', $coop)->pluck('id');
+        $departments = CoopBranchDepartment::whereIn('branch_id', $coop_branches)->latest()->get();
         // $positions = JobPosition::where('cooperative_id', $coop)->orderBy('position')->get();
         // $types = EmploymentType::where('cooperative_id', $coop)->latest()->get();
         $countries = get_countries();
 
 
-        $employees = DB::select(DB::raw("
+       $employees = DB::select(DB::raw("
             SELECT u.*, emp.*
             FROM coop_employees emp
             JOIN users u ON emp.user_id = u.id
-            ORDER BY emp.created_at DESC;
-        "));
+        ORDER BY emp.created_at DESC;
+    "));
 
         // return view('pages.cooperative.hr.employee.index', compact('employees', 'countries', 'departments', 'positions', 'types', 'banks'));
         return view('pages.admin.employees.index', compact("countries", "employees"));

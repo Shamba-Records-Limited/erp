@@ -72,7 +72,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 <select name="country" id="country" class=" form-control select2bs4 {{ $errors->has('country') ? ' is-invalid' : '' }}">
                                     <option value=""> -Select Country-</option>
                                     @foreach($countries as $country)
-                                    <option value="{{$country->id}}"> {{ $country->name }}</option>
+                                    <option value="{{$country['code']}}"> {{ $country['name'] }}</option>
                                     @endforeach
 
                                     @if ($errors->has('country'))

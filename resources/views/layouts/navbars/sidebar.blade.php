@@ -118,6 +118,12 @@ $cooperative = null;
                     <i class="ni ni-single-02 text-custom-green"></i> {{ __('User') }}
                 </a>
             </li>
+             <!-- <li class="nav-item {{ active_class(['admin/employees']) }}">
+                <a class="nav-link" href="{{ route('admin.employees.show') }}">
+                    <i class="menu-icon mdi mdi-cogs"></i>
+                    <span class="menu-title">Employees</span>
+                </a>
+            </li> -->
             <li class="nav-item {{ active_class(['admin/county-govt-officials']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.county-govt-officials.show') }}">
                     <i class="ni ni-circle-08 text-custom-green"></i> {{ __('County Govt Officials') }}
@@ -453,7 +459,7 @@ $cooperative = null;
             <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
             <a class="nav-link" href="{{ route('hr.employees.show') }}">
                 <i class="menu-icon mdi mdi-television text-custom-green"></i>
-                <!-- <span class="menu-title">Employees</span> -->
+                <span class="menu-title"></span>
                 {{config('enums.system_modules')['HR Management']['employees']}}
             </a>
         </li>

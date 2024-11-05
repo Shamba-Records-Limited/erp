@@ -144,33 +144,8 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                     <div class="row align-items-center">
                         <div class="col">
                             <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                            <h2 class=" mb-0">Collections Weight (KGs)</h2>
+                            <h2 class=" mb-0">Collections Quantity (KGs)</h2>
                         </div>
-                        <!-- <div class="col">
-                            <ul class="nav nav-pills justify-content-end">
-                                <li class="nav-item mr-2 mr-md-0" data-toggle="chart"
-                                    data-target="#CollectionsBarChart">
-                                    <a href="#" class="nav-link py-2 px-3 active bg-custom-gradient-green"
-                                        data-toggle="tab">
-                                        <span class="d-none d-md-block">All</span>
-                                        <span class="d-md-none">All</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item mr-2 mr-md-0 " data-toggle="chart"
-                                    data-target="#CollectionsBarChart">
-                                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
-                                        <span class="d-none d-md-block">Month</span>
-                                        <span class="d-md-none">M</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item" data-toggle="chart" data-target="#CollectionsBarChart"><a href="#"
-                                        class="nav-link py-2 px-3" data-toggle="tab">
-                                        <span class="d-none d-md-block">Week</span>
-                                        <span class="d-md-none">W</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div> -->
                     </div>
                 </div>
                 <div class="card-body">

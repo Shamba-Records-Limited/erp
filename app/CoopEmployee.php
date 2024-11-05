@@ -134,6 +134,10 @@ class CoopEmployee extends Model
             $employees .= " ORDER BY name";
         }
 
+
         return DB::select($employees);
     }
+
+
+ 
 }

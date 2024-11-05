@@ -302,7 +302,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Cooperative</th>
-                                <th>Name</th>
+                                <th>Branch Name</th>
                                 <th>Branch Code</th>
                                 <th>Sub county</th>
                                 <th>Location</th>
