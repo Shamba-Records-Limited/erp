@@ -151,20 +151,25 @@ class MarketAuctionController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
+    
         // cart
         $cart = MillerAuctionCart::where("miller_id", $miller_id)
             ->where("cooperative_id", $coop_id)
             ->where("user_id", $user->id)
             ->first();
-
+    
+        if (!$cart) {
+            // Handle case where no cart is found, e.g., return an error or redirect
+            return redirect()->back()->with('error', 'Cart not found.');
+        }
+    
         // total in cart
         $totalInCart = DB::select(DB::raw("
             SELECT sum(item.quantity) AS total
             FROM miller_auction_cart_item item
             WHERE item.cart_id = :cart_id
         "), ["cart_id" => $cart->id])[0]->total;
-
+    
         // aggregate grade distribution
         $aggregateGradeDistribution = DB::select(DB::raw("
             SELECT SUM(d.quantity) AS total,
@@ -176,16 +181,15 @@ class MarketAuctionController extends Controller
             WHERE item.cart_id = :cart_id
             GROUP BY d.product_grade_id
             ORDER BY total DESC
-        "), ["cart_id" => $cart->id,]);
-
-
+        "), ["cart_id" => $cart->id]);
+    
         // cart items
         $cartItems = DB::select(DB::raw("
             SELECT item.*
             FROM miller_auction_cart_item item
             JOIN miller_auction_cart cart ON cart.id = item.cart_id AND cart.id = :cart_id;
         "), ["cart_id" => $cart->id]);
-
+    
         foreach ($cartItems as $item) {
             $item->distributions = DB::select(DB::raw("
                 SELECT sum(distribution.quantity) AS total,
@@ -196,7 +200,7 @@ class MarketAuctionController extends Controller
                 ORDER BY total DESC
             "), ["lot_number" => $item->lot_number]);
         }
-
+    
         // cooperative
         $cooperative = null;
         $cooperatives = DB::select(DB::raw("
@@ -205,21 +209,21 @@ class MarketAuctionController extends Controller
         if (count($cooperatives) > 0) {
             $cooperative = $cooperatives[0];
         }
-
+    
         // default batch number
         $suffix_batch_number = MillerAuctionOrder::count() + 1;
         $now = Carbon::now();
         $now_str = strtoupper($now->format('Ymd'));
         $default_batch_number = "B$now_str-$suffix_batch_number";
-
+    
         // warehouses
         $warehouses = DB::select(DB::raw("
             SELECT * FROM miller_warehouse WHERE miller_id = :miller_id
         "), ["miller_id" => $miller_id]);
-
+    
         return view('pages.miller-admin.market-auction.cart-checkout', compact('cooperative', 'cartItems', 'warehouses', 'totalInCart', 'aggregateGradeDistribution', 'default_batch_number'));
     }
-
+    
     // todo: implement
     public function clear_cart($coop_id)
     {

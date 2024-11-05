@@ -192,7 +192,7 @@ $countries = get_countries();
                                 <label for="member_no">Member No</label>
                                 <input type="text" name="member_no"
                                     class="form-control {{ $errors->has('member_no') ? ' is-invalid' : '' }}"
-                                    id="member_no" placeholder="A236...Z" value="{{ old('member_no')}}">
+                                    id="member_no" placeholder="123" value="{{ old('member_no')}}">
 
                                 @if ($errors->has('member_no'))
                                 <span class="help-block text-danger">

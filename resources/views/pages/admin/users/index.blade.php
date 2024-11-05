@@ -51,7 +51,7 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label for="other_names" class="font-weight-bold">Other Names</label>
+                            <label for="other_names" class="font-weight-bold">Surname</label>
                             <input type="text" name="other_names" class="form-control rounded {{ $errors->has('other_names') ? ' is-invalid' : '' }}" 
                                    id="other_names" placeholder="Doe" value="{{ old('other_names') }}" required>
                             @error('other_names') <div class="invalid-feedback">{{ $message }}</div> @enderror
