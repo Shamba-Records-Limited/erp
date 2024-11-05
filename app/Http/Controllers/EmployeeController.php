@@ -46,13 +46,13 @@ class EmployeeController extends Controller
 
         $coop = Auth::user()->cooperative->id;
         $employees = CoopEmployee::get_employees($coop, null, 100);
-        $banks = Bank::where('cooperative_id', $coop)->get();
+        // $banks = Bank::where('cooperative_id', $coop)->get();
         $coop_branches = CoopBranch::where('cooperative_id', $coop)->pluck('id');
         $departments = CoopBranchDepartment::whereIn('branch_id', $coop_branches)->latest()->get();
         $positions = JobPosition::where('cooperative_id', $coop)->orderBy('position')->get();
         $types = EmploymentType::where('cooperative_id', $coop)->latest()->get();
         $countries = get_countries();
-        return view('pages.cooperative.hr.employee.index', compact('employees', 'countries', 'departments', 'positions', 'types', 'banks'));
+        return view('pages.cooperative.hr.employee.index', compact('employees', 'countries', 'departments', 'positions', 'types'));
     }
 
     //downloads
@@ -108,7 +108,7 @@ class EmployeeController extends Controller
             'gender' => 'required',
             'basic_salary' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'job_group' => 'required',
-            'bank_account_name' => 'required',
+            // 'bank_account_name' => 'required',
             'profile_picture' => "sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072",
         ]);
         if ($this->createEmployee($req)) {
@@ -162,8 +162,8 @@ class EmployeeController extends Controller
             'marital_status' => 'required',
             'dob' => 'required',
             'gender' => 'required',
-            'bank_id' => 'required',
-            'bank_branch_id' => 'required',
+            // 'bank_id' => 'required',
+            // 'bank_branch_id' => 'required',
             'profile_picture' => "sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072",
         ]);
         try {
@@ -182,13 +182,13 @@ class EmployeeController extends Controller
             Log::debug("Update: Saved employee: $employee");
 
             //bank details
-            $account_details = EmployeeBankDetail::find($req->bank_detail_id);
-            $account_details->account_name = $req->bank_account_name;
-            $account_details->account_number = $req->bank_account;
-            $account_details->bank_branch_id = $req->bank_branch_id;
-            $account_details->bank_id = $req->bank_id;
-            $account_details->save();
-            Log::debug("Update: Saved employee bank details: " . $account_details->refresh()->id);
+            // $account_details = EmployeeBankDetail::find($req->bank_detail_id);
+            // $account_details->account_name = $req->bank_account_name;
+            // $account_details->account_number = $req->bank_account;
+            // $account_details->bank_branch_id = $req->bank_branch_id;
+            // $account_details->bank_id = $req->bank_id;
+            // $account_details->save();
+            // Log::debug("Update: Saved employee bank details: " . $account_details->refresh()->id);
 
             $auth_user = Auth::user();
             //send email and new audit trail
@@ -247,15 +247,15 @@ class EmployeeController extends Controller
     {
         $coop = Auth::user()->cooperative->id;
         $employees = CoopEmployee::get_employees($coop, $id, null);
-        $banks = Bank::where('cooperative_id', $coop)->latest()->get();
-        $bank_branches = BankBranch::where('cooperative_id', $coop)->latest()->get();
+        // $banks = Bank::where('cooperative_id', $coop)->latest()->get();
+        // $bank_branches = BankBranch::where('cooperative_id', $coop)->latest()->get();
         $coop_branches = CoopBranch::where('cooperative_id', $coop)->pluck('id');
         $departments = CoopBranchDepartment::whereIn('branch_id', $coop_branches)->latest()->get();
         $positions = JobPosition::where('cooperative_id', $coop)->latest()->get();
         $types = EmploymentType::where('cooperative_id', $coop)->latest()->get();
         $countries = get_countries();
         $departmentId = $id;
-        return view('pages.cooperative.hr.employee.index', compact('employees', 'countries', 'departments', 'positions', 'types', 'banks', 'bank_branches', 'departmentId'));
+        return view('pages.cooperative.hr.employee.index', compact('employees', 'countries', 'departments', 'positions', 'types',  'departmentId'));
     }
 
     /////REPORTS/////

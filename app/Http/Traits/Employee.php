@@ -40,14 +40,14 @@ trait Employee
             $role = Role::select('id', 'name')->where('name', '=', 'employee')->first();
             $new_user->assignRole($role->name);
             //bank details
-            $account_details = new EmployeeBankDetail();
-            $account_details->account_name = $request->bank_account_name;
-            $account_details->account_number = $request->bank_account;
-            $account_details->bank_branch_id = $request->bank_branch_id;
-            $account_details->employee_id = $new_employee;
-            $account_details->bank_id = $request->bank_id;
-            $account_details->save();
-            Log::debug("Saved employee bank details: " . $account_details->refresh()->id);
+            // $account_details = new EmployeeBankDetail();
+            // $account_details->account_name = $request->bank_account_name;
+            // $account_details->account_number = $request->bank_account;
+            // $account_details->bank_branch_id = $request->bank_branch_id;
+            // $account_details->employee_id = $new_employee;
+            // $account_details->bank_id = $request->bank_id;
+            // $account_details->save();
+            // Log::debug("Saved employee bank details: " . $account_details->refresh()->id);
             //employment type
             $employment_type = new EmployeeEmploymentType();
             $employment_type->employment_type_id = $request->employment_type;
@@ -114,7 +114,7 @@ trait Employee
 
     private function persist($req, $new_user, CoopEmployee $employee, $is_edit=false): string
     {
-        $employee->country_id = $req->country;
+        $employee->country_code = $req->country;
         $employee->county_of_residence = $req->county;
         $employee->area_of_residence = $req->area_of_residence;
         $employee->marital_status = $req->marital_status;

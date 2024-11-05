@@ -159,55 +159,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 </span>
                                 @endif
                             </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="bank_account">Bank Account No. </label>
-                                <input type="text" name="bank_account" class="form-control {{ $errors->has('bank_account') ? ' is-invalid' : '' }}" id="bank_account" placeholder="235965..." value="{{ old('bank_account')}}">
-
-                                @if ($errors->has('bank_account'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('bank_account')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="bank_account_name">Bank Account Name. </label>
-                                <input type="text" name="bank_account_name" class="form-control {{ $errors->has('bank_account_name') ? ' is-invalid' : '' }}" id="bank_account_name" placeholder="John Doe..." value="{{ old('bank_account_name')}}">
-
-                                @if ($errors->has('bank_account_name'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('bank_account_name')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="bank_id">Bank</label>
-                                <select name="bank_id" id="bank_id" class=" form-control form-select {{ $errors->has('bank_id') ? ' is-invalid' : '' }}">
-                                    <option value="">---Select Bank---</option>
-                                    @foreach($banks as $bank)
-                                    <option value="{{$bank->id}}"> {{ $bank->name }}</option>
-                                    @endforeach
-                                </select>
-                                @if ($errors->has('bank_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('bank_id')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
-
-                            <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="bank_branch_id">Bank Branch</label>
-                                <select name="bank_branch_id" id="bank_branch_id" class=" form-control form-select {{ $errors->has('bank_branch_id') ? ' is-invalid' : '' }}">
-
-                                </select>
-                                @if ($errors->has('bank_branch_id'))
-                                <span class="help-block text-danger">
-                                    <strong>{{ $errors->first('bank_branch_id')  }}</strong>
-                                </span>
-                                @endif
-                            </div>
+<!--  -->
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="kra">KRA PIN</label>
