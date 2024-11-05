@@ -262,74 +262,91 @@
     </div>
 
     <!-- Dashboard Content -->
-    <div class="row">
-        <div class="col-12 mb-5 pl-5 pr-5 mt--4">
-            <div class="card shadow">
-                <div class="card-header bg-transparent">
-                    <div class="row align-items-center">
+        <div class="row">
+            <div class="col-12 mb-5 pl-5 pr-5 mt--4">
+                <div class="card shadow">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                                <h2 class=" mb-0">Collection Quantity (KGs)</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pl-4 pr-4">
+            <!-- Collection Quantity Per Cooperative (KGs) Card -->
+            <div class="col-lg-6">
+                <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
+                    <div class="card-body">
+                        <div class="col pb-2">
+                            <h2 class="mb-0">Collection Quantity Per Cooperative/Aggregator (KGs)</h2>
+                        </div>
+                        <div>
+                            <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collection By Gender Card (Bar Chart) -->
+            <div class="col-lg-6">
+                <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
+                    <div class="card-body">
                         <div class="col">
-                            <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                            <h2 class=" mb-0">Collection Quantity (KGs)</h2>
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Collections Weight (KGs) By Gender</h6>
+                            <h2 class="mb-0">Collection By Gender</h2>
                         </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="chart">
-                        <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row pl-4 pr-4">
-    <!-- Collection Quantity Per Cooperative (KGs) Card -->
-        <div class="col-lg-6">
-            <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
-                <div class="card-body">
-                    <div class="col pb-2">
-                        <h2 class="mb-0">Collection Quantity Per Cooperative/Aggregator (KGs)</h2>
-                    </div>
-                    <div>
-                        <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Collection By Gender Card -->
-        <div class="col-lg-6">
-            <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
-                <div class="card-body">
-                    <div class="col">
-                        <h6 class="text-uppercase text-muted ls-1 mb-1">Collections Weight (KGs) By Gender</h6>
-                        <h2 class="mb-0">Collection By Gender</h2>
-                    </div>
-                    <div class="chart">
-                        <canvas id="CollectionsGenderBarChart" class="chart-canvas" height="300"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row pl-4 pr-4 mt-4">
-        <!-- Grade Distribution KGs Card -->
-        <div class="col-lg-12">
-            <div class="card" style="overflow-y: scroll; height: 500px;">
-                <div class="card-body">
-                    <div class="col">
-                        <h2 class="mb-0">Grade Distribution KGs</h2>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 d-flex align-items-center">
-                            <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
+                        <div class="chart">
+                            <canvas id="CollectionsGenderBarChart" class="chart-canvas" height="300"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="row pl-4 pr-4 mt-4">
+            <!-- Collection Gender Distribution Card (Pie Chart) -->
+            <div class="col-lg-6">
+                <div class="card" style="height: 100%; min-height: 500px;">
+                    <div class="card-body">
+                        <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Gender Distribution</h6>
+                            <h2 class="mb-0">Collections Gender Distribution</h2>
+                        </div>
+                        <div class="chart">
+                            <canvas id="CollectionsGenderPieChart" class="chart-canvas" height="300"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row pl-4 pr-4 mt-4">
+            <!-- Grade Distribution KGs Card -->
+            <div class="col-lg-12">
+                <div class="card" style="overflow-y: scroll; height: 500px;">
+                    <div class="card-body">
+                        <div class="col">
+                            <h2 class="mb-0">Grade Distribution KGs</h2>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex align-items-center">
+                                <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -340,13 +357,11 @@
 
 @push('custom-scripts')
 <script>
-    // collections chart with comma formatting on y-axis
+    // Collections chart with comma formatting on y-axis
     let collectionsData = @json($data['collections']);
     let collectionsLabels = collectionsData.map(c => c.x);
-   
     let collectionsValues = collectionsData.map(c => c.y);
-    console.log(collectionsValues);
-   
+
     let collectionsBarChartCanvas = document.getElementById("CollectionsBarChart");
 
     let collectionsBarData = {
@@ -360,24 +375,15 @@
     };
     let collectionsBarOptions = {
         scales: {
-        yAxes: [{
-            gridLines: {
-                // color: 'rgb(251,99,64)',
-                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
-            },
-            ticks: {
-                callback: function(value) {
-                    return value.toLocaleString()
+            yAxes: [{
+                gridLines: { zeroLineColor: 'rgba(77, 77, 77, 0.5)' },
+                ticks: {
+                    callback: function(value) { return value.toLocaleString() },
+                    beginAtZero: true,
                 },
-                beginAtZero: true,
-            },
-        }],
-        xAxes: [{
-            gridLines: {
-                display: false,
-            },
-        }],
-    },
+            }],
+            xAxes: [{ gridLines: { display: false } }],
+        },
         responsive: true,
         maintainAspectRatio: false
     };
@@ -387,28 +393,13 @@
         options: collectionsBarOptions
     });
 
-    // cooperative collections chart with comma formatting on y-axis
+    // Cooperative collections chart with comma formatting on y-axis
     let coopCollectionsArrData = @json($data['collections_by_cooperative']);
-    let coopCollectionsLabels = [];
-    let firstKey = Object.keys(coopCollectionsArrData)[0];
-    if (coopCollectionsArrData.length != 0) {
-        coopCollectionsLabels = coopCollectionsArrData[firstKey].map(c => c.x);
-    }
+    let coopCollectionsLabels = coopCollectionsArrData[Object.keys(coopCollectionsArrData)[0]].map(c => c.x);
     let coopCollectionsBarChartCanvas = document.getElementById("CooperativeCollectionsLineChart");
 
-    const colors = [
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)'
-    ];
-
-    let coopCollectionsBarData = {
-        labels: coopCollectionsLabels,
-        datasets: []
-    };
-
+    const colors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)', 'rgba(255, 159, 64, 0.8)'];
+    let coopCollectionsBarData = { labels: coopCollectionsLabels, datasets: [] };
     let colorIndex = 0;
     for (let key in coopCollectionsArrData) {
         let coopCollections = coopCollectionsArrData[key];
@@ -423,27 +414,14 @@
         });
         colorIndex++;
     }
-
     let coopCollectionsBarOptions = {
         scales: {
-        yAxes: [{
-            gridLines: {
-                // color: 'rgb(251,99,64)',
-                zeroLineColor: 'rgba(77, 77, 77, 0.5)',
-            },
-            ticks: {
-                callback: function(value) {
-                    return value.toLocaleString()
-                },
-                beginAtZero: true,
-            },
-        }],
-        xAxes: [{
-            gridLines: {
-                display: false,
-            },
-        }],
-    },
+            yAxes: [{
+                gridLines: { zeroLineColor: 'rgba(77, 77, 77, 0.5)' },
+                ticks: { callback: function(value) { return value.toLocaleString() }, beginAtZero: true },
+            }],
+            xAxes: [{ gridLines: { display: false } }],
+        },
         responsive: true,
         maintainAspectRatio: false
     };
@@ -453,7 +431,7 @@
         options: coopCollectionsBarOptions
     });
 
-    // grade distribution chart with comma formatting on x-axis
+    // Grade distribution chart with comma formatting on x-axis
     let gradeDistributionData = @json($data['grade_distribution']);
     let gradeDistributionLabels = gradeDistributionData.map(c => c.name);
     let gradeDistributionValues = gradeDistributionData.map(c => c.quantity);
@@ -462,127 +440,57 @@
     let gradeDistributionBarData = {
         datasets: [{
             data: gradeDistributionValues,
-            backgroundColor: [
-                'rgba(65, 47, 38, 1)',
-                'rgba(165, 113, 80, 1)',
-                'rgba(184, 134, 11, 1)',
-                'rgba(245, 245, 220, 1)',
-            ]
+            backgroundColor: ['rgba(65, 47, 38, 1)', 'rgba(165, 113, 80, 1)', 'rgba(184, 134, 11, 1)', 'rgba(245, 245, 220, 1)']
         }],
         labels: gradeDistributionLabels
     };
-    let gradeDistributionBarOptions = {
-        responsive: true,
-        maintainAspectRatio: true,
-    };
+    let gradeDistributionBarOptions = { responsive: true, maintainAspectRatio: true };
     let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
         type: "horizontalBar",
         data: gradeDistributionBarData,
         options: gradeDistributionBarOptions
     });
 
-    // Collections gender chart data
+    // Collections by gender bar chart
     let maleCollectionsData = @json($data['male_collections']);
     let maleCollectionValues = maleCollectionsData.map(c => c.y);
-
     let collectionsGenderLabels = maleCollectionsData.map(c => c.x);
-    let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart");
-
     let femaleCollectionsData = @json($data['female_collections']);
     let femaleCollectionValues = femaleCollectionsData.map(c => c.y);
+    let collectionsGenderBarChartCanvas = document.getElementById("CollectionsGenderBarChart");
 
     let collectionsGenderBarData = {
         labels: collectionsGenderLabels,
-        datasets: [{
-            label: 'Male',
-            data: maleCollectionValues,
-            borderColor: 'rgba(54, 162, 235, 1)', //male
-            backgroundColor: 'rgba(54, 162, 235, 1)', //male
-            tension: 0.4,
-            fill: true,
-        }, {
-            label: 'Female',
-            data: femaleCollectionValues,
-            borderColor: '#f53794',
-            backgroundColor: '#f53794',
-            tension: 0.4,
-            fill: true,
-        }],
+        datasets: [
+            { label: 'Male', data: maleCollectionValues, borderColor: 'rgba(54, 162, 235, 1)', backgroundColor: 'rgba(54, 162, 235, 1)', tension: 0.4, fill: true },
+            { label: 'Female', data: femaleCollectionValues, borderColor: '#f53794', backgroundColor: '#f53794', tension: 0.4, fill: true }
+        ],
     };
 
     let collectionsGenderBarOptions = {
         scales: {
-            yAxes: [{
-                gridLines: {
-                    // color: 'rgb(251,99,64)',
-                    zeroLineColor: 'rgba(77, 77, 77, 0.5)',
-                },
-                ticks: {
-                    callback: function(value) {
-                        return value.toLocaleString()
-                    },
-                    beginAtZero: true,
-                },
-            }],
-            xAxes: [{
-                gridLines: {
-                    display: false,
-                },
-            }],
+            yAxes: [{ gridLines: { zeroLineColor: 'rgba(77, 77, 77, 0.5)' }, ticks: { callback: function(value) { return value.toLocaleString() }, beginAtZero: true } }],
+            xAxes: [{ gridLines: { display: false } }]
         },
-        tooltips: {
-            callbacks: {
-                label: function(item, data) {
-                    var label = data.datasets[item.datasetIndex].label || '';
-                    var yLabel = item.yLabel;
-                    var content = '';
-
-                    if (data.datasets.length > 1) {
-                        content += '<span class="popover-body-label mr-auto">' + label + '</span>';
-                    }
-
-                    content += '<span class="popover-body-value">' + yLabel + ' KGs</span>';
-                    return content;
-                },
-            },
-            mode: 'index',
-            intersect: true,
-        },
-        maintainAspectRatio: false,
-        legend: {
-            display: true,
-            position: 'top',
-            labels: {
-                boxWidth: 10,
-                padding: 15,
-            },
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0,
-            },
-        },
-        animation: {
-            easing: 'easeOutBounce',
-            duration: 1000,
-        },
+        responsive: true,
+        maintainAspectRatio: false
     };
+    let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, { type: 'bar', data: collectionsGenderBarData, options: collectionsGenderBarOptions });
 
-    let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, {
-        type: 'bar',
-        data: collectionsGenderBarData,
-        options: collectionsGenderBarOptions,
-    });
-
-    document.addEventListener("DOMContentLoaded", function () {
-        const collectionTotalWeight = document.getElementById("collectionTotalWeight");
-        const rawWeight = collectionTotalWeight.textContent.replace(/[^0-9]/g, ''); // Get the numeric value only
-        const formattedWeight = parseInt(rawWeight, 10).toLocaleString() + " KG";
-        collectionTotalWeight.textContent = formattedWeight;
-    });
-
+    // Collections by gender pie chart
+    let collectionsGenderPieChartCanvas = document.getElementById("CollectionsGenderPieChart");
+    let collectionsGenderPieData = {
+        labels: ["Male", "Female"],
+        datasets: [{
+            data: [
+                maleCollectionValues.reduce((a, b) => a + b, 0),
+                femaleCollectionValues.reduce((a, b) => a + b, 0)
+            ],
+            backgroundColor: ['rgba(54, 162, 235, 1)', '#f53794'],
+            hoverBackgroundColor: ['rgba(54, 162, 235, 0.8)', '#f53794']
+        }]
+    };
+    let collectionsGenderPieOptions = { responsive: true, maintainAspectRatio: false, animation: { animateScale: true, animateRotate: true } };
+    let collectionsGenderPieChart = new Chart(collectionsGenderPieChartCanvas, { type: 'pie', data: collectionsGenderPieData, options: collectionsGenderPieOptions });
 </script>
 @endpush
