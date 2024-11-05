@@ -166,6 +166,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.millers.add');
     Route::get('/millers/{id}', 'Admin\MillersController@showDetail')
         ->name('millers.detail');
+    Route::get('/miller-branches/{id}', 'Admin\MillersController@edit')
+        ->name('miller-branches.detail');
 
 
     // miller branches
@@ -173,6 +175,16 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.miller-branches.show');
     Route::post('/miller-branches/add', 'Admin\MillerBranchesController@store')
         ->name('admin.miller-branches.add');
+    Route::get('/miller-branches/{id}', 'Admin\MillerBranchesController@view')
+        ->name('admin.miller-branches.view');
+    Route::get('/miller-branches/{id}/edit', 'Admin\MillerBranchesController@edit') // Changed this line
+        ->name('miller-branches.detail');
+    Route::patch('/miller-branches/{id}', 'Admin\MillerBranchesController@update')
+        ->name('admin.miller-branches.update');
+    Route::delete('/miller-branches/{id}', 'Admin\MillerBranchesController@delete')
+        ->name('admin.miller-branches.delete');
+
+    
 
     // users
     Route::get('/users', 'Admin\UsersController@index')

@@ -223,43 +223,41 @@ class CoopBranchController extends Controller
         }
     }
     // ... existing code ...
-public function view($id)
-{
-    // Fetch the branch details
-    $branch = CoopBranch::findOrFail($id); // Fetch branch by ID
+    public function view($id)
+    {
+        // Fetch the branch details
+        $branch = CoopBranch::findOrFail($id); // Fetch branch by ID
 
-    // Fetch the farmers associated with this branch
-    $farmers = Farmer::where('branch_id', $id)->get(); // Get farmers of the branch
-    $totalFarmers = $farmers->count(); // Count of farmers
+        // Fetch the farmers associated with this branch
+        $farmers = Farmer::where('branch_id', $id)->get(); // Get farmers of the branch
+        $totalFarmers = $farmers->count(); // Count of farmers
 
-    // Fetch collections with product names, farmer names, and unit
-    $collections = DB::table('collections')
-        ->where('coop_branch_id', $id)
-        ->join('farmers', 'farmers.id', '=', 'collections.farmer_id')
-        ->join('users', 'users.id', '=', 'farmers.user_id')
-        ->join('products', 'products.id', '=', 'collections.product_id')
-        ->join('product_categories', 'product_categories.id', '=', 'products.category_id') // Join with product_categories
-        ->select(
-            'collections.*', 
-            'users.first_name', 
-            'users.other_names', 
-            'products.name as product_name', 
-            'product_categories.unit as unit' // Fetch the unit from product_categories
-        )
-        ->get();
+        // Fetch collections with product names, farmer names, and unit
+        $collections = DB::table('collections')
+            ->where('coop_branch_id', $id)
+            ->join('farmers', 'farmers.id', '=', 'collections.farmer_id')
+            ->join('users', 'users.id', '=', 'farmers.user_id')
+            ->join('products', 'products.id', '=', 'collections.product_id')
+            ->join('product_categories', 'product_categories.id', '=', 'products.category_id') // Join with product_categories
+            ->select(
+                'collections.*', 
+                'users.first_name', 
+                'users.other_names', 
+                'products.name as product_name', 
+                'product_categories.unit as unit' // Fetch the unit from product_categories
+            )
+            ->get();
 
-    // Update total farmers based on unique farmer IDs in collections
-    $totalFarmers = $collections->pluck('farmer_id')->unique()->count(); // Count unique farmers from collections
+        // Update total farmers based on unique farmer IDs in collections
+        $totalFarmers = $collections->pluck('farmer_id')->unique()->count(); // Count unique farmers from collections
 
-    // Define collection time labels
-    $collectionTimeLabels = [
-        1 => 'Morning',
-        2 => 'Afternoon',
-        3 => 'Evening',
-    ];
+        // Define collection time labels
+        $collectionTimeLabels = [
+            1 => 'Morning',
+            2 => 'Afternoon',
+            3 => 'Evening',
+        ];
 
-    return view('pages.admin.branch.view', compact('branch', 'farmers', 'totalFarmers', 'collections', 'collectionTimeLabels'));
-}
-
-// ... existing code ...
+        return view('pages.admin.branch.view', compact('branch', 'farmers', 'totalFarmers', 'collections', 'collectionTimeLabels'));
+    }
 }

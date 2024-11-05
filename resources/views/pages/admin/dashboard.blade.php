@@ -17,7 +17,9 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Raw Material Quantity</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">{{$data["total_collection_weight"] ?? "0"}} KG</span>
+                                    <span class="h2 font-weight-bold mb-0" id="collectionTotalWeight">
+                                        {{ number_format($data["total_collection_weight"] ?? 0) }} KG
+                                    </span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -574,5 +576,13 @@
         data: collectionsGenderBarData,
         options: collectionsGenderBarOptions,
     });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const collectionTotalWeight = document.getElementById("collectionTotalWeight");
+        const rawWeight = collectionTotalWeight.textContent.replace(/[^0-9]/g, ''); // Get the numeric value only
+        const formattedWeight = parseInt(rawWeight, 10).toLocaleString() + " KG";
+        collectionTotalWeight.textContent = formattedWeight;
+    });
+
 </script>
 @endpush

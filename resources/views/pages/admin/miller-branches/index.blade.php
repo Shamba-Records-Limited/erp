@@ -4,6 +4,113 @@
 @endpush
 
 @section('content')
+<div class="header bg-custom-green pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <!-- Card stats -->
+            <div class="row">
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Total Branches</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ is_array($miller_branches) ? count($miller_branches) : $branches->count() }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                                        <i class="mdi mdi-store stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                <span class="text-nowrap">Since yesterday</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class=" text-muted mb-0" style="font-size:1rem">Number of Millers</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ is_array($millers) ? count($millers) : $millers->count() }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="mdi mdi-office-building stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Counties Covered</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ $uniqueCounties }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="mdi mdi-map-marker stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem"> New Branches This Month</h5>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ $branchesThisMonth }}
+                                    </span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-blue text-white rounded-circle shadow">
+                                        <i class="mdi mdi-calendar-clock stats-icon"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- End Stats Section -->
 
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
@@ -24,7 +131,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
 
+
+            
 <div class="card shadow-sm">
     <div class="card-body">
         <button type="button" class="btn btn-primary btn-sm mb-4" data-toggle="collapse" data-target="#addMillerBranchAccordion" 
@@ -115,6 +227,49 @@
     </div>
 </div>
 
+<!-- Branch Distribution per Miller -->
+<div class="row mb-4">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Branches per Miller</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Miller</th>
+                                <th>Number of Branches</th>
+                                <th>Counties Present</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $branchesCollection = collect($miller_branches); // Use miller branches collection
+                            $branchesPerMiller = $branchesCollection->groupBy('miller_id'); // Group by miller_id
+                            @endphp
+                            @foreach($millers as $miller)
+                            <tr>
+                                <td>{{ $miller->name }}</td>
+                                <td>
+                                    <span class="badge badge-primary" style="font-size:14px">
+                                        {{ $branchesPerMiller->get($miller->id, collect())->count() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info" style="font-size:17px">
+                                        {{ $branchesPerMiller->get($miller->id, collect())->unique('county_name')->count() }}
+                                    </span>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
@@ -127,7 +282,8 @@
                                 <th>#</th>
                                 <th>Miller</th>
                                 <th>Name</th>
-                                <th>Sub County</th>
+                                <th>County & SubCounty</th>
+                                <th>Actions</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -136,8 +292,35 @@
                             <tr>
                                 <td>{{++$key }}</td>
                                 <td>{{$branch->miller_name}}</td>
-                                <td>{{$branch->name }}</td>
+                                <td>
+                                    <a href="{{ route('admin.miller-branches.view', $branch->id) }}" class="text-info">
+                                        {{ $branch->name }}
+                                    </a>
+                                </td>
                                 <td>{{$branch->county_name}} - {{$branch->sub_county_name}}</td>
+                                <td>
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <!-- Edit button -->
+                                            <a class="dropdown-item text-info" href="{{ route('miller-branches.detail', $branch->id) }}" style="display: flex; align-items: center;">
+                                                <i class="fa fa-edit" style="margin-right: 6px;"></i> Edit
+                                            </a>
+
+                                            <!-- Delete button -->
+                                            <form action="{{ route('admin.miller-branches.delete', $branch->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this miller branch?');" style="display: block; margin: 0; padding-left: 15px;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; padding: 0; display: flex; align-items: center;">
+                                                    <i class="fa fa-trash-alt" style="margin-right: 6px;"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td></td>
                             </tr>
                             @endforeach
@@ -148,6 +331,12 @@
         </div>
     </div>
 </div>
+
+<form id="deleteForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
 @endsection
 
 @push('plugin-scripts')
@@ -155,20 +344,38 @@
 
 @push('custom-scripts')
 <script>
-    function deleteCoop(id) {
-        shouldDelete = confirm("Are you sure you want to delete this cooperative?")
+    function deleteBranch(id) {
+        let shouldDelete = confirm("Are you sure you want to delete this miller branch?");
         if (!shouldDelete) {
-            return
+            return;
         }
-        window.location = "/admin/cooperative/setup/delete/" + id
+
+        // Update fetch to match the correct URL format
+        fetch(`/miller-branches/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Miller branch deleted successfully');
+                window.location.reload(); // Reload the page or redirect as needed
+            } else {
+                alert('Failed to delete miller branch');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
+
+    // Handle county and sub-county dropdown change
     $("#county_id").change(function(e) {
         $("#sub_county_id").val("");
         $("#sub_county_id").empty();
         $("#sub_county_id").append("<option> -- Select Sub County -- </option>");
 
-        let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"))
+        let subCounties = JSON.parse($("#sub_county_id").attr("data-subcounties"));
         for (let subCounty of subCounties) {
             if (subCounty.county_id == e.target.value) {
                 let elem = `<option value='${subCounty.id}'>${subCounty.name}</option>`;
