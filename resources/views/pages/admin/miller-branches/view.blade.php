@@ -17,6 +17,11 @@
                     <span class="stat-value">{{ $branch->address }}</span>
                     <span class="stat-label">Address</span>
                 </div>
+                <div class="stat-item">
+                    <i class="fas fa-clock"></i>
+                    <span class="stat-value">{{ $branch->created_at->format('d M Y') }}</span>
+                    <span class="stat-label">Opened On</span>
+                </div>
             </div>
         </div>
     </div>
@@ -47,9 +52,57 @@
                         <th>Code</th>
                         <td>{{ $branch->code ?? 'N/A' }}</td>
                     </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Additional Data Points Section -->
+    <div class="row mt-5">
+        <!-- Monthly Sales (Bar Chart) -->
+        <div class="col-lg-6">
+            <h3>Monthly Sales (Kshs)</h3>
+            <canvas id="monthlySalesChart"></canvas>
+        </div>
+
+        <!-- Product Distribution (Pie Chart) -->
+        <div class="col-lg-6" style="width: 400px; height: 400px;">
+            <h3>Product Distribution</h3>
+            <canvas id="productDistributionChart" width="300" height="300"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="row mt-5">
+        <div class="col-lg-12">
+            <h3>Recent Orders</h3>
+            <table class="table table-striped">
+                <thead>
                     <tr>
-                        <th>Created On</th>
-                        <td>{{ $branch->created_at->format('d M Y') }}</td>
+                        <th>Order Date</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2024-10-04</td>
+                        <td>Coffee Beans</td>
+                        <td>500 KG</td>
+                        <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                    </tr>
+                    <tr>
+                        <td>2024-10-03</td>
+                        <td>Tea Leaves</td>
+                        <td>300 KG</td>
+                        <td style="background-color: #fff3cd; color: #856404;">Pending</td>
+                    </tr>
+                    <tr>
+                        <td>2024-09-28</td>
+                        <td>Dairy Products</td>
+                        <td>200 KG</td>
+                        <td style="background-color: #f8d7da; color: #721c24;">Cancelled</td>
                     </tr>
                 </tbody>
             </table>
@@ -57,6 +110,54 @@
     </div>
 </div>
 @endsection
+
+@push('custom-scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Monthly Sales (Bar Chart)
+    const monthlySalesCtx = document.getElementById('monthlySalesChart').getContext('2d');
+    const monthlySalesChart = new Chart(monthlySalesCtx, {
+        type: 'bar',
+        data: {
+            labels: ['June', 'July', 'August', 'September', 'October', 'November'],
+            datasets: [{
+                label: 'Sales (Kshs)',
+                data: [120000, 150000, 110000, 130000, 90000, 140000],
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // Product Distribution (Pie Chart)
+    const productDistributionCtx = document.getElementById('productDistributionChart').getContext('2d');
+    const productDistributionChart = new Chart(productDistributionCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Coffee Beans', 'Tea Leaves', 'Dairy Products'],
+            datasets: [{
+                data: [45, 30, 25],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
+@endpush
+
+
 
 <style>
 :root {

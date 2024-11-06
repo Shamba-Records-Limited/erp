@@ -81,7 +81,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="text-uppercase text-muted mb-0">Cooperative/Aggregator Count</h5>
+                                    <h5 class="text-uppercase text-muted mb-0">Aggregator Count</h5>
                                     <span class="h2 font-weight-bold mb-0" id="cooperativesCount">{{$data["cooperatives_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
@@ -262,87 +262,100 @@
     </div>
 
     <!-- Dashboard Content -->
-        <div class="row">
-            <div class="col-12 mb-5 pl-5 pr-5 mt--4">
-                <div class="card shadow">
-                    <div class="card-header bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
-                                <h2 class=" mb-0">Collection Quantity (KGs)</h2>
-                            </div>
-                        </div>
+<div class="row">
+    <div class="col-12 mb-5 pl-5 pr-5 mt--4">
+        <div class="card shadow">
+            <div class="card-header bg-transparent">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h6 class="text-uppercase text-light ls-1 mb-1">Overview</h6>
+                        <h2 class=" mb-0">Collection Quantity (KGs)</h2>
                     </div>
-                    <div class="card-body">
-                        <div class="chart">
-                            <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
-                        </div>
-                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="chart">
+                    <canvas id="CollectionsBarChart" class="chart-canvas"></canvas>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row pl-4 pr-4">
-            <!-- Collection Quantity Per Cooperative (KGs) Card -->
-            <div class="col-lg-6">
-                <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
-                    <div class="card-body">
-                        <div class="col pb-2">
-                            <h2 class="mb-0">Collection Quantity Per Cooperative/Aggregator (KGs)</h2>
-                        </div>
-                        <div>
-                            <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
-                        </div>
-                    </div>
+<div class="row pl-4 pr-4">
+    <!-- Collection Quantity Per Cooperative (KGs) Card -->
+    <div class="col-lg-6">
+        <div class="card" style="height: 100%; min-height: 500px;">
+            <div class="card-body">
+                <div class="col pb-2">
+                    <h2 class="mb-0">Collection Quantity Per Cooperative/Aggregator (KGs)</h2>
                 </div>
-            </div>
-
-            <!-- Collection By Gender Card (Bar Chart) -->
-            <div class="col-lg-6">
-                <div class="card" style="height: 100%; min-height: 500px;"> <!-- Adjusted min-height for consistency -->
-                    <div class="card-body">
-                        <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1">Collections Weight (KGs) By Gender</h6>
-                            <h2 class="mb-0">Collection By Gender</h2>
-                        </div>
-                        <div class="chart">
-                            <canvas id="CollectionsGenderBarChart" class="chart-canvas" height="300"></canvas>
-                        </div>
-                    </div>
+                <div>
+                    <canvas id="CooperativeCollectionsLineChart" class="mb-4 mb-md-0" height="400"></canvas>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="row pl-4 pr-4 mt-4">
-            <!-- Collection Gender Distribution Card (Pie Chart) -->
-            <div class="col-lg-6">
-                <div class="card" style="height: 100%; min-height: 500px;">
-                    <div class="card-body">
-                        <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1">Gender Distribution</h6>
-                            <h2 class="mb-0">Collections Gender Distribution</h2>
-                        </div>
-                        <div class="chart">
-                            <canvas id="CollectionsGenderPieChart" class="chart-canvas" height="300"></canvas>
-                        </div>
-                    </div>
+    <!-- Collection By Gender Card (Bar Chart) -->
+    <div class="col-lg-6">
+        <div class="card" style="height: 100%; min-height: 500px;">
+            <div class="card-body">
+                <div class="col">
+                    <h6 class="text-uppercase text-muted ls-1 mb-1">Collections Weight (KGs) By Gender</h6>
+                    <h2 class="mb-0">Collection By Gender</h2>
+                </div>
+                <div class="chart">
+                    <canvas id="CollectionsGenderBarChart" class="chart-canvas" height="300"></canvas>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row pl-4 pr-4 mt-4">
-            <!-- Grade Distribution KGs Card -->
-            <div class="col-lg-12">
-                <div class="card" style="overflow-y: scroll; height: 500px;">
-                    <div class="card-body">
-                        <div class="col">
-                            <h2 class="mb-0">Grade Distribution KGs</h2>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 d-flex align-items-center">
-                                <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
-                            </div>
-                        </div>
+<div class="row pl-4 pr-4 mt-4">
+    <!-- Collection Gender Distribution Card (Pie Chart) -->
+    <div class="col-lg-6">
+        <div class="card" style="height: 100%; min-height: 500px;">
+            <div class="card-body">
+                <div class="col">
+                    <h6 class="text-uppercase text-muted ls-1 mb-1">Gender Distribution</h6>
+                    <h2 class="mb-0">Farmers Gender Distribution</h2>
+                </div>
+                <div class="chart">
+                    <canvas id="CollectionsGenderPieChart" class="chart-canvas" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Farmer Age Distribution Card -->
+    <div class="col-lg-6">
+        <div class="card" style="height: 100%; min-height: 500px;">
+            <div class="card-body">
+                <div class="col">
+                    <h6 class="text-uppercase text-muted ls-1 mb-1">Age Distribution</h6>
+                    <h2 class="mb-0">Farmer Age Distribution</h2>
+                </div>
+                <div class="chart">
+                    <canvas id="AgeDistributionBarChart" class="chart-canvas" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row pl-4 pr-4 mt-4">
+    <!-- Grade Distribution KGs Card -->
+    <div class="col-lg-12">
+        <div class="card" style="overflow-y: scroll; height: 500px;">
+            <div class="card-body">
+                <div class="col">
+                    <h2 class="mb-0">Grade Distribution KGs</h2>
+                </div>
+                <div class="row">
+                    <div class="col-12 d-flex align-items-center">
+                        <canvas id="GradeDistributionBarChart" class="mb-4 mb-md-0" style="height: 300px;"></canvas>
                     </div>
                 </div>
             </div>
@@ -492,5 +505,54 @@
     };
     let collectionsGenderPieOptions = { responsive: true, maintainAspectRatio: false, animation: { animateScale: true, animateRotate: true } };
     let collectionsGenderPieChart = new Chart(collectionsGenderPieChartCanvas, { type: 'pie', data: collectionsGenderPieData, options: collectionsGenderPieOptions });
+
+    // Age Distribution Bar Chart with Dummy Data
+    let ageDistributionData = [
+        { age_group: "18-25", quantity: 3 },
+        { age_group: "26-35", quantity: 8 },
+        { age_group: "36-45", quantity: 4 },
+        { age_group: "46-55", quantity: 2 },
+        { age_group: "56-65", quantity: 1 },
+        { age_group: "66+", quantity: 5 }
+    ];
+
+    let ageDistributionLabels = ageDistributionData.map(c => c.age_group);
+    let ageDistributionValues = ageDistributionData.map(c => c.quantity);
+
+    let ageDistributionBarChartCanvas = document.getElementById("AgeDistributionBarChart");
+
+    let ageDistributionBarData = {
+        labels: ageDistributionLabels,
+        datasets: [{
+            label: 'Quantity',
+            data: ageDistributionValues,
+            borderColor: 'rgba(153, 102, 255, 1)',
+            backgroundColor: 'rgba(153, 102, 255, 0.5)',
+            borderWidth: 2
+        }],
+    };
+
+    let ageDistributionBarOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            yAxes: [{
+                gridLines: { color: 'rgba(0, 0, 0, 0.1)' },
+                ticks: { beginAtZero: true }
+            }],
+            xAxes: [{ gridLines: { display: false } }]
+        },
+        plugins: {
+            legend: { display: false }
+        }
+    };
+
+    // Initialize the Age Distribution chart
+    let ageDistributionBarChart = new Chart(ageDistributionBarChartCanvas, {
+        type: "bar",
+        data: ageDistributionBarData,
+        options: ageDistributionBarOptions
+    });
+
 </script>
 @endpush

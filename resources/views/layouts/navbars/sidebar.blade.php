@@ -453,7 +453,7 @@ $cooperative = null;
                 </a>
             </li>
 
-
+            
             @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
             config('enums.system_permissions')['view']))
             <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">

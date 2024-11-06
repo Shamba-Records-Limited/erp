@@ -7,6 +7,61 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Tracking Tree</div>
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <!-- Root Type Card -->
+                    <div class="col-md-3 col-12 mb-4">
+                        <div class="card shadow-lg border-0 rounded">
+                            <div class="card-header text-center bg-gradient-success text-white">
+                                <h5 class="font-weight-bold mb-0">Root Type</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <form id="get_root_details">
+                                    <div class="form-group">
+                                        <select class="form-control form-select node_type" name="root_type" id="root_type">
+                                            <option value="">-- SELECT ROOT TYPE --</option>
+                                            <option value="collection">Collection</option>
+                                            <option value="lot">Lot</option>
+                                            <option value="final_product">Final Product</option>
+                                        </select>
+                                        <span class="help-block text-danger">
+                                            <strong id="root_type_error"></strong>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for dynamically generated card -->
+                    <div class="col-md-3 col-12 mb-4" id="dynamic-card-container"></div>
+
+                    <!-- Tree Direction Card -->
+                    <div class="col-md-3 col-12 mb-4">
+                        <div class="card shadow-lg border-0 rounded">
+                            <div class="card-header text-center bg-gradient-success text-white">
+                                <h5 class="font-weight-bold mb-0">Tree Direction</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <form id="tree_direction_form">
+                                    <div class="form-group">
+                                        <select class="form-control form-select node_type" name="direction" id="direction">
+                                            <option value="to_source">To Source</option>
+                                            <option value="to_final_product">To Final Product</option>
+                                        </select>
+                                        <span class="help-block text-danger">
+                                            <strong id="direction_error"></strong>
+                                        </span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary">Submit</button>
+                </div>
+            </div>
         <div>
             <!-- root -->
             <div class="node">
@@ -95,23 +150,54 @@
     let csrf = "{{csrf_token()}}";
 
     $('#root_type').on('change', function(e) {
-        let root_type = $("#root_type").val() || ''
-        if (root_type == '') {
-            return
+        let root_type = $(this).val() || '';
+        
+        // Clear the dynamically generated card container if no root type is selected
+        if (root_type === '') {
+            $("#dynamic-card-container").empty();
+            return;
         }
 
-        // submit form
+        // Dynamically generate a new card based on the selected root type
+        let dynamicCardHtml = `
+            <div class="card shadow-lg border-0 rounded">
+                <div class="card-header text-center bg-gradient-warning text-white">
+                    <h5 class="font-weight-bold mb-0">${root_type}</h5>
+                </div>
+                <div class="card-body text-center">
+                    <form id="${root_type}_form">
+                        <div class="form-group">
+                            <label for="${root_type}_select">${root_type} Options</label>
+                            <select class="form-control form-select" name="${root_type}_select" id="${root_type}_select">
+                                <option value="">-- SELECT ${root_type.toUpperCase()} --</option>
+                            </select>
+                            <span class="help-block text-danger">
+                                <strong id="${root_type}_error"></strong>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+
+        // Insert the generated card into the placeholder container
+        $("#dynamic-card-container").html(dynamicCardHtml);
+
+        // Fetch the relevant options for the selected root type
         $.ajax({
             method: 'GET',
             url: `/miller-admin/tracking-tree/root-identifier/${root_type}`,
-            error: function(data) {
-
-            },
             success: function(data) {
-                $("#identifier").closest(".form-group").remove();
-                $("#root_type").closest(".form-group").after(data)
+                // Assuming `data` is an array of options (e.g., [{id: 1, name: 'Option 1'}, {id: 2, name: 'Option 2'}])
+                let optionsHtml = data.map(option => `<option value="${option.id}">${option.name}</option>`).join('');
+                
+                // Insert the options into the select element of the dynamically created card
+                $(`#${root_type}_select`).append(optionsHtml);
+            },
+            error: function(xhr, status, error) {
+                console.error("Failed to fetch options:", error);
             }
-        })
+        });
     });
 
     $("#get_root_details").on('submit', function(e) {

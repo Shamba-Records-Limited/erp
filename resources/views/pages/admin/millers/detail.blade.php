@@ -1,4 +1,5 @@
 @extends('layouts.app')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 @section('content')
 <div class="dashboard-container">
@@ -80,81 +81,182 @@
                     </div>
                 </div>
             </div>
-
-        <!-- Branches Card -->
-            <div class="card-glass">
-                <div class="card-header">
-                    <div class="header-icon">
-                        <i class="fas fa-map-marked-alt"></i>
-                    </div>
-                    <h3>Branches</h3>
-                </div>
-                <div class="card-content">
-                    @if($miller->branches->isEmpty())
-                        <p>No branches available.</p>
-                    @else
-                        <ul class="detail-group">
-                            @foreach($miller->branches as $branch)
-                                <li class="detail-item">
-                                    <div class="detail-icon">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                    </div>
-                                    <div class="detail-info">
-                                        <label>{{ $branch->name }}</label>
-                                        <span>{{ $branch->location }} ({{ $branch->code }})</span>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
-            </div>
-
-        <!-- Admin Information Card -->
-            <div class="card-glass">
-                <div class="card-header">
-                    <div class="header-icon admin">
-                        <i class="fas fa-user-shield"></i>
-                    </div>
-                    <h3>Administrator</h3>
-                </div>
-                <div class="card-content">
-                    @if($miller->millerAdmin)
-                        <div class="admin-profile">
-                            <div class="admin-avatar">
-                                <span>{{ substr($miller->millerAdmin->user->first_name, 0, 1) }}{{ substr($miller->millerAdmin->user->other_names, 0, 1) }}</span>
-                            </div>
-                            <h4>{{ $miller->millerAdmin->user->first_name }} {{ $miller->millerAdmin->user->other_names }}</h4>
-                            <span class="admin-role">Miller Administrator</span>
-                        </div>
-                        <div class="detail-group">
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                                <div class="detail-info">
-                                    <label>Email</label>
-                                    <span>{{ $miller->millerAdmin->user->email }}</span>
-                                </div>
-                            </div>
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="detail-info">
-                                    <label>Username</label>
-                                    <span>{{ $miller->millerAdmin->user->username }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <p>No admin assigned.</p>
-                    @endif
-                </div>
-            </div>
+        </div>
     </div>
+
+
+    <!-- New Charts and Tables Section -->
+    <div class="row">
+        <!-- Total Miller Sales (Bar Chart) -->
+        <div class="col-lg-6 mt-4">
+            <h3>Total Miller Sales</h3>
+            <canvas id="totalSalesChart"></canvas>
+        </div>
+
+        <!-- Milled Quantity vs Premilled Quantity (Bar Chart) -->
+        <div class="col-lg-6 mt-4">
+            <h3>Milled Quantity vs Premilled Quantity</h3>
+            <canvas id="milledVsPremilledChart"></canvas>
+        </div>
+
+        <!-- Orders (Line Chart) -->
+        <div class="col-lg-6 mt-4">
+            <h3>Orders Over Time</h3>
+            <canvas id="ordersChart"></canvas>
+        </div>
+
+        <!-- Final Products (Pie Chart) -->
+        <div class="chart-card pl-6 mt-4" style="width: 400px; height: 400px;"> <!-- Adjust width and height as needed -->
+            <h3>Final Products Distribution</h3>
+            <canvas id="finalProductsChart" width="300" height="300"></canvas> <!-- Set width and height -->
+        </div>
+
+
+        <!-- Payments Table -->
+<div class="col-lg-12">
+    <h3>Payments Made</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2024-06-11</td>
+                <td>Ksh 56,000</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Bank Transfer</td>
+            </tr>
+            <tr>
+                <td>2024-05-11</td>
+                <td>Ksh 38,300</td>
+                <td style="background-color: #fff3cd; color: #856404;">Pending</td>
+                <td>Credit Card</td>
+            </tr>
+            <tr>
+                <td>2024-04-22</td>
+                <td>Ksh 45,500</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Mobile Payment</td>
+            </tr>
+            <tr>
+                <td>2024-04-15</td>
+                <td>Ksh 50,000</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Cash</td>
+            </tr>
+            <tr>
+                <td>2024-04-01</td>
+                <td>Ksh 30,000</td>
+                <td style="background-color: #f8d7da; color: #721c24;">Failed</td>
+                <td>Credit Card</td>
+            </tr>
+            <tr>
+                <td>2024-03-20</td>
+                <td>Ksh 27,800</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Bank Transfer</td>
+            </tr>
+            <tr>
+                <td>2024-03-05</td>
+                <td>Ksh 43,200</td>
+                <td style="background-color: #fff3cd; color: #856404;">Pending</td>
+                <td>Mobile Payment</td>
+            </tr>
+            <tr>
+                <td>2024-02-28</td>
+                <td>Ksh 29,000</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Credit Card</td>
+            </tr>
+            <tr>
+                <td>2024-02-10</td>
+                <td>Ksh 55,400</td>
+                <td style="background-color: #d4edda; color: #155724;">Completed</td>
+                <td>Bank Transfer</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
+</div>
+</div>
+
 @endsection
+
+@push('custom-scripts')
+<script>
+    // Total Miller Sales (Bar Chart)
+    const totalSalesCtx = document.getElementById('totalSalesChart').getContext('2d');
+    const totalSalesChart = new Chart(totalSalesCtx, {
+        type: 'bar',
+        data: {
+            labels: ['August', 'September', 'October', 'November'],
+            datasets: [{
+                label: 'Total Sales (Kshs)',
+                data: [12000, 15000, 11000, 13000],
+                backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // Milled Quantity vs Premilled Quantity (Bar Chart)
+    const milledVsPremilledCtx = document.getElementById('milledVsPremilledChart').getContext('2d');
+    const milledVsPremilledChart = new Chart(milledVsPremilledCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Coffee', 'Tea', 'Dairy'],
+            datasets: [
+                { label: 'Milled Quantity', data: [300, 500, 400], backgroundColor: 'rgba(153, 102, 255, 0.5)', borderColor: 'rgba(153, 102, 255, 1)', borderWidth: 1 },
+                { label: 'Premilled Quantity', data: [200, 400, 300], backgroundColor: 'rgba(255, 159, 64, 0.5)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 }
+            ]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // Orders (Line Chart)
+    const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+    const ordersChart = new Chart(ordersCtx, {
+        type: 'line',
+        data: {
+            labels: ['May', 'June', 'July', 'August', 'September', 'October', 'November'],
+            datasets: [{
+                label: 'Orders',
+                data: [10, 12, 15, 9, 17, 23, 14],
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: { scales: { y: { beginAtZero: true } } }
+    });
+
+    // Final Products (Pie Chart)
+    const finalProductsCtx = document.getElementById('finalProductsChart').getContext('2d');
+    const finalProductsChart = new Chart(finalProductsCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Tea', 'Coffee', 'Dairy'],
+            datasets: [{
+                data: [45, 25, 30],
+                backgroundColor: ['rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)', 'rgba(255, 206, 86, 0.5)'],
+                borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                borderWidth: 1
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
+@endpush
+
+
 
 <style>
 :root {
