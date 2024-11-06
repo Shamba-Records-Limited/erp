@@ -113,9 +113,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
@@ -150,9 +150,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
@@ -189,9 +189,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Delivery: $delivery->delivery_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
@@ -227,9 +227,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Order: $order->batch_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Order: $order->batch_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details' class='border-top mt-1 collapse'>
@@ -268,9 +268,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Lot: $lot->lot_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Lot: $lot->lot_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details' class='border-top mt-1 collapse'>
@@ -312,9 +312,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Collection: $collection->collection_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Collection: $collection->collection_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details' class='border-top mt-1 collapse'>
@@ -434,9 +434,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Delivery: $delivery->delivery_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
@@ -472,9 +472,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
@@ -510,9 +510,9 @@ class TrackingTreeController extends Controller
                         <!-- horizontal bar -->
                         <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
                         <!-- /horizontal bar -->
-                        <div class='border rounded p-2'>
-                            <div class='d-flex justify-content-between'>
-                                <div>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
+                        <div class='border rounded p-3 bg-light shadow-sm'>
+                            <div class='d-flex justify-content-between align-items-center'>
+                                <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
                             </div>
                             <div id='child_details'>
