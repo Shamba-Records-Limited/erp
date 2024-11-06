@@ -1,91 +1,109 @@
 @extends('layouts.app')
 
 @push('plugin-styles')
+
 @endpush
 
 @section('content')
+<style>
+    .form-container {
+    background-color: #f8f9fa; /* Light background for the form */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.child_node_container {
+    background-color: #e9ecef; /* Light background for the child node container */
+    border: 1px solid #ced4da; /* Border for the child node container */
+    border-radius: 0.25rem; /* Rounded corners */
+    padding: 15px; /* Padding for the child node container */
+}
+
+.node_children {
+    margin-top: 10px; /* Space between child nodes */
+}
+</style>
 <div class="card">
     <div class="card-body">
         <div class="card-title">Tracking Tree</div>
         <div>
             <!-- root -->
             <div class="node">
-                <div class="border rounded p-2">
-                    <input type="hidden" name="level" class="level" value="0">
-                    <form id="get_root_details">
-                        <div class="form-group">
-                            <label for="root_type">Root Type</label>
-                            <select class="form-control form-select node_type" name="root_type" id="root_type">
-                                <option value="">-- SELECT ROOT TYPE --</option>
-                                <option value="collection">Collection</option>
-                                <option value="lot">Lot</option>
-                                <option value="final_product">Final Product</option>
-                            </select>
+                <div class="d-flex">
+                    <div class="form-container border rounded p-3" style="flex: 1; margin-right: 20px;"> <!-- Added flex and margin -->
+                        <input type="hidden" name="level" class="level" value="0">
+                        <form id="get_root_details">
+                            <div class="form-group">
+                                <label for="root_type">Root Type</label>
+                                <select class="form-control form-select node_type" name="root_type" id="root_type">
+                                    <option value="">-- SELECT ROOT TYPE --</option>
+                                    <option value="collection">Collection</option>
+                                    <option value="lot">Lot</option>
+                                    <option value="final_product">Final Product</option>
+                                </select>
 
-                            <span class="help-block text-danger">
-                                <strong id="root_type_error"></strong>
-                            </span>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tree_direction">Tree Direction</label>
-                            <select class="form-control form-select node_type" name="direction" id="direction">
-                                <option value="to_source">To Source</option>
-                                <option value="to_final_product">To Final Product</option>
-                            </select>
-
-                            <span class="help-block text-danger">
-                                <strong id="direction_error"></strong>
-                            </span>
-                        </div>
-                        <button class="btn btn-outline-primary">Submit</button>
-                    </form>
-                    <!-- root details -->
-                    <div id="root_details_wrap mt-2">
-                        <div id="root_details_top" class="border rounded p-2">
-                            <div class="d-flex justify-content-between">
-                                <div>Root Details</div>
-                                <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#root_details">View Details</button>
+                                <span class="help-block text-danger">
+                                    <strong id="root_type_error"></strong>
+                                </span>
                             </div>
-                            <div id="root_details">
-                                Details Here
+
+                            <div class="form-group">
+                                <label for="tree_direction">Tree Direction</label>
+                                <select class="form-control form-select node_type" name="direction" id="direction">
+                                    <option value="to_source">To Source</option>
+                                    <option value="to_final_product">To Final Product</option>
+                                </select>
+
+                                <span class="help-block text-danger">
+                                    <strong id="direction_error"></strong>
+                                </span>
                             </div>
-                        </div>
-                    </div>
-                    <!-- /root details -->
-                    <button class="btn btn-outline-primary mt-2 show-children">Show Children</button>
-                </div>
-                <div class="pt-3 ml-3 position-relative" style="padding-left: 20px;">
-                    <!-- vertical bar -->
-                    <div style="position: absolute; left: 10px; top: 0; height: 100%; width: 5px; background: green; border-radius: 10px;"></div>
-                    <!-- /vertical bar -->
-                    <div class="node_children">
-                        <!-- child -->
-                        <div class="position-relative" style="padding-left: 30px;">
-                            <!-- horizontal bar -->
-                            <div style="position: absolute; top: 50%; left: 0; height: 3px; width: 15px; background: green;"></div>
-                            <!-- /horizontal bar -->
-                            <div style="position: absolute; left: 3px; top: 0px; width: 15px; height: 15px; background-color: white; border: 3px solid green; border-radius: 50%;"></div>
-                            <div class="border rounded p-2">
+                        </form>
+                        <!-- root details -->
+                        <div id="root_details_wrap mt-2">
+                            <div id="root_details_top" class="border rounded p-2">
                                 <div class="d-flex justify-content-between">
-                                    <div>Child Type: Identifier</div>
-                                    <button class="btn btn-outline-primary" data-toggle="collapse" data-target="#child_details">View Details</button>
+                                    <div>Root Details</div>
+                                    <button class="mt-4 ml-2 btn btn-info btn-rounded" data-toggle="collapse" data-target="#root_details">View Details</button>
                                 </div>
-                                <div id="child_details">
-                                    Child Details Here
+                                <div id="root_details">
+                                    Details Here
                                 </div>
-                                <button class="btn btn-outline-primary mt-2 show-children">Show Children</button>
                             </div>
                         </div>
-                        <!-- /child -->
+                        <!-- /root details -->
+                        <button class="btn btn-primary btn-fw btn-sm show-children">Show Children</button>
+                    </div>
+                    <div class="child_node_container pt-3 position-relative" style="flex: 1; padding-left: 20px;"> <!-- Added flex -->
+                        <!-- vertical bar -->
+                        <div style="position: absolute; left: 10px; top: 0; height: 100%; width: 5px; background: green; border-radius: 10px;"></div>
+                        <!-- /vertical bar -->
+                        <div class="node_children">
+                            <!-- child -->
+                            <div class="position-relative" style="padding-left: 30px;">
+                                <!-- horizontal bar -->
+                                <div style="position: absolute; top: 50%; left: 0; height: 3px; width: 15px; background: green;"></div>
+                                <!-- /horizontal bar -->
+                                <div style="position: absolute; left: 3px; top: 0px; width: 15px; height: 15px; background-color: white; border: 3px solid green; border-radius: 50%;"></div>
+                                <div class="border rounded p-2">
+                                    <div class="d-flex justify-content-between">
+                                        <div>Child Type: Identifier</div>
+                                        <button class="mt-4 ml-2 btn btn-info btn-rounded" data-toggle="collapse" data-target="#child_details">View Details</button>
+                                    </div>
+                                    <div id="child_details">
+                                        Child Details Here
+                                    </div>
+                                    <button class="btn btn-primary btn-fw btn-sm show-children">Show Children</button>
+                                </div>
+                            </div>
+                            <!-- /child -->
+                        </div>
                     </div>
                 </div>
+                <!-- /root -->
             </div>
-            <!-- /root -->
         </div>
     </div>
 </div>
-
 @endsection
 @push('plugin-scripts')
 @endpush
