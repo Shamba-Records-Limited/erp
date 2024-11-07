@@ -1413,6 +1413,10 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
             Route::get('/branches/delete/{id}', 'CoopBranchController@delete')
                 ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['delete'])
                 ->name('hr.branches.delete');
+                // web.php
+            Route::get('/branches/collections/{id}', 'CoopBranchController@collections')
+                ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['view'])
+                ->name('hr.branches.collections');
             //departments
             Route::get('/departments', 'CoopDepartmentController@index')
                 ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['departments'] . ',' . config('enums.system_permissions')['view'])

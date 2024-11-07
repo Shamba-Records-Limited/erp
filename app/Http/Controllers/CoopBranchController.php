@@ -120,4 +120,23 @@ class CoopBranchController extends Controller
             return redirect()->route('hr.branches.show');
         }
     }
+    // CoopBranchController.php
+
+  public function collections(Request $request, $id)
+{
+    $coop = Auth::user()->cooperative->id;
+
+    // Fetch collections for the specified branch with additional fields
+    $collections = DB::select(DB::raw("
+        SELECT c.*, branch.name AS branch_name
+        FROM collections c
+        JOIN coop_branches branch ON branch.id = c.coop_branch_id
+        WHERE c.cooperative_id = :coop_id AND c.coop_branch_id = :branch_id
+    "), ['coop_id' => $coop, 'branch_id' => $id]);
+
+    // Convert the array to a collection
+    $collections = collect($collections);
+
+    return view('pages.cooperative-admin.branches.collections', compact('collections'));
+}
 }
