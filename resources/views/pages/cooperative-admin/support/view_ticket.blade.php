@@ -17,12 +17,34 @@
                             <h4 class="mb-1">#{{ $ticket->number }}</h4>
                             <h5 class="mb-0 opacity-8">{{ $ticket->title }}</h5>
                         </div>
-                        <div class="ticket-status">
-                            <span class="px-4 py-2 rounded-pill @if($ticket->status == 'open') bg-warning @elseif($ticket->status == 'solved') bg-success @else bg-secondary @endif text-white">
-                                <i class="fas @if($ticket->status == 'open') fa-exclamation-circle @elseif($ticket->status == 'solved') fa-check-circle @else fa-times-circle @endif"></i>
-                                {{ ucfirst($ticket->status) }}
-                            </span>
-                        </div>
+                         <div class="ticket-status">
+                        <span class="px-4 py-2 rounded-pill text-white" style="
+                            @if($ticket->status == 'open') 
+                                background-color: #ffc107; 
+                            @elseif($ticket->status == 'solved') 
+                                background-color: #28a745; 
+                            @elseif($ticket->status == 'in_progress') 
+                                background-color: #17a2b8; 
+                            @elseif($ticket->status == 'answered') 
+                                background-color: #172B4D; 
+                            @elseif($ticket->status == 'on_hold') 
+                                background-color: #fd7e14; 
+                            @else 
+                                background-color: #6c757d; 
+                            @endif
+                        ">
+                            <i class="fas 
+                                @if($ticket->status == 'open') 
+                                    fa-exclamation-circle 
+                                @elseif($ticket->status == 'solved') 
+                                    fa-check-circle 
+                                @else 
+                                    fa-times-circle 
+                                @endif
+                            "></i>
+                            {{ ucfirst($ticket->status) }}
+                        </span>
+                    </div>
                     </div>
                 </div>
 
