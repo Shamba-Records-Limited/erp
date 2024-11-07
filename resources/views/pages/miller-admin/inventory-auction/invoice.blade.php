@@ -37,7 +37,7 @@
                         <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
                         <div class="form-group">
                             <label for="">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control select2bs4 {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
+                            <select name="customer_id" id="customer_id" class="form-control form-select {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
                                 <option value="">-- Select Customer --</option>
                                 @foreach($customers as $customer)
                                 <option value="{{$customer->id}}" @if(old('customer_id',$draftInvoice->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>

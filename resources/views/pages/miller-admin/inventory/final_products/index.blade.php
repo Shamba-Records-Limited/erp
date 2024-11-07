@@ -134,7 +134,7 @@ $units = config('enums.units')
 
                                     <div class="form-group">
                                         <label for="milled_inventory_id">Select Inventory</label>
-                                        <select name="milled_inventory_id" id="milled_inventory_id" class="form-control select2bs4 {{ $errors->has('milled_inventory_id') ? ' is-invalid' : '' }}" value="{{old('milled_inventory_id', '')}}">
+                                        <select name="milled_inventory_id" id="milled_inventory_id" class="form-control form-select {{ $errors->has('milled_inventory_id') ? ' is-invalid' : '' }}" value="{{old('milled_inventory_id', '')}}">
                                             <option value="">-- Select Inventory --</option>
                                             @foreach($milledInventories as $milledInventory)
                                             <option value="{{$milledInventory->id}}">{{$milledInventory->inventory_number}}</option>

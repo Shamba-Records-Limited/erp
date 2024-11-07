@@ -14,6 +14,7 @@ use Hash;
 use Illuminate\Http\Request;
 use Log;
 use Spatie\Permission\Models\Role;
+use App\Events\NewUserRegisteredEvent;
 
 class MillersController extends Controller
 {
@@ -112,9 +113,16 @@ class MillersController extends Controller
             $new_user = $user->refresh();
             $new_user->assignRole($role->name);
 
+            $data = [
+                "name" => ucwords(strtolower($request->f_name)),
+                "email" => $request->user_email, "password" => $userPassword,
+            ];
+            
+            event(new NewUserRegisteredEvent($data));
             DB::commit();
             toastr()->success('Miller Created Successfully');
             return redirect()->route('admin.millers.show')->withInput();
+
         } catch (\Throwable $th) {
             dd($th);
             Log::error($th->getMessage());

@@ -809,7 +809,7 @@ $cooperative = null;
                             <!-- Products Item -->
                             <li class="nav-item {{ request()->is('market-auction/products') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.marketplace-products') }}">
-                                    {{ __('Raw Materials Market') }}
+                                    {{ __('Products/Raw Materials') }}
                                 </a>
                             </li>
                             <!-- Market Auction Item -->
@@ -973,7 +973,7 @@ $cooperative = null;
                 </li>
                 <li class="nav-item {{ active_class(['miller-admin/tracking-tree*']) }}">
                     <a class="nav-link" href="{{ route('miller-admin.tracking-tree.show') }}">
-                        <i class="ni ni-map-big text-green"></i> {{ __('Traceability Tree') }}
+                        <i class="ni ni-map-big text-green"></i> {{ __('Tracking Tree') }}
                     </a>
                 </li>
                 @endif
