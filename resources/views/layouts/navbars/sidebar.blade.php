@@ -17,26 +17,31 @@ $cooperative = null;
         <ul class="nav">
             <li class="nav-item nav-profile not-navigation-link">
                 <div class="nav-link">
-                    <div class="user-wrapper p-4">
+                    <div class="user-wrapper ">
                         @php $user = Auth::user(); @endphp
                         <div class="coop-profile-image">
-                            <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg" alt="Profile Image">
+                            <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg"
+                                alt="Profile Image">
                         </div>
                         <div class="text-wrapper">
                             <p class="profile-name">
                                 @if($user)
+                                @if ($user->cooperative)
+                                <strong>{{ ucwords(strtolower($user->cooperative->name)) }}</strong><br>
+                                @elseif ($user->miller_admin && $user->miller_admin->miller)
+                                <strong>{{ ucwords(strtolower($user->miller_admin->miller->name)) }}</strong><br>
+                                @endif
+                                <p class="semi-bold">
                                 {{ ucwords(strtolower($user->first_name)) }}
                                 {{ ucwords(strtolower($user->other_names)) }}
+                                </p>
                                 @endif
                             </p>
                             <div class="dropdown" data-display="static">
                                 <a href="#" class="nav-link d-flex user-switch-dropdown-toggler"
                                     id="UsersettingsDropdown" data-toggle="dropdown" aria-expanded="false">
                                     @if($user)
-                                    @php
-                                    $roles = $user->getRoleNames();
-                                    @endphp
-                                    <!-- Role name section -->
+                                    @php $roles = $user->getRoleNames(); @endphp
                                     <small class="designation text-muted semi-bold">
                                         @foreach($roles as $role)
                                         {{ ucwords(strtolower($role)) }}
@@ -45,17 +50,10 @@ $cooperative = null;
                                     @endif
                                 </a>
                                 <!-- Status Indicator -->
-                                <div class="status-indicator ml-3">
+                                <div class="status-indicator ml-3 mb-2">
                                     <span class="bg-success dot"></span>
-                                    <small><span class=" text-success semi-bold">Online</span></small>
+                                    <small><span class="text-success semi-bold">Online</span></small>
                                 </div>
-                                <small class="designation text-muted">
-                                    @if (!is_null($cooperative))
-                                    {{ ucwords(strtolower($cooperative->name)) }}
-                                    @elseif (!is_null($miller))
-                                    {{ $miller->name }}
-                                    @endif
-                                </small>
                                 <div class="dropdown-menu" aria-labelledby="UsersettingsDropdown">
                                     <a class="dropdown-item p-0">
                                         <div class="d-flex border-bottom">
@@ -118,7 +116,7 @@ $cooperative = null;
                     <i class="ni ni-single-02 text-custom-green"></i> {{ __('User') }}
                 </a>
             </li>
-             <!-- <li class="nav-item {{ active_class(['admin/employees']) }}">
+            <!-- <li class="nav-item {{ active_class(['admin/employees']) }}">
                 <a class="nav-link" href="{{ route('admin.employees.show') }}">
                     <i class="menu-icon mdi mdi-cogs"></i>
                     <span class="menu-title">Employees</span>
@@ -144,13 +142,14 @@ $cooperative = null;
                     <i class="ni ni-key-25 text-custom-green"></i> {{ __('Roles') }}
                 </a>
             </li>
-         <!-- Module Management Dropdown -->
+            <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">
                 <!-- Added margin-bottom for spacing -->
                 <a class="nav-link" href="#moduleManagement" data-toggle="collapse" role="button"
                     aria-expanded="{!! is_active_route(['admin/modules*']) !!}" aria-controls="moduleManagement">
                     <i class="ni ni-archive-2 text-custom-green"></i> <!-- Using the same icon style -->
-                    <span class="nav-link-text" style="color: #f4645f;">{{__('Module Management')}}</span> <!-- Matching text color -->
+                    <span class="nav-link-text" style="color: #f4645f;">{{__('Module Management')}}</span>
+                    <!-- Matching text color -->
                     <i class="menu-arrow"></i> <!-- Keeping the arrow icon -->
                 </a>
                 <div class="collapse {{ show_class(['admin/manage/*']) }}" id="moduleManagement">
@@ -281,15 +280,18 @@ $cooperative = null;
                     <i class="ni ni-building text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
                 </a>
-                <div class="collapse {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') || request()->routeIs('hr.branches.show') ? 'show' : '' }}" id="wetmills-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') || request()->routeIs('hr.branches.show') ? 'show' : '' }}"
+                    id="wetmills-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.branches.mini-dashboard') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.branches.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('hr.branches.show') ? 'active' : '' }}" href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}</a>
+                            <a class="nav-link {{ request()->routeIs('hr.branches.show') ? 'active' : '' }}"
+                                href="{{ route('hr.branches.show') }}"> {{ __('Wet Mills') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -302,15 +304,18 @@ $cooperative = null;
                     <i class="ni ni-single-02 text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Farmer / Suppliers CRM') }}</span>
                 </a>
-                <div class="collapse {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') || request()->routeIs('cooperative-admin.farmers.show') ? 'show' : '' }}" id="farmers-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') || request()->routeIs('cooperative-admin.farmers.show') ? 'show' : '' }}"
+                    id="farmers-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.mini-dashboard') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.farmers.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.farmers.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.farmers.show') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.farmers.show') }}">
                                 {{ __('Farmers') }}
                             </a>
                         </li>
@@ -325,20 +330,24 @@ $cooperative = null;
                     <i class="ni ni-archive-2 text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
                 </a>
-                <div class="collapse {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') || request()->routeIs('cooperative-admin.lots.show') || request()->routeIs('cooperative-admin.collections.show') ? 'show' : '' }}" id="collections-crm">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') || request()->routeIs('cooperative-admin.lots.show') || request()->routeIs('cooperative-admin.collections.show') ? 'show' : '' }}"
+                    id="collections-crm">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.mini-dashboard') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.collections.mini-dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.lots.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.lots.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.lots.show') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.lots.show') }}">
                                 {{ __('Lots') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.collections.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.collections.show') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.collections.show') }}">
                                 {{ __('Collections') }}
                             </a>
                         </li>
@@ -353,40 +362,48 @@ $cooperative = null;
                     <i class="ni ni-money-coins text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
                 </a>
-                <div class="collapse {{ request()->routeIs('cooperative-admin.wallet-management.*') ? 'show' : '' }}" id="wallet-management">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.wallet-management.*') ? 'show' : '' }}"
+                    id="wallet-management">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.dashboard') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.dashboard') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.dashboard') }}">
                                 {{ __('Dashboard') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-receivables') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-receivables') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.account-receivables') }}">
                                 {{ __('Account Receivables') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-payables') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.account-payables') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.account-payables') }}">
                                 {{ __('Account Payables') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.income') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.income') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.income') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.income') }}">
                                 {{ __('Income') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.expenses') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.expenses') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.expenses') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.expenses') }}">
                                 {{ __('Expenses') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.deposits') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.deposits') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.deposits') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.deposits') }}">
                                 {{ __('Deposits') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.withdrawals') ? 'active' : '' }}" href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.wallet-management.withdrawals') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.wallet-management.withdrawals') }}">
                                 {{ __('Withdrawals') }}
                             </a>
                         </li>
@@ -401,21 +418,24 @@ $cooperative = null;
                     <i class="ni ni-money-coins text-custom-green"></i>
                     <span class="nav-link-text" style="color: #f4645f;">{{ __('Products / Raw Materials') }}</span>
                 </a>
-                <div class="collapse {{ request()->routeIs('cooperative-admin.products.show') ? 'show' : '' }}" id="product-management">
+                <div class="collapse {{ request()->routeIs('cooperative-admin.products.show') ? 'show' : '' }}"
+                    id="product-management">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->routeIs('cooperative-admin.products.show') ? 'active' : '' }}" href="{{ route('cooperative-admin.products.show') }}">
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.products.show') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.products.show') }}">
                                 <i class="ni ni-tag text-custom-green"></i> {{ __('Price-setup ') }}
                             </a>
                         </li>
                         <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cooperative-admin.stock-levels.index') ? 'active' : '' }}" href="{{ route('cooperative-admin.stock-levels.index') }}">
-                    <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
-                </a>
-            </li>
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.stock-levels.index') ? 'active' : '' }}"
+                                href="{{ route('cooperative-admin.stock-levels.index') }}">
+                                <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
+                            </a>
+                        </li>
                     </ul>
                 </div>
-             
+
             </li>
 
             <!-- Transactions Reports -->
@@ -457,169 +477,190 @@ $cooperative = null;
             @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
             config('enums.system_permissions')['view']))
             <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
-            <a class="nav-link" href="{{ route('hr.employees.show') }}">
-                <i class="menu-icon mdi mdi-television text-custom-green"></i>
-                <span class="menu-title"></span>
-                {{config('enums.system_modules')['HR Management']['employees']}}
-            </a>
-        </li>
+                <a class="nav-link" href="{{ route('hr.employees.show') }}">
+                    <i class="menu-icon mdi mdi-television text-custom-green"></i>
+                    <span class="menu-title"></span>
+                    {{config('enums.system_modules')['HR Management']['employees']}}
+                </a>
+            </li>
             @endif
 
             @if(can_view_module('User Management'))
             <li class="nav-item {!!  active_class(['cooperative/user-management/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#userManagement" aria-expanded="{!!  is_active_route(['cooperative/user-management/*'])  !!}" aria-controls="userManagement">
-                <i class="ni ni-single-02 text-custom-green"></i>
-                <span class="menu-title">User Management</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['cooperative/user-management/*']) }}" id="userManagement">
-                <ul class="nav flex-column sub-menu">
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['roles'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/roles']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.roles') }}">
-                            {{config('enums.system_modules')['User Management']['roles']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['roles'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/role-management']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.role-management') }}">
-                            {{config('enums.system_modules')['User Management']['role_management']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['roles'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/module/role-management']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.module-management') }}">
-                            {{config('enums.system_modules')['User Management']['module_management']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['roles'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/permissions']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.permissions') }}">
-                            {{config('enums.system_modules')['User Management']['permissions']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['role_permissions'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/role-permissions']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.role-permissions') }}">
-                            {{config('enums.system_modules')['User Management']['role_permissions']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['User Management']['activity_log'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/user-management/activity-log']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.activity_log') }}">
-                            {{config('enums.system_modules')['User Management']['activity_log']}}
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </li>
+                <a class="nav-link" data-toggle="collapse" href="#userManagement"
+                    aria-expanded="{!!  is_active_route(['cooperative/user-management/*'])  !!}"
+                    aria-controls="userManagement">
+                    <i class="ni ni-single-02 text-custom-green"></i>
+                    <span class="menu-title">User Management</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse {{ show_class(['cooperative/user-management/*']) }}" id="userManagement">
+                    <ul class="nav flex-column sub-menu">
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['roles'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/roles']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.roles') }}">
+                                {{config('enums.system_modules')['User Management']['roles']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['roles'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/role-management']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.role-management') }}">
+                                {{config('enums.system_modules')['User Management']['role_management']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['roles'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/module/role-management']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.module-management') }}">
+                                {{config('enums.system_modules')['User Management']['module_management']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['roles'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/permissions']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.permissions') }}">
+                                {{config('enums.system_modules')['User Management']['permissions']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['role_permissions'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/role-permissions']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.role-permissions') }}">
+                                {{config('enums.system_modules')['User Management']['role_permissions']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['User Management']['activity_log'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/user-management/activity-log']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.activity_log') }}">
+                                {{config('enums.system_modules')['User Management']['activity_log']}}
+                            </a>
+                        </li>
+                        @endif
+                    </ul>
+                </div>
+            </li>
             @endif
 
             @if(can_view_module('HR Management'))
             <li class="nav-item {!!  active_class(['cooperative/hr/*']) !!} ">
-            <a class="nav-link" data-toggle="collapse" href="#hrManagement" aria-expanded="{!!  is_active_route(['cooperative/hr/*'])  !!}" aria-controls="hrManagement">
-                <i class="ni ni-single-02 text-custom-green"></i>
-                <span class="menu-title">HR Management</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse {{ show_class(['cooperative/hr/*']) }}" id="hrManagement">
-                <ul class="nav flex-column sub-menu">
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['dashboard'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/dashboard']) }}">
-                        <a class="nav-link" href="{{ route('hr.dashboard') }}">
-                            {{config('enums.system_modules')['HR Management']['dashboard']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['branches'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
-                        <a class="nav-link" href="{{ route('hr.branches.show') }}">
-                            {{config('enums.system_modules')['HR Management']['branches']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['departments'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/departments']) }}">
-                        <a class="nav-link" href="{{ route('hr.departments.show') }}">
-                            {{config('enums.system_modules')['HR Management']['departments']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['job_type'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/employment-types']) }}">
-                        <a class="nav-link" href="{{ route('hr.employment-types.show') }}">
-                            {{config('enums.system_modules')['HR Management']['job_type']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['job_positions'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/job-positions']) }}">
-                        <a class="nav-link" href="{{ route('hr.job-positions.show') }}">
-                            {{config('enums.system_modules')['HR Management']['job_positions']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
-                        <a class="nav-link" href="{{ route('hr.employees.show') }}">
-                            {{config('enums.system_modules')['HR Management']['employees']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['payroll'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/payroll']) }}">
-                        <a class="nav-link" href="{{ route('hr.employees.payroll') }}">
-                            {{config('enums.system_modules')['HR Management']['payroll']}}
-                        </a>
-                    </li>
-                    @endif
+                <a class="nav-link" data-toggle="collapse" href="#hrManagement"
+                    aria-expanded="{!!  is_active_route(['cooperative/hr/*'])  !!}" aria-controls="hrManagement">
+                    <i class="ni ni-single-02 text-custom-green"></i>
+                    <span class="menu-title">HR Management</span>
+                    <i class="menu-arrow"></i>
+                </a>
+                <div class="collapse {{ show_class(['cooperative/hr/*']) }}" id="hrManagement">
+                    <ul class="nav flex-column sub-menu">
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['dashboard'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/dashboard']) }}">
+                            <a class="nav-link" href="{{ route('hr.dashboard') }}">
+                                {{config('enums.system_modules')['HR Management']['dashboard']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['branches'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/branches']) }}">
+                            <a class="nav-link" href="{{ route('hr.branches.show') }}">
+                                {{config('enums.system_modules')['HR Management']['branches']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['departments'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/departments']) }}">
+                            <a class="nav-link" href="{{ route('hr.departments.show') }}">
+                                {{config('enums.system_modules')['HR Management']['departments']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['job_type'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/employment-types']) }}">
+                            <a class="nav-link" href="{{ route('hr.employment-types.show') }}">
+                                {{config('enums.system_modules')['HR Management']['job_type']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['job_positions'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/job-positions']) }}">
+                            <a class="nav-link" href="{{ route('hr.job-positions.show') }}">
+                                {{config('enums.system_modules')['HR Management']['job_positions']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['employees'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/*employees']) }}">
+                            <a class="nav-link" href="{{ route('hr.employees.show') }}">
+                                {{config('enums.system_modules')['HR Management']['employees']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['payroll'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/payroll']) }}">
+                            <a class="nav-link" href="{{ route('hr.employees.payroll') }}">
+                                {{config('enums.system_modules')['HR Management']['payroll']}}
+                            </a>
+                        </li>
+                        @endif
 
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['department_payroll'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/payrolls/department']) }}">
-                        <a class="nav-link" href="{{ route('hr.employees.payroll.department') }}">
-                            {{config('enums.system_modules')['HR Management']['department_payroll']}}
-                        </a>
-                    </li>
-                    @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['department_payroll'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/payrolls/department']) }}">
+                            <a class="nav-link" href="{{ route('hr.employees.payroll.department') }}">
+                                {{config('enums.system_modules')['HR Management']['department_payroll']}}
+                            </a>
+                        </li>
+                        @endif
 
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['files'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/employees/files']) }}">
-                        <a class="nav-link" href="{{ route('hr.employees.files') }}">
-                            {{config('enums.system_modules')['HR Management']['files']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['leave'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/leaves']) }}">
-                        <a class="nav-link" href="{{ route('hr.leaves.show') }}">
-                            {{config('enums.system_modules')['HR Management']['leave']}}
-                        </a>
-                    </li>
-                    @endif
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['recruitment'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/recruitments']) }}">
-                        <a class="nav-link" href="{{ route('hr.recruitments.show') }}">
-                            {{config('enums.system_modules')['HR Management']['recruitment']}}
-                        </a>
-                    </li>
-                    @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['files'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/employees/files']) }}">
+                            <a class="nav-link" href="{{ route('hr.employees.files') }}">
+                                {{config('enums.system_modules')['HR Management']['files']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['leave'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/leaves']) }}">
+                            <a class="nav-link" href="{{ route('hr.leaves.show') }}">
+                                {{config('enums.system_modules')['HR Management']['leave']}}
+                            </a>
+                        </li>
+                        @endif
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['recruitment'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/recruitments']) }}">
+                            <a class="nav-link" href="{{ route('hr.recruitments.show') }}">
+                                {{config('enums.system_modules')['HR Management']['recruitment']}}
+                            </a>
+                        </li>
+                        @endif
 
-                    @if(has_right_permission(config('enums.system_modules')['HR Management']['reports'], config('enums.system_permissions')['view']))
-                    <li class="nav-item {{ active_class(['cooperative/hr/reports']) }}">
-                        <a class="nav-link" href="{{ route('cooperative.hr.reports') }}">
-                            {{config('enums.system_modules')['HR Management']['reports']}}
-                        </a>
-                    </li>
-                    @endif
-                </ul>
-            </div>
-        </li>
+                        @if(has_right_permission(config('enums.system_modules')['HR Management']['reports'],
+                        config('enums.system_permissions')['view']))
+                        <li class="nav-item {{ active_class(['cooperative/hr/reports']) }}">
+                            <a class="nav-link" href="{{ route('cooperative.hr.reports') }}">
+                                {{config('enums.system_modules')['HR Management']['reports']}}
+                            </a>
+                        </li>
+                        @endif
+                    </ul>
+                </div>
+            </li>
             @endif
 
             @if(can_view_module('Bank Management'))
@@ -799,7 +840,8 @@ $cooperative = null;
                         aria-controls="navbar-marketplace">
                         <i class="ni ni-basket text-green"></i> {{ __('Marketplace') }}
                     </a>
-                    <div class="collapse {{ request()->is('miller-admin/market-auction/*') ? 'show' : '' }}" id="navbar-marketplace">
+                    <div class="collapse {{ request()->is('miller-admin/market-auction/*') ? 'show' : '' }}"
+                        id="navbar-marketplace">
                         <ul class="nav nav-sm flex-column">
                             <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.marketplace-dashboard') }}">
@@ -813,7 +855,8 @@ $cooperative = null;
                                 </a>
                             </li>
                             <!-- Market Auction Item -->
-                            <li class="nav-item {{ request()->is('miller-admin/market-auction/show') ? 'active' : '' }}">
+                            <li
+                                class="nav-item {{ request()->is('miller-admin/market-auction/show') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('miller-admin.market-auction.show') }}">
                                     {{ __('Market Auction') }}
                                 </a>

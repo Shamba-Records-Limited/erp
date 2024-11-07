@@ -20404,7 +20404,7 @@ hr.horizontal.light {
 }
 
 .nav-items-wrapper ul {
-    padding-top: 10px;
+    padding-top: 30px;
 }
 
 .coop-profile-image img {
@@ -20452,6 +20452,10 @@ hr.horizontal.light {
     display: flex;
     align-items: center;
     padding: 15px;
+    background-color: white;
+    border-radius: 18px;
+    margin-top: 15px;
+    margin-left: 6px;
     border-bottom: 1px solid #e0e0e0;
 }
 
