@@ -121,17 +121,24 @@ class CoopBranchController extends Controller
         }
     }
     // CoopBranchController.php
-
-  public function collections(Request $request, $id)
+public function collections(Request $request, $id)
 {
     $coop = Auth::user()->cooperative->id;
 
-    // Fetch collections for the specified branch with additional fields
+    // Fetch collections for the specified branch with the correct column name `unit_price`
     $collections = DB::select(DB::raw("
-        SELECT c.*, branch.name AS branch_name
+        SELECT 
+            c.id,
+            c.collection_number,
+            c.lot_number,
+            c.quantity,
+            c.unit_price,
+            branch.name AS branch_name,
+            c.created_at
         FROM collections c
         JOIN coop_branches branch ON branch.id = c.coop_branch_id
         WHERE c.cooperative_id = :coop_id AND c.coop_branch_id = :branch_id
+        ORDER BY c.created_at DESC
     "), ['coop_id' => $coop, 'branch_id' => $id]);
 
     // Convert the array to a collection
@@ -139,4 +146,6 @@ class CoopBranchController extends Controller
 
     return view('pages.cooperative-admin.branches.collections', compact('collections'));
 }
+
+
 }
