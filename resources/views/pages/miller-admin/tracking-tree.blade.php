@@ -29,7 +29,7 @@
             <!-- root -->
             <div class="node">
                 <div class="d-flex">
-                    <div class="form-container border rounded p-3" style="flex: 1; margin-right: 20px;"> <!-- Added flex and margin -->
+                    <div class="form-container border rounded p-3" style="width:24rem; margin-right: 20px;"> <!-- Added flex and margin -->
                         <input type="hidden" name="level" class="level" value="0">
                         <form id="get_root_details">
                             <div class="form-group">
@@ -73,31 +73,37 @@
                         <!-- /root details -->
                         <button class="btn btn-primary btn-fw btn-sm show-children">Show Children</button>
                     </div>
-                    <div class="child_node_container pt-3 position-relative" style="flex: 1; padding-left: 20px;"> <!-- Added flex -->
-                        <!-- vertical bar -->
-                        <div style="position: absolute; left: 10px; top: 0; height: 100%; width: 5px; background: green; border-radius: 10px;"></div>
-                        <!-- /vertical bar -->
-                        <div class="node_children">
+
+
+                    <div class="cbg-dark"> <!-- Added flex -->
+                        <div class="node_children container-fluid">
                             <!-- child -->
-                            <div class="position-relative" style="padding-left: 30px;">
-                                <!-- horizontal bar -->
-                                <div style="position: absolute; top: 50%; left: 0; height: 3px; width: 15px; background: green;"></div>
-                                <!-- /horizontal bar -->
-                                <div style="position: absolute; left: 3px; top: 0px; width: 15px; height: 15px; background-color: white; border: 3px solid green; border-radius: 50%;"></div>
-                                <div class="border rounded p-2">
-                                    <div class="d-flex justify-content-between">
-                                        <div>Child Type: Identifier</div>
+                        <div class="row" >
+                             
+                                <div class="col-md-12 d-flex flex-column align-items-center justify-content-center">
+                                    <!-- CARD I -->
+                                   <!-- <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Child Type: Identifier</h5>
+                                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                                         <button class="mt-4 ml-2 btn btn-info btn-rounded" data-toggle="collapse" data-target="#child_details">View Details</button>
                                     </div>
                                     <div id="child_details">
                                         Child Details Here
                                     </div>
                                     <button class="btn btn-primary btn-fw btn-sm show-children">Show Children</button>
+                                    </div> -->
+                                    <!-- END CARD I -->
+
+                                   
                                 </div>
                             </div>
                             <!-- /child -->
                         </div>
                     </div>
+
+
+
                 </div>
                 <!-- /root -->
             </div>

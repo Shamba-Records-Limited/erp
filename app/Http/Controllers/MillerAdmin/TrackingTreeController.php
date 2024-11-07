@@ -110,9 +110,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$rawMaterial->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
@@ -127,7 +124,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -147,9 +143,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='pre_milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$preMilledInventory->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
@@ -164,7 +157,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -186,9 +178,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='delivery' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$delivery->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
@@ -203,7 +192,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -224,9 +212,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='order' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$order->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Order: $order->batch_number</div>
@@ -241,7 +226,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -264,10 +248,6 @@ class TrackingTreeController extends Controller
                 <div class='node'>
                     <input type='hidden' name='node_type' class='node_type' value='lot' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$lot->lot_number' />
-                    <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Lot: $lot->lot_number</div>
@@ -283,7 +263,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -309,9 +288,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='collection' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$collection->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Collection: $collection->collection_number</div>
@@ -327,7 +303,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -354,9 +329,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='lot' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$lot->lot_number' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Lot:  $lot->lot_number </div>
@@ -371,7 +343,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -393,9 +364,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='order' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$order->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Order: $order->batch_number </div>
@@ -410,7 +378,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -431,9 +398,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='delivery' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$delivery->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
@@ -448,7 +412,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -469,9 +432,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='pre_milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$preMilledInventory->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
@@ -486,7 +446,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -507,9 +466,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$rawMaterial->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-3 bg-light shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
@@ -524,7 +480,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
@@ -545,9 +500,6 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='final_product' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$finalProduct->id' />
                     <div class='position-relative pl-3'>
-                        <!-- horizontal bar -->
-                        <div class='position-absolute' style='top:50%;left:0;height: 2px; width: 15px; background: black'></div>
-                        <!-- /horizontal bar -->
                         <div class='border rounded p-2'>
                             <div class='d-flex justify-content-between'>
                                 <div>Product :$finalProduct->product_number</div>
@@ -562,7 +514,6 @@ class TrackingTreeController extends Controller
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
-                        <div class='position-absolute h-100 w-10 bg-black' style='top:0;left:0;height: 100%; width: 5px; background: black'></div>
                         <div class='node_children'>
                         </div>
                     </div>
