@@ -90,8 +90,9 @@
                             @foreach($branches as $key => $prod)
                             <tr>
                                 <td>{{++$key }}</td>
-                                <td>{{$prod->name }} </td>
-                                <td>{{$prod->code }}</td>
+                                <td>
+                                    <a href="{{ route('hr.branches.collections', $prod->id) }}">{{ $prod->name }}</a> <!-- Updated to make branch name clickable -->
+                                </td>                                 <td>{{$prod->code }}</td>
                                 <td>{{$prod->location }}</td>
                                 <td>
                                     @if($canEdit || $canDelete)
