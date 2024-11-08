@@ -463,7 +463,7 @@ $cooperative = null;
                 <span class="menu-title"></span>
                 {{config('enums.system_modules')['HR Management']['employees']}}
             </a>
-        </li>
+            </li>
             @endif
 
             @if(can_view_module('User Management'))
@@ -519,7 +519,7 @@ $cooperative = null;
                     @endif
                 </ul>
             </div>
-        </li>
+            </li>
             @endif
 
             @if(can_view_module('HR Management'))
@@ -981,26 +981,36 @@ $cooperative = null;
 
 
                 @if($user && $user->hasRole('farmer'))
+                <ul class="navbar-nav flex-column">
+
                 <li class="nav-item {{ active_class(['farmer/dashboard']) }}">
                     <a class="nav-link" href="{{ route('farmer.dashboard') }}">
-                        <i class="menu-icon mdi mdi-television"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <i class="menu-icon mdi mdi-television text-green"></i>
+                        {{__('Dashboard')}}
+                    </a>
+                </li>
+                  <!-- Profile Link -->
+                <li class="nav-item {{ active_class(['farmer/profile*']) }}">
+                    <a class="nav-link" href="{{ route('farmer.profile.show', ['user_id' => $user->id]) }}">
+                        <i class="menu-icon mdi mdi-account text-green"></i>
+                        {{__('Profile')}}
                     </a>
                 </li>
 
                 <li class="nav-item {{ active_class(['farmer/collections*']) }}">
                     <a class="nav-link" href="{{ route('farmer.collections.show') }}">
-                        <i class="menu-icon mdi mdi-cogs"></i>
-                        <span class="menu-title">Collections</span>
+                        <i class="menu-icon mdi mdi-cogs text-green"></i>
+                       {{__('Collections')}}
                     </a>
                 </li>
 
                 <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
                     <a class="nav-link" href="{{ route('farmer.transactions.show') }}">
-                        <i class="menu-icon mdi mdi-help-circle-outline"></i>
-                        <span class="menu-title">Transactions</span>
+                        <i class="menu-icon mdi mdi-help-circle-outline text-green"></i>
+                        {{__('Transactions')}}</span>
                     </a>
                 </li>
+                </ul>
                 @endif
 
                 {{-- vet menu --}}

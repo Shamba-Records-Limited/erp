@@ -2353,6 +2353,8 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
         ->name("farmer.transactions.detail");
     Route::get("/transactions/{id}/complete", "Farmer\TransactionController@complete")
         ->name("farmer.transactions.complete");
+    Route::get('/profile/{user_id}', 'Farmer\ProfileController@show')->name('farmer.profile.show');
+
 });
 
 //farmer routes
