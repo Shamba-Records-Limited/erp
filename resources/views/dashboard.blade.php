@@ -2,12 +2,34 @@
 
 @section('content')
     @include('layouts.headers.cards')
+<style>
+      .welcome-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ asset('argon/img/brand/shamba-traceability.avif') }}") center center/cover no-repeat;
+            filter: blur(8px);
+            transform: translateZ(0) scale(1.05);
+            transition: transform 0.5s ease;
+            z-index: 0;
+        }
+</style>
+    <div class="welcome-container">
+        <!-- Dark overlay for better text readability -->
+        <div class="welcome-overlay"></div>
 
-    <div class="welcome-container pl-8" style="text-align: center; margin-top: 50px;">
-        <h2 style="font-size: 2.5em; color: #333; margin-bottom: 20px;">Welcome to Shamba Coffee ERP</h2>
-        <img src="{{ asset('argon/img/brand/coffee.png') }}" alt="Coffee Image" style="max-width: 200px; height: auto; margin: 0 auto;" />
+        <!-- Welcome content with title, subtitle, image, and CTA button -->
+        <div class="welcome-content">
+            <h2 class="welcome-title">Welcome to Shamba Traceability ERP</h2>
+            <p class="welcome-subtitle">
+                Enhancing agricultural transparency and traceability with a powerful ERP solution for cooperatives and producers.
+            </p>
+            <img src="{{ asset('argon/img/brand/coffee.png') }}" alt="Agriculture Image" class="welcome-image" />
+        </div>
     </div>
-    
 @endsection
 
 @push('js')

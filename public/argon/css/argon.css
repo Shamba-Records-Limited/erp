@@ -20606,3 +20606,124 @@ hr.horizontal.light {
     transform: scale(1.03);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
+
+     /* Full-screen background styling with blur effect */
+        .welcome-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #fff;
+            text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+        }
+
+        /* Blurred background image with parallax effect */
+        .welcome-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ asset('argon/img/brand/shamba-traceability.avif') }}") center center/cover no-repeat;
+            filter: blur(8px);
+            transform: translateZ(0) scale(1.05);
+            transition: transform 0.5s ease;
+            z-index: 0;
+        }
+
+        /* Dark overlay for additional readability */
+        .welcome-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+
+        /* Text and image styling with entrance animations */
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 80%;
+            padding: 20px;
+            border-radius: 8px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .welcome-title {
+            font-size: 3em;
+            color: #ffe8d6;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: slideDown 1.5s ease-in-out;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2em;
+            color: #d1c1b3;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 1.7s ease-in-out;
+        }
+
+        .welcome-image {
+            max-width: 250px;
+            height: auto;
+            margin-top: 30px;
+            animation: fadeInUp 2s ease-in-out;
+            transition: transform 0.3s ease;
+        }
+
+        /* Hover effect for image */
+        .welcome-image:hover {
+            transform: scale(1.05);
+        }
+
+        /* Button styling and animation */
+        .cta-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 25px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #556b2f;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: pulse 2s infinite;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background-color: #6a8251;
+            transform: scale(1.05);
+        }
+
+        /* Keyframes for animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
