@@ -19,7 +19,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cartDropdown">
                     @if ($items_in_cart_count == 0)
-                    <a class="dropdown-item" disabled>Please add items to cart first</p>
+                    <a class="dropdown-item" disabled>Please add items to cart first</a>
                         @else
                         <form action="{{ route('miller-admin.market-auction.clear-cart', $cooperative->id) }}" method="POST">
                             @csrf
