@@ -120,4 +120,37 @@ class CoopBranchController extends Controller
             return redirect()->route('hr.branches.show');
         }
     }
+      // CoopBranchController.php
+public function collections(Request $request, $id)
+{
+    $coop = Auth::user()->cooperative->id;
+
+    // Fetch collections excluding unit_price, but still including quantity for total calculation
+    $collections = DB::select(DB::raw("
+        SELECT 
+            c.id,
+            c.collection_number,
+            c.lot_number,
+            c.quantity,
+            c.collection_time,
+            c.date_collected,
+            c.status,
+            branch.name AS branch_name,
+            coop.name AS cooperative_name,
+            prod.name AS product_name,
+            c.created_at
+        FROM collections c
+        JOIN coop_branches branch ON branch.id = c.coop_branch_id
+        JOIN cooperatives coop ON coop.id = c.cooperative_id
+        JOIN products prod ON prod.id = c.product_id
+        WHERE c.cooperative_id = :coop_id AND c.coop_branch_id = :branch_id
+        ORDER BY c.created_at DESC
+    "), ['coop_id' => $coop, 'branch_id' => $id]);
+
+    // Convert the array to a collection
+    $collections = collect($collections);
+
+    return view('pages.cooperative-admin.branches.collections', compact('collections'));
+}
+
 }

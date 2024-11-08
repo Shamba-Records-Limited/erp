@@ -49,10 +49,19 @@ class ProfileController extends Controller
         $products_they_supply = DB::table('farmers_products')->select('product_id')->where('farmer_id', $user_id)->count();
         $total_livestock = Cow::where('farmer_id', $farmer->farmer->id)->count();
         $lastDayofMonth = \Carbon\Carbon::now()->endOfMonth()->toDateString();
-        $bookings = VetBooking::where('farmer_id', $user_id)
-            ->where('cooperative_id', Auth::user()->cooperative->id)
-            ->whereDate('event_end', '<=', $lastDayofMonth)
-            ->whereBetween('created_at', [$startOfYear, $endOfYear])->latest()->limit(3)->get();
+       // Check if the user has an associated cooperative before querying
+if (Auth::user()->cooperative) {
+    $bookings = VetBooking::where('farmer_id', $user_id)
+        ->where('cooperative_id', Auth::user()->cooperative->id)
+        ->whereDate('event_end', '<=', $lastDayofMonth)
+        ->whereBetween('created_at', [$startOfYear, $endOfYear])
+        ->latest()
+        ->limit(3)
+        ->get();
+} else {
+    // Handle the case when the cooperative is null, for example, set $bookings to an empty collection
+    $bookings = collect();
+}
 
         $all_collections = Collection::where('farmer_id', $farmer->farmer->id)->whereDate('date_collected', '<=', $lastDayofMonth);
         $collection_quantity = implode(',', $all_collections->pluck('quantity')->toArray());

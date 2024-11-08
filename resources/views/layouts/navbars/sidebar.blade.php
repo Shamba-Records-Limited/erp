@@ -18,7 +18,10 @@ $cooperative = null;
             <li class="nav-item nav-profile not-navigation-link">
                 <div class="nav-link">
                     <div class="user-wrapper ">
-                        @php $user = Auth::user(); @endphp
+                        @php $user = Auth::user();
+                        
+                        @endphp
+
                         <div class="coop-profile-image">
                             <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg"
                                 alt="Profile Image">
