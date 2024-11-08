@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\User;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -14,8 +16,11 @@ class UserController extends Controller
      * @param  \App\User  $model
      * @return \Illuminate\View\View
      */
-    public function index(User $model)
+   public function index(User $model)
     {
-        return view('users.index');
+        // Eager load the relationships for the authenticated user
+        $user = Auth::user()->load('miller_admin.miller', 'cooperative');
+
+        return view('users.index', compact('user'));
     }
 }

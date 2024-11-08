@@ -17,26 +17,31 @@ $cooperative = null;
         <ul class="nav">
             <li class="nav-item nav-profile not-navigation-link">
                 <div class="nav-link">
-                    <div class="user-wrapper p-4">
+                    <div class="user-wrapper ">
                         @php $user = Auth::user(); @endphp
                         <div class="coop-profile-image">
-                            <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg" alt="Profile Image">
+                            <img class="coop-profile-image" src="{{ asset('argon') }}/img/avatar.jpeg"
+                                alt="Profile Image">
                         </div>
                         <div class="text-wrapper">
                             <p class="profile-name">
                                 @if($user)
+                                @if ($user->cooperative)
+                                <strong>{{ ucwords(strtolower($user->cooperative->name)) }}</strong><br>
+                                @elseif ($user->miller_admin && $user->miller_admin->miller)
+                                <strong>{{ ucwords(strtolower($user->miller_admin->miller->name)) }}</strong><br>
+                                @endif
+                                <p class="semi-bold">
                                 {{ ucwords(strtolower($user->first_name)) }}
                                 {{ ucwords(strtolower($user->other_names)) }}
+                                </p>
                                 @endif
                             </p>
                             <div class="dropdown" data-display="static">
                                 <a href="#" class="nav-link d-flex user-switch-dropdown-toggler"
                                     id="UsersettingsDropdown" data-toggle="dropdown" aria-expanded="false">
                                     @if($user)
-                                    @php
-                                    $roles = $user->getRoleNames();
-                                    @endphp
-                                    <!-- Role name section -->
+                                    @php $roles = $user->getRoleNames(); @endphp
                                     <small class="designation text-muted semi-bold">
                                         @foreach($roles as $role)
                                         {{ ucwords(strtolower($role)) }}
@@ -45,17 +50,10 @@ $cooperative = null;
                                     @endif
                                 </a>
                                 <!-- Status Indicator -->
-                                <div class="status-indicator ml-3">
+                                <div class="status-indicator ml-3 mb-2">
                                     <span class="bg-success dot"></span>
-                                    <small><span class=" text-success semi-bold">Online</span></small>
+                                    <small><span class="text-success semi-bold">Online</span></small>
                                 </div>
-                                <small class="designation text-muted">
-                                    @if (!is_null($cooperative))
-                                    {{ ucwords(strtolower($cooperative->name)) }}
-                                    @elseif (!is_null($miller))
-                                    {{ $miller->name }}
-                                    @endif
-                                </small>
                                 <div class="dropdown-menu" aria-labelledby="UsersettingsDropdown">
                                     <a class="dropdown-item p-0">
                                         <div class="d-flex border-bottom">
