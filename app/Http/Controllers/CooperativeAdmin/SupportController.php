@@ -153,7 +153,7 @@ public function publish_ticket(Request $request)
             SELECT c.*, u.username AS user_name FROM system_ticket_comment c
             JOIN users u ON c.user_id = u.id
             WHERE c.ticket_id = '$ticket->id'
-            ORDER BY c.created_at DESC
+            ORDER BY c.created_at ASC
         "));
 
         return view("pages.cooperative-admin.support.view_ticket", compact('ticket', 'comments'));
