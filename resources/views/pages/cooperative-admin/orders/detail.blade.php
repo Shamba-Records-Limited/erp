@@ -164,28 +164,43 @@
             </li>
         </ul>
         @if ($tab == 'items' || empty($tab))
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Lot</th>
-                        <th>Quantity</th>
-                        <th>Not Delivered</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($orderItems as $key => $item)
-                    <tr>
-                        <td>{{++$key}}</td>
-                        <td>{{$item->lot_number}}</td>
-                        <td>{{$item->quantity}}</td>
-                        <td>{{$item->undelivered}}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Lot</th>
+                            <th>Quantity</th>
+                            <th>Not Delivered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $totalQuantity = 0;
+                            $totalUndelivered = 0;
+                        @endphp
+                        @foreach($orderItems as $key => $item)
+                        @php
+                            $totalQuantity += $item->quantity;
+                            $totalUndelivered += $item->undelivered;
+                        @endphp
+                        <tr>
+                            <td>{{ ++$key }}</td>
+                            <td>{{ $item->lot_number }}</td>
+                            <td>{{ number_format($item->quantity) }}</td>
+                            <td>{{ number_format($item->undelivered) }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">Total</th>
+                            <th>{{ number_format($totalQuantity) }}</th> <!-- Total quantity -->
+                            <th>{{ number_format($totalUndelivered) }}</th> <!-- Total undelivered -->
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
         @elseif ($tab == 'deliveries')
         <div class="d-flex justify-content-end mb-2">
             <a href="?tab=deliveries&action=add_delivery" class="btn btn-primary">Add Delivery</a>
