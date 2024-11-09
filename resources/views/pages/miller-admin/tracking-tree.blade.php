@@ -29,7 +29,7 @@
             <!-- root -->
             <div class="node">
                 <div class="d-flex">
-                    <div class="form-container border rounded p-3" style="width:24rem; margin-right: 20px;"> <!-- Added flex and margin -->
+                    <div class="form-container border rounded p-3" style="width:24rem; margin-right: 20px; height:500px;"> <!-- Added flex and margin -->
                         <input type="hidden" name="level" class="level" value="0">
                         <form id="get_root_details">
                             <div class="form-group">
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                         <!-- /root details -->
-                        <button class="btn btn-primary btn-fw btn-sm show-children">Show Children</button>
+                        <button class="btn btn-primary btn-fw btn-sm show-children mt-4">Show Children</button>
                     </div>
 
 

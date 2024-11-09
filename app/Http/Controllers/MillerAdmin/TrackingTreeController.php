@@ -110,7 +110,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$rawMaterial->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -143,7 +143,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='pre_milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$preMilledInventory->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -178,7 +178,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='delivery' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$delivery->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -212,7 +212,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='order' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$order->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Order: $order->batch_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -248,7 +248,7 @@ class TrackingTreeController extends Controller
                 <div class='node'>
                     <input type='hidden' name='node_type' class='node_type' value='lot' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$lot->lot_number' />
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Lot: $lot->lot_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -288,7 +288,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='collection' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$collection->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Collection: $collection->collection_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -329,7 +329,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='lot' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$lot->lot_number' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Lot:  $lot->lot_number </div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -339,7 +339,7 @@ class TrackingTreeController extends Controller
                                     <span class='font-weight-bold'>Quantity:</span> $lot->quantity  KG
                                 </div>
                             </div>
-                            <button class='btn btn-primary btn-fw btn-sm show-children'>Show Children</button>
+                            <button class='btn btn-primary btn-fw btn-sm mt-2 show-children'>Show Children</button>
                         </div>
                     </div>
                     <div class='pt-3 ml-3 position-relative pl-2'>
@@ -364,7 +364,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='order' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$order->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Order: $order->batch_number </div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -398,7 +398,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='delivery' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$delivery->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Delivery: $delivery->delivery_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -432,7 +432,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='pre_milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$preMilledInventory->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Pre Milled Inventory :$preMilledInventory->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
@@ -466,7 +466,7 @@ class TrackingTreeController extends Controller
                     <input type='hidden' name='node_type' class='node_type' value='milled_inventory' />
                     <input type='hidden' name='node_identity' class='node_identity' value='$rawMaterial->id' />
                     <div class='position-relative pl-3'>
-                        <div class='border rounded p-3 bg-light shadow-sm'>
+                        <div class='border rounded p-3 node-card shadow-sm'>
                             <div class='d-flex justify-content-between align-items-center'>
                                 <div class='font-weight-bold text-primary'>Raw Material: Milled Inventory :$rawMaterial->inventory_number</div>
                                 <button class='mt-4 ml-2 p-2 btn btn-info btn-rounded' data-toggle='collapse' data-target='#child_details'>View Details</button>
