@@ -219,7 +219,7 @@ class TransactionController extends Controller
      * @param mixed $id
      * @return View|Factory
      */
-    public function detail($id){
+    public function transaction_detail($id){
         $transaction = Transaction::find($id);
 
         $lots = $transaction->lots;
