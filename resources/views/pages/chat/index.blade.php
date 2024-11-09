@@ -226,9 +226,9 @@
                     <h5 class="text-center">Chat Rooms</h5>
                     <div class="d-flex justify-content-end mb-3">
                         <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                            <button class="btn btn-outline-primary dropdown-toggle " type="button"
                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                                aria-expanded="false"><span class="mr-2">Add Chat</span>
                                 <i class="fas fa-ellipsis-v"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -269,20 +269,14 @@
                         <div class="message me">
                             <div class="text-sm"><strong>Me</strong></div>
                             <div>{{ $message->body }}</div>
-                            @if($message->image)
-                            <img src="{{ asset('storage/' . $message->image) }}" alt="Image" class="img-fluid mt-2"
-                                style="max-width: 100%; border-radius: 10px;">
-                            @endif
+                         
                             <div class="message-time">{{ $message->created_at->diffForHumans() }}</div>
                         </div>
                         @else
                         <div class="message other">
                             <div class="text-sm"><strong>{{ $message->sender->username }}</strong></div>
                             <div>{{ $message->body }}</div>
-                            @if($message->image)
-                            <img src="{{ asset('storage/' . $message->image) }}" alt="Image" class="img-fluid mt-2"
-                                style="max-width: 100%; border-radius: 10px;">
-                            @endif
+                          
                             <div class="message-time">{{ $message->created_at->diffForHumans() }}</div>
                         </div>
                         @endif
@@ -295,14 +289,13 @@
                         <div class="d-flex align-items-end">
                             <input type="text" class="form-control" placeholder="Type your message..." name="body"
                                 required>
-                            <input type="file" name="image" accept="image/*" class="ml-2">
-                            <button class="btn btn-outline-primary" type="submit"><i
+                            <button class="btn btn-outline-primary ml-2" type="submit"><i
                                     class="fas fa-paper-plane"></i></button>
                             @if($chatRoom->is_group)
                             <div class="dropdown ml-2">
                                 <button class="btn btn-outline-primary dropdown-toggle" type="button"
                                     id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
+                                    aria-expanded="false">View Group Details
                                     <i class="fas fa-cog"></i>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
