@@ -118,7 +118,7 @@ $collection_time_options = config('enums.collection_time');
                                     <option value="">-- Select Farmer --</option>
                                     @foreach($farmers as $farmer)
                                     <option value="{{$farmer->id}}" @if($farmer->id == old('farmer_id')) selected
-                                        @endif>{{$farmer->username}}</option>
+                                        @endif>{{$farmer->first_name}} {{$farmer->other_names}}</option>
                                     @endforeach
                                 </select>
                                 @if ($errors->has('farmer_id'))

@@ -33,7 +33,8 @@ class CollectionsController extends Controller
         $farmers = DB::select(DB::raw("
                 SELECT
                     f.id,
-                    u.username
+                    u.first_name,
+                    u.other_names
                 FROM farmers f
                 JOIN users u ON f.user_id = u.id
                 JOIN farmer_cooperative fc ON fc.farmer_id = f.id AND fc.cooperative_id = :coop_id;
