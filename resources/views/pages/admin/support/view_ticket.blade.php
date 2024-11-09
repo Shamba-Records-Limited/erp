@@ -17,35 +17,34 @@
                             <h4 class="mb-1">#{{ $ticket->number }}</h4>
                             <h5 class="mb-0 opacity-8">{{ $ticket->title }}</h5>
                         </div>
-                     <div class="ticket-status">
-                        <span class="px-4 py-2 rounded-pill text-white" style="
-                            @if($ticket->status == 'open') 
-                                background-color: #ffc107; 
-                            @elseif($ticket->status == 'solved') 
-                                background-color: #28a745; 
-                            @elseif($ticket->status == 'in_progress') 
-                                background-color: #17a2b8; 
-                            @elseif($ticket->status == 'answered') 
-                                background-color: #172B4D; 
-                            @elseif($ticket->status == 'on_hold') 
-                                background-color: #fd7e14; 
-                            @else 
-                                background-color: #6c757d; 
-                            @endif
-                        ">
-                            <i class="fas 
+                        <div class="ticket-status">
+                            <span class="px-4 py-2 rounded-pill text-white" style="
                                 @if($ticket->status == 'open') 
-                                    fa-exclamation-circle 
+                                    background-color: #ffc107; 
                                 @elseif($ticket->status == 'solved') 
-                                    fa-check-circle 
+                                    background-color: #28a745; 
+                                @elseif($ticket->status == 'in_progress') 
+                                    background-color: #17a2b8; 
+                                @elseif($ticket->status == 'answered') 
+                                    background-color: #172B4D; 
+                                @elseif($ticket->status == 'on_hold') 
+                                    background-color: #fd7e14; 
                                 @else 
-                                    fa-times-circle 
+                                    background-color: #6c757d; 
                                 @endif
-                            "></i>
-                            {{ ucfirst($ticket->status) }}
-                        </span>
-                    </div>
- 
+                            ">
+                                <i class="fas 
+                                    @if($ticket->status == 'open') 
+                                        fa-exclamation-circle 
+                                    @elseif($ticket->status == 'solved') 
+                                        fa-check-circle 
+                                    @else 
+                                        fa-times-circle 
+                                    @endif
+                                "></i>
+                                {{ ucfirst($ticket->status) }}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -69,44 +68,85 @@
                         @endif
                     </div>
 
-                    <!-- Ticket Description -->
+                    <!-- Ticket Details -->
                     <div class="ticket-details p-4 rounded mb-4">
                         <p class="mb-4">{{ $ticket->description }}</p>
+                        
+                        <!-- Additional Fields: Module, Submodule, Link, Image -->
+                        <div class="row">
+                            @if($ticket->module)
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-cube text-primary mr-2"></i>
+                                        <span class="font-weight-bold mr-2">Module:</span>
+                                        {{ $ticket->module }}
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($ticket->submodule)
+                                <div class="col-md-6 mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-cubes text-primary mr-2"></i>
+                                        <span class="font-weight-bold mr-2">Submodule:</span>
+                                        {{ $ticket->submodule }}
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($ticket->link)
+                                <div class="col-12 mb-3">
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-link text-primary mr-2"></i>
+                                        <span class="font-weight-bold mr-2">Link:</span>
+                                        <a href="{{ $ticket->link }}" class="text-primary">{{ $ticket->link }}</a>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if($ticket->image)
+                                <div class="col-12 mt-4">
+                                        <i class="fas fa-image text-primary mr-2 font-weight-bold mb-3"></i>Attached Image
+                                    <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" 
+                                         class="img-fluid rounded-lg shadow-sm ml-4" 
+                                         style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
-                @if ($ticket->status == 'closed')
-                    <div class="text-center mb-4">
-                        <form action="{{ route('admin.support.update-ticket-status', $ticket->number) }}" method="POST" onsubmit="return confirm('Are you sure you want to reopen this ticket?');">
-                            @csrf
-                            @method('POST')
-                            <input type="hidden" name="status" value="open">
-                            <button type="submit" class="btn btn-warning btn-lg px-5 rounded-pill shadow-sm">
-                                <i class="fas fa-undo mr-2"></i>Reopen Ticket
-                            </button>
-                        </form>
-                    </div>
-
+                    <!-- Ticket Status Actions -->
+                    @if ($ticket->status == 'closed')
+                        <div class="text-center mb-4">
+                            <form action="{{ route('admin.support.update-ticket-status', $ticket->number) }}" 
+                                  method="POST" 
+                                  onsubmit="return confirm('Are you sure you want to reopen this ticket?');">
+                                @csrf
+                                <input type="hidden" name="status" value="open">
+                                <button type="submit" class="btn btn-warning btn-lg px-5 rounded-pill shadow-sm">
+                                    <i class="fas fa-undo mr-2"></i>Reopen Ticket
+                                </button>
+                            </form>
+                        </div>
                     @elseif (in_array($ticket->status, ['open', 'in_progress', 'answered', 'on_hold']))
-                    <div class="text-center mb-4">
-                        <form action="{{ route('admin.support.update-ticket-status', $ticket->number) }}" method="POST">
-                            @csrf
-                            @method('POST')
-                            <div class="form-group">
-                                <label for="status" class="font-weight-bold">Change Ticket Status</label>
-                                <select name="status" id="status" class="form-control">
-                                    <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
-                                    <option value="answered" {{ $ticket->status == 'answered' ? 'selected' : '' }}>Answered</option>
-                                    <option value="on_hold" {{ $ticket->status == 'on_hold' ? 'selected' : '' }}>On Hold</option>
-                                    <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>Closed</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm">
-                                <i class="fas fa-save mr-2"></i>Update Status
-                            </button>
-                        </form>
-                    </div>
+                        <div class="text-center mb-4">
+                            <form action="{{ route('admin.support.update-ticket-status', $ticket->number) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="status" class="font-weight-bold">Change Ticket Status</label>
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="in_progress" {{ $ticket->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                        <option value="answered" {{ $ticket->status == 'answered' ? 'selected' : '' }}>Answered</option>
+                                        <option value="on_hold" {{ $ticket->status == 'on_hold' ? 'selected' : '' }}>On Hold</option>
+                                        <option value="closed" {{ $ticket->status == 'closed' ? 'selected' : '' }}>Closed</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill shadow-sm">
+                                    <i class="fas fa-save mr-2"></i>Update Status
+                                </button>
+                            </form>
+                        </div>
                     @endif
-
 
                     <!-- Comments Section -->
                     <div class="comments-section mt-5">

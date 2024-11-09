@@ -106,8 +106,8 @@
 
                         @if($ticket->image)
                         <div class="mt-4">
-                            <h6 class="font-weight-bold mb-3"><i class="fas fa-image text-primary mr-2"></i>Attached Image</h6>
-                            <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" class="img-fluid rounded-lg shadow-sm" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+                            <i class="fas fa-image text-primary mr-2 font-weight-bold mb-3"></i>Attached Image
+                            <img src="{{ asset('storage/' . $ticket->image) }}" alt="Ticket Image" class="img-fluid rounded-lg shadow-sm ml-4" style="max-width: 100%; max-height: 400px; object-fit: contain;">
                         </div>
                         @endif
                     </div>

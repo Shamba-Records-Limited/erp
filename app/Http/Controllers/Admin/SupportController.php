@@ -45,7 +45,7 @@ public function index()
             SELECT c.*, u.username AS user_name FROM system_ticket_comment c
             JOIN users u ON c.user_id = u.id
             WHERE c.ticket_id = '$ticket->id'
-            ORDER BY c.created_at DESC
+            ORDER BY c.created_at ASC
         "));
 
         return view("pages.admin.support.view_ticket", compact('ticket', 'comments'));
