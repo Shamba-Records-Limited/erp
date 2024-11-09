@@ -48,7 +48,7 @@ config('enums.system_permissions')['edit']))
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="o_name">Other Names</label>
+                                <label for="o_name">Sur Name</label>
                                 <input type="text" name="other_names" value="{{ $farmer->user->other_names }}"
                                     class="form-control {{ $errors->has('o_names') ? ' is-invalid' : '' }}"
                                     id="other_name" placeholder="Doe" required>

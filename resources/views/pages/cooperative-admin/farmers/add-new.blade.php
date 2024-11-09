@@ -32,7 +32,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                 </div>
 
                 <div class="form-group col-lg-3 col-md-6 col-12">
-                    <label for="other_name">Other Names</label>
+                    <label for="other_name">Sur Name</label>
                     <input type="text" name="other_names" value="{{ old('other_names')}}"
                         class="form-control {{ $errors->has('other_names') ? ' is-invalid' : '' }}" id="other_name"
                         placeholder="Doe" required>

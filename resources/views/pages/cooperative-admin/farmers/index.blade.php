@@ -254,7 +254,7 @@ $countries = get_countries();
                             </div>
 
                             <div class="form-group col-lg-3 col-md-6 col-12">
-                                <label for="kra">KRA PIN</label>
+                                <label for="kra">Tax ID</label>
                                 <input type="text" name="kra"
                                     class="form-control {{ $errors->has('kra') ? ' is-invalid' : '' }}" id="kra"
                                     placeholder="A236...Z" value="{{ old('kra')}}">
