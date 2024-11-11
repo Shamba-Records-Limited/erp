@@ -33,30 +33,46 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                    $totalDelivered = 0;
+                    $totalQuantity = 0;
+                    @endphp
                     @foreach($orders as $key => $order)
-                    <tr>
-                        <td>{{++$key }}</td>
-                        <td><a href="{{route('miller-admin.orders.detail', $order->id)}}">{{$order->batch_number}}</a></td>
-                        <td>{{$order->cooperative->name}}</td>
-                        @php
+                    @php
                         $deliveredQuantity = $order->deliveredQuantity ?? 0;
-                        $totalQuantity = $order->quantity ?? 0;
-                        
-                        if($deliveredQuantity == 0 || $totalQuantity == 0) {
-                            $percentage = 0;
-                        } else {
-                            $percentage = number_format(($deliveredQuantity / $totalQuantity) * 100, 1);
-                        }
-                        
+                        $totalQuantityOrder = $order->quantity ?? 0;
+
+                        $totalDelivered += $deliveredQuantity;
+                        $totalQuantity += $totalQuantityOrder;
+
+                        $percentage = ($deliveredQuantity && $totalQuantityOrder) 
+                                        ? number_format(($deliveredQuantity / $totalQuantityOrder) * 100, 1) 
+                                        : 0;
+
                         $orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
                         $statusClass = $deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
-                        @endphp
-                        <td>{{ $deliveredQuantity }} / {{ $totalQuantity }} KGs (<span class="text-{{$statusClass}}">{{$percentage}}%</span>)</td>
-                        <td class="text-{{$statusClass}}">{{$orderStatus}}</td>
+                    @endphp
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td><a href="{{ route('miller-admin.orders.detail', $order->id) }}">{{ $order->batch_number }}</a></td>
+                        <td>{{ $order->cooperative->name }}</td>
+                        <td>{{ $deliveredQuantity }} / {{ $totalQuantityOrder }} KGs (<span class="text-{{ $statusClass }}">{{ $percentage }}%</span>)</td>
+                        <td class="text-{{ $statusClass }}">{{ $orderStatus }}</td>
                         <td></td>
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    @php
+                        $totalPercentage = $totalQuantity > 0 ? number_format(($totalDelivered / $totalQuantity) * 100, 1) : 0;
+                    @endphp
+                    <tr>
+                        <td colspan="3" class="text-right font-weight-bold">Total:</td>
+                        <td>{{ $totalDelivered }} / {{ $totalQuantity }} KGs (<span class="text-success">{{ $totalPercentage }}%</span>)</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

@@ -7,79 +7,67 @@
 @section('topItem')
 <!-- view delivery -->
 @if($delivery_to_view)
-<div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; height: 100vh;">
-    <div class="container-fluid h-100 w-100">
-        <div class="row h-100">
-            <div class="col"></div>
-            <div class="col-6 card h-100">
-                <div class="card-header">
-                    <div class="card-title position-relative">
-                        <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?tab=deliveries">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                        <h4 class="text-center">View Delivery</h4>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex justify-content-end p-2">
-
-                        @if($delivery_to_view->approved_at)
-                        <div class="text-success border border-success p-2 rounded">Approved</div>
-                        @else
-                        <div class="text-warning border border-warning p-2 rounded">Pending Approval</div>
-                        @endif
-                    </div>
-
+<div class="overlay">
+    <div class="modal-container">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4>View Delivery</h4>
+                <a class="close-btn" href="?tab=deliveries"><i class="mdi mdi-close"></i></a>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-end p-2">
                     @if($delivery_to_view->approved_at)
-                    <div>
-                        <div class="border rounded p-2 d-flex">
-                            <div>Approved At: </div>
-                            <div class="font-weight-bold ml-2">{{$delivery_to_view->approved_at}}
-                            </div>
-                        </div>
-                        <div class="border rounded p-2 d-flex mt-2">
-                            <div>Approved By: </div>
-                            <div class="font-weight-bold ml-2">{{$delivery_to_view->approved_by}}
-                            </div>
-                        </div>
-                    </div>
+                    <div class="text-success border border-success p-2 rounded">Approved</div>
                     @else
-                    <div class="text-warning m-2 border border-warning p-2 rounded">This delivery is yet to be approved</div>
+                    <div class="text-warning border border-warning p-2 rounded">Pending Approval</div>
                     @endif
-                    <div>
-                        <div class="font-weight-bold">Delivery Items</div>
+                </div>
 
-                        <div class="table-responsive p-2">
-                            <table class="table table-hover dt clickable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Lot</th>
-                                        <th>Quantity</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($deliveryItems as $key => $delivery_item)
-                                    <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{$delivery_item->lot_number}}</td>
-                                        <td>{{$delivery_item->quantity}}</td>
-                                        <td></td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        @if(is_null($delivery_to_view->approved_at))
-                        <div class="mt-4 d-flex">
-                            <a class="btn btn-primary" href="{{route('miller-admin.orders.approve-delivery', $delivery_to_view->id)}}">Approve</a>
-                            <a class="btn btn-secondary ml-2" href="#">Reject</a>
-                        </div>
-                        @endif
+                @if($delivery_to_view->approved_at)
+                <div class="mt-2">
+                    <div class="border rounded p-2 d-flex">
+                        <div>Approved At:</div>
+                        <div class="font-weight-bold ml-2">{{ $delivery_to_view->approved_at }}</div>
+                    </div>
+                    <div class="border rounded p-2 d-flex mt-2">
+                        <div>Approved By:</div>
+                        <div class="font-weight-bold ml-2">{{ $delivery_to_view->approved_by }}</div>
                     </div>
                 </div>
+                @else
+                <div class="text-warning m-2 border border-warning p-2 rounded">
+                    This delivery is yet to be approved
+                </div>
+                @endif
+
+                <div class="font-weight-bold mt-4">Delivery Items</div>
+                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Lot</th>
+                                <th>Quantity(Kgs)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($deliveryItems as $key => $delivery_item)
+                            <tr>
+                                <td>{{ $key + 1 }}</td>
+                                <td>{{ $delivery_item->lot_number }}</td>
+                                <td>{{ $delivery_item->quantity }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                @if(is_null($delivery_to_view->approved_at))
+                <div class="action-buttons mt-4">
+                    <a href="{{ route('miller-admin.orders.approve-delivery', $delivery_to_view->id) }}" class="btn btn-primary">Approve</a>
+                    <a href="#" class="btn btn-secondary ml-2">Reject</a>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -87,6 +75,7 @@
 @endif
 <!-- /view delivery -->
 @endsection
+
 
 @section('content')
 
@@ -117,7 +106,7 @@
                     <tr>
                         <th>#</th>
                         <th>Product</th>
-                        <th>Quantity</th>
+                        <th>Quantity(Kgs)</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -142,7 +131,7 @@
                         <th>#</th>
                         <th>No of Items</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,3 +167,133 @@
 
 @push('custom-scripts')
 @endpush
+
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+    }
+
+    .modal-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .modal-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px;
+        padding: 20px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .modal-body {
+        margin-top: 10px;
+    }
+
+    .alert {
+        margin-bottom: 15px;
+    }
+
+    .info-box, .aggregate-info {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-toggle {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-striped tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+.container {
+    margin-top: 30px;
+}
+
+.card {
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: white;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.order-details {
+    background-color: #f8f9fa;
+}
+
+.delivery-status {
+    background-color: #ffffff;
+}
+
+.info-box {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.batch-number {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.aggregate-info {
+    margin-top: 20px;
+}
+
+.list-group-item {
+    background-color: #f8f9fa;
+    border: none;
+}
+
+.list-group-item:hover {
+    background-color: #e9ecef;
+}
+
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+}
+
+    /* Additional styles for buttons, etc. */
+</style>
