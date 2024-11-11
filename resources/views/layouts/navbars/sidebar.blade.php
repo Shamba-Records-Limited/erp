@@ -34,10 +34,10 @@ $cooperative = null;
                                 @elseif ($user->miller_admin && $user->miller_admin->miller)
                                 <strong>{{ ucwords(strtolower($user->miller_admin->miller->name)) }}</strong><br>
                                 @endif
-                                <p class="semi-bold">
+                                <!-- <p class="semi-bold">
                                 {{ ucwords(strtolower($user->first_name)) }}
                                 {{ ucwords(strtolower($user->other_names)) }}
-                                </p>
+                                </p> -->
                                 @endif
                             </p>
                             <div class="dropdown" data-display="static">
