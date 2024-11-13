@@ -47,7 +47,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Lot</th>
-                                <th>Quantity(Kgs)</th>
+                                <th>Quantity</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -106,7 +106,7 @@
                     <tr>
                         <th>#</th>
                         <th>Product</th>
-                        <th>Quantity(Kgs)</th>
+                        <th>Quantity</th>
                         <th></th>
                     </tr>
                 </thead>
