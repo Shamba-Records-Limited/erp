@@ -55,7 +55,7 @@ $gender_options = config('enums.employee_configs')['gender'];
 
                 <div class="form-group col-lg-4 col-md-6 col-12">
                     <label for="gender">Gender</label>
-                    <select name="gender" id="gender" class=" form-control select2bs4 {{ $errors->has('gender') ? ' is-invalid' : '' }}">
+                    <select name="gender" id="gender" class=" form-control form-select {{ $errors->has('gender') ? ' is-invalid' : '' }}">
                         <option value=""> -Select Gender-</option>
                         @foreach($gender_options as $key => $option)
                         <option value="{{$option}}" @if($option==old('gender', $customer->gender )) selected @endif> {{ $option}}</option>
