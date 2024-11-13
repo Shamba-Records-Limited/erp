@@ -24,7 +24,7 @@
                                     <label for="role">Position</label>
                                     <input type="hidden" name="id" value="{{ $id }}" />
                                     <select name="role" id="role"
-                                            class=" form-control select2bs4 {{ $errors->has('role') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('role') ? ' is-invalid' : '' }}">
                                             <option value="{{ $recruitment->role }}"> {{ $recruitment->role }}</option>
                                         @foreach($positions as $role)
                                             <option value="{{$role->position}}"> {{ $role->position }}</option>
@@ -84,7 +84,7 @@
                                 <div class="form-group col-lg-3 col-md-6 col-12">
                                     <label for="code">Employment Type</label>
                                     <select name="employment_type" id="employment_type"
-                                            class=" form-control select2bs4 {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
+                                            class=" form-control form-select {{ $errors->has('employment_type') ? ' is-invalid' : '' }}">
                                             <option value="{{ $recruitment->employment_type }}">{{ $recruitment->employment_type }}</option>
                                         @foreach($types as $type)
                                             <option value="{{$type->type}}"> {{ $type->type }}</option>

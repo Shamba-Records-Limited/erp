@@ -25,7 +25,7 @@
 
                                     <div class="form-group col-lg-3 col-md-4  col-12">
                                         <label for="report_type">Report Type</label>
-                                        <select name="report_type" id="report_type" class=" form-control select2bs4
+                                        <select name="report_type" id="report_type" class=" form-control form-select
                                         {{ $errors->has('report_type') ? ' is-invalid' : '' }}"
                                                 onchange="toggleEmployeeOptions()"
                                         >
@@ -53,7 +53,7 @@
                                     <div class="form-group col-lg-3 col-md-4 col-12  d-none" id="deduction_type_div">
                                         <label for="deduction_type">Deduction Type</label>
                                         <select name="deduction_type" id="deduction_type"
-                                                class=" form-control select2bs4
+                                                class=" form-control form-select
                                         {{ $errors->has('deduction_type') ? ' is-invalid' : '' }}"
                                         >
                                             @foreach(config('enums.deduction_types') as $key => $v)
@@ -73,7 +73,7 @@
                                     <div class="form-group col-lg-3 col-md-4 col-12  d-none" id="deduction_period_div">
                                         <label for="deduction_period">Period</label>
                                         <select name="deduction_period" id="deduction_period"
-                                                class=" form-control select2bs4
+                                                class=" form-control form-select
                                         {{ $errors->has('deduction_period') ? ' is-invalid' : '' }}"
                                         >
                                             @foreach(config('enums.deduction_report_period') as $key => $v)
@@ -92,7 +92,7 @@
                                     <div class="form-group col-lg-3 col-md-4 col-12 d-none"
                                          id="employeeToShow">
                                         <label for="employee">Employee</label>
-                                        <select name="employee" id="employee" class=" form-control select2bs4
+                                        <select name="employee" id="employee" class=" form-control form-select
                                         {{ $errors->has('employee') ? ' is-invalid' : '' }}">
                                             <option></option>
                                             @foreach($employees as $emp)
@@ -111,7 +111,7 @@
 
                                     <div class="form-group col-lg-3 col-md-4 col-12">
                                         <label for="year">Year</label>
-                                        <select name="year" id="year" class=" form-control select2bs4
+                                        <select name="year" id="year" class=" form-control form-select
                                         {{ $errors->has('year') ? ' is-invalid' : '' }}">
                                             @foreach($years as $yr)
                                                 <option value="{{$yr}}"
@@ -130,7 +130,7 @@
 
                                     <div class="form-group col-lg-3 col-md-4col-12 d-none" id="monthToShow">
                                         <label for="month">Month</label>
-                                        <select name="month" id="month" class=" form-control select2bs4
+                                        <select name="month" id="month" class=" form-control form-select
                                         {{ $errors->has('month') ? ' is-invalid' : '' }}">
                                             @foreach(config('enums.Months') as $key => $m)
                                                 <option value="{{$key}}"
