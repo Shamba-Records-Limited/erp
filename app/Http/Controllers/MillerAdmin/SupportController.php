@@ -34,7 +34,7 @@ class SupportController extends Controller
     {
         $user_id = Auth::id();
 
-        // Get the current fate format
+        // Get the current date format
         $now = Carbon::now();
         $now_str = strtoupper($now->format('Ymd'));
 
@@ -43,7 +43,7 @@ class SupportController extends Controller
             SELECT number
             FROM system_tickets
             WHERE number LIKE 'T$now_str%'
-            ORDER BY NUMBER DESC
+            ORDER BY number DESC
             LIMIT 1
         "));
 
