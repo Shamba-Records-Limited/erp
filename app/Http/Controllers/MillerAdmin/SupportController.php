@@ -148,9 +148,15 @@ class SupportController extends Controller
     public function delete_ticket($ticket_id)
     {
         $ticket = SystemTicket::find($ticket_id);
-        $ticket->delete();
-    }
+        
+        if ($ticket) {
+            $ticket->delete();
+            return redirect()->route('miller-admin.support.show')->with('success', 'Ticket deleted successfully.');
+        }
 
+        return redirect()->route('miller-admin.support.show')->with('error', 'Ticket not found.');
+    }
+    
     public function confirm_ticket_resolved($ticket_number)
     {
         $ticket = SystemTicket::where("number", $ticket_number)->first();

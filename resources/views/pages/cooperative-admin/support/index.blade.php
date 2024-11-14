@@ -34,27 +34,26 @@
                                     <div>{{ Str::words($ticket->description, 9, '...') }}</div>
                                     <!-- Description truncated -->
                                 </td>
-                              <td>
-                                <div class="btn-group dropdown">
-                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Actions
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="text-info dropdown-item" href="{{ route('cooperative-admin.support.view-ticket', $ticket->number) }}">
-                                            <i class="fa fa-eye"></i> View Details
-                                        </a>
+                                <td>
+                                    <div class="btn-group dropdown">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Actions
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="text-info dropdown-item" href="{{ route('cooperative-admin.support.view-ticket', $ticket->number) }}">
+                                                <i class="fa fa-eye"></i> View Details
+                                            </a>
 
-                                        <form action="{{ route('cooperative-admin.support.delete_ticket', $ticket->id) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" onclick="return confirm('Are you sure you want to delete this ticket?')" class="text-danger dropdown-item">
-                                                <i class="fa fa-trash-alt"></i> Delete
-                                            </button>
-                                        </form>
+                                            <form action="{{ route('cooperative-admin.support.delete_ticket', $ticket->id) }}" method="POST" style="display: inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Are you sure you want to delete this ticket?')" class="text-danger dropdown-item">
+                                                    <i class="fa fa-trash-alt"></i> Delete
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

@@ -177,17 +177,17 @@ public function publish_ticket(Request $request)
         return redirect()->back();
     }
 
-  public function delete_ticket($ticket_id)
-{
-    $ticket = SystemTicket::find($ticket_id);
-    
-    if ($ticket) {
-        $ticket->delete();
-        return redirect()->route('cooperative-admin.support.show')->with('success', 'Ticket deleted successfully.');
-    }
+    public function delete_ticket($ticket_id)
+    {
+        $ticket = SystemTicket::find($ticket_id);
+        
+        if ($ticket) {
+            $ticket->delete();
+            return redirect()->route('cooperative-admin.support.show')->with('success', 'Ticket deleted successfully.');
+        }
 
-    return redirect()->route('cooperative-admin.support.show')->with('error', 'Ticket not found.');
-}
+        return redirect()->route('cooperative-admin.support.show')->with('error', 'Ticket not found.');
+    }
 
 
     public function confirm_ticket_resolved($ticket_number)
