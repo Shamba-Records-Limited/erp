@@ -9,69 +9,84 @@
 @php
 $ticket_labels = config('enums.ticket_labels');
 @endphp
-<div class="card shadow-lg border-light">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="card-title">Create a Support Ticket</h2>
-            <span class="badge badge-warning">Draft</span>
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Ticket Number Card -->
+            <div class="card text-center mb-4 shadow-sm border-primary">
+                <div class="card-body p-4">
+                    <h5 class="card-title text-uppercase text-primary">Ticket Number</h5>
+                    <h2 class="font-weight-bold text-dark">#{{ $ticket->number }}</h2>
+                </div>
+            </div>
+
+            <!-- Main Form Card -->
+            <div class="card shadow-lg border-light">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="card-title">Create a Support Ticket</h2>
+                        <span class="badge badge-warning">Draft</span>
+                    </div>
+                    <p class="card-subtitle text-muted mb-4">Please fill in the details of your issue below:</p>
+
+                    <form action="{{ route('miller-admin.support.add_ticket') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div id="form-error" class="alert alert-danger" style="display:none"></div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="subject">Subject</label>
+                                <input id="subject" name="subject" type="text" placeholder="Enter subject here" class="form-control" value="{{ $ticket->title }}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="labels">Labels</label>
+                                <select name="labels" id="labels" class="form-control select2">
+                                    <option value="" disabled selected>Select a label</option>
+                                    @foreach($ticket_labels as $label)
+                                        <option value="{{ $label }}" @if(!is_null($ticket->labels) && $ticket->labels === $label) selected @endif>{{ ucwords($label) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="module">Module</label>
+                                <input id="module" name="module" type="text" placeholder="Enter module here" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="submodule">Submodule</label>
+                                <input id="submodule" name="submodule" type="text" placeholder="Enter submodule here" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="link">Link</label>
+                                <input id="link" name="link" type="url" placeholder="Enter URL here" class="form-control">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="image">Upload Image</label>
+                                <input type="file" id="image" name="image" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" placeholder="Enter detailed description here" class="form-control" rows="5">{{ $ticket->description }}</textarea>
+                        </div>
+
+                        <div class="form-group d-flex justify-content-between">
+                            <button type="button" class="btn btn-primary" onclick="publishForm()">Publish</button>
+                            <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <p class="card-subtitle text-muted">Please fill in the details of your issue below:</p>
-        <div class="my-3 mb-4">Ticket No: <strong>{{$ticket->number}}</strong></div>
-        <form action="{{route('miller-admin.support.add_ticket')}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div id="form-error" class="alert alert-danger" style="display:none"></div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="subject">Subject</label>
-                    <input id="subject" name="subject" type="text" placeholder="Enter subject here" class="form-control" value="{{$ticket->title}}">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="labels">Labels</label>
-                    <select name="labels" id="labels" class="form-control form-select">
-                        <option value="" disabled selected>Select a label</option>
-                        @foreach($ticket_labels as $label)
-                        <option value="{{$label}}" @if(!is_null($ticket->labels) && $ticket->labels === $label) selected @endif> {{ucwords($label)}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="module">Module</label>
-                    <input id="module" name="module" type="text" placeholder="Enter module here" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="submodule">Submodule</label>
-                    <input id="submodule" name="submodule" type="text" placeholder="Enter submodule here" class="form-control">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="link">Link</label>
-                    <input id="link" name="link" type="url" placeholder="Enter URL here" class="form-control">
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="image">Upload Image</label>
-                    <input type="file" id="image" name="image" class="form-control">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" placeholder="Enter detailed description here" class="form-control" rows="5">{{$ticket->description}}</textarea>
-            </div>
-
-            <div class="form-group d-flex justify-content-between">
-                <button type="button" class="btn btn-primary" onclick="publishForm()">Publish</button>
-                <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button>
-            </div>
-        </form>
     </div>
 </div>
-
 @endsection
 
 @push('plugin-scripts')
@@ -173,13 +188,13 @@ function discardTicket() {
     let c = confirm("Are you sure? This will discard your draft changes.");
     if (c) {
         $.ajax({
-            url: "{{route('miller-admin.support.delete_ticket', $ticket->id)}}",
+            url: "{{ route('miller-admin.support.delete_ticket', $ticket->id) }}",
             type: "DELETE",
             data: {
-                _token: "{{csrf_token()}}"
+                _token: "{{ csrf_token() }}"
             },
             success: function(data) {
-                window.location.href = "{{route('miller-admin.support.show')}}";
+                window.location.href = "{{ route('miller-admin.support.show') }}";
             },
             error: function(data) {
                 alert("Error occurred while discarding the ticket.");
@@ -217,5 +232,9 @@ function discardTicket() {
 
 .form-group {
     margin-bottom: 1.5rem;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px;
 }
 </style>
