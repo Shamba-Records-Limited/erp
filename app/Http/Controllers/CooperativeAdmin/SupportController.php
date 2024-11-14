@@ -17,7 +17,6 @@ class SupportController extends Controller
         return $this->middleware('auth');
     }
 
-
 public function index()
 {
     $user_id = Auth::id();
@@ -30,7 +29,6 @@ public function index()
 
     return view("pages.cooperative-admin.support.index", compact('tickets'));
 }
-
 
 public function view_add_ticket()
 {
@@ -66,8 +64,6 @@ public function view_add_ticket()
     return view("pages.cooperative-admin.support.add_ticket", compact('ticket'));
 }
 
-
-
 public function add_ticket(Request $request)
 {
     $request->validate([
@@ -102,7 +98,6 @@ public function add_ticket(Request $request)
 
     return response()->json(['success' => true, 'message' => 'Ticket saved successfully.']);
 }
-
 
 public function publish_ticket(Request $request)
 {
@@ -140,9 +135,6 @@ public function publish_ticket(Request $request)
 
     return response()->json(["success" => true, "message" => "Ticket published successfully."]);
 }
-
-
-
 
     public function view_ticket($ticket_number)
     {
@@ -188,7 +180,6 @@ public function publish_ticket(Request $request)
 
         return redirect()->route('cooperative-admin.support.show')->with('error', 'Ticket not found.');
     }
-
 
     public function confirm_ticket_resolved($ticket_number)
     {

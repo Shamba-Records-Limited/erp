@@ -21,12 +21,11 @@ class SupportController extends Controller
     {
         $user_id = Auth::id();
 
-        $tickets = DB::select(DB::raw("
-            SELECT t.* FROM system_tickets t
-            WHERE t.created_by_id = '$user_id'
-                AND t.published_at IS NOT NULL
-            ORDER BY t.created_at DESC
-        "));
+        // Modified query to properly order tickets
+        $tickets = DB::table('system_tickets')
+            ->where('created_by_id', $user_id)
+            ->orderBy('created_at', 'DESC')
+            ->get();
 
         return view("pages.miller-admin.support.index", compact('tickets'));
     }
@@ -35,41 +34,32 @@ class SupportController extends Controller
     {
         $user_id = Auth::id();
 
-        // retrieve or create draft
-        $ticket = null;
-        try {
-            $ticket = DB::select(DB::raw("
-                SELECT * FROM system_tickets
-                WHERE created_by_id = '$user_id'
-                    AND status='Draft'
-                ORDER BY created_at DESC
-                LIMIT 1
-            "))[0];
-        } catch (\Throwable $th) {
-            // create new ticket
-            $now = Carbon::now();
-            $now_str = strtoupper($now->format('Ymd'));
+        // Get the current fate format
+        $now = Carbon::now();
+        $now_str = strtoupper($now->format('Ymd'));
 
-            $totalTickets = DB::select(DB::raw("
-                SELECT COUNT(*) AS total FROM system_tickets
-                WHERE DATE(created_at) = CURDATE() 
-            "))[0]->total;
+        // Get the highest ticket number for today
+        $lastTicket = DB::select(DB::raw("
+            SELECT number
+            FROM system_tickets
+            WHERE number LIKE 'T$now_str%'
+            ORDER BY NUMBER DESC
+            LIMIT 1
+        "));
 
-            $ticket_number = "T$now_str-$totalTickets";
-
-            $ticket = new SystemTicket();
-            $ticket->number = $ticket_number;
-            $ticket->created_by_id = $user_id;
-            $ticket->save();
-
-            $ticket = DB::select(DB::raw("
-                SELECT * FROM system_tickets
-                WHERE created_by_id = '$user_id'
-                    AND status='Draft'
-                ORDER BY created_at DESC
-                LIMIT 1
-            "))[0];
+        // Generate new ticket number
+        $ticket_number = "T$now_str-1";
+        if (!empty($lastTicket)) {
+            $lastNumber = (int)substr($lastTicket[0]->number, strrpos($lastTicket[0]->number, '-') + 1);
+            $ticket_number = "T$now_str-" . ($lastNumber + 1);
         }
+
+        // Create new ticket
+        $ticket = new SystemTicket();
+        $ticket->number = $ticket_number;
+        $ticket->created_by_id = $user_id;
+        $ticket->status = 'Draft';
+        $ticket->save();
 
         return view("pages.miller-admin.support.add_ticket", compact('ticket'));
     }
@@ -78,50 +68,84 @@ class SupportController extends Controller
     {
         $request->validate([
             "ticket_number" => "required",
+            "subject" => "required|string",
+            "module" => "nullable|string",
+            "submodule" => "nullable|string",
+            "link" => "nullable|url",          // Separate 'link' validation
+            "description" => "required|string",
+            "labels" => "sometimes|nullable|string",
+            "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Image validation
         ]);
 
-        $ticket = SystemTicket::where("number", $request->ticket_number)->first();
-        $ticket->title = $request->title;
+        $ticket = SystemTicket::where("number", $request->ticket_number)->first() ?: new SystemTicket();
+
+        // Process the image upload
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('ticket_images', 'public');
+            $ticket->image = $imagePath; // Save image path
+        }
+
+        // Set other ticket fields
+        $ticket->title = $request->subject;
+        $ticket->module = $request->module;
+        $ticket->submodule = $request->submodule;
+        $ticket->link = $request->link;   // Store only the link here
         $ticket->description = $request->description;
         $ticket->labels = $request->labels;
+        $ticket->status = 'Draft';
+        $ticket->created_by_id = Auth::id();
         $ticket->save();
+
+        return response()->json(['success' => true, 'message' => 'Ticket saved successfully.']);
     }
 
     public function publish_ticket(Request $request)
     {
         $request->validate([
             "number" => "required",
-            "title" => "required",
-            "description" => "required",
-            "labels" => "sometimes"
+            "subject" => "required|string",
+            "module" => "nullable|string",
+            "submodule" => "nullable|string",
+            "link" => "nullable|url",
+            "description" => "required|string",
+            "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Add validation for image
         ]);
 
         $ticket = SystemTicket::where("number", $request->number)->first();
         if (!$ticket) {
-            toastr()->error('Ticket not found.');
-            return response()->json([
-                "success" => false
-            ]);
+            return response()->json(["success" => false, "message" => 'Ticket not found.']);
         }
 
-        $ticket->title = $request->title;
+        // Process the image upload
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('ticket_images', 'public');
+                \Log::info('Image uploaded:', ['path' => $imagePath]);
+                $ticket->image = $imagePath; // Store the image path
+            }
+        // Update other ticket fields
+        $ticket->title = $request->subject;
+        $ticket->module = $request->module;
+        $ticket->submodule = $request->submodule;
+        $ticket->link = $request->link;
         $ticket->description = $request->description;
-        $ticket->labels = $request->labels;
+
         $ticket->status = "open";
         $ticket->published_at = Carbon::now();
         $ticket->save();
 
-        toastr()->success('Ticket published successfully.');
+        return response()->json(["success" => true, "message" => "Ticket published successfully."]);
     }
 
-    public function view_ticket($ticket_number){
+    public function view_ticket($ticket_number)
+    {
         $ticket = SystemTicket::where("number", $ticket_number)->first();
+    \Log::info('Ticket Data:', ['ticket' => $ticket]);
 
         $comments = DB::select(DB::raw("
             SELECT c.*, u.username AS user_name FROM system_ticket_comment c
             JOIN users u ON c.user_id = u.id
             WHERE c.ticket_id = '$ticket->id'
-            ORDER BY c.created_at DESC
+            ORDER BY c.created_at ASC
         "));
 
         return view("pages.miller-admin.support.view_ticket", compact('ticket', 'comments'));

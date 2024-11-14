@@ -41,7 +41,7 @@ $ticket_labels = config('enums.ticket_labels');
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="labels">Labels</label>
-                                <select name="labels" id="labels" class="form-control select2">
+                                <select name="labels" id="labels" class="form-control form-select">
                                     <option value="" disabled selected>Select a label</option>
                                     @foreach($ticket_labels as $label)
                                         <option value="{{ $label }}" @if(!is_null($ticket->labels) && $ticket->labels === $label) selected @endif>{{ ucwords($label) }}</option>
