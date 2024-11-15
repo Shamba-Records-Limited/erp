@@ -29,16 +29,18 @@ class ProductsController extends Controller
     {
         $categories = ProductCategory::all();
         $products = DB::select(DB::raw("
-            SELECT p.id, p.name, pc.name as category_name FROM products p
-            LEFT JOIN product_categories pc ON p.category_id = pc.id;
+            SELECT p.id, p.name, pc.name as category_name, u.name as unit FROM products p
+            LEFT JOIN product_categories pc ON p.category_id = pc.id
+            LEFT JOIN units u ON p.unit_id = u.id;
         "));
-        return view('pages.admin.products.products', compact("categories", "products"));
+        $units = Unit::all();
+        return view('pages.admin.products.products', compact("categories", "products","units"));
     }
 
     public function store_product(Request $request)
     {
         $request->validate([
-            "name" => "required|unique:products,name",
+            "name" => "required",
             "category_id" => "required|exists:product_categories,id",
         ]);
 
@@ -46,6 +48,7 @@ class ProductsController extends Controller
             $product = new Product();
             $product->name = $request->name;
             $product->category_id = $request->category_id;
+            $product->unit_id = $request->unit_id;
             $product->save();
 
             toastr()->success('Product Created Successfully');

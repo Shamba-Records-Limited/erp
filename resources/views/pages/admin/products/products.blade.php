@@ -48,6 +48,20 @@
                                 </span>
                                 @endif
                             </div>
+                            <div class="form-group col-lg-3 col-md-6 col-12">
+                                <label for="unit_id">Unit</label>
+                                <select name="unit_id" id="unit_id" class="form-control form-select {{ $errors->has('unit_id') ? ' is-invalid' : '' }}" required>
+                                    <option value="">-- Select Unit --</option>
+                                    @foreach($units as $unit)
+                                    <option value="{{$unit->id}}" @if($category->id == old('unit_id')) selected @endif>{{$unit->name}}</option>
+                                    @endforeach
+                                </select>
+                                @if ($errors->has('unit_id'))
+                                <span class="help-block text-danger">
+                                    <strong>{{ $errors->first('unit_id')  }}</strong>
+                                </span>
+                                @endif
+                            </div>
                         </div>
                         <div class="form-group col-lg-3 col-md-6 col-12">
                             <button type="submit" class="btn btn-primary btn-fw btn-block">Add</button>
@@ -71,6 +85,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Category</th>
+                                <th>Unit</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -80,6 +95,7 @@
                                 <td>{{++$key }}</td>
                                 <td>{{$product->name }}</td>
                                 <td>{{$product->category_name}}</td>
+                                <td>{{$product->unit}}</td>
                                 </td>
                                 <td>
                                     <div class="btn-group dropdown">
