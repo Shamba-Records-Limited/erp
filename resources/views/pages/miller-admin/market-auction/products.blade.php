@@ -6,6 +6,37 @@
 @section('content')
 
 <div class="container mt-4">
+    <!-- Register Product Button -->
+    <div class="d-flex justify-content-start mb-3">
+        <button class="btn btn-primary" id="register-product-btn">Register New Product</button>
+    </div>
+
+    <!-- Register Product Form -->
+    <div id="register-product-form" class="card p-4 mb-4" style="display: none;">
+        <h4 class="mb-3">Register New Product</h4>
+        <form action="" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="mb-3">
+                <label for="product-name" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="product-name" name="name" placeholder="Nescafe Coffee" required>
+            </div>
+            <div class="mb-3">
+                <label for="product-image" class="form-label">Product Image</label>
+                <input type="file" class="form-control" id="product-image" name="image" accept="image/*" required>
+            </div>
+            <div class="mb-3">
+                <label for="product-quantity" class="form-label">Quantity Available</label>
+                <input type="number" class="form-control" id="product-quantity" name="quantity" placeholder="32packets" required>
+            </div>
+            <div class="mb-3">
+                <label for="product-price" class="form-label">Selling Price (KES)</label>
+                <input type="number" class="form-control" id="product-price" name="price" placeholder="Kshs. 560" step="1" required>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+
+    <!-- Product Cards -->
     <div class="row">
         @foreach($paginatedProducts as $product)
         <div class="col-md-4 col-lg-3 mb-4 d-flex">
@@ -37,6 +68,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(document).ready(function() {
+    // Toggle the visibility of the register product form
+    $('#register-product-btn').on('click', function() {
+        $('#register-product-form').toggle();
+    });
+
     // When any "Add to Cart" button is clicked
     $('.add-to-cart-btn').on('click', function() {
         // Change the button text to "✔ Added"

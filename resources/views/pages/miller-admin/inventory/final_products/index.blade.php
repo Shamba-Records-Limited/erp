@@ -210,9 +210,9 @@
             <div class="card-title">Final Products</div>
             <div>
                 <a href="?is_creating_final_product=1" class="btn btn-primary">Create Final Product</a>
-                <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.final-products.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
+                <a class="btn btn-primary" href="{{route('miller-admin.final-products.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
                 </a>
-                <a class="btn btn-primary btn-fw btn-sm ml-1" href="{{route('miller-admin.final-products.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
+                <a class="btn btn-primary" href="{{route('miller-admin.final-products.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
                 </a>
             </div>
         </div>

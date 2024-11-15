@@ -4,45 +4,39 @@
 @endpush
 
 @section('topItem')
-@php
-$units = config('enums.units')
-@endphp
 @if($isGrading == "1")
-<div style="position: absolute; z-index: 1050; background-color: rgba(34, 34, 34, 0.2); width: 100vw; min-height: 100vh;">
-    <div class="container-fluid h-100 w-100">
-        <div class="row h-100">
-            <div class="col"></div>
-            <div class="col-6 card h-100 pr-10">
-                <div class="card-header">
-                    <div class="card-title position-relative">
-                        <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?is_creating_final_product=0">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                        <h4 class="text-center">Grade Milled Coffee</h4>
-                    </div>
+<div class="overlay">
+    <div class="modal-container">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4 class="text-center">Grade Milled Coffee</h4>
+                <a class="close-btn" href="?is_creating_final_product=0">
+                    <i class="mdi mdi-close"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                <div class="text-warning m-2 border border-warning p-2 rounded">
+                    You are working on a draft grading. Publish it to apply changes
                 </div>
-                <div class="card-body">
-                    <div class="text-warning m-2 border border-warning p-2 rounded">You are working on a draft grading. Publish it to apply changes</div>
-                    <div class="table-responsive p-2">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Grade</th>
-                                    <th>Quantity</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($gradings as $grading)
-                                <tr>
-                                    <td>{{$grading->grade}}</td>
-                                    <td>{{$grading->quantity}}</td>
-                                    <td></td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="table-responsive p-2">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Quantity</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($gradings as $grading)
+                            <tr>
+                                <td>{{ $grading->grade }}</td>
+                                <td>{{ $grading->quantity }}</td>
+                                <td></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -50,6 +44,7 @@ $units = config('enums.units')
 </div>
 @endif
 @endsection
+
 
 @section('content')
 <div class="card">
@@ -133,3 +128,133 @@ $units = config('enums.units')
 
 @push('custom-scripts')
 @endpush
+
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+    }
+
+    .modal-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .modal-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px;
+        padding: 20px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .modal-body {
+        margin-top: 10px;
+    }
+
+    .alert {
+        margin-bottom: 15px;
+    }
+
+    .info-box, .aggregate-info {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-toggle {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-striped tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .order-details {
+        background-color: #f8f9fa;
+    }
+
+    .delivery-status {
+        background-color: #ffffff;
+    }
+
+    .info-box {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .batch-number {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .aggregate-info {
+        margin-top: 20px;
+    }
+
+    .list-group-item {
+        background-color: #f8f9fa;
+        border: none;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+    }
+</style>
