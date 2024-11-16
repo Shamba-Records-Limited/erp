@@ -56,10 +56,12 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
+                                    @if(substr($transaction->subject, 0, 3) == 'LOT')
                                     <a class="text-primary dropdown-item"
                                         href="{{route('cooperative-admin.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> View Details
                                     </a>
+                                    @endif
                                     @if($transaction->status == 'PENDING')
                                     <a class="text-success dropdown-item"
                                         href="{{route('cooperative-admin.transactions.complete', $transaction->id )}}">
