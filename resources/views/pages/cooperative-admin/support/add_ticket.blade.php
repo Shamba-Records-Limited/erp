@@ -17,7 +17,7 @@ $ticket_labels = config('enums.ticket_labels');
         </div>
         <p class="card-subtitle text-muted">Please fill in the details of your issue below:</p>
         <div class="my-3 mb-4">Ticket No: <strong>{{$ticket->number}}</strong></div>
-        <form action="{{route('cooperative-admin.support.add_ticket')}}" method="POST" enctype="multipart/form-data">
+        <form action="{{route('cooperative-admin.support.add_ticket')}}" method="POST" enctype="multipart/form-data" id="add-ticket-form">
             @csrf
             <div id="form-error" class="alert alert-danger" style="display:none"></div>
 
@@ -66,7 +66,7 @@ $ticket_labels = config('enums.ticket_labels');
 
             <div class="form-group d-flex justify-content-between">
                 <button type="button" class="btn btn-primary" onclick="publishForm()">Publish</button>
-                <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button>
+                <!-- <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button> -->
             </div>
         </form>
     </div>
@@ -154,16 +154,17 @@ function publishForm() {
             url: "{{ route('cooperative-admin.support.publish_ticket', $ticket->number) }}",
             type: "POST",
             data: formData,
-            contentType: false, // Required for FormData
-            processData: false, // Required for FormData
+            contentType: false, 
+            processData: false,
             success: function(data) {
                 if (data.success) {
+                    document.getElementById("add-ticket-form").reset();
                     window.location.href = "{{ route('cooperative-admin.support.show') }}";
                 } else {
                     $('#form-error').html(data.message).show();
                 }
             },
-            error: function(data) {
+        error: function(data) {
                 const resp = data.responseJSON;
                 if (resp && resp.message) {
                     $('#form-error').html(resp.message).show();
@@ -172,28 +173,12 @@ function publishForm() {
                 }
             }
         });
+        
     }
 }
 
 
-function discardTicket() {
-    let c = confirm("Are you sure? This will discard your draft changes.");
-    if (c) {
-        $.ajax({
-            url: "{{route('cooperative-admin.support.delete_ticket', $ticket->id)}}",
-            type: "DELETE",
-            data: {
-                _token: "{{csrf_token()}}"
-            },
-            success: function(data) {
-                window.location.href = "{{route('cooperative-admin.support.show')}}";
-            },
-            error: function(data) {
-                alert("Error occurred while discarding the ticket.");
-            }
-        });
-    }
-}
+
 </script>
 @endpush
 

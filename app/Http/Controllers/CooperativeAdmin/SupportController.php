@@ -57,9 +57,9 @@ public function view_add_ticket()
     // Create new ticket
     $ticket = new SystemTicket();
     $ticket->number = $ticket_number;
-    $ticket->created_by_id = $user_id;
-    $ticket->status = 'Draft';
-    $ticket->save();
+    // $ticket->created_by_id = $user_id;
+    // $ticket->status = 'Draft';
+    // $ticket->save();
 
     return view("pages.cooperative-admin.support.add_ticket", compact('ticket'));
 }
@@ -101,6 +101,8 @@ public function add_ticket(Request $request)
 
 public function publish_ticket(Request $request)
 {
+    $user_id = Auth::id();
+
     $request->validate([
         "number" => "required",
         "subject" => "required|string",
@@ -111,10 +113,11 @@ public function publish_ticket(Request $request)
         "image" => "nullable|image|mimes:jpeg,png,jpg,gif|max:2048", // Add validation for image
     ]);
 
-    $ticket = SystemTicket::where("number", $request->number)->first();
-    if (!$ticket) {
-        return response()->json(["success" => false, "message" => 'Ticket not found.']);
-    }
+    // if (!$ticket) {
+    //     return response()->json(["success" => false, "message" => 'Ticket not found.']);
+    // }
+    $ticket = new SystemTicket();
+    $ticket->created_by_id = $user_id;
 
    // Process the image upload
         if ($request->hasFile('image')) {
@@ -128,6 +131,8 @@ public function publish_ticket(Request $request)
     $ticket->submodule = $request->submodule;
     $ticket->link = $request->link;
     $ticket->description = $request->description;
+    $ticket->number = $request->number;
+
 
     $ticket->status = "open";
     $ticket->published_at = Carbon::now();
@@ -171,14 +176,27 @@ public function publish_ticket(Request $request)
 
     public function delete_ticket($ticket_id)
     {
-        $ticket = SystemTicket::find($ticket_id);
-        
-        if ($ticket) {
-            $ticket->delete();
-            return redirect()->route('cooperative-admin.support.show')->with('success', 'Ticket deleted successfully.');
-        }
+          $countComments = DB::select(DB::raw("
+            SELECT count(*) as count
+            FROM system_ticket_comment s 
+            WHERE ticket_id = '$ticket_id';
+        "));
 
-        return redirect()->route('cooperative-admin.support.show')->with('error', 'Ticket not found.');
+        if($countComments[0]->count == 0){
+
+             $ticket = SystemTicket::find($ticket_id);
+        
+                if ($ticket) {
+                    $ticket->delete();
+                    // toastr()->success("Ticket deleted successfully.");
+
+                    return redirect()->route('cooperative-admin.support.show')->with('success', 'Ticket deleted successfully.');
+                }
+
+        }
+        // toastr()->error("Ticket cannot be deleted.");
+
+        return redirect()->route('cooperative-admin.support.show')->with('error', 'Ticket cannot be deleted.');
     }
 
     public function confirm_ticket_resolved($ticket_number)
