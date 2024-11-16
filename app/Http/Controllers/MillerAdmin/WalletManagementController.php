@@ -428,7 +428,7 @@ class WalletManagementController extends Controller
             $account->owner_type = "MILLER";
             $account->owner_id = $miller_id;
 
-            $account->credit_or_debit = "CREDIT";
+            $account->credit_or_debit = "DEBIT";
             $account->save();
         }
 
