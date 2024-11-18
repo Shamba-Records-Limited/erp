@@ -30,6 +30,8 @@
     <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
+    <link type="text/css" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+
     <style>
     .skeleton {
 
@@ -64,6 +66,15 @@
     .filter-display {
         gap: 5px;
     }
+
+    .bg-image {
+        background-image: url('/assets/images/coffeebg.png'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        width: 100%;
+    }
     </style>
     <script src="https://unpkg.com/htmx.org@1.9.3"></script>
 
@@ -94,8 +105,8 @@
         @yield('content')
 
     </div>
+    
     <div class="ml-10" style="margin-left:330px">
-
         @include('layouts.footers.auth')
     </div>
 
