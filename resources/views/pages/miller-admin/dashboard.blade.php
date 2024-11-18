@@ -24,8 +24,9 @@ $total_gender_distribution = 0;
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Coffee In Marketplace</h5>
-                                    <span class="h2 font-weight-bold mb-0">{{$data["coffee_in_marketplace"] ?? "0"}}
-                                        KG</span>
+                                    <span class="h2 font-weight-bold mb-0">
+                                        {{ number_format($data["coffee_in_marketplace"] ?? 0) }} KG
+                                    </span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">

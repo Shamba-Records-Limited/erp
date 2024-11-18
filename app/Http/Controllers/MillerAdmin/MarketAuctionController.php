@@ -25,7 +25,6 @@ class MarketAuctionController extends Controller
         return $this->middleware('auth');
     }
 
-    // display cooperatives
     public function index()
     {
         $cooperatives = DB::select(DB::raw("
@@ -34,12 +33,28 @@ class MarketAuctionController extends Controller
                     WHERE l.cooperative_id = coop.id AND
                     (SELECT count(1) FROM miller_auction_order_item item
                         WHERE item.lot_number = l.lot_number
-                        ) = 0
-                ) AS lots_count FROM cooperatives coop
+                    ) = 0
+                ) AS lots_count
+            FROM cooperatives coop
         "));
 
-        return view('pages.miller-admin.market-auction.index', compact('cooperatives'));
+        $totalLots = DB::select(DB::raw("
+            SELECT SUM(
+                (SELECT count(1) FROM lots l
+                    WHERE l.cooperative_id = coop.id AND
+                    (SELECT count(1) FROM miller_auction_order_item item
+                        WHERE item.lot_number = l.lot_number
+                    ) = 0
+                )
+            ) AS total_lots
+            FROM cooperatives coop
+        "));
+
+        $totalLots = $totalLots[0]->total_lots ?? 0;
+
+        return view('pages.miller-admin.market-auction.index', compact('cooperatives', 'totalLots'));
     }
+
 
     public function view_coop_collections($coop_id)
     {

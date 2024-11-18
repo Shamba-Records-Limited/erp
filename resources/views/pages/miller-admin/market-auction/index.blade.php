@@ -23,13 +23,22 @@
                 <tbody>
                     @foreach($cooperatives as $key => $cooperative)
                     <tr>
-                        <td>{{++$key }}</td>
-                        <td>{{$cooperative->name}}</td>
-                        <td>{{$cooperative->lots_count}}</td>
-                        <td><a href="{{route('miller-admin.market-auction.coop-collections.show', $cooperative->id)}}" class="btn btn-primary">View</a></td>
+                        <td>{{ ++$key }}</td>
+                        <td>{{ $cooperative->name }}</td>
+                        <td>{{ $cooperative->lots_count }}</td>
+                        <td>
+                            <a href="{{ route('miller-admin.market-auction.coop-collections.show', $cooperative->id) }}" class="btn btn-primary">View</a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right font-weight-bold">Total:</td>
+                        <td class="font-weight-bold">{{ $totalLots }}</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

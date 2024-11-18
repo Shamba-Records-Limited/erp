@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Active Listings</h5>
+                                    <h5 class="card-title text-uppercase text-muted mb-0 font-weight-bold" style="font-size: {{ $h5FontSize }}; text-decoration: none;">Active Listings</h5>
                                     <span class="h2 font-weight-bold mb-0 d-block">{{ $data['active_listings'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
