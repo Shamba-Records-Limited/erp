@@ -45,16 +45,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php $totalQuantity = 0; @endphp
                     @foreach($lots as $key => $lot)
                     <tr>
-                        <td>{{++$key }}</td>
-                        <td>{{$lot->lot_number}}</td>
-                        <td>{{$lot->available_quantity}} KG</td>
+                        <td>{{ ++$key }}</td>
+                        <td>{{ $lot->lot_number }}</td>
+                        <td>
+                            {{ $lot->available_quantity }} KG
+                            @php $totalQuantity += $lot->available_quantity; @endphp
+                        </td>
                         <td class="text-right">
                             @if ($lot->qty <= 0)
-                            <a href="{{route('miller-admin.market-auction.add-to-cart', [$cooperative->id, $lot->lot_number])}}" class="btn btn-outline-primary">Add to Cart</a>
+                            <a href="{{ route('miller-admin.market-auction.add-to-cart', [$cooperative->id, $lot->lot_number]) }}" class="btn btn-outline-primary">Add to Cart</a>
                             @else
-                            <form action="{{route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $lot->lot_number])}}" method="post">
+                            <form action="{{ route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $lot->lot_number]) }}" method="post">
                                 @csrf
                                 {{ method_field('DELETE') }}
                                 <button onclick="return confirm('sure to remove?')" class="btn btn-outline-danger">Remove from Cart</button>
@@ -64,9 +68,15 @@
                     </tr>
                     @endforeach
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" class="text-right font-weight-bold">Total Quantity:</td>
+                        <td class="font-weight-bold">{{ $totalQuantity }} KG</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
-
     </div>
 </div>
 @endsection

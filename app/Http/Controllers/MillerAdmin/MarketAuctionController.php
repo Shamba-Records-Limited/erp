@@ -64,8 +64,8 @@ class MarketAuctionController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
-        // update or create cart
+    
+        // Update or create cart
         $cart = null;
         try {
             $cart = MillerAuctionCart::where("miller_id", $miller_id)
@@ -89,28 +89,40 @@ class MarketAuctionController extends Controller
                 return redirect()->back();
             }
         }
-
+    
+        // Fetch lots with quantities
         $lots = DB::select(DB::raw("
             SELECT l.*, item.quantity AS qty
             FROM lots l
             LEFT JOIN miller_auction_cart_item item ON item.lot_number = l.lot_number
             LEFT JOIN miller_auction_cart cart ON cart.id = item.cart_id
-            where l.cooperative_id = :coop_id AND 
+            WHERE l.cooperative_id = :coop_id AND 
                 (SELECT count(1) FROM miller_auction_order_item item
                     WHERE item.lot_number = l.lot_number
                 ) = 0
         "), ["coop_id" => $coop_id]);
-
-        // count all coop lots except one in an order
+    
+        // Count all cooperative lots except those in an order
         $lots_count = DB::select(DB::raw("
-            SELECT count(1) FROM lots l
-            where l.cooperative_id = :coop_id AND
+            SELECT count(1) AS count
+            FROM lots l
+            WHERE l.cooperative_id = :coop_id AND
                 (SELECT count(1) FROM miller_auction_order_item item
                     WHERE item.lot_number = l.lot_number
                 ) = 0
-        "), ["coop_id" => $coop_id]);
-
-        // cooperative
+        "), ["coop_id" => $coop_id])[0]->count;
+    
+        // Calculate total quantity of available lots
+        $total_quantity = DB::select(DB::raw("
+            SELECT SUM(l.available_quantity) AS total_quantity
+            FROM lots l
+            WHERE l.cooperative_id = :coop_id AND
+                (SELECT count(1) FROM miller_auction_order_item item
+                    WHERE item.lot_number = l.lot_number
+                ) = 0
+        "), ["coop_id" => $coop_id])[0]->total_quantity;
+    
+        // Fetch cooperative details
         $cooperative = null;
         $cooperatives = DB::select(DB::raw("
             SELECT * FROM cooperatives WHERE id = :coop_id;
@@ -118,14 +130,17 @@ class MarketAuctionController extends Controller
         if (count($cooperatives) > 0) {
             $cooperative = $cooperatives[0];
         }
-
+    
+        // Count items in cart
         $items_in_cart_count = DB::select(DB::raw("
-            SELECT count(1) as count FROM miller_auction_cart_item item WHERE cart_id = :cart_id
+            SELECT count(1) AS count
+            FROM miller_auction_cart_item item
+            WHERE cart_id = :cart_id
         "), ["cart_id" => $cart->id])[0]->count;
-
-
-        return view('pages.miller-admin.market-auction.coop-lots', compact('cooperative', 'lots', 'lots_count', 'items_in_cart_count'));
+    
+        return view('pages.miller-admin.market-auction.coop-lots', compact('cooperative', 'lots', 'lots_count', 'items_in_cart_count', 'total_quantity'));
     }
+    
 
     // todo: replace with remove lot from cart
     public function remove_collection_from_cart($coop_id, $collection_id)

@@ -8,7 +8,7 @@
 <div class="card pt-6">
     <div class="card-body">
         <div class="card-title">Market Auction</div>
-        <div class="card-subtitle">Cooperatives</div>
+        <!-- <div class="card-subtitle">Cooperatives</div> -->
         <div class="table-responsive">
             <table class="table table-hover dt clickable">
                 <thead>
