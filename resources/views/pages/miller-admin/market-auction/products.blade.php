@@ -12,8 +12,12 @@
     </div>
 
     <!-- Register Product Form -->
-    <div id="register-product-form" class="card p-4 mb-4" style="display: none;">
-        <h4 class="mb-3">Register New Product</h4>
+    <div id="register-product-form" class="card p-4 mb-4 position-relative" style="display: none;">
+        <!-- X Button to Close the Form -->
+        <button type="button" class="close-btn btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;" id="close-register-form">
+            &times;
+        </button>
+
         <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
@@ -71,6 +75,11 @@ $(document).ready(function() {
     // Toggle the visibility of the register product form
     $('#register-product-btn').on('click', function() {
         $('#register-product-form').toggle();
+    });
+
+    // Close the form when the "X" button is clicked
+    $('#close-register-form').on('click', function() {
+        $('#register-product-form').hide();
     });
 
     // When any "Add to Cart" button is clicked
