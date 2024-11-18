@@ -29,8 +29,8 @@
                                 <td>{{ ++$key }}</td>
                                 <td>{{ $ticket->number }}</td>
                                 <td>
-                                    <div>{{ $ticket->title }}</div> <!-- Full title without truncation -->
-                                    <div>{{ $ticket->description }}</div> <!-- Full description -->
+                                    <div>{{ Str::words($ticket->title, 5, '...') }}</div> <!-- Truncated title -->
+                                    <div>{{ Str::words($ticket->description, 9, '...') }}</div> <!-- Description title -->
                                 </td>
                                 <td>
                                     <div class="btn-group dropdown">

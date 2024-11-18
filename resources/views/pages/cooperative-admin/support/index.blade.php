@@ -11,8 +11,7 @@
             <div class="card-body">
                 <div class="card-title">Support</div>
                 <div class="d-flex justify-content-end mb-2">
-                    <a href="{{ route('cooperative-admin.support.view_add_ticket') }}" class="btn btn-primary">Add
-                        Ticket</a>
+                    <a href="{{ route('cooperative-admin.support.view_add_ticket') }}" class="btn btn-primary">Add Ticket</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover dt">

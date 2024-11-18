@@ -164,7 +164,7 @@ function publishForm() {
                     $('#form-error').html(data.message).show();
                 }
             },
-        error: function(data) {
+            error: function(data) {
                 const resp = data.responseJSON;
                 if (resp && resp.message) {
                     $('#form-error').html(resp.message).show();

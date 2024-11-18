@@ -79,7 +79,7 @@ $ticket_labels = config('enums.ticket_labels');
 
                         <div class="form-group d-flex justify-content-between">
                             <button type="button" class="btn btn-primary" onclick="publishForm()">Publish</button>
-                            <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button>
+                            <!-- <button type="button" class="btn btn-danger" onclick="discardTicket()">Discard Ticket Draft</button> -->
                         </div>
                     </form>
                 </div>
@@ -184,24 +184,6 @@ function publishForm() {
     }
 }
 
-function discardTicket() {
-    let c = confirm("Are you sure? This will discard your draft changes.");
-    if (c) {
-        $.ajax({
-            url: "{{ route('miller-admin.support.delete_ticket', $ticket->id) }}",
-            type: "DELETE",
-            data: {
-                _token: "{{ csrf_token() }}"
-            },
-            success: function(data) {
-                window.location.href = "{{ route('miller-admin.support.show') }}";
-            },
-            error: function(data) {
-                alert("Error occurred while discarding the ticket.");
-            }
-        });
-    }
-}
 </script>
 @endpush
 
