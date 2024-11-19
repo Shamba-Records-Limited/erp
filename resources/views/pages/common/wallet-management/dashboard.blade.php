@@ -197,11 +197,11 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income and Expenses
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income and Expenses Trends
                             </h6>
                             <h2 class=" mb-0">Income and Expenses</h2>
-                        </div>
+                    </div>
                     <canvas id="IncomeExpensesBarChart" height="250"></canvas>
                 </div>
             </div>
@@ -210,11 +210,11 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Account Breakdown
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Account Breakdown Trends
                             </h6>
                             <h2 class=" mb-0">Account Breakdown</h2>
-                        </div>
+                    </div>
                     <canvas id="AccountBreakdownPieChart" height="250"></canvas>
                 </div>
             </div>
@@ -225,11 +225,11 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income 
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income Trends
                             </h6>
                             <h2 class=" mb-0">Income</h2>
-                        </div>
+                    </div>
                     <canvas id="IncomeLineChart" height="250"></canvas>
                 </div>
             </div>
@@ -238,11 +238,11 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Expenses
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Expenses Trends
                             </h6>
                             <h2 class=" mb-0"> Expenses</h2>
-                        </div>
+                    </div>
                     <canvas id="ExpensesLineChart" height="250"></canvas>
                 </div>
             </div>
