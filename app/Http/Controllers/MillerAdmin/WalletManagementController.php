@@ -561,66 +561,64 @@ class WalletManagementController extends Controller
             $suggested_chart_mode = "yearly";
         }
 
-        $income = [];
-        $expenses = [];
-        if ($suggested_chart_mode == "daily") {
-            $incomeDailyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT :from_date AS date
-                    UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
-                    FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
-                )
-                SELECT date_series.date AS x,
-                    (
-                        SELECT IFNULL(SUM(t.amount), 0)
-                        FROM transactions t
-                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
-                            t.recipient_id = :miller_id
-                    ) AS y
-                FROM date_series
-                GROUP BY date_series.date;";
+        // Aggregate data for the dashboard
+        $incomeTotal = Transaction::where('recipient_id', $miller_id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->sum('amount');
 
-            $income = DB::select(DB::raw($incomeDailyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-                "miller_id" => $miller_id,
-            ]);
+        $expensesTotal = Transaction::where('sender_id', $miller_id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->sum('amount');
 
-            $expensesDailyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT :from_date AS date
-                    UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
-                    FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
-                )
-                SELECT date_series.date AS x,
-                    (
-                        SELECT IFNULL(SUM(t.amount), 0)
-                        FROM transactions t
-                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
-                            t.sender_id = :miller_id
-                    ) AS y
-                FROM date_series
-                GROUP BY date_series.date;";
+        $accountReceivables = Transaction::where('recipient_id', $miller_id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
 
-            $expenses = DB::select(DB::raw($expensesDailyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-                "miller_id" => $miller_id,
-            ]);
-        }
+        $accountPayables = Transaction::where('sender_id', $miller_id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
 
+        $depositsTotal = Transaction::where('type', 'DEPOSIT')
+            ->where('sender_id', $miller_id)
+            ->sum('amount');
+
+        $withdrawalsTotal = Transaction::where('type', 'WITHDRAWAL')
+            ->where('sender_id', $miller_id)
+            ->sum('amount');
+
+        // Prepare data for the charts
+        $transactionData = Transaction::selectRaw("
+            DATE(created_at) as date, 
+            SUM(CASE WHEN recipient_id = ? THEN amount ELSE 0 END) as income,
+            SUM(CASE WHEN sender_id = ? THEN amount ELSE 0 END) as expenses
+        ", [$miller_id, $miller_id])
+
+        ->whereBetween('created_at', [$from_date, $to_date])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+
+        $labels = $transactionData->pluck('date')->toArray();
+        $incomeData = $transactionData->pluck('income')->toArray();
+        $expenseData = $transactionData->pluck('expenses')->toArray();
 
 
         $data = [
-            "income" => $income,
-            "expenses" => $expenses
+            'totals' => [
+                'income' => $incomeTotal,
+                'expenses' => $expensesTotal,
+                'accountReceivables' => $accountReceivables,
+                'accountPayables' => $accountPayables,
+                'deposits' => $depositsTotal,
+                'withdrawals' => $withdrawalsTotal,
+            ],
+            'charts' => [
+                'labels' => $labels,
+                'income' => $incomeData,
+                'expenses' => $expenseData,
+            ]
         ];
-
-
 
         return view("pages.miller-admin.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
     }

@@ -2,130 +2,647 @@
 
 @push('plugin-styles')
 <style>
-    .dashgrid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        gap: 10px;
+    .header {
+        background-color: #28a745;
+        padding: 2rem 0;
     }
 
-    .span-8 {
-        grid-column: span 8;
+    .icon-shape {
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .span-4 {
-        grid-column: span 4;
-    }
-
-    .span-2 {
-        grid-column: span 2;
-    }
-
-    .span-6 {
-        grid-column: span 6;
-    }
-
-
-    .row-span-2 {
-        grid-row: span 2;
-    }
 </style>
 @endpush
 
 @section('content')
-<div class="d-flex justify-content-between w-100">
-    <div>Dashboard</div>
-    <div class="d-flex align-items-start">
-        <form class="d-flex">
-            <div class="form-group">
-                <select name="date_range" placeholder="Select Date Range" class="form-control form-select" onchange="this.form.submit()" id="dateRange">
-                    <option value="week" @if($date_range=="week" ) selected @endif)>This Week</option>
-                    <option value="month" @if($date_range=="month" ) selected @endif>This Month</option>
-                    <option value="year" @if($date_range=="year" ) selected @endif>This Year</option>
-                    <option value="custom" @if($date_range=="custom" ) selected @endif>Custom</option>
-                </select>
+@include('layout.export-dialog')
+
+<div class="header bg-custom-green pb-4 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+            <!-- Card stats -->
+            <div class="row">
+                <!-- Income Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Total Income</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['income'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-success text-white rounded-circle shadow">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> +5%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expenses Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Total Expenses</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['expenses'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                                        <i class="fas fa-coins"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> -3%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Receivables Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Account Receivables</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['accountReceivables'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-up"></i> +2%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Payables Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Account Payables</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['accountPayables'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
+                                        <i class="fas fa-file-invoice"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-primary mr-2"><i class="fas fa-arrow-up"></i> +4%</span>
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="date" class="form-control" name="from_date" value="{{$from_date}}" onchange="this.form.submit()" id="fromDate" />
+
+            <div class="row mt-4">
+                <!-- Deposits Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Deposits</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['deposits'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                                        <i class="fas fa-piggy-bank"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-info mr-2"><i class="fas fa-arrow-up"></i> +1%</span>
+                                <span class="text-nowrap">Since last month</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+               <!-- Withdrawals Card -->
+                <div class="col-xl-3 col-lg-6">
+                    <div class="card card-stats mb-4 mb-xl-0">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h5 class="text-muted mb-0" style="font-size:1rem">Withdrawals</h5>
+                                    <span class="h2 font-weight-bold mb-0">KSH {{ number_format($data['totals']['withdrawals'], 2) }}</span>
+                                </div>
+                                <div class="col-auto">
+                                    <div class="icon icon-shape bg-custom-green text-white rounded-circle shadow">
+                                        <i class="fas fa-money-bill-wave"></i> <!-- Updated Icon -->
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="mt-3 mb-0 text-muted text-sm">
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> -2%</span> <!-- Updated icon -->
+                                <span class="text-nowrap">Since last week</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="date" class="form-control" name="to_date" value="{{$to_date}}" onchange="this.form.submit()" id="toDate" />
-            </div>
-        </form>
-        <button class="btn btn-warning mt-1 ml-2" href="{{route('cooperative-admin.dashboard.export')}}" onclick="exportChart()">Export</button>
+        </div>
     </div>
 
+    <div class="d-flex justify-content-end w-100 ">
+        <form class="d-flex">
+            <div class="form-group mr-2">
+                <select name="date_range" class="form-control form-select" onchange="this.form.submit()">
+                    <option value="week" @if($date_range=="week") selected @endif>This Week</option>
+                    <option value="month" @if($date_range=="month") selected @endif>This Month</option>
+                    <option value="year" @if($date_range=="year") selected @endif>This Year</option>
+                    <option value="custom" @if($date_range=="custom") selected @endif>Custom</option>
+                </select>
+            </div>
+            <div class="form-group mr-2">
+                <input type="date" class="form-control" name="from_date" value="{{$from_date}}" onchange="this.form.submit()" />
+            </div>
+            <div class="form-group mr-2">
+                <input type="date" class="form-control" name="to_date" value="{{$to_date}}" onchange="this.form.submit()" />
+            </div>
+            <button type="button" class="btn btn-warning btn-compact mt-1" onclick="exportChart()">Export</button>
+        </form>
+    </div>
 </div>
 
-
-<div class="dashgrid">
-    <div class="card span-6">
-        <div class="card-body">
-            <div class="card-title">
-                Income vs Expenses
+<!-- Graphs Section -->
+<div class="container-fluid mt-4">
+    <div class="row">
+        <!-- Income and Expenses Bar Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income and Expenses Trends
+                            </h6>
+                            <h2 class=" mb-0">Income and Expenses</h2>
+                    </div>
+                    <canvas id="IncomeExpensesBarChart" height="250"></canvas>
+                </div>
             </div>
-            <div>
-                <canvas id="IncomeVsExpensesChart" class="mb-4 mb-md-0" height="250"></canvas>
+        </div>
+        <!-- Account Breakdown Pie Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Account Breakdown Trends
+                            </h6>
+                            <h2 class=" mb-0">Account Breakdown</h2>
+                    </div>
+                    <canvas id="AccountBreakdownPieChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <!-- Income Line Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income Trends
+                            </h6>
+                            <h2 class=" mb-0">Income</h2>
+                    </div>
+                    <canvas id="IncomeLineChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Expenses Line Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col mb-2">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Expenses Trends
+                            </h6>
+                            <h2 class=" mb-0"> Expenses</h2>
+                    </div>
+                    <canvas id="ExpensesLineChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+    <!-- Receivables and Payables Bar Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Receivables vs. Payables</h2>
+                <canvas id="ReceivablesPayablesBarChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receivables Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Receivables Over Time</h2>
+                <canvas id="ReceivablesLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payables Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Payables Over Time</h2>
+                <canvas id="PayablesLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposits and Withdrawals Bar Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Deposits vs. Withdrawals</h2>
+                <canvas id="DepositsWithdrawalsBarChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposits Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Deposits Over Time</h2>
+                <canvas id="DepositsLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawals Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Withdrawals Over Time</h2>
+                <canvas id="WithdrawalsLineChart" height="250"></canvas>
             </div>
         </div>
     </div>
 </div>
+
+</div>
 @endsection
-@push('plugin-scripts')
-<script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
-@endpush
-
 @push('custom-scripts')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+
 <script>
-    // income vs expenses chart
-    let expenseData = @json($data['expenses']);
-    let incomeVsExpenseLabels = expenseData.map(c => c.x)
-    let expenseValues = expenseData.map(c => c.y)
-    let incomeVsExpensesChart = document.getElementById("IncomeVsExpensesChart")
+    // Data from the backend
+    const incomeData = @json($data['charts']['income']);
+    const expenseData = @json($data['charts']['expenses']);
+    const labels = @json($data['charts']['labels']);
+    const totals = @json($data['totals']);
 
-    let incomeData = @json($data['income']);
-    let incomeValues = incomeData.map(c => c.y)
+    // Receivables and Payables Data
+    const receivablesData = totals.accountReceivables;
+    const payablesData = totals.accountPayables;
 
-    let incomeVsExpenseChartData = {
-        labels: incomeVsExpenseLabels,
-        datasets: [{
-            label: 'Expenses',
-            data: expenseValues,
-            borderColor: 'rgba(192, 75, 192, 1)',
-            backgroundColor: 'rgba(192, 75, 192, 0.2)',
-        }, {
-            label: 'Income',
-            data: incomeValues,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        }
-    ],
-        // labels: ["Male", "Female", "Other"]
-    };
-    let incomeVsExpenseChartOptions = {
-        animationEasing: "easeOutBounce",
-        animateScale: true,
-        responsive: true,
-        maintainAspectRatio: false,
-        showScale: true,
-        legend: {
-            display: true
+    // Deposits and Withdrawals Data
+    const depositsData = totals.deposits;
+    const withdrawalsData = totals.withdrawals;
+
+    // Bar Chart for Income and Expenses
+    new Chart(document.getElementById("IncomeExpensesBarChart"), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
         },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                top: 0,
-                bottom: 0
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
             }
         }
-        // y axis is KGs
-    };
-    let incomeVsExpenseChart = new Chart(incomeVsExpensesChart, {
-        type: "line",
-        data: incomeVsExpenseChartData,
-        options: incomeVsExpenseChartOptions
     });
 
-    
+    // Pie Chart for Account Breakdown
+    new Chart(document.getElementById("AccountBreakdownPieChart"), {
+        type: 'pie',
+        data: {
+            labels: ['Total Income', 'Total Expenses', 'Account Receivables', 'Account Payables'],
+            datasets: [
+                {
+                    data: [
+                        totals.income,
+                        totals.expenses,
+                        totals.accountReceivables,
+                        totals.accountPayables
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(54, 162, 235, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+
+    // Line Chart for Income
+    new Chart(document.getElementById("IncomeLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Expenses
+    new Chart(document.getElementById("ExpensesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+     // Bar Chart for Receivables and Payables
+    new Chart(document.getElementById("ReceivablesPayablesBarChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Receivables', 'Payables'],
+            datasets: [
+                {
+                    label: 'Amount (KSH)',
+                    data: [receivablesData, payablesData],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Receivables
+    new Chart(document.getElementById("ReceivablesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Receivables',
+                    data: Array(labels.length).fill(receivablesData / labels.length), // Example data distribution
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Payables
+    new Chart(document.getElementById("PayablesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Payables',
+                    data: Array(labels.length).fill(payablesData / labels.length), // Example data distribution
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Bar Chart for Deposits and Withdrawals
+    new Chart(document.getElementById("DepositsWithdrawalsBarChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Deposits', 'Withdrawals'],
+            datasets: [
+                {
+                    label: 'Amount (KSH)',
+                    data: [depositsData, withdrawalsData],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Deposits
+    new Chart(document.getElementById("DepositsLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Deposits',
+                    data: Array(labels.length).fill(depositsData / labels.length), // Example data distribution
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Withdrawals
+    new Chart(document.getElementById("WithdrawalsLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Withdrawals',
+                    data: Array(labels.length).fill(withdrawalsData / labels.length), // Example data distribution
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
 </script>
+
 @endpush
+
