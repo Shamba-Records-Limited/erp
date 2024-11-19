@@ -19,6 +19,8 @@
 @endpush
 
 @section('content')
+@include('layout.export-dialog')
+
 <div class="header bg-custom-green pb-4 pt-5 pt-md-8">
     <div class="container-fluid">
         <div class="header-body">
@@ -188,48 +190,116 @@
     </div>
 </div>
 
-<!-- Charts -->
+<!-- Graphs Section -->
 <div class="container-fluid mt-4">
-    <div class="card">
-        <div class="card-body">
-            <h3>Income vs Expenses</h3>
-            <canvas id="IncomeVsExpensesChart" height="250"></canvas>
+    <div class="row">
+        <!-- Income and Expenses Bar Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Income and Expenses (Bar Chart)</h3>
+                    <canvas id="IncomeExpensesBarChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Account Breakdown Pie Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3>Account Breakdown (Pie Chart)</h3>
+                    <canvas id="AccountBreakdownPieChart" height="250"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 @endsection
-
-@push('plugin-scripts')
-<script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
-@endpush
-
 @push('custom-scripts')
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
+<script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+
 <script>
-    const labels = @json($data['charts']['labels']);
+    // Data from the backend
     const incomeData = @json($data['charts']['income']);
     const expenseData = @json($data['charts']['expenses']);
+    const labels = @json($data['charts']['labels']);
+    const totals = @json($data['totals']);
 
-    new Chart(document.getElementById("IncomeVsExpensesChart"), {
-        type: 'line',
+    // Bar Chart for Income and Expenses
+    new Chart(document.getElementById("IncomeExpensesBarChart"), {
+        type: 'bar',
         data: {
             labels: labels,
             datasets: [
                 {
                     label: 'Income',
                     data: incomeData,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    fill: true,
+                    borderWidth: 1
                 },
                 {
                     label: 'Expenses',
                     data: expenseData,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
                     borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: true,
-                },
+                    borderWidth: 1
+                }
             ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
         }
     });
+
+    // Pie Chart for Account Breakdown
+    new Chart(document.getElementById("AccountBreakdownPieChart"), {
+        type: 'pie',
+        data: {
+            labels: ['Total Income', 'Total Expenses', 'Account Receivables', 'Account Payables'],
+            datasets: [
+                {
+                    data: [
+                        totals.income,
+                        totals.expenses,
+                        totals.accountReceivables,
+                        totals.accountPayables
+                    ],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(54, 162, 235, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            }
+        }
+    });
+
+  
+
 </script>
 @endpush
+
