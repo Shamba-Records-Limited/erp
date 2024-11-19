@@ -248,9 +248,69 @@
             </div>
         </div>
     </div>
+    <div class="row mt-4">
+    <!-- Receivables and Payables Bar Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Receivables vs. Payables</h2>
+                <canvas id="ReceivablesPayablesBarChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receivables Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Receivables Over Time</h2>
+                <canvas id="ReceivablesLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payables Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Payables Over Time</h2>
+                <canvas id="PayablesLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposits and Withdrawals Bar Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Deposits vs. Withdrawals</h2>
+                <canvas id="DepositsWithdrawalsBarChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposits Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Deposits Over Time</h2>
+                <canvas id="DepositsLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawals Line Chart -->
+    <div class="col-xl-6 col-lg-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h2>Withdrawals Over Time</h2>
+                <canvas id="WithdrawalsLineChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
-
+</div>
 @endsection
 @push('custom-scripts')
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
@@ -262,6 +322,14 @@
     const expenseData = @json($data['charts']['expenses']);
     const labels = @json($data['charts']['labels']);
     const totals = @json($data['totals']);
+
+    // Receivables and Payables Data
+    const receivablesData = totals.accountReceivables;
+    const payablesData = totals.accountPayables;
+
+    // Deposits and Withdrawals Data
+    const depositsData = totals.deposits;
+    const withdrawalsData = totals.withdrawals;
 
     // Bar Chart for Income and Expenses
     new Chart(document.getElementById("IncomeExpensesBarChart"), {
@@ -375,6 +443,188 @@
                     data: expenseData,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+     // Bar Chart for Receivables and Payables
+    new Chart(document.getElementById("ReceivablesPayablesBarChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Receivables', 'Payables'],
+            datasets: [
+                {
+                    label: 'Amount (KSH)',
+                    data: [receivablesData, payablesData],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Receivables
+    new Chart(document.getElementById("ReceivablesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Receivables',
+                    data: Array(labels.length).fill(receivablesData / labels.length), // Example data distribution
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Payables
+    new Chart(document.getElementById("PayablesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Payables',
+                    data: Array(labels.length).fill(payablesData / labels.length), // Example data distribution
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Bar Chart for Deposits and Withdrawals
+    new Chart(document.getElementById("DepositsWithdrawalsBarChart"), {
+        type: 'bar',
+        data: {
+            labels: ['Deposits', 'Withdrawals'],
+            datasets: [
+                {
+                    label: 'Amount (KSH)',
+                    data: [depositsData, withdrawalsData],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 159, 64, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Deposits
+    new Chart(document.getElementById("DepositsLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Deposits',
+                    data: Array(labels.length).fill(depositsData / labels.length), // Example data distribution
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Line Chart for Withdrawals
+    new Chart(document.getElementById("WithdrawalsLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Withdrawals',
+                    data: Array(labels.length).fill(withdrawalsData / labels.length), // Example data distribution
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
                     fill: true,
                     borderWidth: 2,
                     tension: 0.4
