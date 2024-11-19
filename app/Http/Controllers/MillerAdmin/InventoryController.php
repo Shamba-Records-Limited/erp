@@ -419,7 +419,7 @@ class InventoryController extends Controller
 
             $uniqueProductNames = Cache::remember("product_names_m_$miller_id", 60, function () use ($miller_id) {
                 return DB::select(DB::raw("
-                SELECT fp.name FROM final_products fp
+                SELECT fp.id, fp.name FROM final_products fp
                 WHERE miller_id = :miller_id
             "), ["miller_id" => $miller_id]);
             });

@@ -622,7 +622,7 @@ class WalletManagementController extends Controller
 
 
 
-        return view("pages.common.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
+        return view("pages.miller-admin.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
     }
 
     public function account_receivables()

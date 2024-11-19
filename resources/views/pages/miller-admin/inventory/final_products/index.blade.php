@@ -12,7 +12,7 @@
     <div class="modal-container">
         <div class="modal-card">
             <div class="modal-header">
-                <h4 class="text-center">Create Final Product</h4>
+                <h4 class="text-center">Generate a Final Product</h4>
                 <a class="close-btn" href="?is_creating_final_product=0">
                     <i class="mdi mdi-close"></i>
                 </a>
@@ -31,15 +31,15 @@
                     <input type="hidden" name="product_id" value="{{ $draftProduct->id }}" />
 
                     <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" list="productNames" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ $draftProduct->name }}" required />
-                        <datalist id="productNames">
+                        <label for="product_id">Select Product</label>
+                        <select name="product_id" id="product_id" class="form-control form-select @error('product_id') is-invalid @enderror">
+                            <option value="">--Select Product--</option>
                             @foreach($uniqueProductNames as $productName)
-                                <option value="{{ $productName->name }}"></option>
+                                <option value="{{ $productName->id }}">{{ $productName->name }}</option>
                             @endforeach
-                        </datalist>
-                        @if($errors->has('name'))
-                            <span class="text-danger">{{ $errors->first('name') }}</span>
+                        </select>
+                        @if($errors->has('product_id'))
+                            <span class="text-danger">{{ $errors->first('product_id') }}</span>
                         @endif
                     </div>
 
@@ -76,25 +76,25 @@
                         @endif
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="count">Count</label>
                         <input type="number" name="count" id="count" class="form-control @error('count') is-invalid @enderror" value="{{ $draftProduct->count }}" required />
                         @if($errors->has('count'))
                             <span class="text-danger">{{ $errors->first('count') }}</span>
                         @endif
-                    </div>
+                    </div> -->
 
                     <div class="form-row">
                         <div class="col">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="is_wholesale" name="is_wholesale" @if($draftProduct->is_wholesale) checked @endif>
-                                <label class="form-check-label" for="is_wholesale">Is Wholesale?</label>
+                                <label class="form-check-label" for="is_wholesale">Wholesale Product</label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-check">
                                 <input type="checkbox" class="form-check-input" id="is_retail" name="is_retail" @if($draftProduct->is_retail) checked @endif>
-                                <label class="form-check-label" for="is_retail">Is Retail?</label>
+                                <label class="form-check-label" for="is_retail">Retail Product</label>
                             </div>
                         </div>
                     </div>
@@ -209,7 +209,7 @@
         <div class="d-flex justify-content-between align-items-end">
             <div class="card-title">Final Products</div>
             <div>
-                <a href="?is_creating_final_product=1" class="btn btn-primary">Create Final Product</a>
+                <a href="?is_creating_final_product=1" class="btn btn-primary">Generate Final Product</a>
                 <a class="btn btn-primary" href="{{route('miller-admin.final-products.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span>Export Excel
                 </a>
                 <a class="btn btn-primary" href="{{route('miller-admin.final-products.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span>Export Pdf
@@ -224,6 +224,7 @@
                     <th>#</th>
                     <th>Product Number</th>
                     <th>Product</th>
+                    <th>Quantity</th>
                     <th>Pricing</th>
                     <th>Count</th>
                     <th></th>
@@ -234,7 +235,8 @@
                 <tr>
                     <td>{{$key+1}}</td>
                     <td>{{$product->product_number}}</td>
-                    <td>{{$product->name}} {{$product->quantity}} {{$product->unit}}</td>
+                    <td>{{$product->name}}</td>
+                    <td>{{$product->quantity}} {{$product->unit}}</td>
                     <td>KES {{$product->selling_price}} / KG</td>
                     <td>{{$product->count}}</td>
                     <td></td>
