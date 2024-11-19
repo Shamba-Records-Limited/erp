@@ -197,7 +197,11 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h3>Income and Expenses (Bar Chart)</h3>
+                    <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income and Expenses
+                            </h6>
+                            <h2 class=" mb-0">Income and Expenses</h2>
+                        </div>
                     <canvas id="IncomeExpensesBarChart" height="250"></canvas>
                 </div>
             </div>
@@ -206,13 +210,46 @@
         <div class="col-xl-6 col-lg-12 mb-4">
             <div class="card">
                 <div class="card-body">
-                    <h3>Account Breakdown (Pie Chart)</h3>
+                    <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Account Breakdown
+                            </h6>
+                            <h2 class=" mb-0">Account Breakdown</h2>
+                        </div>
                     <canvas id="AccountBreakdownPieChart" height="250"></canvas>
                 </div>
             </div>
         </div>
     </div>
+    <div class="row mt-4">
+        <!-- Income Line Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Income 
+                            </h6>
+                            <h2 class=" mb-0">Income</h2>
+                        </div>
+                    <canvas id="IncomeLineChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Expenses Line Chart -->
+        <div class="col-xl-6 col-lg-12 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col">
+                            <h6 class="text-uppercase text-muted ls-1 mb-1"> Expenses
+                            </h6>
+                            <h2 class=" mb-0"> Expenses</h2>
+                        </div>
+                    <canvas id="ExpensesLineChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @endsection
 @push('custom-scripts')
@@ -298,8 +335,64 @@
         }
     });
 
-  
+    // Line Chart for Income
+    new Chart(document.getElementById("IncomeLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
 
+    // Line Chart for Expenses
+    new Chart(document.getElementById("ExpensesLineChart"), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    borderWidth: 2,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                tooltip: { enabled: true }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
 </script>
+
 @endpush
 
