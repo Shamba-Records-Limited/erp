@@ -106,8 +106,8 @@
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $coop->coop_name }}</td>
-                        <td>{{ $coop->created_at ?? 'N/A' }}</td>
-                        <td>{{ $coop->added_by ?? 'N/A' }}</td>
+                        <td>{{ $coop->created_at ? \Carbon\Carbon::parse($coop->created_at)->format('d M Y h:i A') : 'N/A' }}</td>
+                        <td>{{ $coop->added_by_first_name ?? 'N/A' }} {{ $coop->added_by_other_names ?? '' }}</td>
                     </tr>
                     @endforeach
                 </tbody>

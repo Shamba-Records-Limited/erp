@@ -146,10 +146,14 @@ class FarmersController extends Controller
         if ($tab == 'cooperatives') {
             $farmerCooperatives = DB::select(DB::raw("
                 SELECT
+                    fc.id,
+                    u.first_name AS added_by_first_name,
+                    u.other_names AS added_by_other_names,
                     c.name as coop_name,
                     fc.created_at
                 FROM farmer_cooperative fc
                 JOIN cooperatives c ON c.id = fc.cooperative_id
+                LEFT JOIN users u ON fc.added_by_id = u.id
                 WHERE fc.farmer_id = :id
             "), ["id" => $id]);
         } else if ($tab == 'collections') {
