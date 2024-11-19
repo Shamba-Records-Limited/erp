@@ -480,124 +480,125 @@ class WalletManagementController extends Controller
         }
     }
 
-    public function dashboard(Request $request)
-    {
-        $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
+// Update the dashboard method in WalletManagementController.php
 
-        $date_range = $request->query("date_range", "week");
-        $from_date = $request->query("from_date", "");
-        $to_date = $request->query("to_date", "");
+public function dashboard(Request $request)
+{
+    $user = Auth::user();
+            try {
+                $miller_id = $user->miller_admin->miller_id;
+            } catch (\Throwable $th) {
+                $miller_id = null;
+            }    $coop_id = $user->cooperative->id;
 
-        $from_date_prev = "";
-        $to_date_prev = "";
+    $date_range = $request->query("date_range", "week");
+            $from_date = $request->query("from_date", "");
+            $to_date = $request->query("to_date", "");
 
-        if ($date_range == "custom") {
-            $from_date = $request->from_date;
-            $to_date = $request->to_date;
-        } else if ($date_range == "week") {
-            $from_date = date("Y-m-d", strtotime("-7 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Week";
-            $from_date_prev = date("Y-m-d", strtotime("-14 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-7 days"));
-        } else if ($date_range == "month") {
-            $from_date = date("Y-m-d", strtotime("-30 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Month";
-            $from_date_prev = date("Y-m-d", strtotime("-60 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-30 days"));
-        } else if ($date_range == "year") {
-            $from_date = date("Y-m-d", strtotime("-365 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Year";
-            $from_date_prev = date("Y-m-d", strtotime("-730 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-365 days"));
-        }
+            $from_date_prev = "";
+            $to_date_prev = "";
 
-        $suggested_chart_mode = "daily";
-        // to 60 days
-        if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
+            if ($date_range == "custom") {
+                $from_date = $request->from_date;
+                $to_date = $request->to_date;
+            } else if ($date_range == "week") {
+                $from_date = date("Y-m-d", strtotime("-7 days"));
+                $to_date = date("Y-m-d");
+                $prev_range = "Last Week";
+                $from_date_prev = date("Y-m-d", strtotime("-14 days"));
+                $to_date_prev = date("Y-m-d", strtotime("-7 days"));
+            } else if ($date_range == "month") {
+                $from_date = date("Y-m-d", strtotime("-30 days"));
+                $to_date = date("Y-m-d");
+                $prev_range = "Last Month";
+                $from_date_prev = date("Y-m-d", strtotime("-60 days"));
+                $to_date_prev = date("Y-m-d", strtotime("-30 days"));
+            } else if ($date_range == "year") {
+                $from_date = date("Y-m-d", strtotime("-365 days"));
+                $to_date = date("Y-m-d");
+                $prev_range = "Last Year";
+                $from_date_prev = date("Y-m-d", strtotime("-730 days"));
+                $to_date_prev = date("Y-m-d", strtotime("-365 days"));
+            }
+
             $suggested_chart_mode = "daily";
-        }
-        // to 4 months
-        else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
-            $suggested_chart_mode = "weekly";
-        }
-        // to 3 years
-        else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
-            $suggested_chart_mode = "monthly";
-        } else {
-            $suggested_chart_mode = "yearly";
-        }
+            // to 60 days
+            if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
+                $suggested_chart_mode = "daily";
+            }
+            // to 4 months
+            else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
+                $suggested_chart_mode = "weekly";
+            }
+            // to 3 years
+            else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
+                $suggested_chart_mode = "monthly";
+            } else {
+                $suggested_chart_mode = "yearly";
+            }
+            
+        // Aggregate data for the dashboard
+        $incomeTotal = Transaction::where('recipient_id', $coop_id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->sum('amount');
 
-        $income = [];
-        $expenses = [];
-        if ($suggested_chart_mode == "daily") {
-            $incomeDailyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT :from_date AS date
-                    UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
-                    FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
-                )
-                SELECT date_series.date AS x,
-                    (
-                        SELECT IFNULL(SUM(t.amount), 0)
-                        FROM transactions t
-                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
-                            t.recipient_id = :miller_id
-                    ) AS y
-                FROM date_series
-                GROUP BY date_series.date;";
+        $expensesTotal = Transaction::where('sender_id', $coop_id)
+            ->whereBetween('created_at', [$from_date, $to_date])
+            ->sum('amount');
 
-            $income = DB::select(DB::raw($incomeDailyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-                "miller_id" => $miller_id,
-            ]);
+        $accountReceivables = Transaction::where('recipient_id', $coop_id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
 
-            $expensesDailyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT :from_date AS date
-                    UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
-                    FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
-                )
-                SELECT date_series.date AS x,
-                    (
-                        SELECT IFNULL(SUM(t.amount), 0)
-                        FROM transactions t
-                        WHERE CAST(t.completed_at AS DATE) = date_series.date AND
-                            t.sender_id = :miller_id
-                    ) AS y
-                FROM date_series
-                GROUP BY date_series.date;";
+        $accountPayables = Transaction::where('sender_id', $coop_id)
+            ->where('status', 'PENDING')
+            ->sum('amount');
 
-            $expenses = DB::select(DB::raw($expensesDailyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-                "miller_id" => $miller_id,
-            ]);
-        }
+        $depositsTotal = Transaction::where('type', 'DEPOSIT')
+            ->where('sender_id', $coop_id)
+            ->sum('amount');
+
+        $withdrawalsTotal = Transaction::where('type', 'WITHDRAWAL')
+            ->where('sender_id', $coop_id)
+            ->sum('amount');
+
+        // Prepare data for the charts
+        $transactionData = Transaction::selectRaw("
+            DATE(created_at) as date, 
+            SUM(CASE WHEN recipient_id = ? THEN amount ELSE 0 END) as income,
+            SUM(CASE WHEN sender_id = ? THEN amount ELSE 0 END) as expenses
+        ", [$coop_id, $coop_id])
+
+        ->whereBetween('created_at', [$from_date, $to_date])
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
 
 
+        $labels = $transactionData->pluck('date')->toArray();
+        $incomeData = $transactionData->pluck('income')->toArray();
+        $expenseData = $transactionData->pluck('expenses')->toArray();
 
         $data = [
-            "income" => $income,
-            "expenses" => $expenses
+            'totals' => [
+                'income' => $incomeTotal,
+                'expenses' => $expensesTotal,
+                'accountReceivables' => $accountReceivables,
+                'accountPayables' => $accountPayables,
+                'deposits' => $depositsTotal,
+                'withdrawals' => $withdrawalsTotal,
+            ],
+            'charts' => [
+                'labels' => $labels,
+                'income' => $incomeData,
+                'expenses' => $expenseData,
+            ]
         ];
 
+    return view("pages.common.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
+}
 
 
-        return view("pages.common.wallet-management.dashboard", compact("data", "date_range", "from_date", "to_date"));
-    }
 
     public function account_receivables()
     {
