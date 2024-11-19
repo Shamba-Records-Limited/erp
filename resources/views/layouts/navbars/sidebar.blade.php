@@ -119,6 +119,11 @@ $cooperative = null;
                     <i class="ni ni-single-02 text-custom-green"></i> {{ __('User') }}
                 </a>
             </li>
+            <li class="nav-item {{ active_class(['admin/roles*']) }} mb-3">
+                <a class="nav-link" href="{{ route('admin.roles.show') }}">
+                    <i class="ni ni-key-25 text-custom-green"></i> {{ __('Roles') }}
+                </a>
+            </li>
              <!-- <li class="nav-item {{ active_class(['admin/employees']) }}">
                 <a class="nav-link" href="{{ route('admin.employees.show') }}">
                     <i class="menu-icon mdi mdi-cogs"></i>
@@ -138,11 +143,6 @@ $cooperative = null;
             <li class="nav-item {{ active_class(['admin/collections*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.collections.show') }}">
                     <i class="ni ni-credit-card text-custom-green"></i> {{ __('Collections') }}
-                </a>
-            </li>
-            <li class="nav-item {{ active_class(['admin/roles*']) }} mb-3">
-                <a class="nav-link" href="{{ route('admin.roles.show') }}">
-                    <i class="ni ni-key-25 text-custom-green"></i> {{ __('Roles') }}
                 </a>
             </li>
          <!-- Module Management Dropdown -->

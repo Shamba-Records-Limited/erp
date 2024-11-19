@@ -83,6 +83,7 @@ class FarmersController extends Controller
             $farmer->member_no = $request->id_no;
             $farmer->gender = $request->gender[0];
             $farmer->phone_no = $request->phone_no;
+            $farmer->dob = $request->dob;
             $farmer->save();
 
             //get roles
