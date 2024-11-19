@@ -203,7 +203,7 @@ foreach ($collections as $collection) {
                                 <td>{{ $collection->collection_number }}</td>
                                 <td>{{ $collection->lot_number }}</td>
                                 <td>
-                                    <a href="{{ route('cooperative-admin.farmers.detail', $collection->farmer_id) }}">{{ $collection->username }}</a>
+                                    <a href="{{ route('cooperative-admin.farmers.detail', $collection->farmer_id) }}">{{ $collection->first_name }} {{ $collection->other_names }}</a>
                                 </td>
                                 <td>{{ $collection->product_name }}</td>
                                 <td>{{ number_format($collection->quantity) }}</td> <!-- Format with commas -->

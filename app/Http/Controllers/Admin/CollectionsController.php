@@ -15,7 +15,7 @@ class CollectionsController extends Controller
     public function index()
     {
         $collections = DB::select(DB::raw("
-            SELECT usr.username, p.name as product_name, quantity, c.*, pc.unit,
+            SELECT usr.username,usr.first_name,usr.other_names, p.name as product_name, quantity, c.*, pc.unit,
                    co.name as cooperative_name
             FROM collections c
             JOIN farmers f ON f.id = c.farmer_id
