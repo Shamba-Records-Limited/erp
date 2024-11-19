@@ -23,7 +23,7 @@
 
         <!-- Welcome content with title, subtitle, image, and CTA button -->
         <div class="welcome-content">
-            <h2 class="welcome-title">Welcome to Shamba Traceability ERP</h2>
+            <h2 class="welcome-title">Welcome to Shamba Traceability</h2>
             <p class="welcome-subtitle">
                 Enhancing agricultural transparency and traceability with a powerful ERP solution for cooperatives and producers.
             </p>
