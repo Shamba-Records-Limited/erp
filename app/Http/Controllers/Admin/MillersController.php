@@ -64,7 +64,10 @@ class MillersController extends Controller
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
             'u_name' => 'required|unique:users,username',
+            'miller_logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+        // Store the logo file
+        $logoPath = $request->file('miller_logo')->store('logos', 'public');
 
         try {
             DB::beginTransaction();
@@ -77,6 +80,8 @@ class MillersController extends Controller
             $miller->email = $request->miller_email;
             $miller->address = $request->address;
             $miller->phone_no = $request->phone_no;
+            $miller->logo = $logoPath;
+
             $miller->save();
 
             // Miller Branch

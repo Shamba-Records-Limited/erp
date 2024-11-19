@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Log;
 use Spatie\Permission\Models\Role;
+use App\Miller;
 
 class WarehousesController extends Controller
 {
@@ -122,6 +123,8 @@ class WarehousesController extends Controller
         // }
 
         $warehouses = collect(MillerWarehouse::where("miller_id", $miller_id)->get());
+        $miller = collect(Miller::where("id", $miller_id)->get());
+        $logo = $miller->first()->logo ?? null;
 
         if ($type != env('PDF_FORMAT')) {
             $file_name = strtolower('warehouses_' . date('d_m_Y')) . '.' . $type;
@@ -138,6 +141,7 @@ class WarehousesController extends Controller
                 'records' => $warehouses,
                 'filename' => strtolower('warehouses_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'logo' => $logo
             ];
             return download_pdf($columns, $data);
         }

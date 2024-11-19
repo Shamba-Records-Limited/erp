@@ -82,7 +82,6 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Aggregator Count</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="cooperativesCount">{{$data["cooperatives_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-info text-white rounded-circle shadow">
@@ -445,24 +444,7 @@
     });
 
     // Grade distribution chart with comma formatting on x-axis
-    let gradeDistributionData = @json($data['grade_distribution']);
-    let gradeDistributionLabels = gradeDistributionData.map(c => c.name);
-    let gradeDistributionValues = gradeDistributionData.map(c => c.quantity);
-    let gradeDistributionBarChartCanvas = document.getElementById("GradeDistributionBarChart");
-
-    let gradeDistributionBarData = {
-        datasets: [{
-            data: gradeDistributionValues,
-            backgroundColor: ['rgba(65, 47, 38, 1)', 'rgba(165, 113, 80, 1)', 'rgba(184, 134, 11, 1)', 'rgba(245, 245, 220, 1)']
-        }],
-        labels: gradeDistributionLabels
-    };
-    let gradeDistributionBarOptions = { responsive: true, maintainAspectRatio: true };
-    let gradeDistributionChart = new Chart(gradeDistributionBarChartCanvas, {
-        type: "horizontalBar",
-        data: gradeDistributionBarData,
-        options: gradeDistributionBarOptions
-    });
+    
 
     // Collections by gender bar chart
     let maleCollectionsData = @json($data['male_collections']);
@@ -507,6 +489,7 @@
     let collectionsGenderPieChart = new Chart(collectionsGenderPieChartCanvas, { type: 'pie', data: collectionsGenderPieData, options: collectionsGenderPieOptions });
 
     // Age Distribution Bar Chart with Dummy Data
+    let ageDistributionData = @json($age_distribution);
     let ageDistributionData = [
         { age_group: "18-25", quantity: 3 },
         { age_group: "26-35", quantity: 8 },

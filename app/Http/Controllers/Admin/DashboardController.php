@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Farmer;
 
 class DashboardController extends Controller
 {
@@ -272,23 +273,20 @@ class DashboardController extends Controller
             }
 
             $collectionsByCooperative[$coop->name] = DB::select(DB::raw($myQuery), $params);
+            // cooperatives count
+            $cooperativesCount = DB::select(DB::raw("SELECT COUNT(*) AS count FROM cooperatives"))[0]->count;
+    
+            // coffee grade distribution
+            $grade_distribution = DB::select(DB::raw("
+                SELECT SUM(quantity) AS quantity, pg.name AS name
+                FROM lot_grade_distributions lgd
+                JOIN product_grades pg ON pg.id = lgd.product_grade_id
+                JOIN lots l ON l.lot_number = lgd.lot_number 
+                WHERE l.cooperative_id = :coop_id
+                GROUP BY lgd.product_grade_id
+                ORDER BY quantity DESC
+            "), ["coop_id" => $coop_id]);    
         }
-
-        // cooperatives count
-        $cooperativesCount = DB::select(DB::raw("SELECT COUNT(*) AS count FROM cooperatives"))[0]->count;
-
-        // coffee grade distribution
-        $grade_distribution = DB::select(DB::raw("
-            SELECT SUM(quantity) AS quantity, pg.name AS name
-            FROM lot_grade_distributions lgd
-            JOIN product_grades pg ON pg.id = lgd.product_grade_id
-            JOIN lots l ON l.lot_number = lgd.lot_number 
-            WHERE l.cooperative_id = :coop_id
-            GROUP BY lgd.product_grade_id
-            ORDER BY quantity DESC
-        "), ["coop_id" => $coop_id]);
-
-
 
         $data = [
             "total_collection_weight" => $totalCollectionWeight,
@@ -296,14 +294,36 @@ class DashboardController extends Controller
             "collection_count" => $collectionCount,
             "collections" => $collections,
             "collections_by_cooperative" => $collectionsByCooperative,
-            "cooperatives_count" => $cooperativesCount,
-            "grade_distribution" => $grade_distribution,
+            // "cooperatives_count" => $cooperativesCount,
+            // "grade_distribution" => $grade_distribution,
             "male_collections" => $maleCollections,
             "female_collections" => $femaleCollections,
             "age_distribution" => $age_distribution, // Added age distribution
         ];
+        
+        //Farmer age distribution
+        $ageDistribution = Farmer::selectRaw("
+        CASE 
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 18 AND 25 THEN '18-25'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 26 AND 35 THEN '26-35'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 36 AND 45 THEN '36-45'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 46 AND 55 THEN '46-55'
+            WHEN TIMESTAMPDIFF(YEAR, dob, CURDATE()) BETWEEN 56 AND 65 THEN '56-65'
+            ELSE '66+'
+	END as age_group, COUNT(*) as quantity
+    ")
+    ->groupBy('age_group')
+    ->orderByRaw("FIELD(age_group, '18-25', '26-35', '36-45', '46-55', '56-65', '66+')")
+    ->get()->toArray();
+    $age_distribution=json_encode($ageDistribution);
 
+        // Generate gender distribution data
+        $genderDistribution = Farmer::select('gender', DB::raw('COUNT(*) as quantity'))
+        ->groupBy('gender')
+        ->orderBy('gender') // Optional: Order genders alphabetically
+        ->get()->toArray();
+        $gender_distribution=json_encode($genderDistribution);
 
-        return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
+        return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date", "gender_distribution", "age_distribution"));
     }
 }
