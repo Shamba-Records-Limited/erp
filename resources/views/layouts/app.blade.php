@@ -536,6 +536,89 @@
 
         return nav;
     }
+
+    //dynamic pdf generation
+    var titleText = document.getElementById('title_header').textContent.trim();
+    var cleanTitle = titleText.trim().replace(/\s+/g, '').replace(/[^a-zA-Z0-9]/g, '');
+    var cleanfileName = (cleanTitle + '.xlsx').toLowerCase();
+
+    var tableHeaders = [];
+    $('#jsonDataTable thead th').each(function() {
+        tableHeaders.push($(this).text());
+    });
+    $(document).ready(function() {
+        $('#exportButton').on('click', function() {
+            // Send both headers and JSON data to the server via AJAX
+            $.ajax({
+                url: '{{ route('common.dataexport.exportjsonexceldata') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',  // CSRF token for security
+                    data: jsonData,  // Send the JSON data
+                    headers: tableHeaders,  // Send the table headers
+                },
+                xhrFields: {
+                    responseType: 'blob' // Expect the response to be a binary file
+                },
+                success: function(response, status, xhr) {
+                    // Get the file name from the Content-Disposition header
+                    var disposition = xhr.getResponseHeader('Content-Disposition');
+                    var fileName = cleanfileName; // Default file name
+                    if (disposition && disposition.indexOf('attachment') !== -1) {
+                        var match = disposition.match(/filename="([^"]+)"/);
+                        if (match && match[1]) {
+                            fileName = match[1];
+                        }
+                    }
+
+                    // Create a Blob object and trigger the download
+                    var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = fileName;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url); // Clean up
+                },
+                error: function(xhr, status, error) {
+                    console.error('Export failed:', error);
+                    alert('Failed to export the file. Please try again.');
+                }
+            });
+        });
+    });
+
+    ///PDF///
+    $(document).ready(function () {
+        const csrfToken = $('meta[name="csrf-token"]').attr('content');
+        $('#export-btn-pdf').click(function () {
+            $.ajax({
+                url: '/export-json-pdf',
+                method: 'POST',
+                data: {
+                    data: jsonData,
+                    headers: tableHeaders,
+                    title: titleText,
+                    _token: '{{ csrf_token() }}',  // CSRF token for security
+                },
+                xhrFields: {
+                    responseType: 'blob' // Expecting binary data
+                },
+                success: function (response) {
+                    const blob = new Blob([response], { type: 'application/pdf' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = titleText + '.pdf';
+                    link.click();
+                },
+                error: function (error) {
+                    alert("There was an error generating the PDF.");
+                }
+            });
+        });
+    });
     </script>
     @stack('custom-scripts')
 </body>

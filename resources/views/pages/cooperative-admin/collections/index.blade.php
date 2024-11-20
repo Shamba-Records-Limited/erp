@@ -24,11 +24,11 @@ $collection_time_options = config('enums.collection_time');
                         aria-expanded="@if ($errors->count() > 0) true @else false @endif"
                         aria-controls="addCollectionForm"><span class="mdi mdi-plus"></span>Collect
                     </button>
-                    <a class="btn btn-primary btn-fw btn-sm"
+                    <a class="btn btn-primary btn-fw btn-sm" 
                         href="{{route('cooperative-admin.collections.export', 'xlsx')}}"><span
                             class="mdi mdi-file-excel"></span>Export Excel
                     </a>
-                    <a class="btn btn-primary btn-fw btn-sm"
+                    <a class="btn btn-primary btn-fw btn-sm" 
                         href="{{route('cooperative-admin.collections.export', 'pdf')}}"><span
                             class="mdi mdi-file-pdf"></span>Export Pdf
                     </a>
@@ -212,9 +212,9 @@ $collection_time_options = config('enums.collection_time');
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Collections</h4>
+                <h4 class="card-title" id="title_header">Collections</h4>
                 <div class="table-responsive">
-                    <table class="table table-hover dt clickable">
+                    <table class="table table-hover dt clickable" id="jsonDataTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -257,7 +257,9 @@ $collection_time_options = config('enums.collection_time');
                                             Actions
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="text-primary dropdown-item" href="#">
+                                            <a class="text-primary dropdown-item" id="export-btn-pdf" >
+                                            <!-- href="{{ route('cooperative-admin.collections_receipt', $collection->id) }}" -->
+                                            
                                                 <i class="fa fa-pdf"></i> Generate Receipt
                                             </a>
                                         </div>
@@ -307,5 +309,8 @@ function set_unit_id() {
 $(document).ready(function() {
     set_unit_id();
 });
+
+//pass single record of data 
+var jsonData = @json($collections);
 </script>
 @endpush

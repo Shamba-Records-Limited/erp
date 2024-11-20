@@ -412,6 +412,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     })->name('cooperative-admin.download-upload-collections-template');
     Route::post('/collections/import-bulk', 'CooperativeAdmin\CollectionsController@import_bulk')
         ->name('cooperative-admin.collections.import-bulk');
+    Route::get('/collections/receipt/{id}', 'CooperativeAdmin\CollectionsController@print_transaction_receipt')
+            ->name('cooperative-admin.collections_receipt');
 
     // orders
     Route::get("/orders", "CooperativeAdmin\OrdersController@index")
@@ -2762,3 +2764,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
+
+Route::post('/export-json-excel', 'Common\DataExportController@exportJsonExcelData')->name('common.dataexport.exportjsonexceldata');
+Route::post('/export-json-pdf', 'Common\DataExportController@exportPdfData')->name('common.dataexport.exportjsonpdfdata');

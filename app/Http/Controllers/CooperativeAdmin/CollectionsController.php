@@ -312,16 +312,16 @@ class CollectionsController extends Controller
                 ]);
             }
         }
-// Calculate KPIs
-$totalCollections = count($collections);
-$totalQuantityCollected = array_sum(array_column($collections, 'y')); // Use 'y' from the query result
-$averageCollectionPerLot = $totalCollections > 0 ? $totalQuantityCollected / $totalCollections : 0;
-    // Update this mapping to match your database values
-$collectionTimeLabels = [
-    1 => 'Morning',
-    2 => 'Afternoon',
-    3 => 'Evening',
-];
+    // Calculate KPIs
+    $totalCollections = count($collections);
+    $totalQuantityCollected = array_sum(array_column($collections, 'y')); // Use 'y' from the query result
+    $averageCollectionPerLot = $totalCollections > 0 ? $totalQuantityCollected / $totalCollections : 0;
+        // Update this mapping to match your database values
+    $collectionTimeLabels = [
+        1 => 'Morning',
+        2 => 'Afternoon',
+        3 => 'Evening',
+    ];
     // Retrieve and format `collection_time` data with labels
     $collectionTimeData = DB::table('collections')
         ->select('collection_time', DB::raw('count(*) as count'))
@@ -397,4 +397,27 @@ $collectionTimeLabels = [
             return redirect()->back();
         }
     }
+
+
+    public function print_transaction_receipt($id){
+        // Retrieve the collection by ID
+    $collections = Collection::find($id);
+    if (!$collections) {
+        abort(404, 'Collection not found.');
+    }
+    // Fetch the unit name dynamically
+    $unit = DB::table('products')
+        ->join('units', 'products.unit_id', '=', 'units.id')
+        ->where('products.id', $collections->product_id)
+        ->value('units.name') ; // Retrieves the unit name directly
+
+    $collectionTimeLabels = [
+                1 => 'Morning',
+                2 => 'Afternoon',
+                3 => 'Evening',
+            ];
+    // dd($collections);
+    return view('pages.cooperative-admin.collections.collections_receipt', compact('collections', 'unit', 'collectionTimeLabels'));
+    }
+
 }

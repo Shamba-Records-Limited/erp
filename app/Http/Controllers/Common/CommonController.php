@@ -149,6 +149,7 @@ class CommonController extends Controller
         return view('pages.common.transaction_receipt', compact('transaction', 'lots'));
     }
 
+
     public function print_receipt($id) {
         $receipt = Receipt::find($id);
 
