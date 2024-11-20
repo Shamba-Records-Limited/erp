@@ -80,7 +80,7 @@ class FarmersController extends Controller
             $farmer->county_id = $request->county_id;
             $farmer->sub_county_id = $request->sub_county_id;
             $farmer->id_no = $request->id_no;
-            $farmer->member_no = $request->id_no;
+            $farmer->member_no = $request->member_no;
             $farmer->gender = $request->gender[0];
             $farmer->phone_no = $request->phone_no;
             $farmer->dob = $request->dob;
@@ -125,12 +125,16 @@ class FarmersController extends Controller
                 f.*,
                 u.*,
                 county.name as county_name,
-                sub_county.name as sub_county_name
+                sub_county.name as sub_county_name,
+                COALESCE(SUM(c.quantity), 0) as total_collection_quantity
             FROM farmers f
             JOIN users u ON f.user_id = u.id
             LEFT JOIN counties county ON county.id = f.county_id
             LEFT JOIN sub_counties sub_county ON sub_county.id = f.sub_county_id
-            WHERE f.id = :id;
+            LEFT JOIN collections c ON c.farmer_id = f.id
+            WHERE f.id = :id
+            GROUP BY f.id, u.id, county.name, sub_county.name;
+
         "), ["id" => $id]);
 
         $farmer = null;
