@@ -20,24 +20,34 @@ class RolesController extends Controller
                 FROM roles r;
             "));
 
+
         return view('pages.admin.roles.index', compact('roles'));
     }
 
-    public function detail_permissions($id)
-    {
-        $roles = DB::select(DB::raw("
-                SELECT r.id, r.name
-                FROM roles r
-                WHERE r.id = :id;
-            "), ["id" => $id]);
+ public function detail_permissions($id)
+{
+    // Fetch role details
+    $roles = DB::select(DB::raw("
+            SELECT r.id, r.name
+            FROM roles r
+            WHERE r.id = :id;
+        "), ["id" => $id]);
 
-        $role = null;
-        if (count($roles) > 0){
-            $role = $roles[0];
-        }
-
-        return view('pages.admin.roles.detail-tabs.permissions', compact('role', 'id'));
+    $role = null;
+    if (count($roles) > 0) {
+        $role = $roles[0];
     }
+
+    // Fetch permissions for the role
+    $permissions = DB::select(DB::raw("
+            SELECT p.id, p.name
+            FROM permissions p
+            INNER JOIN role_has_permissions rp ON rp.permission_id = p.id
+            WHERE rp.role_id = :id;
+        "), ["id" => $id]);
+
+    return view('pages.admin.roles.detail-tabs.permissions', compact('role', 'id', 'permissions'));
+}
 
     public function detail_users($id)
     {
@@ -55,4 +65,5 @@ class RolesController extends Controller
 
         return view('pages.admin.roles.detail-tabs.users', compact('role', 'id'));
     }
+
 }

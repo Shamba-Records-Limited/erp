@@ -9,9 +9,9 @@
     <div class="card-body">
         <h2 class="card-title">Role: {{$role->name}}</h2>
         <ul class="nav">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="{{ route('admin.roles.show_permissions_tab', $id) }}" class="nav-link">Permissions</a>
-            </li> -->
+            </li>
             <li class="nav-item">
                 <a href="{{ route('admin.roles.show_users_tab', $id) }}" class="nav-link active">Users</a>
             </li>
