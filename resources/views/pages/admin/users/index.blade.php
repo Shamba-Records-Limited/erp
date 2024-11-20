@@ -135,7 +135,7 @@
         usersToDisplay.forEach((user) => {
             const profileImage = user.profile_picture 
                 ? `/storage/${user.profile_picture}` 
-                : '/images/default-avatar.png'; // Fallback image
+                : '/assets/images/avatar.png'; // Fallback image
 
             const cardHtml = `
                 <div class="col-md-6 col-lg-3 mb-4">
@@ -161,7 +161,7 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item text-info" href="/admin/users/detail/${user.id}"><i class="fa fa-eye"></i> View Details</a>
+                                    <a class="dropdown-item text-info" href="/users/${user.id}"><i class="fa fa-eye"></i> View Details</a>
                                     <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
                                     <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
                                 </div>
