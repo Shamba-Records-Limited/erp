@@ -132,33 +132,38 @@
     function renderCards(usersToDisplay) {
         const container = document.getElementById("userCardsContainer");
         container.innerHTML = "";
-        usersToDisplay.forEach((user, index) => {
+        usersToDisplay.forEach((user) => {
+            const profileImage = user.profile_picture 
+                ? `/storage/${user.profile_picture}` 
+                : '/images/default-avatar.png'; // Fallback image
+
             const cardHtml = `
                 <div class="col-md-6 col-lg-3 mb-4">
-                    <div class="card shadow-sm" style="height: 320px;"> <!-- Fixed height for uniform size -->
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="d-flex align-items-center">
-                                    <div class="mr-3"></div>
-                                    <div>
-                                        <h5 class="card-title mb-1">${user.username}</h5>
-                                        <p class="card-text"><small class="text-muted">${user.coop_name}</small></p>
-                                    </div>
-                                </div>
-                                <hr>
-                                <p class="mb-1"><strong>Name:</strong> ${user.first_name} ${user.other_names}</p>
-                                <p class="mb-1"><strong>Email:</strong> ${user.email}</p>
-                            </div>
-                            <div>
-                                <div class="dropdown mt-3">
-                                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                                        Actions
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item text-info" href="/admin/users/detail/${user.id}"><i class="fa fa-eye"></i> View Details</a>
-                                        <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
-                                        <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
-                                    </div>
+                    <div class="card shadow-sm" style="height: 320px; position: relative;"> <!-- Fixed height for uniform size -->
+                        <!-- Profile Image in Top Right -->
+                        <div style="position: absolute; top: 10px; right: 10px;">
+                            <img 
+                                src="${profileImage}" 
+                                alt="${user.username}" 
+                                class="rounded-circle" 
+                                style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd;"
+                            >
+                        </div>
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <h5 class="card-title mb-1">${user.username}</h5>
+                            <p class="card-text"><small class="text-muted">${user.coop_name || 'N/A'}</small></p>
+                            <hr>
+                            <p class="mb-1"><strong>Name:</strong> ${user.first_name} ${user.other_names}</p>
+                            <p class="mb-1"><strong>Email:</strong> ${user.email}</p>
+                            <div class="dropdown mt-3">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Actions
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item text-info" href="/admin/users/detail/${user.id}"><i class="fa fa-eye"></i> View Details</a>
+                                    <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
+                                    <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -168,6 +173,7 @@
             container.innerHTML += cardHtml;
         });
     }
+
 
     function renderPaginationControls(totalItems) {
         const totalPages = Math.ceil(totalItems / itemsPerPage);

@@ -36,7 +36,7 @@ class UsersController extends Controller
     public function index()
     {
         $users = DB::select(DB::raw("
-                SELECT u.id, u.username, u.first_name, u.other_names, u.email, c.name as coop_name
+                SELECT u.id, u.username, u.first_name, u.other_names, u.email, u.profile_picture, c.name as coop_name
                 FROM users u
                 JOIN cooperatives c ON u.cooperative_id = c.id
                 ORDER BY u.created_at DESC;
@@ -67,7 +67,13 @@ class UsersController extends Controller
             $user->cooperative_id = $request->cooperative_id;
             $user->email = $request->email;
             $user->username = $request->username;
-            save_user_image($user, $request);
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                $filePath = $file->store('uploads/profile_pictures', 'public'); // Save in 'storage/app/public'
+                $user->profile_picture = $filePath; // Save file path to the database
+            }
 
             $password = generate_password();
             $user->password = Hash::make($password);
@@ -137,18 +143,52 @@ class UsersController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required',
+            'username' => 'required',
             'first_name' => 'required',
             'other_names' => 'required',
+            'email' => 'required|email',
+            'profile_picture' => 'sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072',
         ]);
 
-        $user = User::find($id);
-        $user->username = $request->name;
-        $user->first_name = $request->first_name;
-        $user->other_names = $request->other_names;
-        $user->save();
-        return redirect()->route('admin.users.show');
+        try {
+            $user = User::findOrFail($id);
+
+            // Update user details
+            $user->username = $request->username;
+            $user->first_name = $request->first_name;
+            $user->other_names = $request->other_names;
+            $user->email = $request->email;
+
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                // Log the file upload
+                Log::info('Profile picture uploaded for user: ' . $user->id);
+
+                // Delete old profile picture if it exists
+                if ($user->profile_picture && file_exists(public_path('storage/' . $user->profile_picture))) {
+                    unlink(public_path('storage/' . $user->profile_picture));
+                    Log::info('Old profile picture deleted: ' . $user->profile_picture);
+                }
+
+                // Save the new profile picture
+                $file = $request->file('profile_picture');
+                $filePath = $file->store('uploads/profile_pictures', 'public');
+                $user->profile_picture = $filePath;
+
+                Log::info('New profile picture stored at: ' . $filePath);
+            }
+
+            $user->save();
+
+            Log::info('User updated successfully: ' . $user->id);
+
+            return redirect()->route('admin.users.show')->with('success', 'User updated successfully!');
+        } catch (\Exception $e) {
+            Log::error('Error updating user: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Failed to update user']);
+        }
     }
+
 
     public function viewMakeEmployee($id)
     {
