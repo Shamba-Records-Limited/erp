@@ -1,6 +1,5 @@
 @extends('layouts.app', ['class' => 'bg-image'])
 
-
 @section('content')
 @include('layouts.headers.guest')
 
@@ -29,13 +28,28 @@
                             {{ __('Sign in with your credentials:') }}
                         </small>
                         <br>
-
                     </div>
                     <form role="form" method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div
-                            class="form-group{{ $errors->has('username') || $errors->has('email') ? ' has-danger' : '' }} mb-3">
+                        <div class="form-group mb-3">
+                            <!-- <label for="language">{{ __('Language') }}</label> -->
+                            <select class="form-control" id="language" name="language" required>
+                                <option value="English" selected>{{ __('English') }}</option>
+                                <option value="Spanish">{{ __('Spanish') }}</option>
+                                <option value="French">{{ __('French') }}</option>
+                                <option value="German">{{ __('German') }}</option>
+                                <option value="Chinese">{{ __('Chinese') }}</option>
+                                <option value="Japanese">{{ __('Japanese') }}</option>
+                                <option value="Swahili">{{ __('Swahili') }}</option>
+                                <option value="Arabic">{{ __('Arabic') }}</option>
+                                <option value="Hindi">{{ __('Hindi') }}</option>
+                                <option value="Portuguese">{{ __('Portuguese') }}</option>
+                                <option value="Russian">{{ __('Russian') }}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('username') || $errors->has('email') ? ' has-danger' : '' }} mb-3">
                             <div class="input-group input-group-alternative">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="ni ni-email-83"></i></span>
@@ -67,6 +81,7 @@
                             </span>
                             @endif
                         </div>
+
                         <div class="custom-control custom-control-alternative custom-checkbox">
                             <input class="custom-control-input" name="remember" id="customCheckLogin" type="checkbox"
                                 {{ old('remember') ? 'checked' : '' }}>
