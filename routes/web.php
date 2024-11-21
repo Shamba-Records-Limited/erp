@@ -191,8 +191,6 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.users.show');
     Route::post('/users', 'Admin\UsersController@store')
         ->name('admin.users.add');
-    Route::get('/users/{id}', 'Admin\UsersController@detail')
-        ->name('admin.users.detail');
     Route::get('/users/make-employee/{id}', 'Admin\UsersController@viewMakeEmployee')
         ->name('admin.users.view-make-employee');
     Route::post('/users/make-employee/{id}', 'Admin\UsersController@makeEmployee')
@@ -201,12 +199,18 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.users.view-make-county-govt-official');
     Route::post('/users/make-employee', 'Admin\UsersController@makeCountyGovtAcc')
         ->name('admin.users.make-county-govt-official');
+
+    Route::get('/users/view/{id}', 'Admin\UsersController@detail')
+        ->name('admin.users.detail');
+
     Route::get('/users/edit/{id}', 'Admin\UsersController@edit')
         ->name('admin.users.edit');
     Route::post('/users/edit/{id}', 'Admin\UsersController@update')
-        ->name('admin.users.update');
+        ->name('admin.users.update');    
+    Route::get('/users/delete/{id}', 'Admin\UsersController@delete')
+        ->name('admin.users.delete');
+
     // todo: implement activate/deactivate
-    // todo: implement delete
 
     // employees
     Route::get('/employees', 'Admin\EmployeesController@index')

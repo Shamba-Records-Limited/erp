@@ -98,6 +98,7 @@ class UsersController extends Controller
                     u.first_name,
                     u.other_names,
                     u.email,
+                    u.profile_picture,
                     c.name as coop_name,
                     official.id as official_id,
                     official_county.name as official_county,
@@ -186,6 +187,32 @@ class UsersController extends Controller
         } catch (\Exception $e) {
             Log::error('Error updating user: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Failed to update user']);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            // Delete related data if necessary
+            if ($user->profile_picture && file_exists(public_path('storage/' . $user->profile_picture))) {
+                unlink(public_path('storage/' . $user->profile_picture));
+            }
+
+            // Remove user roles if using Spatie roles
+            $user->roles()->detach();
+
+            // Delete user
+            $user->delete();
+
+            Log::info("User deleted successfully: $id");
+
+            toastr()->success('User deleted successfully');
+            return redirect()->route('admin.users.index');
+        } catch (\Throwable $th) {
+            Log::error('Error deleting user: ' . $th->getMessage());
+            return redirect()->back();
         }
     }
 

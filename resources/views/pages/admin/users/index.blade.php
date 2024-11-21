@@ -161,9 +161,9 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item text-info" href="/users/${user.id}"><i class="fa fa-eye"></i> View Details</a>
-                                    <a class="dropdown-item text-warning" href="/admin/users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
-                                    <a class="dropdown-item text-danger" href="#" onclick="deleteUser(${user.id})"><i class="fa fa-trash"></i> Delete</a>
+                                    <a class="dropdown-item text-info" href="users/view/${user.id}" onclick="viewUserDetails(${user.id})"><i class="fa fa-eye"></i> View Details</a>
+                                    <a class="dropdown-item text-warning" href="users/edit/${user.id}"><i class="fa fa-edit"></i> Edit</a>
+                                    <a class="dropdown-item text-danger" href="users/delete/${user.id}" onclick="confirmDelete(${user.id})"><i class="fa fa-trash"></i> Delete</a>
                                 </div>
                             </div>
                         </div>
@@ -212,6 +212,12 @@
         );
     }
 
+    function viewUserDetails(userId) {
+        const url = `users/view/${userId}`; // Construct the user details URL
+        console.log(`Redirecting to: ${url}`);
+        window.location.href = url; // Redirect to the user details page
+    }
+
     document.getElementById("searchInput").addEventListener("input", function() {
         const query = this.value;
         const filteredUsers = filterUsers(query);
@@ -222,10 +228,27 @@
     // Initial load
     displayPage(users);
 
-    function deleteUser(id) {
+    function confirmDelete(userId) {
         if (confirm("Are you sure you want to delete this user?")) {
-            window.location.href = "/admin/users/delete/" + id;
+            fetch(`/users/delete/${userId}`, {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("User deleted successfully");
+                    location.reload();
+                } else {
+                    alert("Error deleting user");
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
     }
+
+    renderCards(users);
 </script>
 @endpush

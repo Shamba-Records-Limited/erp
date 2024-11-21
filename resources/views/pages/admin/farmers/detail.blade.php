@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="economic-data detail-card mb-4">
-                        <h4 class="card-heading"><i class="fas fa-chart-line"></i> Economic Data</h4>
+                        <h4 class="card-heading"><i class="fas fa-chart-line"></i> Identification Data</h4>
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-id-card"></i></span>
                             <span class="label">ID Number:</span>
