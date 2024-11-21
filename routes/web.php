@@ -2771,3 +2771,4 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::post('/export-json-excel', 'Common\DataExportController@exportJsonExcelData')->name('common.dataexport.exportjsonexceldata');
 Route::post('/export-json-pdf', 'Common\DataExportController@exportPdfData')->name('common.dataexport.exportjsonpdfdata');
+Route::post('/print-cooperative-receipt', 'Common\DataExportController@printCooperativeReceipt')->name('common.dataexport.printmillereceipt');

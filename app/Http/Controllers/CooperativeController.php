@@ -68,13 +68,18 @@ class CooperativeController extends Controller
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
             'u_name' => 'required|unique:users,username',
-            "main_product_id" => 'required|exists:products,id'
+            "main_product_id" => 'required|exists:products,id',
+            'logo' => 'nullable|image|max:2048',
         ]);
 
         try {
 
             DB::beginTransaction();
+            $logoPath = null;
 
+                if ($request->hasFile('company_logo')) {
+                    $logoPath = $request->file('company_logo')->store('logos', 'public');
+                }
             $cooperative = new Cooperative();
             $cooperative->name = $request->cooperative_name;
             $cooperative->abbreviation = $request->abbr;
@@ -85,6 +90,7 @@ class CooperativeController extends Controller
             $cooperative->contact_details = $request->cooperative_contact;
             $cooperative->currency = $request->cooperative_currency;
             $cooperative->main_product_id = $request->main_product_id;
+            $cooperative->logo = $logoPath;
             $cooperative->save();
 
             $cooperative_id = $cooperative->id;

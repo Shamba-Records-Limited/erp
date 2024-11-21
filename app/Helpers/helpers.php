@@ -1547,18 +1547,36 @@ if (!function_exists('perform_transaction')) {
     }
 
     if (!function_exists('download_pdf2')) {
-    function download_pdf2($columns, $data)
-    {
-        $pdf_view = $data['pdf_view'];
-        $title = $data['title'];
-        $period = Carbon::now()->format('D, d M Y  H:i:s');
-        $records = $data['records'];
-        $summation = $data['summation'] ?? null;
-        $pdf = app('dompdf.wrapper');
-        $pdf->setPaper('letter', $data['orientation']);
-        $pdf->loadView('pdf.export', compact('title', 'period', 'records', 'columns', 'summation'));
-        $file_name = $data['filename'];
-        return $pdf->download($file_name . '.pdf');
+        function download_pdf2($columns, $data)
+        {
+            $pdf_view = $data['pdf_view'];
+            $title = $data['title'];
+            $period = Carbon::now()->format('D, d M Y  H:i:s');
+            $records = $data['records'];
+            $summation = $data['summation'] ?? null;
+            $pdf = app('dompdf.wrapper');
+            $pdf->setPaper('letter', $data['orientation']);
+            $pdf->loadView('pdf.export', compact('title', 'period', 'records', 'columns', 'summation'));
+            $file_name = $data['filename'];
+            return $pdf->download($file_name . '.pdf');
+        }
     }
-}
+
+    if (!function_exists('print_collection_receipt')) {
+
+        function print_collection_receipt($columns, $data)
+        {
+            $pdf_view = $data['pdf_view'];
+            $title = $data['title'];
+            $period = Carbon::now()->format('D, d M Y  H:i:s');
+            $records = $data['records'];
+            $logo = $data['logo'];
+            $summation = $data['summation'] ?? null;
+            $pdf = app('dompdf.wrapper');
+            $pdf->setPaper('letter', $data['orientation']);
+            $pdf->loadView('pdf.collection_receipt', compact('title', 'period', 'records', 'columns', 'summation','logo'));
+            $file_name = $data['filename'];
+            return $pdf->download($file_name . '.pdf');
+        }
+    }
 }
