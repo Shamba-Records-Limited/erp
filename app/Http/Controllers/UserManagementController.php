@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use App\Role;
 
 class UserManagementController extends Controller
 {
@@ -43,6 +44,11 @@ class UserManagementController extends Controller
         $this->validate($request, [
             'role' => 'required|string'
         ]);
+
+          Role::create([
+            'name' => $request->input('role'),
+            'guard_name' => 'web',
+        ]);
         $user = Auth::user();
         $role = new CooperativeInternalRole();
         $role->role = $request->role;
@@ -50,7 +56,9 @@ class UserManagementController extends Controller
         $role->save();
         $data = ['user_id' => $user->id, 'activity' => 'created  ' . $request->role . ' Internal Role', 'cooperative_id' => $user->cooperative->id];
         event(new AuditTrailEvent($data));
+
         toastr()->success('Role Created Successfully');
+
         return redirect()->back();
     }
 
