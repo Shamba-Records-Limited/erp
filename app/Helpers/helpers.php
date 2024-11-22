@@ -1571,10 +1571,11 @@ if (!function_exists('perform_transaction')) {
             $period = Carbon::now()->format('D, d M Y  H:i:s');
             $records = $data['records'];
             $logo = $data['logo'];
+            $qr_code = $data['qr_code'];
             $summation = $data['summation'] ?? null;
             $pdf = app('dompdf.wrapper');
             $pdf->setPaper('letter', $data['orientation']);
-            $pdf->loadView('pdf.collection_receipt', compact('title', 'period', 'records', 'columns', 'summation','logo'));
+            $pdf->loadView('pdf.collection_receipt', compact('title', 'period', 'records', 'columns', 'summation','logo','qr_code'));
             $file_name = $data['filename'];
             return $pdf->download($file_name . '.pdf');
         }

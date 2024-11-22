@@ -152,8 +152,9 @@
         <tbody>
             <tr style="vertical-align: center;">
                 <td style="width: 5.2em;">
-                    <img src="{{ asset('storage/' . $logo) }}" alt="Logo" style="height: 5em; width: 5em;">
+                    <img src="{{ asset('storage/logos/' . $logo) }}" alt="Logo" style="height: 5em; width: 5em;">
                 </td>
+                <p>Logo: {{$logo}} </p>
             </tr>
         </tbody>
     </table>
@@ -201,7 +202,7 @@
         </tbody>
     </table>
     <div class="d-flex justify-content-center">
-    {!! QrCode::size(150)->generate('Transaction Receipt') !!}
+{!! QrCode::size(200)->generate($title) !!}
     </div>
 </body>
 </html>

@@ -16,7 +16,7 @@ use App\Collection;
 use App\Cooperative;
 use App\Miller;
 use DB;
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class DataExportController extends Controller
@@ -122,14 +122,14 @@ public function printCooperativeReceipt(Request $request){
     $miller_id = null;
     $logo_path='';
     //1. Miller
-    if ($user->miller_admin) {
-        $miller_id = $user->miller_admin->miller_id;
+    if ($user->miller) {
+        $miller_id = $user->miller_id;
         $miller = collect(Miller::where("id", $miller_id)->get());
         $logo_path = $miller->first()->logo ?? null;
     }
     //2.cooperative
-    if ($user->cooperative_admin) {
-        $cooperative_id = $user->cooperative_admin->cooperative_id;
+    if ($user->cooperative) {
+        $cooperative_id = $user->cooperative_id;
         $cooperative = collect(Cooperative::where("id", $cooperative_id)->get());
         $logo_path = $cooperative->first()->logo ?? null;
     }
@@ -143,6 +143,7 @@ public function printCooperativeReceipt(Request $request){
       $headers = $request->input('headers');
       $collection_id = $request->input('data');
       $id_type=$request->input('id_type');
+      $qrCode = QrCode::size(200)->generate($collection_id); // Generate the QR code
       $jsonPrepData = $this->prepData($collection_id,$id_type);
          $columns = $headers;
          $data = [
@@ -152,7 +153,9 @@ public function printCooperativeReceipt(Request $request){
              'filename' => strtolower(preg_replace('/[^A-Za-z0-9_-]/', '', $title) . '' . date('d_m_Y')),
              'orientation' => 'letter',
              'logo' => $logo_path,
+             'qr_code' => $qrCode
          ];
+        //  dd($qrCode);
          return  print_collection_receipt($columns, $data);
 }
 
