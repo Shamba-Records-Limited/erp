@@ -12,9 +12,9 @@ $collection_time_options = config('enums.collection_time');
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Collections</h4>
+                <h4 class="card-title" id="title_header">Collections</h4>
                 <div class="table-responsive">
-                    <table class="table table-hover dt clickable">
+                    <table class="table table-hover dt clickable" id="jsonDataTable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -43,7 +43,7 @@ $collection_time_options = config('enums.collection_time');
                                             Actions
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="text-primary dropdown-item" href="#">
+                                            <a class="text-primary dropdown-item"  onclick="printReceipt('{{$collection->id}}')" >
                                                 <i class="fa fa-pdf"></i> Generate Receipt
                                             </a>
                                         </div>
@@ -85,5 +85,10 @@ $collection_time_options = config('enums.collection_time');
     $(document).ready(function() {
         set_unit_id();
     });
+
+    var jsonData = @json($collections);
+    var id_type = 'collection_receipt';
+    var titleText = '  Collection Receipt';
+
 </script>
 @endpush

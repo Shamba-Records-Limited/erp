@@ -154,7 +154,6 @@
                 <td style="width: 5.2em;">
                     <img src="{{ asset('storage/logos/' . $logo) }}" alt="Logo" style="height: 5em; width: 5em;">
                 </td>
-                <p>Logo: {{$logo}} </p>
             </tr>
         </tbody>
     </table>

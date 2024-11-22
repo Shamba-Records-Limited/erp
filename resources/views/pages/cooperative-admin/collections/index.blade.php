@@ -311,38 +311,8 @@ $(document).ready(function() {
 
 //pass single record of data 
 var jsonData = @json($collections);
-
-var id_type = 'collection_receipt';
+ var id_type = 'collection_receipt';
 var titleText = '  Collection Receipt';
-///Print Receipt///
-function printReceipt(id){
-    $(document).ready(function () {
-        $.ajax({
-            url: '/print-cooperative-receipt',
-            method: 'POST',
-            data: {
-                data: id,
-                headers: tableHeaders,
-                title: titleText,
-                id_type: id_type,
-                _token: '{{ csrf_token() }}',  // CSRF token for security
-            },
-            xhrFields: {
-                responseType: 'blob' // Expecting binary data
-            },
-            success: function (response) {
-                const blob = new Blob([response], { type: 'application/pdf' });
-                const link = document.createElement('a');
-                link.href = window.URL.createObjectURL(blob);
-                link.download = titleText + '.pdf';
-                link.click();
-            },
-            error: function (error) {
-                alert("There was an error generating the PDF.");
-            }
-        });
-   
-});
-}
+
 </script>
 @endpush
