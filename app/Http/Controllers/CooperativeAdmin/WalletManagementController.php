@@ -491,7 +491,7 @@ public function dashboard(Request $request)
                 $miller_id = null;
             }    $coop_id = $user->cooperative->id;
 
-    $date_range = $request->query("date_range", "week");
+            $date_range = $request->query("date_range", "week");
             $from_date = $request->query("from_date", "");
             $to_date = $request->query("to_date", "");
 

@@ -214,104 +214,185 @@ class CollectionsController extends Controller
     {
             $coop_id = Auth::user()->cooperative->id;
 
-        // collection over time
-        $date_range = $request->query("date_range", "week");
-        $from_date = $request->query("from_date", "");
-        $to_date = $request->query("from_date", "");
-        $from_date_prev = "";
-        $to_date_prev = "";
-        $prevCollections = [];
+            $date_range = $request->query("date_range", "week");
+            $from_date = $request->query("from_date", "");
+            $to_date = $request->query("to_date", "");
+            $from_date_prev = "";
+            $to_date_prev = "";
+            $prevCollections = [];
 
-        if ($date_range == "custom") {
-            $from_date = $request->from_date;
-            $to_date = $request->to_date;
-        } else if ($date_range == "week") {
-            $from_date = date("Y-m-d", strtotime("-7 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Week";
-            $from_date_prev = date("Y-m-d", strtotime("-14 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-7 days"));
-        } else if ($date_range == "month") {
-            $from_date = date("Y-m-d", strtotime("-30 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Month";
-            $from_date_prev = date("Y-m-d", strtotime("-60 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-30 days"));
-        } else if ($date_range == "year") {
-            $from_date = date("Y-m-d", strtotime("-365 days"));
-            $to_date = date("Y-m-d");
-            $prev_range = "Last Year";
-            $from_date_prev = date("Y-m-d", strtotime("-730 days"));
-            $to_date_prev = date("Y-m-d", strtotime("-365 days"));
-        }
+            switch ($date_range) {
+                case "custom":
+                    $from_date = $request->query("from_date", now()->subDays(7)->format('Y-m-d'));
+                    $to_date = $request->query("to_date", now()->format('Y-m-d'));
+                    break;
+                case "week":
+                    $from_date = now()->subDays(7)->format('Y-m-d');
+                    $to_date = now()->format('Y-m-d');
+                    $from_date_prev = now()->subDays(14)->format('Y-m-d');
+                    $to_date_prev = now()->subDays(7)->format('Y-m-d');
+                    $prev_range = "Last Week";
+                    break;
+                case "month":
+                    $from_date = now()->subDays(30)->format('Y-m-d');
+                    $to_date = now()->format('Y-m-d');
+                    $from_date_prev = now()->subDays(60)->format('Y-m-d');
+                    $to_date_prev = now()->subDays(30)->format('Y-m-d');
+                    $prev_range = "Last Month";
+                    break;
+                case "year":
+                    $from_date = now()->subYear()->format('Y-m-d');
+                    $to_date = now()->format('Y-m-d');
+                    $from_date_prev = now()->subYears(2)->format('Y-m-d');
+                    $to_date_prev = now()->subYear()->format('Y-m-d');
+                    $prev_range = "Last Year";
+                    break;
+                default:
+                    throw new \InvalidArgumentException("Invalid date range: $date_range");
+            }
 
 
-        $suggested_chart_mode = "daily";
-        // to 60 days
-        if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
             $suggested_chart_mode = "daily";
-        }
-        // to 4 months
-        else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
-            $suggested_chart_mode = "weekly";
-        }
-        // to 3 years
-        else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
-            $suggested_chart_mode = "monthly";
-        } else {
-            $suggested_chart_mode = "yearly";
-        }
 
-
-
-        $collections = [];
-        if ($suggested_chart_mode == "daily") {
-            $dailyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT :from_date AS date
-                    UNION ALL
-                    SELECT DATE_ADD(date, INTERVAL 1 DAY)
-                    FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 DAY) <= :to_date
-                )
-                SELECT date_series.date AS x, IFNULL(SUM(collections.quantity), 0) AS y FROM date_series
-                LEFT JOIN collections ON date_series.date = collections.date_collected
-                GROUP BY date_series.date;
-            ";
-            $collections = DB::select(DB::raw($dailyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-            ]);
-            if ($from_date_prev != "") {
-                $prevCollections = DB::select(DB::raw($dailyQuery), [
-                    "from_date" => $from_date_prev,
-                    "to_date" => $to_date_prev,
-                ]);
+            // Determine suggested chart mode based on $date_range and duration
+            if ($date_range == "week") {
+                $suggested_chart_mode = "weekly";
+            } elseif ($date_range == "month") {
+                $suggested_chart_mode = "monthly";
+            } elseif ($date_range == "year") {
+                $suggested_chart_mode = "yearly"; 
+            } else {
+                // Custom or other ranges, fallback to duration-based logic
+                $range_duration = strtotime($to_date) - strtotime($from_date);
+                if ($range_duration < 60 * 24 * 60 * 60) {
+                    $suggested_chart_mode = "daily";
+                } elseif ($range_duration < 4 * 30 * 24 * 60 * 60) {
+                    $suggested_chart_mode = "weekly";
+                } elseif ($range_duration < 3 * 12 * 30 * 24 * 60 * 60) {
+                    $suggested_chart_mode = "monthly";
+                } else {
+                    $suggested_chart_mode = "yearly";
+                }
             }
-        } else if ($suggested_chart_mode == "monthly") {
-            $monthlyQuery = "
-                WITH RECURSIVE date_series AS (
-                    SELECT DATE_FORMAT(:from_date, '%Y-%b') AS month_year, :from_date AS date
-                    UNION ALL
-                    SELECT DATE_FORMAT(DATE_ADD(date, INTERVAL 1 MONTH), '%Y-%b'), DATE_ADD(date, INTERVAL 1 MONTH)
+
+            // dd($suggested_chart_mode, $from_date, $to_date);
+            $from_date_formatted = date('Y-m-01', strtotime($from_date));
+            $to_date_formatted = date('Y-m-d', strtotime($to_date));
+            // Fetch collections based on chart mode
+            $collections = [];
+            if ($suggested_chart_mode == "daily") {
+                $dailyQuery = "
+                    WITH RECURSIVE date_series AS (
+                        SELECT '$from_date_formatted' AS date
+                        UNION ALL
+                        SELECT DATE_ADD(date, INTERVAL 1 DAY)
+                        FROM date_series
+                        WHERE DATE_ADD(date, INTERVAL 1 DAY) <= '$to_date_formatted'
+                    )
+                    SELECT date_series.date AS x, IFNULL(SUM(c.quantity), 0) AS y
                     FROM date_series
-                    WHERE DATE_ADD(date, INTERVAL 1 MONTH) <= :to_date
-                )
-                SELECT date_series.month_year AS x, IFNULL(SUM(c.quantity), 0) AS y FROM date_series
-                LEFT JOIN collections c ON DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year
-                GROUP BY date_series.month_year;
-            ";
-            $collections = DB::select(DB::raw($monthlyQuery), [
-                "from_date" => $from_date,
-                "to_date" => $to_date,
-            ]);
-            if ($from_date_prev != "") {
-                $prevCollections = DB::select(DB::raw($monthlyQuery), [
-                    "from_date" => $from_date_prev,
-                    "to_date" => $to_date_prev,
+                    LEFT JOIN collections c ON date_series.date = c.date_collected
+                    AND c.cooperative_id = '$coop_id'
+                    GROUP BY date_series.date;
+                ";
+                $collections = DB::select($dailyQuery, [
+                    'from_date' => $from_date,
+                    'to_date' => $to_date,
                 ]);
+
+                if ($from_date_prev) {
+                    $prevCollections = DB::select($dailyQuery, [
+                        'from_date' => $from_date_prev,
+                        'to_date' => $to_date_prev,
+                    ]);
+                }
+            } 
+            if ($suggested_chart_mode == "weekly") {
+                $weeklyQuery = "
+                    WITH RECURSIVE date_series AS (
+                        SELECT DATE_FORMAT('$from_date_formatted', '%Y-%u') AS week_year, '$from_date_formatted' AS start_date
+                        UNION ALL
+                        SELECT DATE_FORMAT(DATE_ADD(start_date, INTERVAL 7 DAY), '%Y-%u'), DATE_ADD(start_date, INTERVAL 7 DAY)
+                        FROM date_series
+                        WHERE DATE_ADD(start_date, INTERVAL 7 DAY) <= '$to_date_formatted'
+                    )
+                    SELECT date_series.week_year AS x, IFNULL(SUM(c.quantity), 0) AS y
+                    FROM date_series
+                    LEFT JOIN collections c 
+                    ON DATE_FORMAT(c.date_collected, '%Y-%u') = date_series.week_year
+                    AND c.cooperative_id = '$coop_id'
+                    GROUP BY date_series.week_year, date_series.start_date
+                    ORDER BY date_series.start_date;               
+                ";
+
+               $collections = DB::select(DB::raw($weeklyQuery), [
+                    'from_date' => $from_date,
+                    'to_date' => $to_date,
+                    'coop_id' => $coop_id,
+                ]);
+
+                if ($from_date_prev != "") {
+                    $prevCollections = DB::select(DB::raw($weeklyQuery), [
+                        "from_date" => $from_date_prev,
+                        "to_date" => $to_date_prev,
+                    ]);
+                }
             }
-        }
+            elseif ($suggested_chart_mode == "monthly") {
+                $monthlyQuery = "
+                    WITH RECURSIVE date_series AS (
+                        SELECT DATE_FORMAT('$from_date_formatted', '%Y-%b') AS month_year,  '$from_date_formatted'  AS date
+                        UNION ALL
+                        SELECT DATE_FORMAT(DATE_ADD(date, INTERVAL 1 MONTH), '%Y-%b'), DATE_ADD(date, INTERVAL 1 MONTH)
+                        FROM date_series
+                        WHERE DATE_ADD(date, INTERVAL 1 MONTH) <= '$to_date_formatted'
+                    )
+                    SELECT date_series.month_year AS x, IFNULL(SUM(c.quantity), 0) AS y
+                    FROM date_series
+                    LEFT JOIN collections c ON DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year
+                    AND c.cooperative_id = '$coop_id'
+                    GROUP BY date_series.month_year;
+                ";
+                $collections = DB::select($monthlyQuery, [
+                    'from_date' => $from_date,
+                    'to_date' => $to_date,
+                ]);
+
+                if ($from_date_prev) {
+                    $prevCollections = DB::select($monthlyQuery, [
+                        'from_date' => $from_date_prev,
+                        'to_date' => $to_date_prev,
+                    ]);
+                }
+            } 
+            elseif ($suggested_chart_mode == "yearly") {
+                $yearlyQuery = "
+                    WITH RECURSIVE date_series AS (
+                        SELECT YEAR('$from_date_formatted') AS year, '$from_date_formatted' AS date
+                        UNION ALL
+                        SELECT YEAR(DATE_ADD(date, INTERVAL 1 YEAR)), DATE_ADD(date, INTERVAL 1 YEAR)
+                        FROM date_series
+                        WHERE DATE_ADD(date, INTERVAL 1 YEAR) <= '$to_date_formatted'
+                    )
+                    SELECT date_series.year AS x, IFNULL(SUM(c.quantity), 0) AS y
+                    FROM date_series
+                    LEFT JOIN collections c ON YEAR(c.date_collected) = date_series.year
+                    AND c.cooperative_id = '$coop_id'
+                    GROUP BY date_series.year;
+                ";
+                
+                $collections = DB::select(DB::raw($yearlyQuery), [
+                    "from_date" => $from_date,
+                    "to_date" => $to_date,
+                ]);
+                
+                if ($from_date_prev != "") {
+                    $prevCollections = DB::select(DB::raw($yearlyQuery), [
+                        "from_date" => $from_date_prev,
+                        "to_date" => $to_date_prev,
+                    ]);
+                }
+            }
     // Calculate KPIs
     $totalCollections = count($collections);
     $totalQuantityCollected = array_sum(array_column($collections, 'y')); // Use 'y' from the query result
