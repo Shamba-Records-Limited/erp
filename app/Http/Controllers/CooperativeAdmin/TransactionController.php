@@ -112,6 +112,8 @@ class TransactionController extends Controller
      */
     public function add(Request $request): RedirectResponse
     {
+
+        dd($request->amount);
         $request->validate([
             "farmer_id" => "required|exists:farmers,id",
             "collection_ids" => "required",
@@ -122,7 +124,7 @@ class TransactionController extends Controller
 
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
-
+      // dd($coop_id);
         try {
             $transaction = new Transaction();
             $transaction->created_by = $user->id;

@@ -174,7 +174,6 @@ class WalletManagementController extends Controller
             "amount" => "required|numeric",
         ]);
 
-
         DB::beginTransaction();
 
         $user = Auth::user();
@@ -183,7 +182,7 @@ class WalletManagementController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
+          
         try {
             $transaction = new Transaction();
             $transaction->created_by = $user->id;
@@ -2068,7 +2067,8 @@ public function dashboard(Request $request)
 
             DB::commit();
             toastr()->success('Operational Expense Added Successfully');
-            return redirect()->back();
+           return redirect()->back();
+           //return redirect()->route('cooperative-admin.transactions.show');
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
@@ -2089,7 +2089,8 @@ public function dashboard(Request $request)
             perform_transaction($transaction);
             DB::commit();
             toastr()->success('Transaction Completed Successfully');
-            return redirect()->route($to)->withInput();
+            return redirect()->route('cooperative-admin.transactions.show');
+            //return redirect()->route($to)->withInput();
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             DB::rollback();

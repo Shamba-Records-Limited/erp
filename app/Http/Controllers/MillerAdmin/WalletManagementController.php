@@ -1282,16 +1282,16 @@ class WalletManagementController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        $to = $request->query("to", "miller-admin.transactions.show");
-
-
+        $to = $request->query("to", "miller-admin.wallet-management.account-payables");
         DB::beginTransaction();
         try {
             perform_transaction($transaction);
             DB::commit();
             toastr()->success('Transaction Completed Successfully');
-            return redirect()->route($to)->withInput();
+            return redirect()->route('miller-admin.wallet-management.account-payables');
+            //return redirect()->route($to)->withInput();
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             Log::error($th->getMessage());
             DB::rollback();
             toastr()->error('Oops! Operation failed');
