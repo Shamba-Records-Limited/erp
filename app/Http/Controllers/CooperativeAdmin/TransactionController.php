@@ -112,8 +112,6 @@ class TransactionController extends Controller
      */
     public function add(Request $request): RedirectResponse
     {
-
-        dd($request->amount);
         $request->validate([
             "farmer_id" => "required|exists:farmers,id",
             "collection_ids" => "required",
