@@ -102,10 +102,10 @@ $gender_options = config('enums.employee_configs')['gender'];
                 </div>
 
                 <div>
-                    <button class="btn btn-outline-primary" name="save">Save</button>
+                    <!--<button class="btn btn-outline-primary" name="save">Save</button>-->
                     @if(is_null($customer->published_at))
                     <button class="btn btn-outline-success" name="save_and_publish">Save and Publish</button>
-                    <a class="btn btn-outline-warning" onclick="return confirm('Are you sure you want to discard this draft?')">Discard Draft</a>
+                   <!-- <a class="btn btn-outline-warning" onclick="return confirm('Are you sure you want to discard this draft?')">Discard Draft</a>-->
                     @endif
                 </div>
             </div>

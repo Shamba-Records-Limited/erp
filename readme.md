@@ -86,16 +86,10 @@ This method of adding the `admin` role to the user with the username `admin` usi
 
 ```bash
 docker exec -it laravel-app php artisan tinker
-$user = App\Models\User::where('username', 'admin')->first();
+$user = App\User::where('username', 'admin')->first();
 $user->assignRole('admin');
 exit;
 ```
-
-
-
-
-
-
 
 #### API Setup Instructions (Passports)
 
