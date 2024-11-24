@@ -107,22 +107,21 @@ class TransactionController extends Controller
 
         return response($collectionOptions, 200)->header('Content-Type', 'text/html');
     }
-    /**
-     * @return RedirectResponse
-     */
-    public function add(Request $request): RedirectResponse
+   
+
+    public function add_new(Request $request)
     {
         $request->validate([
             "farmer_id" => "required|exists:farmers,id",
             "collection_ids" => "required",
             "amount" => "required|numeric",
+            "description" => "required"
         ]);
-
+    
         DB::beginTransaction();
 
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
-      // dd($coop_id);
         try {
             $transaction = new Transaction();
             $transaction->created_by = $user->id;
@@ -134,7 +133,6 @@ class TransactionController extends Controller
                 $cooperative_acc->acc_number = "A".str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
                 $cooperative_acc->owner_type = "MILLER";
                 $cooperative_acc->owner_id = $coop_id;
-
                 $cooperative_acc->credit_or_debit = "CREDIT";
                 $cooperative_acc->save();
             }
@@ -142,7 +140,6 @@ class TransactionController extends Controller
             $transaction->sender_type = 'COOPERATIVE';
             $transaction->sender_id = $coop_id;
             $transaction->sender_acc_id = $cooperative_acc->id;
-
             // get or create farmer account
             $farmer_acc = Account::where("owner_type", "FARMER")->where("owner_id", $request->farmer_id)->first();
             if (is_null($farmer_acc)) {
@@ -151,11 +148,9 @@ class TransactionController extends Controller
                 $farmer_acc->acc_number = "A".str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
                 $farmer_acc->owner_type = "FARMER";
                 $farmer_acc->owner_id = $request->farmer_id;
-
                 $farmer_acc->credit_or_debit = "CREDIT";
                 $farmer_acc->save();
             }
-
             $transaction->recipient_type = 'FARMER';
             $transaction->recipient_id = $request->farmer_id;
             $transaction->recipient_acc_id = $farmer_acc->id;
@@ -177,7 +172,6 @@ class TransactionController extends Controller
             $transaction->type = 'FARMER_PAYMENT';
             $transaction->status = 'PENDING';
 
-
             if(count($request->collection_ids) == 1){
                 $transaction->subject_type = 'COLLECTION';
                 $transaction->subject_id = $request->collection_ids[0];
@@ -185,11 +179,11 @@ class TransactionController extends Controller
                 $groupCount = CollectionGroup::count();
                 $groupNumber = "CG";
                 $groupNumber .= str_pad($groupCount + 1, 3, '0', STR_PAD_LEFT);
+                //dd($groupNumber);
                 # todo: add bulk
                 $collectionGroup = new CollectionGroup();
                 $collectionGroup->group_number = $groupNumber;
                 $collectionGroup->save();
-
                 # save corresponding collection group items
                 foreach($request->collection_ids as $collection_id) {
                     $collectionGroupItem = new CollectionGroupItem();
@@ -197,14 +191,10 @@ class TransactionController extends Controller
                     $collectionGroupItem->collection_id = $collection_id;
                     $collectionGroupItem->save();
                 }
-
                 $transaction->subject_type = 'COLLECTION_GROUP';
                 $transaction->subject_id = $collectionGroup->id;
             }
-
-
             $transaction->save();
-
             DB::commit();
             toastr()->success('Transaction Created Successfully');
             return redirect()->route('cooperative-admin.transactions.show')->withInput();
@@ -220,9 +210,29 @@ class TransactionController extends Controller
      * @return View|Factory
      */
     public function transaction_detail($id){
-        $transaction = Transaction::find($id);
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
 
-        $lots = $transaction->lots;
+        //$id='e27a8e3b-11c0-414b-b95b-16db3c3a5ad2';
+        $transaction = Transaction::find($id);
+        // $lots = $transaction->lots;
+
+        $subquery = DB::table('collections as c1')
+                  ->select('c1.id', 'c1.farmer_id', 'c1.cooperative_id', 'c1.lot_number')
+                  ->where('c1.cooperative_id', $coop_id)
+                  ->whereRaw('c1.created_at = (SELECT MAX(c2.created_at) FROM collections as c2 WHERE c2.farmer_id = c1.farmer_id AND c2.cooperative_id = c1.cooperative_id)');
+
+        $lots = DB::table('transactions as tr')
+                    ->select('tr.id', 'tr.transaction_number', 'tr.amount', 'tr.type', 'lo.lot_number', 'lo.available_quantity as quantity')
+                    ->joinSub($subquery, 'c', function ($join) {
+                        $join->on('tr.recipient_id', '=', 'c.farmer_id')
+                            ->on('tr.sender_id', '=', 'c.cooperative_id');
+                        })
+                        ->join('lots as lo', 'c.lot_number', '=', 'lo.lot_number')
+                        ->where('tr.id', '=', $id)
+                        ->get();
+         
+          //dd($transaction,$lots);
 
         return view("pages.cooperative-admin.transactions.detail", compact('transaction', 'lots'));
     }

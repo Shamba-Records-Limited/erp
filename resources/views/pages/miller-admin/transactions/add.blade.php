@@ -54,17 +54,42 @@
 
 @push('custom-scripts')
 <script>
-    function retrieveLotSelector() {
-        let cooperative_id = $("#cooperative_id").val();
 
+    function retrieveLotSelector1s() {
+        let cooperative_id = $("#cooperative_id").val();
+        if (!cooperative_id) {
+            alert("Please select a cooperative.");
+            return;
+        }
         $.ajax({
             url: `/miller-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
+            type: "GET",
+            headers: {
+                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+             },
+            success: function(data) {
+                let my_elem = $('#lot_ids').first();
+                $(my_elem).empty(); // Clear existing options
+                $(my_elem).append(data); // Append new options
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error); // Log the actual error
+                alert("Unexpected error occurred while fetching lots.");
+            }
+        });
+    }
+
+    function retrieveLotSelector() {
+        let cooperative_id = $("#cooperative_id").val();
+        $.ajax({
+            url: `/miller-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
+            //url: `/transactions/add/miller-selector/${cooperative_id}`,
             type: "GET",
             success: function(data) {
                 let my_elem = $('#lot_ids').first();
                 // console.log($(document));
                 // $(my_elem).replaceChildren(data)
-
+                 alert($data);
                 $(my_elem).empty()
                 $(my_elem).append(data)
             },

@@ -470,6 +470,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.transactions.view-add-collection-selector");
     Route::post("/transactions/add", "CooperativeAdmin\TransactionController@add")
         ->name("cooperative-admin.transactions.add");
+    Route::post("/transactions/add-new", "CooperativeAdmin\TransactionController@add_new")
+        ->name("cooperative-admin.transactions.add-new");
     Route::get("/transactions/{id}", "CooperativeAdmin\TransactionController@detail")
         ->name("cooperative-admin.transactions.detail");
     Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
@@ -780,9 +782,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
             ->name("miller-admin.wallet-management.expenses.table");
         Route::get('/expenses/download/{type}', 'MillerAdmin\WalletManagementController@export_expenses')
             ->name("miller-admin.expenses.export");
-
-                
-
 
 
         // transactions

@@ -159,11 +159,22 @@ class WalletManagementController extends Controller
         return view("pages.miller-admin.transactions.add", compact("cooperatives"));
     }
 
+
+
+     public function view_add_lot_selector1($id)
+     {
+      $lots = Lot::where("cooperative_id", $id)->get();
+      $lotOptions = "<option value=''>--SELECT LOT--</option>";
+      foreach ($lots as $lot) {
+          $lotOptions .= "<option value='{$lot->lot_number}'>{$lot->lot_number} - {$lot->quantity} KG</option>";
+      }
+      return response($lotOptions, 200)->header('Content-Type', 'text/html');
+     }
+
     public function view_add_lot_selector($id)
     {
         // todo: add id filter
         $lots = Lot::where("cooperative_id", $id)->get();
-
         $lotOptions = "<option value=''>--SELECT LOT--</option>
         ";
         foreach ($lots as $lot) {
@@ -388,9 +399,10 @@ class WalletManagementController extends Controller
         $request->validate([
             "selectedLots" => "required"
         ]);
-
+         
         $totalWeight = 0;
         $lotNumbers = $request->selectedLots;
+
         foreach ($lotNumbers as $lotNumber) {
             $lot = Lot::where("lot_number", $lotNumber)->firstOrFail();
             $totalWeight += $lot->quantity;

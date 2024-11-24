@@ -146,9 +146,11 @@ class WalletManagementController extends Controller
 
     public function view_add_lot_selector($id)
     {
+
         // todo: add id filter
         $lots = Lot::where("cooperative_id", $id)->get();
-
+         $dd($lots);
+         
         $lotOptions = "<option value=''>--SELECT LOT--</option>
         ";
         foreach ($lots as $lot) {
@@ -2067,8 +2069,8 @@ public function dashboard(Request $request)
 
             DB::commit();
             toastr()->success('Operational Expense Added Successfully');
-           return redirect()->back();
-           //return redirect()->route('cooperative-admin.transactions.show');
+          // return redirect()->back();
+           return redirect()->route('cooperative-admin.transactions.show')->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());

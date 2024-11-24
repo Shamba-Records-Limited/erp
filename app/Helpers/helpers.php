@@ -1339,7 +1339,10 @@ if (!function_exists('perform_transaction')) {
     {
         $sender_acc = Account::find($transaction->sender_acc_id);
         $recipient_acc = Account::find($transaction->recipient_acc_id);
-        if($transaction->type=='OPERATIONAL_EXPENSE' || $transaction->type == 'WITHDRAWAL'){
+        if($transaction->type=='OPERATIONAL_EXPENSE' || 
+           $transaction->type == 'WITHDRAWAL'|| 
+           $transaction->type == 'FARMER_PAYMENT'){
+        
             $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
         }else{
