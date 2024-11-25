@@ -16,8 +16,11 @@
             </div>
             <div class="modal-body">
                 <div class="d-flex justify-content-end p-2">
-                    @if($delivery_to_view->approved_at)
+                    @if($delivery_to_view->approved_at && strpos($delivery_to_view->delivery_number, 'REJECTED') == false)
                     <div class="text-success border border-success p-2 rounded">Approved</div>
+
+                    @elseif($delivery_to_view->approved_at && strpos($delivery_to_view->delivery_number, 'REJECTED') !== false)
+                    <div class="text-warning border border-warning p-2 rounded">Rejected</div>
                     @else
                     <div class="text-warning border border-warning p-2 rounded">Pending Approval</div>
                     @endif
@@ -65,7 +68,11 @@
                 @if(is_null($delivery_to_view->approved_at))
                 <div class="action-buttons mt-4">
                     <a href="{{ route('miller-admin.orders.approve-delivery', $delivery_to_view->id) }}" class="btn btn-primary">Approve</a>
-                    <a href="#" class="btn btn-secondary ml-2">Reject</a>
+                    <a href="#" 
+                        class="btn btn-secondary ml-2" 
+                        onclick="confirmRejectOrder('{{ route('miller-admin.orders.reject-delivery', $delivery_to_view->id) }}')">
+                        Reject
+                    </a>
                 </div>
                 @endif
             </div>
@@ -140,8 +147,10 @@
                         <td>{{++$key}}</td>
                         <td>{{$delivery->total_items}}</td>
                         <td>
-                            @if($delivery->approved_at)
+                            @if($delivery->approved_at && strpos($delivery->delivery_number, 'REJECTED') == false)
                             <div class="text-success">Approved</div>
+                            @elseif($delivery->approved_at && strpos($delivery->delivery_number, 'REJECTED') !== false)
+                            <div class="text-warning">Rejected</div>
                             @else
                             <div class="text-warning">Pending</div>
                             @endif
@@ -166,6 +175,33 @@
 @endpush
 
 @push('custom-scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+      function confirmRejectOrder1(url) {
+        // Show confirmation dialog
+        if (confirm("Are You Sure You Want To Reject Order!")) {
+            // If user confirms, redirect to the given URL
+            window.location.href = url;
+        }
+        // If user cancels, nothing happens
+    }
+    function confirmRejectOrder(url) {
+        Swal.fire({
+            title: 'Are You Sure?',
+            text: "You want to reject this order!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Reject it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the given URL
+                window.location.href = url;
+            }
+        });
+    }
+</script>
 @endpush
 
 <style>

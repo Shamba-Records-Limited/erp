@@ -31,7 +31,6 @@ class OrdersController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
         // $orders = DB::select(DB::raw("
         //     SELECT ord.*,
         //         coop.name as cooperative_name
@@ -40,8 +39,12 @@ class OrdersController extends Controller
         //     JOIN millers ON millers.id = ord.miller_id AND millers.id = :miller_id;
         // "), ["miller_id" => $miller_id]);
 
-        $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->get();
-
+       // $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->get();
+        $orders = MillerAuctionOrder::where('miller_id', $miller_id)
+                ->join('auction_order_delivery', 'miller_auction_order.id', '=', 'auction_order_delivery.order_id')
+                ->with('cooperative') // Assuming cooperative is a relationship
+                ->select('miller_auction_order.*', 'auction_order_delivery.delivery_number') // Select specific columns
+                ->get();
         return view('pages.miller-admin.orders.index', compact('orders'));
     }
 
@@ -203,6 +206,51 @@ class OrdersController extends Controller
         $item->save();
 
         return redirect()->route("miller-admin.market-auction.coop-collections.render-order-row", $item->id);
+    }
+
+
+
+    public function reject_delivery($delivery_id)
+    {
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        DB::beginTransaction();
+        try {
+            $user_id = Auth::id();
+            $delivery = AuctionOrderDelivery::find($delivery_id);
+            $delivery->approved_at = Carbon::now();
+            $delivery->approved_by = $user_id;
+            $delivery->delivery_number=$delivery->delivery_number."-REJECTED";
+            $delivery->save();
+
+            $order_id=$delivery->order_id;
+            $delivery->items = MillerAuctionOrderItem::where('order_id', $order_id)->get();
+	        //dd($delivery->items);
+            foreach ($delivery->items as $delivery_item) {
+				   $id = $delivery_item->id; 
+					$miller_auction_order_item = MillerAuctionOrderItem::where('id', $id)->first();
+                   // dd($miller_auction_order_item);
+					if ($miller_auction_order_item){
+						// Set quantity to 0
+						$miller_auction_order_item->quantity = 0;
+					    $miller_auction_order_item->save();
+					  } 
+               }
+			   
+            DB::commit();
+            toastr()->success('Delivery Rejected');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to initialize cart');
+            return redirect()->back();
+        }
     }
 
     public function approve_delivery($delivery_id)

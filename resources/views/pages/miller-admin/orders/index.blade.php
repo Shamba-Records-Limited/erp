@@ -49,8 +49,18 @@
                                         ? number_format(($deliveredQuantity / $totalQuantityOrder) * 100, 1) 
                                         : 0;
 
-                        $orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
-                        $statusClass = $deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
+                        if(strpos($order->delivery_number, 'REJECTED') == false){
+                            $orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+                            $statusClass = $deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
+                        }else if(strpos($order->delivery_number, 'REJECTED') !== false){
+                            $orderStatus = 'Rejected';
+                            $statusClass ='danger';
+                        }else{
+                            $orderStatus = $deliveredQuantity == 0 ? 'Pending' : ($order->undeliveredQuantity > 0 ? 'Partial' : 'Completed');
+                            $statusClass = $deliveredQuantity == 0 ? 'danger' : ($order->undeliveredQuantity > 0 ? 'warning' : 'success');
+                        }
+        
+                        
                     @endphp
                     <tr>
                         <td>{{ $key + 1 }}</td>
