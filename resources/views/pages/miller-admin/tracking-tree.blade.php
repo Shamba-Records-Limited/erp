@@ -18,8 +18,119 @@
     padding: 15px; /* Padding for the child node container */
 }
 
+/* Main Container */
+.card {
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Timeline Styling */
+.node {
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 30px;
+    border-left: 3px solid #007bff;
+    padding-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.node:last-child {
+    border-left: none; /* Remove border for the last node */
+}
+
+/* Timeline Dot */
+.node::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 20px;
+    height: 20px;
+    background-color: #007bff;
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, background-color 0.3s;
+}
+
+/* Node Content Styling */
+.node .border {
+    border: 1px solid #d1d9e6;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.node .font-weight-bold.text-primary {
+    color: #007bff;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.btn-info.btn-rounded, .btn-primary {
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 5px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(23, 162, 184, 0.2);
+}
+
+.btn-info.btn-rounded {
+    background-color: #17a2b8;
+    color: #ffffff;
+}
+
+.btn-info.btn-rounded:hover {
+    background-color: #138f99;
+    box-shadow: 0px 6px 12px rgba(23, 162, 184, 0.3);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #0056d3;
+    box-shadow: 0px 6px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Collapsible Details Section */
+#child_details, #root_details {
+    transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+    overflow: hidden;
+}
+
+.collapse.show {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* Colored Connector Lines for Child Levels */
 .node_children {
-    margin-top: 10px; /* Space between child nodes */
+    margin-top: 15px;
+    position: relative;
+    padding-left: 20px;
+}
+
+
+/* Responsive Styling */
+@media screen and (max-width: 768px) {
+    .node {
+        padding-left: 30px;
+    }
+    .node::before {
+        left: -5px;
+    }
+}
+.node .node-card{
+    background-color: #DFDEDE;
 }
 </style>
 <div class="card">
