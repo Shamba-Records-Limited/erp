@@ -54,9 +54,12 @@
                             {{ $lot->available_quantity }} KG
                             @php $totalQuantity += $lot->available_quantity; @endphp
                         </td>
+                        
                         <td class="text-right">
                             @if ($lot->qty <= 0)
-                            <a href="{{ route('miller-admin.market-auction.add-to-cart', [$cooperative->id, $lot->lot_number]) }}" class="btn btn-outline-primary">Add to Cart</a>
+                            <button class="btn btn-outline-primary" onclick="addToCart('{{ $cooperative->id }}', '{{ $lot->lot_number }}','{{ $lot->available_quantity }}')">
+                               Add to Cart
+                            </button>
                             @else
                             <form action="{{ route('miller-admin.market-auction.remove-from-cart', [$cooperative->id, $lot->lot_number]) }}" method="post">
                                 @csrf
@@ -76,6 +79,7 @@
                     </tr>
                 </tfoot>
             </table>
+
         </div>
     </div>
 </div>
@@ -86,5 +90,25 @@
 
 @push('custom-scripts')
 <script>
+        function addToCart(cooperativeId, lotNumber, available_qnty) {
+            // Prompt the user for the quantity
+            const quantity = prompt("Enter the quantity to add to cart:");
+            // Check if the user entered a valid quantity
+            if (quantity === null || quantity.trim() === "") {
+                alert("Quantity is required.");
+                return;
+            }
+            if (parseInt(quantity) > parseInt(available_qnty)) {
+                    alert("Quantity exceeds available stock.");
+                    return;
+            }
+            if (isNaN(quantity) || parseInt(quantity) <= 0) {
+                alert("Please enter a valid positive number.");
+                return;
+            }
+            // Redirect to the add-to-cart route with the quantity as a query parameter
+            const url = `/miller-admin/market-auction/${cooperativeId}/add_to_cart/${lotNumber}?quantity=${encodeURIComponent(quantity)}`;
+            window.location.href = url;
+        }
 </script>
 @endpush

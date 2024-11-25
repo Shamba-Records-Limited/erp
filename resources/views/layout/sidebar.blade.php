@@ -785,8 +785,8 @@ $cooperative = null;
                         </a>
                     </li>
                     <!-- todo: implement grades view -->
-                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
-                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                    <li class="nav-item {{ active_class(['miller-admin/inventory/milled-grades']) }}">
+                        <a class="nav-link" href="{{ route('miller-admin.milled-inventory-grades.show') }}">
                             <span class="menu-title">Inventory Grades</span>
                         </a>
                     </li>

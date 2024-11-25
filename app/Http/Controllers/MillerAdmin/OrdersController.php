@@ -165,7 +165,7 @@ class OrdersController extends Controller
                 WHERE item.delivery_id = :delivery_id;
             "), ["delivery_id" => $delivery_id_to_view]);
         }
-
+        
 
         return view('pages.miller-admin.orders.detail', compact('order', 'tab', 'orderItems', 'orderDeliveries', 'delivery_to_view', 'deliveryItems', 'totalInOrder', 'aggregateGradeDistribution'));
     }

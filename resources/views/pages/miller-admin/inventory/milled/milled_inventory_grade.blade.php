@@ -49,7 +49,7 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <div class="card-title">Milled Inventory</div>
+        <div class="card-title">Inventory Grades</div>
 
         <div class="d-flex justify-content-end">
             <a class="btn btn-primary btn-fw btn-sm" href="{{route('miller-admin.milled-inventory.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Export Excel
@@ -67,7 +67,7 @@
                         <th>Lot Number</th>
                         <th>Quantity</th>
                         <th>Milled Quantity</th>
-                        <th>Waste Quantity</th>
+                        <th>Grade</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -84,7 +84,7 @@
                         <td>{{$inventory->l_num}}</td>
                         <td>{{$inventory->milled_quantity + $inventory->waste_quantity}} KG</td>
                         <td>{{$inventory->milled_quantity}} KG</td>
-                        <td>{{$inventory->waste_quantity}} KG</td>
+                        <td>{{$inventory->grade_name}} KG</td>
                         <td>
                             <div class="btn-group dropdown">
                                 <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
