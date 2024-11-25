@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Add Transaction</div>
-        <form method="POST" action="{{route('cooperative-admin.transactions.add')}}">
+        <form method="POST" action="{{route('cooperative-admin.transactions.add-new')}}">
             @csrf
             <div id="for_single_payment" class="form-group">
                 <label for="">Farmer</label>

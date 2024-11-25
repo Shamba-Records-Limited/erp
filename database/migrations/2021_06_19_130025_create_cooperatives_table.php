@@ -13,6 +13,8 @@ class CreateCooperativesTable extends Migration
      */
     public function up()
     {
+
+        if (!Schema::hasTable('cooperatives')) {
         Schema::create('cooperatives', function (Blueprint $table) {
             $table->uuid("id")->primary();
             $table->string("name");
@@ -28,6 +30,10 @@ class CreateCooperativesTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+    }
+
+
     }
 
     /**

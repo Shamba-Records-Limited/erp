@@ -1339,15 +1339,17 @@ if (!function_exists('perform_transaction')) {
     {
         $sender_acc = Account::find($transaction->sender_acc_id);
         $recipient_acc = Account::find($transaction->recipient_acc_id);
-
-        $sender_acc->balance -= $transaction->amount;
-        $sender_acc->save();
-
-        $recipient_acc->balance += $transaction->amount;
-        $recipient_acc->save();
-
+        if($transaction->type=='OPERATIONAL_EXPENSE' || 
+           $transaction->type == 'WITHDRAWAL'|| 
+           $transaction->type == 'FARMER_PAYMENT'){
+        
+            $sender_acc->balance -= $transaction->amount;
+            $sender_acc->save();
+        }else{
+           $recipient_acc->balance += $transaction->amount;
+           $recipient_acc->save();
+        }
         $transaction->status = 'COMPLETE';
-
         # todo: generate stored receipt
         $now = Carbon::now();
         $receiptNumber = "RPT";

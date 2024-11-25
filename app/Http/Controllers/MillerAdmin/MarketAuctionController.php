@@ -425,6 +425,87 @@ class MarketAuctionController extends Controller
     }
 
 
+    public function add_lot_to_cart_new(Request $request, $coop_id, $lot_id)
+    {
+        $quantity = $request->query('quantity');
+        if (!$quantity || $quantity < 1) {
+            return redirect()->back()->with('error', 'Invalid quantity.');
+        } 
+
+        $coop_id=$coop_id;
+        $lot_number=$lot_id;
+        $quantity=$request->quantity;
+
+        //dd($coop_id,$lot_number,$quantity);
+
+        DB::beginTransaction();
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+        // retrieve lot
+        try {
+            $lot = Lot::where("cooperative_id", $coop_id)
+                ->where("lot_number", $lot_number)
+                ->firstOrFail();
+               // dd($lot); 
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            toastr()->error('Lot does not exist');
+            return redirect()->back();
+        }
+
+        // update or create cart
+        $cart = null;
+        try {
+            $cart = MillerAuctionCart::where("miller_id", $miller_id)
+                ->where("cooperative_id", $coop_id)
+                ->where("user_id", $user->id)
+                ->first();
+            if ($cart == null) {
+                throw new \Throwable("cart does not exist");
+            }
+        } catch (\Throwable $th) {
+            try {
+                $cart = new MillerAuctionCart();
+                $cart->miller_id = $miller_id;
+                $cart->cooperative_id = $coop_id;
+                $cart->user_id = $user->id;
+                $cart->save();
+            } catch (\Throwable $th) {
+                Log::error($th->getMessage());
+                DB::rollBack();
+                toastr()->error('Unable to initialize cart');
+                return redirect()->back();
+            }
+        }
+
+        try {
+            $cartItem = MillerAuctionCartItem::where("cart_id", $cart->id)
+                ->where("lot_number", $lot_number)
+                ->firstOrFail();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $cartItem = new MillerAuctionCartItem();
+            $cartItem->cart_id = $cart->id;
+            $cartItem->lot_number = $lot_number;
+            $cartItem->quantity = $quantity;
+            $cartItem->save();
+        }       
+        //update lot available quantity
+        $lot->available_quantity=$lot->available_quantity-$quantity;
+        $lot->save();
+
+        DB::commit();
+
+        toastr()->success('Item added to cart successfully');
+        return redirect()->back();
+    }
+
+
     public function add_lot_to_cart($coop_id, $lot_number)
     {
         DB::beginTransaction();
@@ -526,7 +607,20 @@ class MarketAuctionController extends Controller
             toastr()->error('Item does not exist');
             return redirect()->back();
         }
-
+        // retrieve lot
+        try {
+            $lot = Lot::where("cooperative_id", $coop_id)
+                ->where("lot_number", $lot_number)
+                ->firstOrFail(); 
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            toastr()->error('Lot does not exist');
+            return redirect()->back();
+        }
+        //update lot available quantity
+        $lot->available_quantity=$lot->available_quantity+$cartItem->quantity;
+        $lot->save();
+        
         $cartItem->delete();
 
         DB::commit();

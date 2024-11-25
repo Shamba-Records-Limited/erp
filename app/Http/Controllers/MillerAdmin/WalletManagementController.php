@@ -33,6 +33,7 @@ class WalletManagementController extends Controller
             $miller_id = null;
         }
 
+        
         $transactions = DB::select(DB::raw("
             SELECT t.*, c.name AS dest,
             (
@@ -62,6 +63,7 @@ class WalletManagementController extends Controller
             -- WHERE HAS NO PARENT
             WHERE t.parent_id IS NULL
         "), ["miller_id" => $miller_id, "miller_id1" => $miller_id, "miller_id2" => $miller_id, "miller_id3" => $miller_id]);
+       
 
         return view("pages.miller-admin.transactions.index", compact('transactions'));
     }
@@ -157,11 +159,22 @@ class WalletManagementController extends Controller
         return view("pages.miller-admin.transactions.add", compact("cooperatives"));
     }
 
+
+
+     public function view_add_lot_selector1($id)
+     {
+      $lots = Lot::where("cooperative_id", $id)->get();
+      $lotOptions = "<option value=''>--SELECT LOT--</option>";
+      foreach ($lots as $lot) {
+          $lotOptions .= "<option value='{$lot->lot_number}'>{$lot->lot_number} - {$lot->quantity} KG</option>";
+      }
+      return response($lotOptions, 200)->header('Content-Type', 'text/html');
+     }
+
     public function view_add_lot_selector($id)
     {
         // todo: add id filter
         $lots = Lot::where("cooperative_id", $id)->get();
-
         $lotOptions = "<option value=''>--SELECT LOT--</option>
         ";
         foreach ($lots as $lot) {
@@ -289,6 +302,88 @@ class WalletManagementController extends Controller
             return redirect()->back()->withInput();
         }
     }
+    public function view_add_operational_expense()
+    {
+       // dd($miller_id);
+        $user = Auth::user();
+        $miller_id = $user->miller_admin->miller_id;
+        // get or create miller account
+        $account = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->first();
+        if (is_null($account)) {
+            $accCount = Account::count();
+            $account = new Account();
+            $account->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
+            $account->owner_type = "MILLER";
+            $account->owner_id = $miller_id;
+
+            $account->credit_or_debit = "DEBIT";
+            $account->save();
+        }
+
+        $acc_type = 'miller-admin';
+
+        return view('pages.common.wallet-management.account-payables.add-operational-expense', compact('account', 'acc_type'));
+    }
+
+    public function add_operational_expense(Request $request)
+    {
+        $user = Auth::user();
+        $miller_id = $user->miller_admin->miller_id;
+
+        $request->validate([
+            "amount" => "required|numeric",
+            "description" => "required|string",
+            "purpose" => "required|string",
+            "operational_expense_slip" => "required|file",
+        ]);
+    
+        DB::beginTransaction();
+        $account = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->first();
+        try {
+            // generate transaction number
+            $now = Carbon::now();
+            $transactionNumber = "OE";
+            $transactionNumber .= $now->format('Ymd');
+            // count today's transactions
+            $todaysTransactions = Transaction::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
+            $transactionNumber .= str_pad($todaysTransactions + 1, 3, '0', STR_PAD_LEFT);
+
+            $transaction = new Transaction();
+            $transaction->transaction_number = $transactionNumber;
+            $transaction->created_by = $user->id;
+            $transaction->sender_type = 'MILLER';
+            $transaction->sender_id = $miller_id;
+            $transaction->sender_acc_id = $account->id;
+
+            $transaction->purpose = $request->purpose;
+
+            $transaction->recipient_type = 'CASH';
+            $transaction->recipient_id = $miller_id;
+            $transaction->recipient_acc_id = $account->id;
+
+            $transaction->amount_source = 'SELF';
+            $transaction->amount = $request->amount;
+            $transaction->description = $request->description;
+            $transaction->type = 'OPERATIONAL_EXPENSE';
+            $transaction->status = 'PENDING';
+
+            $transaction->subject_type = 'MILLER';
+            $transaction->subject_id = $miller_id;
+
+            // save operational expense slip
+            $transaction->attachment = $request->operational_expense_slip ? store_image($request, "operational_expense_slip", $request->operational_expense_slip, 'images/operational_expense_slips', 200, 200) : null;
+            $transaction->save();
+            DB::commit();
+            toastr()->success('Operational Expense Added Successfully');
+            return redirect()->route('miller-admin.transactions.show');
+            //return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th->getMessage());
+            toastr()->error($th->getMessage());
+            return redirect()->back();
+        }
+    }
 
     public function transaction_detail($id)
     {
@@ -304,9 +399,10 @@ class WalletManagementController extends Controller
         $request->validate([
             "selectedLots" => "required"
         ]);
-
+         
         $totalWeight = 0;
         $lotNumbers = $request->selectedLots;
+
         foreach ($lotNumbers as $lotNumber) {
             $lot = Lot::where("lot_number", $lotNumber)->firstOrFail();
             $totalWeight += $lot->quantity;
@@ -1198,16 +1294,16 @@ class WalletManagementController extends Controller
     {
         $transaction = Transaction::find($id);
 
-        $to = $request->query("to", "miller-admin.transactions.show");
-
-
+        $to = $request->query("to", "miller-admin.wallet-management.account-payables");
         DB::beginTransaction();
         try {
             perform_transaction($transaction);
             DB::commit();
             toastr()->success('Transaction Completed Successfully');
-            return redirect()->route($to)->withInput();
+            return redirect()->route('miller-admin.wallet-management.account-payables');
+            //return redirect()->route($to)->withInput();
         } catch (\Throwable $th) {
+            dd($th->getMessage());
             Log::error($th->getMessage());
             DB::rollback();
             toastr()->error('Oops! Operation failed');

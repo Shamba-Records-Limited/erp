@@ -94,7 +94,7 @@ class CooperativeController extends Controller
             $cooperative->save();
 
             $cooperative_id = $cooperative->id;
-
+           // dd($cooperative);
             // default branch
             $branch = new CoopBranch();
             $branch->name = "Main";
@@ -106,6 +106,7 @@ class CooperativeController extends Controller
             $branch->product_id = $request->main_product_id;
             $branch->save();
 
+            // dd($branch);
 
             // $this->create_financial_period($cooperative_id, 'annually');
             // $this->create_financial_period($cooperative_id, 'quarterly');

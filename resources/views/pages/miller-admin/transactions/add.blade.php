@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Add Transaction</div>
-        <form method="POST" action="{{route('miller-admin.transactions.add')}}">
+        <form method="POST" action="{{route('cooperative-admin.transactions.add')}}">
             @csrf
             <div id="for_single_payment" class="form-group">
                 <label for="">Cooperative</label>
@@ -54,17 +54,16 @@
 
 @push('custom-scripts')
 <script>
+
     function retrieveLotSelector() {
         let cooperative_id = $("#cooperative_id").val();
-
         $.ajax({
-            url: `/miller-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
+            url: `/cooperative-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
             type: "GET",
             success: function(data) {
                 let my_elem = $('#lot_ids').first();
                 // console.log($(document));
                 // $(my_elem).replaceChildren(data)
-
                 $(my_elem).empty()
                 $(my_elem).append(data)
             },
@@ -76,9 +75,8 @@
 
     function retrieveLotWeights() {
         var selectedLots = $("#lot_ids").val()
-
         $.ajax({
-            url: `/miller-admin/wallet-management/transactions/add/retrieve-lot-weights`,
+            url: `/cooperative-admin/wallet-management/transactions/add/retrieve-lot-weights`,
             type: "POST",
             data: {
                 _token: "{{csrf_token()}}",
@@ -98,13 +96,12 @@
     function calculateAmount() {
         var qty = parseFloat($("#lot_weight").text())
         var price = parseFloat($("#pricing").val())
-
         if (qty == 0 || price == 0) {
             $("#amount").val(0)
             return
         }
-
         $("#amount").val(qty * price);
     }
+
 </script>
 @endpush

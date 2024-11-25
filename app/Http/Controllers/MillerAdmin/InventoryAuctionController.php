@@ -68,6 +68,7 @@ class InventoryAuctionController extends Controller
         $draftCustomer = Customer::where("miller_id", $miller_id)->where("published_at", null)->firstOrFail();
 
         return redirect()->route("miller-admin.inventory-auction.view-update-customer-details", $draftCustomer->id);
+        
     }
 
     public function view_update_customer_details($id)
@@ -118,13 +119,15 @@ class InventoryAuctionController extends Controller
 
             DB::commit();
             toastr()->success('Customer saved successfully.');
-            return redirect()->back();
+            //return redirect()->back();
+            return redirect()->route("miller-admin.inventory-auction.list-customers");
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
             toastr()->error($th->getMessage());
             return redirect()->back();
         }
+        
     }
 
     public function view_customer($id, Request $request)

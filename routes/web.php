@@ -470,6 +470,8 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         ->name("cooperative-admin.transactions.view-add-collection-selector");
     Route::post("/transactions/add", "CooperativeAdmin\TransactionController@add")
         ->name("cooperative-admin.transactions.add");
+    Route::post("/transactions/add-new", "CooperativeAdmin\TransactionController@add_new")
+        ->name("cooperative-admin.transactions.add-new");
     Route::get("/transactions/{id}", "CooperativeAdmin\TransactionController@detail")
         ->name("cooperative-admin.transactions.detail");
     Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
@@ -596,6 +598,11 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.market-auction.coop-collections.show");
     Route::get("/market-auction/{coop_id}/add_to_cart/{lot_id}", "MillerAdmin\MarketAuctionController@add_lot_to_cart")
         ->name("miller-admin.market-auction.add-to-cart");
+
+    Route::get('/market-auction/{coop_id}/add_to_cart/{lot_id}', "MillerAdmin\MarketAuctionController@add_lot_to_cart_new")
+        ->name('miller-admin.market-auction.add-to-cart-new');
+    
+
     Route::delete("/market-auction/{coop_id}/remove_from_cart/{item_id}", "MillerAdmin\MarketAuctionController@remove_lot_from_cart")
         ->name("miller-admin.market-auction.remove-from-cart");
     Route::delete("/market-auction/{coop_id}/clear_cart", "MillerAdmin\MarketAuctionController@clear_cart")
@@ -644,8 +651,13 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.pre-milled-inventory.export");
     Route::post("/inventory/save-milling", "MillerAdmin\InventoryController@save_milling")
         ->name("miller-admin.milling.save");
+
     Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
         ->name("miller-admin.milled-inventory.show");
+
+    Route::get("/inventory/milled-grades", "MillerAdmin\InventoryController@milled_grades")
+        ->name("miller-admin.milled-inventory-grades.show");
+
     Route::get('/inventory/milled/export/{type}', 'MillerAdmin\InventoryController@export_milled_inventories')
         ->name("miller-admin.milled-inventory.export");
     Route::get("/inventory/milled/{id}", "MillerAdmin\InventoryController@milled_details")
@@ -780,9 +792,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
             ->name("miller-admin.wallet-management.expenses.table");
         Route::get('/expenses/download/{type}', 'MillerAdmin\WalletManagementController@export_expenses')
             ->name("miller-admin.expenses.export");
-
-                
-
 
 
         // transactions

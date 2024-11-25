@@ -143,26 +143,23 @@ class WalletManagementController extends Controller
 
         return view("pages.miller-admin.transactions.add", compact("cooperatives"));
     }
-
+    
     public function view_add_lot_selector($id)
     {
         // todo: add id filter
         $lots = Lot::where("cooperative_id", $id)->get();
-
         $lotOptions = "<option value=''>--SELECT LOT--</option>
         ";
         foreach ($lots as $lot) {
             $lotOptions .= "<option value='$lot->lot_number'>$lot->lot_number - $lot->quantity KG</option>
             ";
         }
-
         $elem = "
             <label>Lot</label>
             <select class='form-control select2bs4' name='lot_ids' id='lot_ids' multiple>
                 $lotOptions
             </select>
         ";
-
         return response($lotOptions, 200)->header('Content-Type', 'text/html');
     }
 
@@ -172,18 +169,18 @@ class WalletManagementController extends Controller
             "cooperative_id" => "required|exists:cooperatives,id",
             "lot_ids" => "required",
             "amount" => "required|numeric",
+            "description" => "required|numeric",
         ]);
-
 
         DB::beginTransaction();
 
         $user = Auth::user();
         try {
-            $miller_id = $user->miller_admin->miller_id;
+            $coop_id = $user->cooperative->id;
         } catch (\Throwable $th) {
-            $miller_id = null;
+            $coop_id = null;
         }
-
+          
         try {
             $transaction = new Transaction();
             $transaction->created_by = $user->id;
@@ -195,17 +192,15 @@ class WalletManagementController extends Controller
                 $miller_acc->acc_number = "A" . str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
                 $miller_acc->owner_type = "MILLER";
                 $miller_acc->owner_id = $miller_id;
-
                 $miller_acc->credit_or_debit = "CREDIT";
                 $miller_acc->save();
             }
-
             $transaction->sender_type = 'MILLER';
             $transaction->sender_id = $miller_id;
             $transaction->sender_acc_id = $miller_acc->id;
 
             // get or create cooperative account
-            $cooperative_acc = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $request->cooperative_id)->first();
+            $cooperative_acc = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->first();
             if (is_null($cooperative_acc)) {
                 $accCount = Account::count();
                 $cooperative_acc = new Account();
@@ -262,13 +257,11 @@ class WalletManagementController extends Controller
                 $transaction->subject_type = 'LOT_GROUP';
                 $transaction->subject_id = $lotGroup->id;
             }
-
-
             $transaction->save();
 
             DB::commit();
             toastr()->success('Transaction Created Successfully');
-            return redirect()->route('miller-admin.wallet-management.account-payables')->withInput();
+            return redirect()->route('cooperative-admin.transactions.show')->withInput();
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             DB::rollback();
@@ -298,7 +291,6 @@ class WalletManagementController extends Controller
             $lot = Lot::where("lot_number", $lotNumber)->firstOrFail();
             $totalWeight += $lot->quantity;
         }
-
         return response()->json(["lot_weights" => $totalWeight]);
     }
 
@@ -2008,7 +2000,7 @@ public function dashboard(Request $request)
             $account->owner_type = "COOPERATIVE";
             $account->owner_id = $coop_id;
 
-            $account->credit_or_debit = "CREDIT";
+            $account->credit_or_debit = "DEBIT";
             $account->save();
         }
 
@@ -2068,7 +2060,8 @@ public function dashboard(Request $request)
 
             DB::commit();
             toastr()->success('Operational Expense Added Successfully');
-            return redirect()->back();
+          // return redirect()->back();
+           return redirect()->route('cooperative-admin.transactions.show')->withInput();
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());
@@ -2089,7 +2082,8 @@ public function dashboard(Request $request)
             perform_transaction($transaction);
             DB::commit();
             toastr()->success('Transaction Completed Successfully');
-            return redirect()->route($to)->withInput();
+            return redirect()->route('cooperative-admin.transactions.show');
+            //return redirect()->route($to)->withInput();
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             DB::rollback();

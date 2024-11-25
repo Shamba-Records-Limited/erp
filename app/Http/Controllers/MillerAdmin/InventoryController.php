@@ -158,6 +158,43 @@ class InventoryController extends Controller
         return view('pages.miller-admin.inventory.milled.index', compact('milledInventories', 'isGrading', 'gradings'));
     }
 
+    public function milled_grade(Request $request)
+    {
+        $user_id = Auth::id();
+
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
+
+        $milledInventories = DB::select(DB::raw("
+            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num,pgd.name as grade_name
+            FROM milled_inventories inv
+            JOIN pre_milled_inventories pre_inv ON pre_inv.id = inv.pre_milled_inventory_id
+            JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
+            JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
+            JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
+            JOIN milled_inventory_grades min_g on inv.id = min_g.milled_inventory_id
+            JOIN product_grades pgd ON min_g.product_grade_id = pgd.id
+            WHERE inv.miller_id = :miller_id
+        "), ["miller_id" => $miller_id]);
+
+        $isGrading = $request->query("is_grading", "0");
+
+        $gradings = [];
+        if ($isGrading == "1") {
+        }
+
+
+
+        return view('pages.miller-admin.inventory.milled.milled_inventory_grade', compact('milledInventories', 'isGrading', 'gradings'));
+    }
+
+    
+
     public function export_milled_inventories($type)
     {
         $user = Auth::user();
@@ -265,10 +302,16 @@ class InventoryController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
+            //check to make sure yoyu don't mill more than stock
+            if($milled_quantity > $preMilledInventory->quantity){
+                toastr()->error('Cant Mill More than Available quantity!');
+                return redirect()->back();
+            }
             $now = Carbon::now();
             $inventoryNumber = "INV";
             $inventoryNumber .= $now->format('Ymd');
-
             // count today's inventories
             $todaysInventories = MilledInventory::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
             $inventoryNumber .= str_pad($todaysInventories + 1, 3, '0', STR_PAD_LEFT);
@@ -283,7 +326,6 @@ class InventoryController extends Controller
             $inventory->save();
 
             // update pre milled inventory
-            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
             $preMilledInventory->milled_inventory_id = $inventory->id;
             $preMilledInventory->save();
 

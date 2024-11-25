@@ -31,7 +31,7 @@
                     </div>
                     <div class="border rounded p-2 d-flex mt-2">
                         <div>Approved By:</div>
-                        <div class="font-weight-bold ml-2">{{ $delivery_to_view->approved_by }}</div>
+                        <div class="font-weight-bold ml-2">{{ $delivery_to_view->first_name }} {{ $delivery_to_view->other_names }}</div>
                     </div>
                 </div>
                 @else
