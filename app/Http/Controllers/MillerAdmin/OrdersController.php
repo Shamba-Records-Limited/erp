@@ -156,7 +156,13 @@ class OrdersController extends Controller
         $delivery_to_view = null;
         $deliveryItems = [];
         if ($delivery_id_to_view) {
-            $delivery_to_view = AuctionOrderDelivery::find($delivery_id_to_view);
+           // $delivery_to_view = AuctionOrderDelivery::find($delivery_id_to_view);
+            
+            $delivery_to_view = AuctionOrderDelivery::join('users', 'auction_order_delivery.user_id', '=', 'users.id')
+                   ->where('auction_order_delivery.id', $delivery_id_to_view)
+                   ->select('auction_order_delivery.*', 'users.first_name as first_name', 'users.other_names as other_names') // Select fields
+                  ->first();
+
 
             $deliveryItems = DB::select(DB::raw("
                 SELECT item.*, order_item.lot_number
