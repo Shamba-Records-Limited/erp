@@ -61,19 +61,23 @@
     <div class="row mt-5">
         <!-- Monthly Sales (Bar Chart) -->
         <div class="col-lg-6">
+            <div class="card p-4">
             <h3>Monthly Sales (Kshs)</h3>
             <canvas id="monthlySalesChart"></canvas>
+            </div>
         </div>
 
         <!-- Product Distribution (Pie Chart) -->
-        <div class="col-lg-6" style="width: 400px; height: 400px;">
+        <div class="col-lg-6" >
+            <div class="card p-4" style="height:400px">
             <h3>Product Distribution</h3>
             <canvas id="productDistributionChart" width="300" height="300"></canvas>
+        </div>
         </div>
     </div>
 
     <!-- Recent Orders Table -->
-    <div class="row mt-5">
+    <div class="row mt-5 card p-4">
         <div class="col-lg-12">
             <h3>Recent Orders</h3>
             <table class="table table-striped">
