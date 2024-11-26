@@ -21,6 +21,16 @@
 .node_children {
     margin-top: 10px; /* Space between child nodes */
 }
+
+/* Main Container */
+.card {
+    margin: 20px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 </style>
 <div class="card">
     <div class="card-body">
