@@ -38,6 +38,27 @@ class MarketAuctionController extends Controller
             FROM cooperatives coop
         "));
 
+
+        $cooperatives = DB::select(DB::raw("
+                    SELECT coop.*,
+                        (
+                            SELECT COUNT(1) 
+                            FROM lots l
+                            WHERE l.cooperative_id = coop.id
+                            AND (
+                                -- Condition 1: Not referenced in miller_auction_order_item
+                                (SELECT COUNT(1) FROM miller_auction_order_item item WHERE item.lot_number = l.lot_number) = 0
+                                OR
+                                -- Condition 2: Referenced but sum(quantity) < sum(available_quantity)
+                                (
+                                    (SELECT SUM(item.quantity) FROM miller_auction_order_item item WHERE item.lot_number = l.lot_number) < l.available_quantity
+                                )
+                            )
+                        ) AS lots_count
+                    FROM cooperatives coop
+                "));
+    
+
         $totalLots = DB::select(DB::raw("
             SELECT SUM(
                 (SELECT count(1) FROM lots l
@@ -50,6 +71,28 @@ class MarketAuctionController extends Controller
             FROM cooperatives coop
         "));
 
+        $totalLots = DB::select(DB::raw("
+        SELECT SUM(lots_count) AS total_lots
+        FROM (
+            SELECT COUNT(l.lot_number) AS lots_count
+            FROM cooperatives coop
+            LEFT JOIN lots l ON l.cooperative_id = coop.id
+            WHERE (
+                NOT EXISTS (
+                    SELECT 1
+                    FROM miller_auction_order_item item
+                    WHERE item.lot_number = l.lot_number
+                )
+                OR
+                (
+                    (SELECT COALESCE(SUM(item.quantity), 0)
+                     FROM miller_auction_order_item item
+                     WHERE item.lot_number = l.lot_number) < l.available_quantity
+                )
+            )
+            GROUP BY coop.id
+        ) AS subquery
+    "));
         $totalLots = $totalLots[0]->total_lots ?? 0;
 
         return view('pages.miller-admin.market-auction.index', compact('cooperatives', 'totalLots'));
@@ -91,25 +134,73 @@ class MarketAuctionController extends Controller
         }
     
         // Fetch lots with quantities
-        $lots = DB::select(DB::raw("
+     /*   $lots = DB::select(DB::raw("
             SELECT l.*, item.quantity AS qty
             FROM lots l
             LEFT JOIN miller_auction_cart_item item ON item.lot_number = l.lot_number
             LEFT JOIN miller_auction_cart cart ON cart.id = item.cart_id
-            WHERE l.cooperative_id = :coop_id AND 
+            WHERE l.cooperative_id = :coop_id AND
+               (     
                 (SELECT count(1) FROM miller_auction_order_item item
                     WHERE item.lot_number = l.lot_number
                 ) = 0
+                 OR
+                (
+                (SELECT COALESCE(SUM(item.quantity), 0)
+                 FROM miller_auction_order_item item
+                 WHERE item.lot_number = l.lot_number) < l.available_quantity
+                 )
+               )            
         "), ["coop_id" => $coop_id]);
-    
+    */
+                $lots = DB::select(DB::raw("
+                SELECT 
+                    l.*, 
+                    item.quantity AS qty,
+                    remaining.remaining_quantity
+                FROM lots l
+                LEFT JOIN miller_auction_cart_item item ON item.lot_number = l.lot_number
+                LEFT JOIN miller_auction_cart cart ON cart.id = item.cart_id
+                LEFT JOIN (
+                    SELECT 
+                        l.lot_number,
+                        (l.available_quantity - COALESCE(s.sold_quantity, 0)) AS remaining_quantity
+                    FROM lots l
+                    LEFT JOIN (
+                        SELECT 
+                            lot_number, 
+                            SUM(quantity) AS sold_quantity
+                        FROM miller_auction_order_item
+                        GROUP BY lot_number
+                    ) s ON s.lot_number = l.lot_number
+                ) remaining ON remaining.lot_number = l.lot_number
+                WHERE l.cooperative_id = :coop_id AND
+                    (
+                        (SELECT COUNT(1) FROM miller_auction_order_item item WHERE item.lot_number = l.lot_number) = 0
+                        OR
+                        (
+                            (SELECT COALESCE(SUM(item.quantity), 0)
+                            FROM miller_auction_order_item item
+                            WHERE item.lot_number = l.lot_number) < l.available_quantity
+                        )
+                    )
+            "), ["coop_id" => $coop_id]);
         // Count all cooperative lots except those in an order
         $lots_count = DB::select(DB::raw("
             SELECT count(1) AS count
             FROM lots l
             WHERE l.cooperative_id = :coop_id AND
+               (
                 (SELECT count(1) FROM miller_auction_order_item item
                     WHERE item.lot_number = l.lot_number
                 ) = 0
+               OR
+               (
+                (SELECT COALESCE(SUM(item.quantity), 0)
+                 FROM miller_auction_order_item item
+                 WHERE item.lot_number = l.lot_number) < l.available_quantity
+               )
+             )
         "), ["coop_id" => $coop_id])[0]->count;
     
         // Calculate total quantity of available lots
@@ -117,9 +208,17 @@ class MarketAuctionController extends Controller
             SELECT SUM(l.available_quantity) AS total_quantity
             FROM lots l
             WHERE l.cooperative_id = :coop_id AND
+              (
                 (SELECT count(1) FROM miller_auction_order_item item
                     WHERE item.lot_number = l.lot_number
                 ) = 0
+                OR
+                (
+                (SELECT COALESCE(SUM(item.quantity), 0)
+                 FROM miller_auction_order_item item
+                 WHERE item.lot_number = l.lot_number) < l.available_quantity
+                )
+              )
         "), ["coop_id" => $coop_id])[0]->total_quantity;
     
         // Fetch cooperative details
@@ -431,13 +530,10 @@ class MarketAuctionController extends Controller
         if (!$quantity || $quantity < 1) {
             return redirect()->back()->with('error', 'Invalid quantity.');
         } 
-
         $coop_id=$coop_id;
         $lot_number=$lot_id;
         $quantity=$request->quantity;
-
-        //dd($coop_id,$lot_number,$quantity);
-
+        
         DB::beginTransaction();
         $user = Auth::user();
         try {
@@ -445,13 +541,11 @@ class MarketAuctionController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
         // retrieve lot
         try {
             $lot = Lot::where("cooperative_id", $coop_id)
                 ->where("lot_number", $lot_number)
                 ->firstOrFail();
-               // dd($lot); 
         } catch (\Throwable $th) {
             DB::rollBack();
             toastr()->error('Lot does not exist');
@@ -496,8 +590,8 @@ class MarketAuctionController extends Controller
             $cartItem->save();
         }       
         //update lot available quantity
-        $lot->available_quantity=$lot->available_quantity-$quantity;
-        $lot->save();
+       // $lot->available_quantity=$lot->available_quantity-$quantity;
+       // $lot->save();
 
         DB::commit();
 

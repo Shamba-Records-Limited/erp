@@ -51,13 +51,13 @@
                         <td>{{ ++$key }}</td>
                         <td>{{ $lot->lot_number }}</td>
                         <td>
-                            {{ $lot->available_quantity }} KG
-                            @php $totalQuantity += $lot->available_quantity; @endphp
+                            {{ $lot->remaining_quantity }} KG
+                            @php $totalQuantity += $lot->remaining_quantity; @endphp
                         </td>
                         
                         <td class="text-right">
                             @if ($lot->qty <= 0)
-                            <button class="btn btn-outline-primary" onclick="addToCart('{{ $cooperative->id }}', '{{ $lot->lot_number }}','{{ $lot->available_quantity }}')">
+                            <button class="btn btn-outline-primary" onclick="addToCart('{{ $cooperative->id }}', '{{ $lot->lot_number }}','{{ $lot->remaining_quantity }}')">
                                Add to Cart
                             </button>
                             @else

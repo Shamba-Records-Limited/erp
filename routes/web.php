@@ -644,6 +644,9 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::get("/orders/approve-delivery/{delivery_id}", "MillerAdmin\OrdersController@approve_delivery")
         ->name("miller-admin.orders.approve-delivery");
 
+    Route::get("/orders/reject-delivery/{delivery_id}", "MillerAdmin\OrdersController@reject_delivery")
+        ->name("miller-admin.orders.reject-delivery");
+
     // inventory
     Route::get("/inventory/pre-milled", "MillerAdmin\InventoryController@pre_milled")
         ->name("miller-admin.pre-milled-inventory.show");
