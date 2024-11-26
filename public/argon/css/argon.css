@@ -20440,6 +20440,10 @@ hr.horizontal.light {
     /* Make the name bold */
 }
 
+.text-wrapper{
+    width:160px;
+}
+
 .designation {
     font-size: 0.9em;
     /* Font size for roles and cooperative name */
