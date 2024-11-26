@@ -44,7 +44,11 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                            @if($data['percent_daily'] > 0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data['percent_daily'] }}%</span>
+                            @else
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{$data['percent_daily'] }}%</span>
+                            @endif
                                 <span class="text-nowrap">Since yesterday</span>
                             </p>
                         </div>
@@ -68,8 +72,13 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                            @if($data['percent_farmer'] > 0)
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{$data['percent_farmer']}}%</span>
+                            @else
+                            <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i>{{$data['percent_farmer']}}%</span>
+                            @endif
                                 <span class="text-nowrap">Since last month</span>
+                            
                             </p>
                         </div>
                     </div>
@@ -92,7 +101,11 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                               @if($data['percent_weekly'] > 0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data['percent_weekly'] }}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data['percent_weekly']}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last week</span>
                             </p>
                         </div>
@@ -157,6 +170,7 @@ $total_gender_distribution = $data["gender"]->female + $data["gender"]->male + $
                 </div>
             </div>
         </div>
+        
         <div class="col-xl-4">
             <div class="card shadow">
                 <div class="card-body">

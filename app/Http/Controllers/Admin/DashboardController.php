@@ -44,17 +44,17 @@ class DashboardController extends Controller
         $age_distribution = DB::select(DB::raw("
         SELECT 
             CASE 
-                WHEN age BETWEEN 18 AND 25 THEN '18-25'
-                WHEN age BETWEEN 26 AND 35 THEN '26-35'
-                WHEN age BETWEEN 36 AND 45 THEN '36-45'
-                WHEN age BETWEEN 46 AND 55 THEN '46-55'
-                WHEN age BETWEEN 56 AND 65 THEN '56-65'
+                WHEN TIMESTAMPDIFF(YEAR, f.dob, CURDATE()) BETWEEN 18 AND 25 THEN '18-25'
+                WHEN TIMESTAMPDIFF(YEAR, f.dob, CURDATE()) BETWEEN 26 AND 35 THEN '26-35'
+                WHEN TIMESTAMPDIFF(YEAR, f.dob, CURDATE()) BETWEEN 36 AND 45 THEN '36-45'
+                WHEN TIMESTAMPDIFF(YEAR, f.dob, CURDATE()) BETWEEN 46 AND 55 THEN '46-55'
+                WHEN TIMESTAMPDIFF(YEAR, f.dob, CURDATE()) BETWEEN 56 AND 65 THEN '56-65'
                 ELSE '66+' 
             END AS age_group,
             COUNT(*) AS quantity
-        FROM farmers
+        FROM farmers f
         GROUP BY age_group
-        "));
+    "));
 
 
         // collection over time
@@ -273,7 +273,7 @@ class DashboardController extends Controller
 
             $collectionsByCooperative[$coop->name] = DB::select(DB::raw($myQuery), $params);
         }
-
+      
         // cooperatives count
         $cooperativesCount = DB::select(DB::raw("SELECT COUNT(*) AS count FROM cooperatives"))[0]->count;
 
@@ -288,7 +288,142 @@ class DashboardController extends Controller
             ORDER BY quantity DESC
         "), ["coop_id" => $coop_id]);
 
+        $genderDistribution = DB::table('farmers')
+        ->select('gender', DB::raw('COUNT(*) as count'))
+        ->groupBy('gender')
+        ->get();
 
+        //Raw material quantity
+        $raw_material_count = DB::select(DB::raw("
+            SELECT 
+                COUNT(*) AS total_count,
+                SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END) AS this_month_quantity,
+                SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END) AS last_month_quantity,
+                -- Calculate percentage change
+                CASE 
+                    WHEN SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END) = 0 
+                    THEN NULL -- Avoid division by zero
+                    ELSE (SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END) 
+                        - SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END)) 
+                        / SUM(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN quantity ELSE 0 END) * 100 
+                END AS percentage_change
+            FROM raw_material_inventories
+            WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)
+        "));
+
+        $raw_percent = $raw_material_count[0]->percentage_change ?? 0;
+
+         //Farmers Cahnge
+         $farmer_count_comparison = DB::select(DB::raw("
+         SELECT
+             -- Farmer count for this week
+             COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) AS this_week_count,
+             
+             -- Farmer count for last week
+             COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) AS last_week_count,
+             
+             -- Calculate the percentage change
+             CASE 
+                 WHEN COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) = 0 
+                 THEN NULL -- Avoid division by zero
+                 ELSE (COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) 
+                       - COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END)) 
+                       / COUNT(CASE WHEN WEEK(created_at) = WEEK(CURDATE()) - 1 AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) * 100 
+             END AS percentage_change
+         FROM farmers
+         WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 2 WEEK)
+     "));
+         $farmer_percent = $farmer_count_comparison[0]->percentage_change ?? 0;
+
+         //collection count
+         $collections_comparison = DB::select(DB::raw("
+            SELECT
+                -- Collection count for today
+                COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN 1 END) AS today_count,
+                -- Collection count for yesterday
+                COUNT(CASE WHEN DATE(created_at) = CURDATE() - INTERVAL 1 DAY THEN 1 END) AS yesterday_count,
+                -- Calculate the percentage change
+                CASE 
+                    WHEN COUNT(CASE WHEN DATE(created_at) = CURDATE() - INTERVAL 1 DAY THEN 1 END) = 0 
+                    THEN NULL -- Avoid division by zero
+                    ELSE (COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN 1 END) 
+                        - COUNT(CASE WHEN DATE(created_at) = CURDATE() - INTERVAL 1 DAY THEN 1 END)) 
+                        / COUNT(CASE WHEN DATE(created_at) = CURDATE() - INTERVAL 1 DAY THEN 1 END) * 100 
+                END AS percentage_change
+            FROM collections
+            WHERE created_at >= CURDATE() - INTERVAL 1 DAY
+        "));
+        $collection_percent = $collections_comparison[0]->percentage_change ?? 0;
+
+        //cooperatives count
+        $cooperative_comparison = DB::select(DB::raw("
+            SELECT
+                -- Count cooperatives for this month
+                COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) THEN 1 END) AS this_month_count,
+                -- Count cooperatives for last month
+                COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) AS last_month_count,
+                -- Calculate the percentage change
+                CASE
+                    WHEN COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) = 0
+                    THEN NULL -- Avoid division by zero
+                    ELSE (COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) THEN 1 END)
+                        - COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END))
+                        / COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) * 100
+                END AS percentage_change
+            FROM cooperatives
+            WHERE created_at >= CURDATE() - INTERVAL 2 MONTH
+        "));
+        $coop_percent = $cooperative_comparison[0]->percentage_change ?? 0;
+
+        $miller_comparison = DB::select(DB::raw("
+                SELECT
+                    -- Count millers for this month
+                    COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) THEN 1 END) AS this_month_count,
+                    -- Count millers for last month
+                    COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) AS last_month_count,
+                    -- Calculate the percentage change
+                    CASE
+                        WHEN COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) = 0
+                        THEN NULL -- Avoid division by zero
+                        ELSE (COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) THEN 1 END)
+                            - COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END))
+                            / COUNT(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN 1 END) * 100
+                    END AS percentage_change
+                FROM millers
+                WHERE created_at >= CURDATE() - INTERVAL 2 MONTH
+            "));
+
+            $millers_percent = $miller_comparison[0]->percentage_change ?? 0;
+
+            $product_comparison = DB::select(DB::raw("
+                SELECT 
+                    -- Sum of quantities for this month
+                    SUM(CASE 
+                        WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                        AND MONTH(created_at) = MONTH(CURDATE()) THEN quantity 
+                        ELSE 0 END) AS this_month_quantity,
+                    -- Sum of quantities for last month
+                    SUM(CASE 
+                        WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                        AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN quantity 
+                        ELSE 0 END) AS last_month_quantity,
+                    -- Calculate percentage change
+                    CASE
+                        WHEN SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN quantity ELSE 0 END) = 0
+                        THEN NULL -- Avoid division by zero
+                        ELSE 
+                            (SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) THEN quantity ELSE 0 END) 
+                            - SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN quantity ELSE 0 END)) 
+                            / SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN quantity ELSE 0 END) * 100
+                    END AS percentage_change
+                FROM final_products
+                WHERE created_at >= CURDATE() - INTERVAL 2 MONTH
+            "));
+            $percent_product = $product_comparison[0]->percentage_change;
 
         $data = [
             "total_collection_weight" => $totalCollectionWeight,
@@ -301,9 +436,17 @@ class DashboardController extends Controller
             "male_collections" => $maleCollections,
             "female_collections" => $femaleCollections,
             "age_distribution" => $age_distribution, // Added age distribution
+            "genderDistribution" =>  $genderDistribution,
+            'raw_percent '=>$raw_percent,
+            'farmer_percent' =>$farmer_percent,
+            'collection_percent'=> $collection_percent,
+            'coop_percent'=> $coop_percent ,
+            'millers_percent'=> $millers_percent,
+            '$product_percent'=>$percent_product
         ];
 
 
-        return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
+        return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date","age_distribution"));
     }
+
 }

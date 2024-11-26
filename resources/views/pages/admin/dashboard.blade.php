@@ -507,14 +507,7 @@
     let collectionsGenderPieChart = new Chart(collectionsGenderPieChartCanvas, { type: 'pie', data: collectionsGenderPieData, options: collectionsGenderPieOptions });
 
     // Age Distribution Bar Chart with Dummy Data
-    let ageDistributionData = [
-        { age_group: "18-25", quantity: 3 },
-        { age_group: "26-35", quantity: 8 },
-        { age_group: "36-45", quantity: 4 },
-        { age_group: "46-55", quantity: 2 },
-        { age_group: "56-65", quantity: 1 },
-        { age_group: "66+", quantity: 5 }
-    ];
+    let ageDistributionData = @json($age_distribution);
 
     let ageDistributionLabels = ageDistributionData.map(c => c.age_group);
     let ageDistributionValues = ageDistributionData.map(c => c.quantity);
