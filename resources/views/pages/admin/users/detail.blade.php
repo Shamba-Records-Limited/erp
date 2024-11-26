@@ -23,7 +23,14 @@
                     <div class="info-card text-center p-3 shadow">
                         <h3 class="user-name">{{$user->first_name}} {{$user->other_names}}</h3>
                         <div class="location-info">
-                            <i class="fas fa-map-marker-alt"></i> {{$user->employee_county ?? 'N/A'}}, {{$user->employee_country_name ?? 'N/A'}}
+                            <i class="fas fa-map-marker-alt"></i>
+                           @if (!is_null($user->employee_country_name) && !is_null($user->employee_county))
+                             {{$user->employee_county}}, {{$user->employee_country_name}}
+                         @elseif (!is_null($user->official_country_name) && !is_null($user->official_county))
+                              {{$user->official_county}}, {{$user->official_country_name}}
+                         @else
+                             <span>No location info available</span>
+                         @endif
                         </div>
                     </div>
                 </div>
