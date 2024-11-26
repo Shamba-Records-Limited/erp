@@ -20579,7 +20579,12 @@ hr.horizontal.light {
 .detail-item .farmer-icon {
     color: #4CAF50; 
     margin-right: 10px; 
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
+}
+.detail-item .user-icon {
+    color: #4CAF50;
+    margin-right: 10px;
+    font-size: 0.9rem;
 }
 
 .label {
