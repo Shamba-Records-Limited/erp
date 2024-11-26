@@ -86,34 +86,45 @@
 
 
     <!-- New Charts and Tables Section -->
-    <div class="row">
-        <!-- Total Miller Sales (Bar Chart) -->
-        <div class="col-lg-6 mt-4">
-            <h3>Total Miller Sales</h3>
-            <canvas id="totalSalesChart"></canvas>
-        </div>
+ <!-- New Charts and Tables Section -->
+ <div class="row ml-3">
+     <!-- Total Miller Sales (Bar Chart) -->
+     <div class="col-lg-6 mt-4">
+         <div class="card p-4">
+             <h3 class="chart-title">Total Miller Sales</h3>
+             <canvas id="totalSalesChart"></canvas>
+         </div>
+     </div>
 
-        <!-- Milled Quantity vs Premilled Quantity (Bar Chart) -->
-        <div class="col-lg-6 mt-4">
-            <h3>Milled Quantity vs Premilled Quantity</h3>
-            <canvas id="milledVsPremilledChart"></canvas>
-        </div>
+     <!-- Milled Quantity vs Premilled Quantity (Bar Chart) -->
+     <div class="col-lg-6 mt-4">
+         <div class="card p-4">
+             <h3 class="chart-title">Milled Quantity vs Premilled Quantity</h3>
+             <canvas id="milledVsPremilledChart"></canvas>
+         </div>
+     </div>
 
-        <!-- Orders (Line Chart) -->
-        <div class="col-lg-6 mt-4">
-            <h3>Orders Over Time</h3>
-            <canvas id="ordersChart"></canvas>
-        </div>
+     <!-- Orders (Line Chart) -->
+     <div class="col-lg-6 mt-4">
+         <div class="card p-4">
+             <h3 class="chart-title">Orders Over Time</h3>
+             <canvas id="ordersChart"></canvas>
+         </div>
+     </div>
 
-        <!-- Final Products (Pie Chart) -->
-        <div class="chart-card pl-6 mt-4" style="width: 400px; height: 400px;"> <!-- Adjust width and height as needed -->
-            <h3>Final Products Distribution</h3>
-            <canvas id="finalProductsChart" width="300" height="300"></canvas> <!-- Set width and height -->
-        </div>
+     <!-- Final Products (Pie Chart) -->
+     <div class="col-lg-6 mt-4">
+         <div class="card p-4" style="height:400px">
+             <h3 class="chart-title">Final Products Distribution</h3>
+             <canvas id="finalProductsChart"></canvas>
+         </div>
+     </div>
+ </div>
+
 
 
         <!-- Payments Table -->
-<div class="col-lg-12">
+<div class="col-lg-12 mt-5 p-4 card">
     <h3>Payments Made</h3>
     <table class="table table-striped">
         <thead>
@@ -251,7 +262,9 @@
                 borderWidth: 1
             }]
         },
-        options: { responsive: true }
+        options: {
+        responsive: true,
+ }
     });
 </script>
 @endpush
@@ -259,20 +272,7 @@
 
 
 <style>
-:root {
-    --primary-color: #2563eb;
-    --primary-dark: #1d4ed8;
-    --secondary-color: #64748b;
-    --success-color: #22c55e;
-    --danger-color: #ef4444;
-    --warning-color: #f59e0b;
-    --background-color: #f1f5f9;
-    --card-background: rgba(255, 255, 255, 0.9);
-    --text-primary: #1e293b;
-    --text-secondary: #64748b;
-    --border-radius: 16px;
-    --transition: all 0.3s ease;
-}
+
 
 .dashboard-container {
     padding: 2rem;

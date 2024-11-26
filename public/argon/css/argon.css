@@ -20440,6 +20440,10 @@ hr.horizontal.light {
     /* Make the name bold */
 }
 
+.text-wrapper{
+    width:160px;
+}
+
 .designation {
     font-size: 0.9em;
     /* Font size for roles and cooperative name */
@@ -20575,7 +20579,12 @@ hr.horizontal.light {
 .detail-item .farmer-icon {
     color: #4CAF50; 
     margin-right: 10px; 
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
+}
+.detail-item .user-icon {
+    color: #4CAF50;
+    margin-right: 10px;
+    font-size: 0.9rem;
 }
 
 .label {
@@ -20729,14 +20738,6 @@ hr.horizontal.light {
         }
 
 
-/* Main Container */
-.card {
-    margin: 20px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
 
 /* Timeline Styling */
 .node {
