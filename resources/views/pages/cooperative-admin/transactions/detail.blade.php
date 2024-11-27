@@ -22,7 +22,7 @@
         </div>
 
         <!-- Table for lot details -->
-        <h4 class="mt-4">Lot Details</h4>
+        <h4 class=" card-title mt-8">Lot Details</h4>
         <div class="table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
