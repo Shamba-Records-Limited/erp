@@ -261,24 +261,113 @@ class DashboardController extends Controller
         //     SELECT 
         // "));
 
+        //collections yesterday backwords and today compared//
+        $collections_compare = DB::select(
+            DB::raw("
+                SELECT 
+                    SUM(CASE 
+                        WHEN created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY THEN quantity 
+                        ELSE 0 
+                    END) AS today_quantity,
+                    SUM(CASE 
+                        WHEN created_at >= CURDATE() - INTERVAL 1 DAY AND created_at < CURDATE() THEN quantity 
+                        ELSE 0 
+                    END) AS yesterday_quantity
+                FROM 
+                    collections
+                WHERE 
+                    created_at >= CURDATE() - INTERVAL 1 DAY
+                    AND cooperative_id = :cooperative_id
+            "),
+            ['cooperative_id' => 'ac1da4bd-532e-4016-8a0b-8d6c234549ef']
+        );
+        
+        $todayQuantity = $collections_compare[0]->today_quantity ?? 0;
+        $yesterdayQuantity = $collections_compare[0]->yesterday_quantity ?? 0;
+        //percentage of taday agains yesterday
+        if($yesterdayQuantity==0){
+            $percent_daily=100;
+        }else{
+            $today_yesterdays=(($todayQuantity-$yesterdayQuantity)/$yesterdayQuantity)*100;
+             $percent_daily=round($today_yesterdays,2);
+        }
+      
+       //Farmer Count Last month compared to this month
+       $farmers_count = DB::select(
+        DB::raw("
+            SELECT 
+                COUNT(CASE 
+                    WHEN MONTH(f.created_at) = MONTH(CURDATE()) AND YEAR(f.created_at) = YEAR(CURDATE()) THEN 1 
+                    ELSE NULL 
+                END) AS this_month_count,
+                COUNT(CASE 
+                    WHEN MONTH(f.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH) AND YEAR(f.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH) THEN 1 
+                    ELSE NULL 
+                END) AS last_month_count
+            FROM 
+                farmers f
+            JOIN 
+                farmer_cooperative fc ON fc.farmer_id = f.id 
+                AND fc.cooperative_id = :coop_id
+        "),
+        ["coop_id" => $coop_id]
+        )[0];
+         $thisMonthFarmers = $farmers_count->this_month_count ?? 0;
+         $lastMonthFarmers = $farmers_count->last_month_count ?? 0;   
+         if($lastMonthFarmers==0){
+            $farmer_percent=100;
+         }else{
+            $this_month_last_months=(($thisMonthFarmers-$lastMonthFarmers)/$lastMonthFarmers)*100;
+            $farmer_percent=round($this_month_last_months,2);
+         }
+
+         
+     //collections count last week against this week
+     $collection_counts = DB::select(
+        DB::raw("
+            SELECT 
+                COUNT(CASE 
+                    WHEN YEARWEEK(created_at, 1) = YEARWEEK(CURDATE(), 1) THEN 1 
+                    ELSE NULL 
+                END) AS this_week_count,
+                COUNT(CASE 
+                    WHEN YEARWEEK(created_at, 1) = YEARWEEK(CURDATE() - INTERVAL 1 WEEK, 1) THEN 1 
+                    ELSE NULL 
+                END) AS last_week_count
+            FROM 
+                collections
+            WHERE 
+                cooperative_id = :coop_id
+        "),
+        ['coop_id' => $coop_id]
+    )[0];
+    $thisWeekCount = $collection_counts->this_week_count ?? 0;
+    $lastWeekCount = $collection_counts->last_week_count ?? 0;
+     if( $lastWeekCount==0){
+        $percent_weekly=100;
+     }else{
+        $this_week_last_week=(($thisWeekCount-$lastWeekCount)/$lastWeekCount)*100;
+        $percent_weekly=round($this_week_last_week,2);
+     }
+     
 
 
-        $data = [
-            "farmer_count" => $farmerCount,
-            "collection_count" => $collectionCount,
-            "total_collection_weight" => $totalCollectionWeight,
-            "collections_by_wet_mills" => $collections_by_wet_mills,
-            "grade_distribution" => $grade_distribution,
-            "gender" => $gender_distribution,
-            "collections" => $collections,
-            "male_collections" => $maleCollections,
-            "female_collections" => $femaleCollections,
-            "other_gender_collections" => $otherGenderCollections,
-            "prev_collections" => $prevCollections
-        ];
-
-
-
+    $data = [
+        "farmer_count" => $farmerCount,
+        "collection_count" => $collectionCount,
+        "total_collection_weight" => $totalCollectionWeight,
+        "collections_by_wet_mills" => $collections_by_wet_mills,
+        "grade_distribution" => $grade_distribution,
+        "gender" => $gender_distribution,
+        "collections" => $collections,
+        "male_collections" => $maleCollections,
+        "female_collections" => $femaleCollections,
+        "other_gender_collections" => $otherGenderCollections,
+        "prev_collections" => $prevCollections,
+         "percent_farmer" =>  $farmer_percent,
+         "percent_daily"=>$percent_daily,
+         "percent_weekly"=>$percent_weekly
+    ];
 
         return view('pages.cooperative-admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
     }
