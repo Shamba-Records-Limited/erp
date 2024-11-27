@@ -16,7 +16,7 @@
             <div class="quick-stats">
                 <div class="stat-item">
                     <i class="fas fa-users"></i>
-                    <span class="stat-value">{{ count($farmers) }}</span>
+                    <span class="stat-value">{{ $totalFarmers }}</span>
                     <span class="stat-label">Farmers</span>
                 </div>
                 <div class="stat-item">

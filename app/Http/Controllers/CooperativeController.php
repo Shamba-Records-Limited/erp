@@ -437,30 +437,36 @@ class CooperativeController extends Controller
     }
 
  
-   public function showDetail($id)
-   {
-       // Fetch the cooperative details
-       $cooperative = DB::table('cooperatives')->where('id', $id)->first();
+ public function showDetail($id)
+ {
+     // Fetch the cooperative details
+     $cooperative = DB::table('cooperatives')->where('id', $id)->first();
 
-       // Fetch farmers associated with the cooperative with pagination
-       $perPage = request()->get('per_page', 10);
-       $farmers = DB::table('farmer_cooperative')
-           ->join('farmers', 'farmers.id', '=', 'farmer_cooperative.farmer_id')
-           ->join('users', 'users.id', '=', 'farmers.user_id')
-           ->where('farmer_cooperative.cooperative_id', $id)
-           ->select('farmers.id', 'farmers.member_no', 'users.username', 'users.first_name', 'users.other_names')
-           ->paginate($perPage);
+     // Fetch farmers associated with the cooperative with pagination
+     $perPage = request()->get('per_page', 10);
+     $farmers = DB::table('farmer_cooperative')
+         ->join('farmers', 'farmers.id', '=', 'farmer_cooperative.farmer_id')
+         ->join('users', 'users.id', '=', 'farmers.user_id')
+         ->where('farmer_cooperative.cooperative_id', $id)
+         ->select('farmers.id', 'farmers.member_no', 'users.username', 'users.first_name', 'users.other_names')
+         ->paginate($perPage);
 
-       // Fetch the cooperative admin details
-       $admin = DB::table('users')->where('cooperative_id', $id)->first(['first_name', 'other_names', 'email', 'username']);
+     // Fetch the total count of farmers (without pagination)
+     $totalFarmers = DB::table('farmer_cooperative')
+         ->join('farmers', 'farmers.id', '=', 'farmer_cooperative.farmer_id')
+         ->where('farmer_cooperative.cooperative_id', $id)
+         ->count();
 
-       // Check if the cooperative exists
-       if (!$cooperative) {
-           abort(404, 'Cooperative not found');
-       }
+     // Fetch the cooperative admin details
+     $admin = DB::table('users')->where('cooperative_id', $id)->first(['first_name', 'other_names', 'email', 'username']);
 
-       return view('pages.admin.cooperatives.detail', compact('cooperative', 'farmers', 'admin'));
-   }
+     // Check if the cooperative exists
+     if (!$cooperative) {
+         abort(404, 'Cooperative not found');
+     }
+
+     return view('pages.admin.cooperatives.detail', compact('cooperative', 'farmers', 'admin', 'totalFarmers'));
+ }
 
 
 }
