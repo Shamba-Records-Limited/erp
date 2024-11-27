@@ -151,7 +151,6 @@
                         <option value="50" {{ request()->get('per_page') == '50' ? 'selected' : '' }}>50</option>
                     </select>
                 </form>
-                {{ $farmers->links() }}
             </div>
             <table class="farmers-table">
                 <thead>
@@ -211,6 +210,7 @@
                     @endforelse
                 </tbody>
             </table>
+            <div class="form-links"> {{ $farmers->links() }}</div>
         </div>
     </div>
 </div>
@@ -229,6 +229,10 @@
     --text-secondary: #64748b;
     --border-radius: 16px;
     --transition: all 0.3s ease;
+}
+
+.form-links{
+    margin-left:45%;
 }
 
 .dashboard-container {
