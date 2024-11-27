@@ -424,6 +424,83 @@ class DashboardController extends Controller
                 WHERE created_at >= CURDATE() - INTERVAL 2 MONTH
             "));
             $percent_product = $product_comparison[0]->percentage_change;
+       //product count
+
+       $product_count_comparison = DB::select(DB::raw("
+                SELECT 
+                    -- Sum of 'count' for this month
+                    SUM(CASE 
+                        WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                        AND MONTH(created_at) = MONTH(CURDATE()) THEN count 
+                        ELSE 0 END) AS this_month_count,
+                    -- Sum of 'count' for last month
+                    SUM(CASE 
+                        WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                        AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN count 
+                        ELSE 0 END) AS last_month_count,
+                    -- Calculate percentage change
+                    CASE
+                        WHEN SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN count ELSE 0 END) = 0
+                        THEN NULL -- Avoid division by zero
+                        ELSE 
+                            (SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) THEN count ELSE 0 END) 
+                            - SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN count ELSE 0 END)) 
+                            / SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                                    AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN count ELSE 0 END) * 100
+                    END AS percentage_change
+
+                FROM final_products
+            "));
+        $finalproductcount_percent = $product_count_comparison[0]->percentage_change ?? 0;
+
+              //total sales
+      $sales_comparison = DB::select(DB::raw("
+      SELECT 
+          -- Total sales for this month
+          SUM(CASE 
+              WHEN YEAR(created_at) = YEAR(CURDATE()) 
+              AND MONTH(created_at) = MONTH(CURDATE()) THEN (paid_amount - balance) 
+              ELSE 0 END) AS this_month_sales,
+          -- Total sales for last month
+          SUM(CASE 
+              WHEN YEAR(created_at) = YEAR(CURDATE()) 
+              AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN (paid_amount - balance) 
+              ELSE 0 END) AS last_month_sales,
+          -- Calculate percentage change
+          CASE
+              WHEN SUM(CASE 
+                       WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                       AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN (paid_amount - balance) 
+                       ELSE 0 END) = 0
+              THEN NULL -- Avoid division by zero
+              ELSE 
+                  (SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                            AND MONTH(created_at) = MONTH(CURDATE()) THEN (paid_amount - balance) 
+                            ELSE 0 END) 
+                  - SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                             AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN (paid_amount - balance) 
+                             ELSE 0 END)) 
+                  / SUM(CASE WHEN YEAR(created_at) = YEAR(CURDATE()) 
+                             AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN (paid_amount - balance) 
+                             ELSE 0 END) * 100
+          END AS percentage_change
+      FROM sales
+  "));
+
+     $sales_percent = $sales_comparison[0]->percentage_change ?? 0;
+
+     //total sales
+     $total_sales = DB::select(DB::raw("
+    SELECT 
+        SUM(paid_amount - balance) AS total_sales_since_last_month
+    FROM sales
+    WHERE created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+    AND created_at < CURDATE()
+     "));
+     $sales_since_last_month = $total_sales[0]->total_sales_since_last_month ?? 0;
 
         $data = [
             "total_collection_weight" => $totalCollectionWeight,
@@ -437,15 +514,16 @@ class DashboardController extends Controller
             "female_collections" => $femaleCollections,
             "age_distribution" => $age_distribution, // Added age distribution
             "genderDistribution" =>  $genderDistribution,
-            'raw_percent '=>$raw_percent,
-            'farmer_percent' =>$farmer_percent,
-            'collection_percent'=> $collection_percent,
-            'coop_percent'=> $coop_percent ,
-            'millers_percent'=> $millers_percent,
-            '$product_percent'=>$percent_product
+            "raw_percent"=>$raw_percent,
+            "farmer_percent" =>$farmer_percent,
+            "collection_percent"=> $collection_percent,
+            "coop_percent"=> $coop_percent ,
+            "millers_percent"=> $millers_percent,
+            "finalproductcount_percent"=> $finalproductcount_percent,
+            "finalproductqnty_percent"=>$percent_product,
+            "sales_percent" =>  $sales_percent,
+             "sales_since_last_month"=>$sales_since_last_month
         ];
-
-
         return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date","age_distribution"));
     }
 

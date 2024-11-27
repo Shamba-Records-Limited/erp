@@ -28,7 +28,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                @if($data['raw_percent'] > 0)
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>{{$data["raw_percent"]}} %</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i>{{$data["raw_percent"]}} %</span>
+                                 @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -49,7 +53,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 3.48%</span>
+                                @if($data["farmer_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["farmer_percent"]}}%</span>
+                                 @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["farmer_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last week</span>
                             </p>
                         </div>
@@ -70,7 +78,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                 @if($data["collection_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["collection_percent"]}}%</span>
+                                 @else
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{$data["collection_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since yesterday</span>
                             </p>
                         </div>
@@ -91,7 +103,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                @if($data["coop_percent"]>0)
+                                 <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["coop_percent"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["coop_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -112,7 +128,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
+                                @if($data["millers_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["millers_percent"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["millers_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -133,7 +153,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 15%</span>
+                                @if($data["finalproductcount_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["finalproductcount_percent"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-dwon"></i> {{$data["finalproductcount_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -155,7 +179,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 10%</span>
+                                @if($data["finalproductqnty_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["finalproductqnty_percent"]}} %</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-up"></i> {{$data["finalproductqnty_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -199,7 +227,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 5%</span>
+                                @if($data["finalproductcount_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["finalproductcount_percent"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["finalproductcount_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -212,7 +244,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Total Sales</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="totalSales">Ksh 112,345</span>
+                                    <span class="h2 font-weight-bold mb-0" id="totalSales">Ksh {{$data["sales_since_last_month"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
@@ -221,7 +253,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20%</span>
+                                @if($data["sales_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["sales_percent"]}}%</span>
+                                @ese
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["sales_percent"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
