@@ -141,6 +141,18 @@
         </div>
 
         <div class="table-container">
+            <!-- Pagination Controls -->
+            <div class="pagination">
+                <form method="GET" action="{{ request()->url() }}">
+                    <label for="per_page">Entries per page:</label>
+                    <select name="per_page" id="per_page" onchange="this.form.submit()">
+                        <option value="10" {{ request()->get('per_page') == '10' ? 'selected' : '' }}>10</option>
+                        <option value="20" {{ request()->get('per_page') == '20' ? 'selected' : '' }}>20</option>
+                        <option value="50" {{ request()->get('per_page') == '50' ? 'selected' : '' }}>50</option>
+                    </select>
+                </form>
+                {{ $farmers->links() }}
+            </div>
             <table class="farmers-table">
                 <thead>
                     <tr>
@@ -153,49 +165,49 @@
                 </thead>
                 <tbody>
                     @forelse($farmers as $key => $farmer)
-                    <tr>
-                        <td>{{ ++$key }}</td>
-                        <td>
-                            <div class="member-info">
-                                <div class="member-avatar">
-                                    {{ substr($farmer->first_name, 0, 1) }}
+                        <tr>
+                            <td>{{ $farmers->firstItem() + $key }}</td> <!-- Calculate correct index -->
+                            <td>
+                                <div class="member-info">
+                                    <div class="member-avatar">
+                                        {{ substr($farmer->first_name, 0, 1) }}
+                                    </div>
+                                    <div class="member-details">
+                                        <span class="member-name">{{ $farmer->first_name }} {{ $farmer->other_names }}</span>
+                                        <span class="member-username">{{ $farmer->username }}</span>
+                                    </div>
                                 </div>
-                                <div class="member-details">
-                                    <span class="member-name">{{ $farmer->first_name }} {{ $farmer->other_names }}</span>
-                                    <span class="member-username">{{ $farmer->username }}</span>
+                            </td>
+                            <td>
+                                <span class="member-number">{{ $farmer->member_no }}</span>
+                            </td>
+                            <td>
+                                <span class="status-badge active">Active</span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ route('admin.farmers.detail', $farmer->id) }}" class="btn-action view">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <!-- <button class="btn-action edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button> -->
+                                    <button class="btn-action delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="member-number">{{ $farmer->member_no }}</span>
-                        </td>
-                        <td>
-                            <span class="status-badge active">Active</span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{{ route('admin.farmers.detail', $farmer->id) }}" class="btn-action view">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <!-- <button class="btn-action edit">
-                                    <i class="fas fa-edit"></i>
-                                </button> -->
-                                <button class="btn-action delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="5" class="empty-state">
-                            <div class="empty-state-content">
-                                <i class="fas fa-users-slash"></i>
-                                <h3>No Farmers Found</h3>
-                                <p>This cooperative doesn't have any registered farmers yet.</p>
-                            </div>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <div class="empty-state-content">
+                                    <i class="fas fa-users-slash"></i>
+                                    <h3>No Farmers Found</h3>
+                                    <p>This cooperative doesn't have any registered farmers yet.</p>
+                                </div>
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
