@@ -200,7 +200,7 @@ class DashboardController extends Controller
                         JOIN farmers f ON f.id = c.farmer_id
                         WHERE DATE_FORMAT(c.date_collected, '%Y-%b') = date_series.month_year AND
                             CASE WHEN :gender = 'all' THEN 1 ELSE f.gender = :gender1 END AND
-                            CASE WHEN :coop = 'all' THEN 1 ELSE c.coop_id = :coop1 END
+                            CASE WHEN :coop = 'all' THEN 1 ELSE c.cooperative_id = :coop1 END
                     ) AS y
                 FROM date_series
                 GROUP BY date_series.month_year;
