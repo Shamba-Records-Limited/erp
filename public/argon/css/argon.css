@@ -20581,9 +20581,16 @@ hr.horizontal.light {
     margin-right: 10px; 
     font-size: 0.9rem;
 }
+
 .detail-item .user-icon {
     color: #4CAF50;
-    margin-right: 10px;
+    margin-right: 1px;
+    font-size: 0.9rem;
+}
+
+.user-icon {
+    color: #4CAF50;
+    margin-right: 15px;
     font-size: 0.9rem;
 }
 
@@ -20843,4 +20850,9 @@ hr.horizontal.light {
 }
 .node .node-card{
     background-color: #DFDEDE;
+}
+
+.amount {
+    color: #28a745;
+    font-weight: bold;
 }

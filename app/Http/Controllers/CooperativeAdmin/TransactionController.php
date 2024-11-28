@@ -210,29 +210,12 @@ class TransactionController extends Controller
      * @return View|Factory
      */
     public function transaction_detail($id){
-        $user = Auth::user();
-        $coop_id = $user->cooperative->id;
+       $transaction = Transaction::find($id);
 
-        //$id='e27a8e3b-11c0-414b-b95b-16db3c3a5ad2';
-        $transaction = Transaction::find($id);
-        // $lots = $transaction->lots;
+            $lots = $transaction->lots;
 
-        $subquery = DB::table('collections as c1')
-                  ->select('c1.id', 'c1.farmer_id', 'c1.cooperative_id', 'c1.lot_number')
-                  ->where('c1.cooperative_id', $coop_id)
-                  ->whereRaw('c1.created_at = (SELECT MAX(c2.created_at) FROM collections as c2 WHERE c2.farmer_id = c1.farmer_id AND c2.cooperative_id = c1.cooperative_id)');
-
-        $lots = DB::table('transactions as tr')
-                    ->select('tr.id', 'tr.transaction_number', 'tr.amount', 'tr.type', 'lo.lot_number', 'lo.available_quantity as quantity')
-                    ->joinSub($subquery, 'c', function ($join) {
-                        $join->on('tr.recipient_id', '=', 'c.farmer_id')
-                            ->on('tr.sender_id', '=', 'c.cooperative_id');
-                        })
-                        ->join('lots as lo', 'c.lot_number', '=', 'lo.lot_number')
-                        ->where('tr.id', '=', $id)
-                        ->get();
          
-          //dd($transaction,$lots);
+//           dd($lots);
 
         return view("pages.cooperative-admin.transactions.detail", compact('transaction', 'lots'));
     }

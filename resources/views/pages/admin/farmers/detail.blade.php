@@ -27,7 +27,7 @@
                         </div>
                         <div class="total-collection mt-3">
                             <p>Total Collection</p>
-                            <h4 class="font-weight-bold">{{ isset($farmer->total_collection_quantity) ? $farmer->total_collection_quantity . ' KG' : 'No Data' }}</h4>
+                            <h4 class="font-weight-bold">{{ isset($farmer->total_collection_quantity) ? number_format($farmer->total_collection_quantity). ' KG' : 'No Data' }}</h4>
                         </div>
                     </div>
                 </div>
@@ -88,7 +88,7 @@
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-tractor"></i></span>
                             <span class="label">Total Collection Quantity:</span>
-                            <span class="value">{{ isset($farmer->total_collection_quantity) ? $farmer->total_collection_quantity . ' KG' : 'No Data' }}</span>
+                            <span class="value">{{ isset($farmer->total_collection_quantity) ? number_format($farmer->total_collection_quantity) . ' KG' : 'No Data' }}</span>
                         </div>
                         <div class="detail-item">
                             <span class="farmer-icon"><i class="fas fa-leaf"></i></span>
