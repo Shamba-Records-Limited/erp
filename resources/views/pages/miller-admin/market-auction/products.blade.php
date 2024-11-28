@@ -18,7 +18,7 @@
             &times;
         </button>
 
-        <form action="" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('miller-admin.marketplace-products.add_product') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
                 <label for="product-name" class="form-label">Product Name</label>
@@ -36,7 +36,7 @@
                 <label for="product-price" class="form-label">Selling Price (KES)</label>
                 <input type="number" class="form-control" id="product-price" name="price" placeholder="Kshs. 560" step="1" required>
             </div>
-            <button type="submit" class="btn btn-success">Submit</button>
+            <button type="submit" class="btn btn-success">Submit1</button>
         </form>
     </div>
 
@@ -46,10 +46,11 @@
         <div class="col-md-4 col-lg-3 mb-4 d-flex">
             <div class="card product-card flex-fill" style="height: 100%;">
                 <!-- Lazy loading implemented here -->
-                <img src="{{ $product['image'] }}" class="card-img-top" alt="{{ $product['name'] }}" loading="lazy" style="object-fit: cover; height: 200px;">
+                <!--<img src="{{ $product['image'] }}" class="card-img-top" alt="{{ $product['name'] }}" loading="lazy" style="object-fit: cover; height: 200px;">-->
+                <img src="{{ asset('storage/' . ($product->image ?? 'default-image.jpg')) }}" class="card-img-top" alt="{{ $product->name ?? 'Product' }}" loading="lazy" style="object-fit: cover; height: 200px;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">{{ $product['name'] }}</h5>
-                    <p class="card-text">KES {{ number_format($product['price'], 2) }}</p>
+                    <p class="card-text">KES {{ number_format($product['sale_price'], 2) }}</p>
                     <button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>
                 </div>
             </div>

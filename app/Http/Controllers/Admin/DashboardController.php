@@ -313,6 +313,19 @@ class DashboardController extends Controller
 
         $raw_percent = $raw_material_count[0]->percentage_change ?? 0;
 
+        $raw_materials_qnty = DB::select(DB::raw("
+            SELECT 
+                SUM(quantity) AS total_quantity
+            FROM raw_material_inventories
+            WHERE created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+            AND created_at < CURDATE()
+        "));
+
+        $raw_materialsqnty = $raw_materials_qnty[0]->total_quantity ?? 0;   
+      
+
+
+
          //Farmers Cahnge
          $farmer_count_comparison = DB::select(DB::raw("
          SELECT
@@ -395,6 +408,15 @@ class DashboardController extends Controller
 
             $millers_percent = $miller_comparison[0]->percentage_change ?? 0;
 
+            $millers_count = DB::select(DB::raw("
+                SELECT 
+                    COUNT(*) AS total_millers
+                FROM millers
+                WHERE created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+                AND created_at < CURDATE()
+            "));
+            $total_millers=$millers_count[0]->total_millers ?? 0;
+
             $product_comparison = DB::select(DB::raw("
                 SELECT 
                     -- Sum of quantities for this month
@@ -424,6 +446,25 @@ class DashboardController extends Controller
                 WHERE created_at >= CURDATE() - INTERVAL 2 MONTH
             "));
             $percent_product = $product_comparison[0]->percentage_change;
+
+            $final_products_quantity = DB::select(DB::raw("
+                SELECT 
+                    SUM(quantity) AS total_quantity
+                FROM final_products
+                WHERE created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+                AND created_at < CURDATE()
+            "));
+            $final_products_qnty =$final_products_quantity[0]->total_quantity ?? 0;
+
+            $final_products_count = DB::select(DB::raw("
+                SELECT 
+                    SUM(count) AS total_count
+                FROM final_products
+                WHERE created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+                AND created_at < CURDATE()
+            "));
+            $final_prod_count = $final_products_count[0]->total_count ?? 0;
+        
        //product count
 
        $product_count_comparison = DB::select(DB::raw("
@@ -502,6 +543,37 @@ class DashboardController extends Controller
      "));
      $sales_since_last_month = $total_sales[0]->total_sales_since_last_month ?? 0;
 
+     $pre_milled_inventories = DB::select(DB::raw("
+    SELECT
+        -- Sum for this month
+        SUM(CASE 
+            WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) THEN quantity 
+            ELSE 0 
+        END) AS this_month_quantity,
+
+        -- Sum for last month
+        SUM(CASE 
+            WHEN YEAR(created_at) = YEAR(CURDATE()) AND MONTH(created_at) = MONTH(CURDATE()) - 1 THEN quantity 
+            ELSE 0 
+        END) AS last_month_quantity,
+
+        -- Total since the beginning of last month to date
+        SUM(CASE 
+            WHEN created_at >= DATE_SUB(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH) AND created_at < CURDATE() THEN quantity
+            ELSE 0 
+        END) AS total_since_last_month
+    FROM pre_milled_inventories
+"));
+
+        $this_month_quantity = $pre_milled_inventories[0]->this_month_quantity ?? 0;
+        $last_month_quantity = $pre_milled_inventories[0]->last_month_quantity ?? 0;
+        // Calculate percentage change
+        $percentage_change = $last_month_quantity > 0 
+            ? (($this_month_quantity - $last_month_quantity) / $last_month_quantity) * 100 
+            : 0;
+        $total_Premiiled_since_last_month = $pre_milled_inventories[0]->total_since_last_month ?? 0;
+        $premilled_percent  = round($percentage_change, 2);
+
         $data = [
             "total_collection_weight" => $totalCollectionWeight,
             "farmer_count" => $farmerCount,
@@ -515,14 +587,20 @@ class DashboardController extends Controller
             "age_distribution" => $age_distribution, // Added age distribution
             "genderDistribution" =>  $genderDistribution,
             "raw_percent"=>$raw_percent,
+            "raw_materials_qnty"=> $raw_materialsqnty ,
             "farmer_percent" =>$farmer_percent,
             "collection_percent"=> $collection_percent,
             "coop_percent"=> $coop_percent ,
             "millers_percent"=> $millers_percent,
+            "millers_count" => $total_millers,
             "finalproductcount_percent"=> $finalproductcount_percent,
             "finalproductqnty_percent"=>$percent_product,
+            "final_products_quantity"=>$final_products_qnty,
+            "final_products_count"=>$final_prod_count,
             "sales_percent" =>  $sales_percent,
-             "sales_since_last_month"=>$sales_since_last_month
+             "sales_since_last_month"=>$sales_since_last_month,
+             "premilled_percent" => $premilled_percent,
+             "total_Premilled_since_last_month" => $total_Premiiled_since_last_month 
         ];
         return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date","age_distribution"));
     }

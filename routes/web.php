@@ -590,6 +590,8 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // market/products
     Route::get("market-auction/products", "MillerAdmin\MarketProductsController@index")
         ->name("miller-admin.marketplace-products");
+    Route::post("market-auction/products/add_product", "MillerAdmin\MarketProductsController@add_product")
+        ->name("miller-admin.marketplace-products.add_product");
 
     // market/auction
     Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")

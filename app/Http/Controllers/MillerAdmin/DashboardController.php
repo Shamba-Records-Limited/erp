@@ -188,6 +188,31 @@ class DashboardController extends Controller
                 "y" => $y
             ];
         }
+            //remaining coffe
+            $totalRemainingLot = DB::select(DB::raw("
+            SELECT SUM(remaining_quantity) AS total_remaining_quantity
+            FROM (
+                SELECT 
+                    (l.available_quantity - COALESCE(s.sold_quantity, 0)) AS remaining_quantity
+                FROM lots l
+                LEFT JOIN (
+                    SELECT 
+                        lot_number, 
+                        SUM(quantity) AS sold_quantity
+                    FROM miller_auction_order_item
+                    GROUP BY lot_number
+                ) s ON s.lot_number = l.lot_number
+            ) subquery;
+        "));
+        
+        $totalRemainingQuantity = $totalRemainingLot[0]->total_remaining_quantity;
+
+             //current orders
+             $count_order = DB::table('miller_auction_order as mac')
+             //->join('auction_order_delivery as auc', 'mac.order_id', '=', 'auc.order_id')
+             //->whereNull('auc.approved_by')
+             ->where('mac.miller_id', '=', $miller_id) 
+             ->count();  
 
 
         $data = [
@@ -199,6 +224,8 @@ class DashboardController extends Controller
             "expenses_series" => $expenses_series,
             "inventory_series" => $inventory_series,
             "sales_series" => $sales_series,
+            "total_remaining_quantity"=>$totalRemainingQuantity,
+            "count_order"=>$count_order
         ];
 
         return view('pages.miller-admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
