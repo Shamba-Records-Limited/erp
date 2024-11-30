@@ -115,7 +115,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 </select>
                             </div>
 
-<div class="form-group col-lg-3 col-md-6 col-12">
+                                        <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="ministry">Ministry</label>
                                 <input type="text" name="ministry" class="form-control  {{ $errors->has('ministry') ? ' is-invalid' : '' }}" value="{{ $official->ministry}}" id="ministry" placeholder="Enter govt ministry...">
                                 @if ($errors->has('ministry'))
@@ -125,7 +125,7 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 @endif
                             </div>
 
-<div class="form-group col-lg-3 col-md-6 col-12">
+                            <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="ministry">Designation</label>
                                 <input type="text" name="designation" class="form-control  {{ $errors->has('designation') ? ' is-invalid' : '' }}" value="{{ $official->designation}}" id="designation" placeholder="Enter ministry designation...">
                                 @if ($errors->has('designation'))
