@@ -47,7 +47,7 @@
             <div class="card product-card flex-fill" style="height: 100%;">
                 <!-- Lazy loading implemented here -->
                 <!--<img src="{{ $product['image'] }}" class="card-img-top" alt="{{ $product['name'] }}" loading="lazy" style="object-fit: cover; height: 200px;">-->
-                <img src="{{ asset('storage/' . ($product->image ?? 'default-image.jpg')) }}" class="card-img-top" alt="{{ $product->name ?? 'Product' }}" loading="lazy" style="object-fit: cover; height: 200px;">
+                <img src="{{ asset('storage/' . ($product['image'] ?? 'default-image.jpg')) }}" class="card-img-top" alt="{{ $product->name ?? 'Product' }}" loading="lazy" style="object-fit: cover; height: 200px;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">{{ $product['name'] }}</h5>
                     <p class="card-text">KES {{ number_format($product['sale_price'], 2) }}</p>

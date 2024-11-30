@@ -15,15 +15,9 @@ class MarketProductsController extends Controller
     }
     public function index()
     {
-        // Hardcoded products data with relevant images from cdn.mafrservices.com
-        $products = [
-            ['name' => 'Nescafe Coffee', 'price' => 157.00, 'image' => 'https://images.pexels.com/photos/7507582/pexels-photo-7507582.jpeg'], // Coffee cup
-            ['name' => 'Cadbury Cocoa', 'price' => 172.00, 'image' => 'https://cdn.mafrservices.com/sys-master-root/h1a/hce/9428046315550/25993_2.jpg'],
-
-        ];
         $product = Product::all();
         $products = $product->toArray();
-       // dd($products);
+        //dd($products);
         // Paginate the products (8 per page)
         $perPage = 8;
         $currentPage = LengthAwarePaginator::resolveCurrentPage();

@@ -150,7 +150,7 @@ class UsersController extends Controller
             'email' => 'required|email',
             'profile_picture' => 'sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072',
         ]);
-
+        
         try {
             $user = User::findOrFail($id);
 
@@ -182,11 +182,17 @@ class UsersController extends Controller
             $user->save();
 
             Log::info('User updated successfully: ' . $user->id);
-
-            return redirect()->route('admin.users.show')->with('success', 'User updated successfully!');
+            toastr()->success('User updated successfully');
+            return redirect()->route('admin.users.show');
+            
         } catch (\Exception $e) {
-            Log::error('Error updating user: ' . $e->getMessage());
-            return redirect()->back()->withErrors(['error' => 'Failed to update user']);
+            Log::error('Error updating user: ' . $e->getMessage(), [
+                'user_id' => $user->id ?? null,
+                'data' => $request->all(),
+            ]);
+            return redirect()->back()
+            ->withInput()
+            ->withErrors(['error' => 'Failed to update user']);
         }
     }
 

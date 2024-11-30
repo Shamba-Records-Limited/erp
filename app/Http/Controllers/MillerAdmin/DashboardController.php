@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -189,7 +190,7 @@ class DashboardController extends Controller
             ];
         }
             //remaining coffe
-            $totalRemainingLot = DB::select(DB::raw("
+     $totalRemainingLot = DB::select(DB::raw("
             SELECT SUM(remaining_quantity) AS total_remaining_quantity
             FROM (
                 SELECT 
@@ -205,15 +206,73 @@ class DashboardController extends Controller
             ) subquery;
         "));
         
-        $totalRemainingQuantity = $totalRemainingLot[0]->total_remaining_quantity;
+        $totalRemainingQuantity=$totalRemainingLot[0]->total_remaining_quantity ?? 0 ;
+        
+        $totalPercentageChange = DB::select(DB::raw("
+        SELECT 
+            -- Calculate total quantity for this month and last month
+            CASE 
+                WHEN last_month.total_qty = 0 THEN NULL
+                ELSE ((current_month.total_qty - last_month.total_qty) / last_month.total_qty) * 100
+            END AS total_percentage_change
+        FROM (
+            -- Subquery for current month's total quantity
+            SELECT 
+                SUM(item.quantity) AS total_qty
+            FROM miller_auction_cart_item item
+            WHERE MONTH(item.created_at) = MONTH(CURRENT_DATE)
+            AND YEAR(item.created_at) = YEAR(CURRENT_DATE)
+        ) current_month,
+        (
+            -- Subquery for last month's total quantity
+            SELECT 
+                SUM(item.quantity) AS total_qty
+            FROM miller_auction_cart_item item
+            WHERE MONTH(item.created_at) = MONTH(CURRENT_DATE) - 1
+            AND YEAR(item.created_at) = YEAR(CURRENT_DATE)
+        ) last_month
+    "), []);
+             $totalPercentageLot=$totalPercentageChange[0]->total_percentage_change;
+            // Handle the case where there were no lots last month
+            $percentageChangeLot = $totalPercentageLot ?? 0;
 
-             //current orders
-             $count_order = DB::table('miller_auction_order as mac')
-             //->join('auction_order_delivery as auc', 'mac.order_id', '=', 'auc.order_id')
-             //->whereNull('auc.approved_by')
-             ->where('mac.miller_id', '=', $miller_id) 
-             ->count();  
+        //2.current orders
+        // Get the start and end timestamps for today and yesterday
+            $todayStart = Carbon::today()->startOfDay();
+            $todayEnd = Carbon::today()->endOfDay();
 
+            $yesterdayStart = Carbon::yesterday()->startOfDay();
+            $yesterdayEnd = Carbon::yesterday()->endOfDay();     
+        $orderCounts = DB::table('miller_auction_order as mac')
+             ->selectRaw("
+                 SUM(CASE WHEN mac.created_at BETWEEN ? AND ? THEN 1 ELSE 0 END) as today_count,
+                 SUM(CASE WHEN mac.created_at BETWEEN ? AND ? THEN 1 ELSE 0 END) as yesterday_count
+             ", [
+                 $todayStart, $todayEnd,  // Today
+                 $yesterdayStart, $yesterdayEnd  // Yesterday
+             ])
+             ->where('mac.miller_id', '=', $miller_id)
+             ->first();
+            // Check if the query returned results
+            if ($orderCounts) {
+                // Extract counts, defaulting to 0 if not available
+                $today_count = $orderCounts->today_count ?? 0;
+                $yesterday_count = $orderCounts->yesterday_count ?? 0;
+
+                // Calculate the percentage change
+                if ($yesterday_count > 0) {
+                    $order_percent = (($today_count - $yesterday_count) / $yesterday_count) * 100;
+                } else {
+                    $order_percent = $today_count > 0 ? 100 : 0; // If no orders yesterday, consider 100% increase if today has orders
+                }
+            } else {
+                // Default values if no data is returned
+                $today_count = 0;
+                $yesterday_count = 0;
+                $order_percent = 0;
+            }
+             $total_count=$today_count+$yesterday_count;
+            // Initialize count
 
         $data = [
             "coffee_in_marketplace" => $coffee_in_marketplace,
@@ -225,7 +284,9 @@ class DashboardController extends Controller
             "inventory_series" => $inventory_series,
             "sales_series" => $sales_series,
             "total_remaining_quantity"=>$totalRemainingQuantity,
-            "count_order"=>$count_order
+            "count_order"=>$total_count,
+            "order_percent" => $order_percent,
+            "percentageRemaining"=>round($percentageChangeLot,2),
         ];
 
         return view('pages.miller-admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
