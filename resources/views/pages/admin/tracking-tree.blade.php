@@ -43,6 +43,9 @@
                         <input type="hidden" name="level" class="level" value="0">
                         <form id="get_root_details">
                             <div class="form-group">
+                                <label for="cooperative">Cooperative Name</label>
+                            </div>
+                            <div class="form-group">
                                 <label for="root_type">Root Type</label>
                                 <select class="form-control form-select node_type" name="root_type" id="root_type">
                                     <option value="">-- SELECT ROOT TYPE --</option>
@@ -137,7 +140,7 @@
         // submit form
         $.ajax({
             method: 'GET',
-            url: `/miller-admin/tracking-tree/root-identifier/${root_type}`,
+            url: `/admin/tracking-tree/root-identifier/${root_type}`,
             error: function(data) {
 
             },
@@ -182,7 +185,7 @@
         // submit form
         $.ajax({
             method: 'POST',
-            url: "/miller-admin/tracking-tree/root-details",
+            url: "/admin/tracking-tree/root-details",
             data,
             error: function(data) {
 
@@ -215,7 +218,7 @@
 
         $.ajax({
             method: 'POST',
-            url: "/miller-admin/tracking-tree/node-children",
+            url: "/admin/tracking-tree/node-children",
             data: {
                 _token: "{{ csrf_token() }}",
                 node_type,
