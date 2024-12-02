@@ -104,7 +104,7 @@ exit;
 		 3. ln -s /var/www/storage/app/public /var/www/public/storage
   ###To remove the symlink if not needed 
        1. log in to the container as previusly(1)
-       2. Make sure to be on the path  rm/var/www/public# 
+       2. Make sure to be on the path  /var/www/public
        3.  rm storage
 
 #### TODO: Monitoring and Alerting.

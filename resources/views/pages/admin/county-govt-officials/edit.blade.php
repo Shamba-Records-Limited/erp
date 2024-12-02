@@ -181,6 +181,22 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                 @endif
                             </div>
 
+                            <div class="form-group col-lg-4 col-md-6 col-12">
+                            <label for="profile_picture" class="font-weight-bold">Profile Picture</label>
+                            <div class="text-center mb-2">
+                                <img 
+                                    src="{{ $official->profile_picture ? '/storage/' . $official->profile_picture : '/images/default-avatar.png' }}" 
+                                    alt="Profile Picture" 
+                                    class="rounded-circle" 
+                                    style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd;">
+                            </div>
+                            <input type="file" name="profile_picture" class="form-control {{ $errors->has('profile_picture') ? 'is-invalid' : '' }}" id="profile_picture">
+
+                            @if ($errors->has('profile_picture'))
+                                <div class="invalid-feedback">{{ $errors->first('profile_picture') }}</div>
+                            @endif
+                        </div>
+
                         </div>
                         <hr class="mt-1 mb-1">
                         <div class="form-row">
