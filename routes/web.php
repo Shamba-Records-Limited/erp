@@ -312,6 +312,18 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post('/support/update-ticket-status/{ticket_number}', 'Admin\SupportController@update_ticket_status')
         ->name('admin.support.update-ticket-status');
 
+    // tracking-tree
+    Route::get('/tracking', 'Admin\TrackingTreeController@index')
+        ->name('admin.tracking-tree.show');
+    Route::get("/tracking-tree", "Admin\TrackingTreeController@index")
+        ->name("admin.tracking-tree.show");
+    Route::get("/tracking-tree/root-identifier/{root_type}", "Admin\TrackingTreeController@root_identifier")
+        ->name("admin.tracking-tree.root_identifier");
+    Route::post("/tracking-tree/root-details", "Admin\TrackingTreeController@root_details")
+        ->name("admin.tracking-tree.root_details");
+    Route::post("/tracking-tree/node-children", "Admin\TrackingTreeController@node_children")
+        ->name("admin.tracking-tree.node-children");
+
 });
 
 
