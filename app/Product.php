@@ -9,7 +9,7 @@ use Webpatser\Uuid\Uuid;
 class Product extends Model
 {
     protected $fillable = [
-        'name','cooperative_id','mode', 'sale_price',
+        'name','cooperative_id','mode', 'sale_price','quantity', 
         'paye','serial_number','image','category_id', 'unit_id'
     ];
 
