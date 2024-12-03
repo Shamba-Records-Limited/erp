@@ -133,6 +133,22 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post("admin/dashboard/export", "Admin\DashboardController@export_dashboard")
         ->name("admin.dashboard.export");
 
+    //warehouses
+    Route::get("admin/warehouse", "Admin\WarehousesController@index")
+          ->name("admin.warehouse");
+
+    // tracking-tree
+    Route::get('/tracking', 'Admin\TrackingTreeController@index')
+        ->name('admin.tracking-tree.show');
+    Route::get("/tracking-tree", "Admin\TrackingTreeController@index")
+        ->name("admin.tracking-tree.show");
+    Route::get("/tracking-tree/root-identifier/{root_type}", "Admin\TrackingTreeController@root_identifier")
+        ->name("admin.tracking-tree.root_identifier");
+    Route::post("/tracking-tree/root-details", "Admin\TrackingTreeController@root_details")
+        ->name("admin.tracking-tree.root_details");
+    Route::post("/tracking-tree/node-children", "Admin\TrackingTreeController@node_children")
+        ->name("admin.tracking-tree.node-children");
+
     //branches
     Route::get('/branches', 'Admin\CoopBranchController@index')
         ->name('branches.show');
@@ -184,7 +200,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::delete('/miller-branches/{id}', 'Admin\MillerBranchesController@delete')
         ->name('admin.miller-branches.delete');
 
-    
+
 
     // users
     Route::get('/users', 'Admin\UsersController@index')
@@ -206,7 +222,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/users/edit/{id}', 'Admin\UsersController@edit')
         ->name('admin.users.edit');
     Route::post('/users/edit/{id}', 'Admin\UsersController@update')
-        ->name('admin.users.update');    
+        ->name('admin.users.update');
     Route::get('/users/delete/{id}', 'Admin\UsersController@delete')
         ->name('admin.users.delete');
 
@@ -236,7 +252,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.add');
     Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
         ->name('admin.farmers.detail');
-   
+
     // products
     Route::get('/products/dash', 'Admin\ProductsController@dash')
         ->name('admin.products.dash');
@@ -312,18 +328,6 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post('/support/update-ticket-status/{ticket_number}', 'Admin\SupportController@update_ticket_status')
         ->name('admin.support.update-ticket-status');
 
-    // tracking-tree
-    Route::get('/tracking', 'Admin\TrackingTreeController@index')
-        ->name('admin.tracking-tree.show');
-    Route::get("/tracking-tree", "Admin\TrackingTreeController@index")
-        ->name("admin.tracking-tree.show");
-    Route::get("/tracking-tree/root-identifier/{root_type}", "Admin\TrackingTreeController@root_identifier")
-        ->name("admin.tracking-tree.root_identifier");
-    Route::post("/tracking-tree/root-details", "Admin\TrackingTreeController@root_details")
-        ->name("admin.tracking-tree.root_details");
-    Route::post("/tracking-tree/node-children", "Admin\TrackingTreeController@node_children")
-        ->name("admin.tracking-tree.node-children");
-
 });
 
 
@@ -377,10 +381,10 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
 
     Route::post('/products/product-pricing', 'CooperativeAdmin\ProductsController@store_product_pricing')
         ->name('cooperative-admin.products.store_product_pricing');
-     
+
     // Stock Levels Routes
     Route::get('/stock-levels', 'CooperativeAdmin\StockLevelsController@index')->name('cooperative-admin.stock-levels.index');
-    Route::get('/stock-levels/{productId}', 'CooperativeAdmin\StockLevelsController@show')->name('cooperative-admin.stock-levels.show');    
+    Route::get('/stock-levels/{productId}', 'CooperativeAdmin\StockLevelsController@show')->name('cooperative-admin.stock-levels.show');
 
     // farmers
     Route::get('/farmers-mini-dashboard', 'CooperativeAdmin\FarmersController@farmer_mini_dashboard')
@@ -493,7 +497,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
         // dashboard
         Route::get("/dashboard", "CooperativeAdmin\WalletManagementController@dashboard")
             ->name("cooperative-admin.wallet-management.dashboard");
-        
+
         // module: account receivables
         Route::get("/account-receivables", "CooperativeAdmin\WalletManagementController@account_receivables")
             ->name("cooperative-admin.wallet-management.account-receivables");
@@ -501,7 +505,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.wallet-management.account-receivables.table");
         Route::get('/account-receivables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_receivables')
             ->name("cooperative-admin.account-receivables.export");
-        
+
         // module: account payables
         Route::get("/account-payables", "CooperativeAdmin\WalletManagementController@account_payables")
             ->name("cooperative-admin.wallet-management.account-payables");
@@ -509,7 +513,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.wallet-management.account-payables.table");
         Route::get('/account-payables/download/{type}', 'CooperativeAdmin\WalletManagementController@export_account_payables')
             ->name("cooperative-admin.account-payables.export");
-        
+
         // module: expenses
         Route::get("/expenses", "CooperativeAdmin\WalletManagementController@expenses")
             ->name("cooperative-admin.wallet-management.expenses");
@@ -525,7 +529,7 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.wallet-management.income.table");
         Route::get('/income/download/{type}', 'CooperativeAdmin\WalletManagementController@export_income')
             ->name("cooperative-admin.income.export");
-            
+
 
         // transactions
         Route::get("/transactions", "CooperativeAdmin\WalletManagementController@list_transactions")
@@ -602,8 +606,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // market/products
     Route::get("market-auction/products", "MillerAdmin\MarketProductsController@index")
         ->name("miller-admin.marketplace-products");
-    Route::post("market-auction/products/add_product", "MillerAdmin\MarketProductsController@add_product")
-        ->name("miller-admin.marketplace-products.add_product");
 
     // market/auction
     Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")
