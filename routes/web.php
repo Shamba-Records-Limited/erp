@@ -133,6 +133,10 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::post("admin/dashboard/export", "Admin\DashboardController@export_dashboard")
         ->name("admin.dashboard.export");
 
+    //warehouses
+    Route::get("admin/warehouse", "Admin\WarehousesController@index")
+          ->name("admin.warehouse");
+
     //branches
     Route::get('/branches', 'Admin\CoopBranchController@index')
         ->name('branches.show');

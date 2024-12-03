@@ -93,6 +93,11 @@ $cooperative = null;
                 <a class="nav-link" href="{{ route('admin.dashboard') }}">
                     <i class="ni ni-tv-2 text-custom-green"></i> {{ __('Dashboard') }}
                 </a>
+            </li> <li class="nav-item {{ active_class(['admin/warehouse']) }} mb-3">
+                <!-- Added margin-bottom for spacing -->
+                <a class="nav-link" href="{{ route('admin.warehouse') }}">
+                    <i class="ni ni-tv-2 text-custom-green"></i> {{ __('Warehouse') }}
+                </a>
             </li>
             <li class="nav-item {{ active_class(['admin/cooperative/setup*']) }} mb-3">
                 <a class="nav-link" href="{{ route('cooperative') }}">
