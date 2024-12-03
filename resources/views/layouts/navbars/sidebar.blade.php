@@ -1009,6 +1009,33 @@ $cooperative = null;
                     </a>
                 </li>
 
+
+                <!-- Marketplace Dropdown -->
+                <li class="nav-item {!!  active_class(['farmer/marketplace/*']) !!} ">
+                    <a class="nav-link" href="#navbar-marketplace" data-toggle="collapse" role="button"
+                        aria-expanded="{!!  is_active_route(['farmer/marketplace/*'])  !!}"
+                        aria-controls="navbar-marketplace">
+                        <i class="ni ni-money-coins text-green"></i>
+                        <span class="nav-link-text">{{ __('Market Place') }}</span>
+                    </a>
+                    <div class="collapse {{ show_class(['farmer/marketplace/*']) }}" id="navbar-marketplace">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ active_class(['farmer/marketplace/dashboard']) }}">
+                                <a class="nav-link" href="{{ route('farmer.marketplace.dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+                            <li
+                                class="nav-item {{ active_class(['farmer/marketplace/products']) }}">
+                                <a class="nav-link"
+                                    href="{{ route('farmer.marketplace.products') }}">
+                                    {{ __('Products') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
                 <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
                     <a class="nav-link" href="{{ route('farmer.transactions.show') }}">
                         <i class="menu-icon mdi mdi-help-circle-outline text-green"></i>

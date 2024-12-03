@@ -2382,6 +2382,12 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
 
     Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
 
+      // Web routes for Farmer Marketplace
+      Route::prefix('farmer/marketplace')->name('farmer.marketplace.')->group(function () {
+          Route::get('/dashboard', 'Farmer\MarketplaceController@dashboard')->name('dashboard');
+          Route::get('/products', 'Farmer\MarketplaceController@products')->name('products');
+      });
+
     Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
     Route::get("/transactions/{id}", "Farmer\TransactionController@detail")
         ->name("farmer.transactions.detail");
@@ -2456,28 +2462,28 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
 //         Route::post('/bookings/{id}/edit/status', 'Farmer\VetController@edit_booking_status')->name('farmer.vet.my-booking.edit.status');
 //     });
 
-//     /*************
-//      * WALLET
-//      *************/
-//     Route::prefix('/wallet')->group(function () {
-//         Route::get('/dashboard', 'Farmer\WalletController@index')->name('farmer.wallet.dashboard');
-//         Route::get('/transactions', 'Farmer\WalletController@transactions')->name('farmer.wallet.transactions');
-//         Route::post('/transactions/withdraw', 'MpesaController@b2cInit')->name('farmer.wallet.transactions.withdraw');
-//         Route::post('/transactions/deposit', 'MpesaController@lnmStkPush')->name('farmer.wallet.transactions.deposit');
+    /*************
+     * WALLET
+     *************/
+    Route::prefix('/wallet')->group(function () {
+        Route::get('/dashboard', 'Farmer\WalletController@index')->name('farmer.wallet.dashboard');
+        Route::get('/transactions', 'Farmer\WalletController@transactions')->name('farmer.wallet.transactions');
+        Route::post('/transactions/withdraw', 'MpesaController@b2cInit')->name('farmer.wallet.transactions.withdraw');
+        Route::post('/transactions/deposit', 'MpesaController@lnmStkPush')->name('farmer.wallet.transactions.deposit');
 
-//         Route::get('/loans', 'Farmer\LoansController@index')->name('farmer.wallet.loans');
-//         Route::get('/loans/{loan_id}/details', 'Farmer\LoansController@details')->name('farmer.wallet.loans.details');
-//         Route::post('/loans/request', 'Farmer\LoansController@requestLoan')->name('farmer.wallet.loans.request');
-//         Route::get('/loan/{id}/installments', 'Farmer\LoansController@loan_installments')->name('farmer.loan.installments');
-//         Route::post('/loan/{id}/repay', 'Farmer\LoansController@repay_loan')->name('farmer.loan.installment.repay');
+        Route::get('/loans', 'Farmer\LoansController@index')->name('farmer.wallet.loans');
+        Route::get('/loans/{loan_id}/details', 'Farmer\LoansController@details')->name('farmer.wallet.loans.details');
+        Route::post('/loans/request', 'Farmer\LoansController@requestLoan')->name('farmer.wallet.loans.request');
+        Route::get('/loan/{id}/installments', 'Farmer\LoansController@loan_installments')->name('farmer.loan.installments');
+        Route::post('/loan/{id}/repay', 'Farmer\LoansController@repay_loan')->name('farmer.loan.installment.repay');
 
-//         Route::get('/savings', 'Farmer\SavingsController@index')->name('farmer.wallet.savings');
-//         Route::get('/saving/{id}/installments', 'Farmer\SavingsController@installments')->name('farmer.wallet.saving.installments');
-//         Route::post('/savings/add', 'Farmer\SavingsController@create_saving_account')->name('farmer.wallet.savings.add');
-//         Route::post('/savings/withdraw', 'Farmer\SavingsController@withdraw_from_saving_account')
-//             ->name('farmer.wallet.savings.withdraw');
-//         Route::post('/barchart-doughnutChart', 'Farmer\WalletController@bar_chart_data')->name('farmer.wallet.dashboard.barchart');
-//     });
+        Route::get('/savings', 'Farmer\SavingsController@index')->name('farmer.wallet.savings');
+        Route::get('/saving/{id}/installments', 'Farmer\SavingsController@installments')->name('farmer.wallet.saving.installments');
+        Route::post('/savings/add', 'Farmer\SavingsController@create_saving_account')->name('farmer.wallet.savings.add');
+        Route::post('/savings/withdraw', 'Farmer\SavingsController@withdraw_from_saving_account')
+            ->name('farmer.wallet.savings.withdraw');
+        Route::post('/barchart-doughnutChart', 'Farmer\WalletController@bar_chart_data')->name('farmer.wallet.dashboard.barchart');
+    });
 
 //     /*************
 //      * INSURANCE
