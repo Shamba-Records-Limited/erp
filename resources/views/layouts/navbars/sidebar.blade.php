@@ -150,6 +150,14 @@ $cooperative = null;
                     <i class="ni ni-credit-card text-custom-green"></i> {{ __('Collections') }}
                 </a>
             </li>
+
+        <!-- Global Tracking Tree -->
+            <li class="nav-item {{ active_class(['admin/tracking-tree*']) }} mb-3">
+                <a class="nav-link" href="{{ route('admin.tracking-tree.show') }}">
+                    <i class="ni ni-map-big text-green"></i> {{ __('Tracking Tree') }}
+                </a>
+            </li>
+
          <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">
                 <!-- Added margin-bottom for spacing -->
