@@ -12,8 +12,13 @@ class DashboardController extends Controller
     }
 
     public function index() {
+    //
 
-        return view('pages.farmer.dashboard');
+    }
+
+    public function dashboard() {
+
+        //
     }
 
 }
