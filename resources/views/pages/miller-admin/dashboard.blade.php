@@ -25,7 +25,7 @@ $total_gender_distribution = 0;
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Coffee In Marketplace</h5>
                                     <span class="h2 font-weight-bold mb-0">
-                                        {{ number_format($data["coffee_in_marketplace"] ?? 0) }} KG
+                                        {{ number_format($data["total_remaining_quantity"] ?? 0) }} KG
                                     </span>
                                 </div>
                                 <div class="col-auto">
@@ -35,7 +35,11 @@ $total_gender_distribution = 0;
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
+                                @if($data["percentageRemaining"]>0)
+                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> {{$data["percentageRemaining"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i> {{$data["percentageRemaining"]}}%</span>
+                                @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -70,7 +74,7 @@ $total_gender_distribution = 0;
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Current Orders</h5>
-                                    <span class="h2 font-weight-bold mb-0">924</span>
+                                    <span class="h2 font-weight-bold mb-0">{{$data["count_order"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -79,7 +83,11 @@ $total_gender_distribution = 0;
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
+                                @if($data["order_percent"]>0)
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-up"></i>{{$data["order_percent"]}}%</span>
+                                @else
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i>{{$data["order_percent"]}}%</span>
+                                 @endif
                                 <span class="text-nowrap">Since yesterday</span>
                             </p>
                         </div>

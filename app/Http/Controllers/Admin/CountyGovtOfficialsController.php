@@ -172,7 +172,7 @@ class CountyGovtOfficialsController extends Controller
     {
         $request->validate([
             'id' => 'required|exists:county_govt_officials,id',
-            'country_code' => 'required',
+          //  'country_code' => 'required',
             'county_id' => 'required|exists:counties,id',
             'sub_county_id' => 'required|exists:sub_counties,id',
             'id_no' => "required|unique:county_govt_officials,id_no,$request->id",
@@ -180,17 +180,41 @@ class CountyGovtOfficialsController extends Controller
             'employee_no' => 'required|string',
             'gender' => 'required',
             'ministry' => 'required',
-            'designation' => 'required'
+            'designation' => 'required',
+            'profile_picture' => "required|image|mimes:jpeg,jpg,png,gif|max:3072",
         ]);
-
+       // dd($request->all());
         try {
+            
             DB::beginTransaction();
             $user = Auth::user();
 
-           $official = CountyGovtOfficial::find($request->id);
+            $official = CountyGovtOfficial::find($request->id);
+            $userprof = User::findOrFail($official->user_id);
+            // Update user details
+            $userprof->username = $request->username;
+            $userprof->first_name = $request->first_name;
+            $userprof->other_names = $request->other_names;
+            $userprof->email = $request->email;
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                // Log the file upload
+                Log::info('Profile picture uploaded for user: ' . $userprof->id);
+                // Delete old profile picture if it exists
+                if ($userprof->profile_picture && file_exists(public_path('storage/' . $userprof->profile_picture))) {
+                    unlink(public_path('storage/' . $userprof->profile_picture));
+                    Log::info('Old profile picture deleted: ' . $userprof->profile_picture);
+                }
+                // Save the new profile picture
+                $file = $request->file('profile_picture');
+                $filePath = $file->store('images/profile', 'public');
+                $userprof->profile_picture = $filePath;
+                Log::info('New profile picture stored at: ' . $filePath);
+            }
+            $userprof->save();
 
             //official...
-            $official->country_code = $request->country_code;
+           // $official->country_code = $request->country_code;
             $official->county_id = $request->county_id;
             $official->sub_county_id = $request->sub_county_id;
             $official->gender = $request->gender;
@@ -200,7 +224,6 @@ class CountyGovtOfficialsController extends Controller
             $official->ministry = $request->ministry;
             $official->designation = $request->designation;
             $official->save();
-
 
             Log::debug("Updated official: $official");
 
@@ -230,7 +253,7 @@ class CountyGovtOfficialsController extends Controller
             Log::error($th->getMessage());
             Log::error($th->getTraceAsString());
             DB::rollback();
-            toastr()->error('County Govt Official could not be updated');
+            toastr()->error('County Govt Official could not be updateds');
             return redirect()->back()->withInput();
         }
     }

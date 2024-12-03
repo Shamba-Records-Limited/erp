@@ -163,6 +163,8 @@ class MarketDashboardController extends Controller
                 ) = 0
         "))[0]->total;
 
+        //Charts data
+
         // coffee grade distribution
         $grade_distribution = DB::select(DB::raw("
             SELECT SUM(quantity) AS quantity, pg.name AS name
@@ -175,6 +177,14 @@ class MarketDashboardController extends Controller
         "), ["miller_id" => $miller_id]);
 
         // todo: continue here
+        $salesChart = DB::table('sales')
+        ->select(
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"),
+            DB::raw("SUM(paid_amount) as total_sales")
+        )
+        ->groupBy('month')
+        ->orderBy('month', 'ASC')
+        ->get();
 
         // combination of milled and pre-milled
         $inventory_series = [];
@@ -189,6 +199,152 @@ class MarketDashboardController extends Controller
             ];
         }
 
+        //Available stock 
+        $available_stock = DB::select(DB::raw("
+            SELECT SUM(l.available_quantity) AS quantity
+            FROM lots l
+            LEFT JOIN (
+                SELECT lot_number, SUM(quantity) AS total_quantity
+                FROM miller_auction_order_item
+                GROUP BY lot_number
+            ) item_summary
+            ON l.lot_number = item_summary.lot_number
+            WHERE (item_summary.lot_number IS NULL OR item_summary.total_quantity < l.available_quantity)
+            AND l.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+        "));
+
+        $stock_available = $available_stock[0]->quantity ?? 0; // Use null coalescing to avoid errors if the 
+        
+        // Calculate the sum of quantities for this week
+            $thisWeekQuantity = DB::table('lots as l')
+            ->leftJoinSub(
+                DB::table('miller_auction_order_item')
+                    ->select('lot_number', DB::raw('SUM(quantity) AS total_quantity'))
+                    ->groupBy('lot_number'),
+                'item_summary',
+                'l.lot_number',
+                '=',
+                'item_summary.lot_number'
+            )
+            ->where(function ($query) {
+                $query->whereNull('item_summary.lot_number')
+                    ->orWhereRaw('item_summary.total_quantity < l.available_quantity');
+            })
+            ->whereBetween('l.created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->sum('l.available_quantity');
+
+            // Calculate the sum of quantities for last week
+            $lastWeekQuantity = DB::table('lots as l')
+            ->leftJoinSub(
+                DB::table('miller_auction_order_item')
+                    ->select('lot_number', DB::raw('SUM(quantity) AS total_quantity'))
+                    ->groupBy('lot_number'),
+                'item_summary',
+                'l.lot_number',
+                '=',
+                'item_summary.lot_number'
+            )
+            ->where(function ($query) {
+                $query->whereNull('item_summary.lot_number')
+                    ->orWhereRaw('item_summary.total_quantity < l.available_quantity');
+            })
+            ->whereBetween('l.created_at', [
+                now()->subWeek()->startOfWeek(),
+                now()->subWeek()->endOfWeek()
+            ])
+            ->sum('l.available_quantity');
+
+            // Calculate percentage change
+            if ($lastWeekQuantity > 0) {
+            $stock_percent= (($thisWeekQuantity - $lastWeekQuantity) / $lastWeekQuantity) * 100;
+            } else {
+            $stock_percent=100; // Or set to 100% if there's no stock last week
+            }
+            
+         //toatal sales since ast month
+         $sales = DB::select(DB::raw("
+                SELECT SUM(paid_amount) AS total_sales
+                FROM sales
+                WHERE miller_id = :miller_id
+                AND created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+            "), [
+                'miller_id' => $miller_id,
+            ]);
+            // Access the total_sales value
+            $totalSales = $result[0]->total_sales ?? 0;
+
+            // Total sales for this month
+                $thisMonthResult = DB::select(DB::raw("
+                SELECT SUM(paid_amount) AS total_sales
+                FROM sales
+                WHERE miller_id = :miller_id
+                AND created_at >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                "), [
+                'miller_id' => $miller_id,
+                ]);
+
+                $thisMonthSales = $thisMonthResult[0]->total_sales ?? 0;
+
+                // Total sales for last month
+                $lastMonthResult = DB::select(DB::raw("
+                SELECT SUM(paid_amount) AS total_sales
+                FROM sales
+                WHERE miller_id = :miller_id
+                AND created_at >= DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01')
+                AND created_at < DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                "), [
+                'miller_id' => $miller_id,
+                ]);
+
+                $lastMonthSales = $lastMonthResult[0]->total_sales ?? 0;
+
+                // Calculate percentage change
+                if ($lastMonthSales > 0) {
+                $sale_percent = (($thisMonthSales - $lastMonthSales) / $lastMonthSales) * 100;
+                } else {
+                    $sale_percent  = $thisMonthSales > 0 ? 100 : 0; // If no sales last month, set change to 100% or 0%
+                }
+
+            // Count total orders approved by the specified miller from last week to today
+            $totalOrders = DB::select(DB::raw("
+                SELECT COUNT(*) AS total_orders
+                FROM auction_order_delivery
+                WHERE approved_by = :miller_id
+                AND created_at >= DATE_SUB(CURDATE(), INTERVAL 1 WEEK)
+            "), [
+                'miller_id' => $miller_id,
+            ]);
+            // Access the total_orders value
+            $totalOrdersCount = $totalOrders[0]->total_orders ?? 0;
+
+
+            // Get the total orders for this week
+            $thisWeekTotal = DB::select(DB::raw("
+            SELECT COUNT(*) AS total_orders
+            FROM auction_order_delivery
+            WHERE approved_by = :miller_id
+            AND created_at >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY
+            AND created_at < CURDATE() + INTERVAL 1 DAY
+            "), ['miller_id' => $miller_id]);
+
+            // Get the total orders for last week
+            $lastWeekTotal = DB::select(DB::raw("
+            SELECT COUNT(*) AS total_orders
+            FROM auction_order_delivery
+            WHERE approved_by = :miller_id
+            AND created_at >= CURDATE() - INTERVAL (WEEKDAY(CURDATE()) + 7) DAY
+            AND created_at < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY
+            "), ['miller_id' => $miller_id]);
+
+            // Access the total orders count for this week and last week
+            $thisWeekOrders = $thisWeekTotal[0]->total_orders ?? 0;
+            $lastWeekOrders = $lastWeekTotal[0]->total_orders ?? 0;
+
+            // Calculate percentage change if last week orders exist
+            $order_percent = 0;
+            if ($lastWeekOrders > 0) {
+                $order_percent  = (($thisWeekOrders - $lastWeekOrders) / $lastWeekOrders) * 100;
+            }
 
         $data = [
             "coffee_in_marketplace" => $coffee_in_marketplace,
@@ -199,8 +355,16 @@ class MarketDashboardController extends Controller
             "expenses_series" => $expenses_series,
             "inventory_series" => $inventory_series,
             "sales_series" => $sales_series,
+            'stock_availabe'=>$stock_available,
+            'stock_percent'=> round($stock_percent,2),
+            'totalsales'=> $totalSales,
+            'sale_percent'=>$sale_percent,
+            'totalOrdersCount'=> $totalOrdersCount,
+            'order_percent'=>$order_percent,
+            'salesChart' => $salesChart 
+
         ];
 
-        return view('pages.miller-admin.market-auction.dashboard');
+        return view('pages.miller-admin.market-auction.dashboard',compact('data'));
     }
 }

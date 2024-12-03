@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                @if($data['raw_percent'] > 0)
+                                @if($data["raw_percent"] > 0)
                                 <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>{{$data["raw_percent"]}} %</span>
                                 @else
                                 <span class="text-danger mr-2"><i class="fa fa-arrow-down"></i>{{$data["raw_percent"]}} %</span>
@@ -119,7 +119,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Millers/Processors Count</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="millersCount">{{$data["collection_count"]}}</span>
+                                    <span class="h2 font-weight-bold mb-0" id="millersCount">{{$data["millers_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
@@ -144,7 +144,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Number of Final Products</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="finalProductsCount">1,234</span>
+                                    <span class="h2 font-weight-bold mb-0" id="finalProductsCount">{{$data["final_products_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
@@ -159,7 +159,7 @@
                                 <span class="text-danger mr-2"><i class="fas fa-arrow-dwon"></i> {{$data["finalproductcount_percent"]}}%</span>
                                 @endif
                                 <span class="text-nowrap">Since last month</span>
-                            </p>
+                            </p> 
                         </div>
                     </div>
                 </div>
@@ -170,7 +170,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Processed Product Quantity</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="milledCoffeeQuantity">4,560 KG</span>
+                                    <span class="h2 font-weight-bold mb-0" id="milledCoffeeQuantity">{{$data["final_products_quantity"]}} KG</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
@@ -196,7 +196,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Pre-Processed Product Quantity</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="preMilledCoffeeQuantity">3,200 KG</span>
+                                    <span class="h2 font-weight-bold mb-0" id="preMilledCoffeeQuantity">{{$data["total_Premilled_since_last_month"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
@@ -205,7 +205,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 8%</span>
+                                @if($data["premilled_percent"]>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data["premilled_percent"]}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data["premilled_percent"]}}%</span>
+                                 @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -218,7 +222,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="text-uppercase text-muted mb-0">Number of Products Available</h5>
-                                    <span class="h2 font-weight-bold mb-0" id="productsAvailableCount">890</span>
+                                    <span class="h2 font-weight-bold mb-0" id="productsAvailableCount">{{$data["final_products_count"]}}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-info text-white rounded-circle shadow">

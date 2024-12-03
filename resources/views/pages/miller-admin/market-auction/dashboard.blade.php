@@ -46,7 +46,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Available Stock for Sale</h5>
-                                    <span class="h2 font-weight-bold mb-0 d-block">{{ $data['available_stock'] ?? '0' }}</span>
+                                    <span class="h2 font-weight-bold mb-0 d-block">{{ $data['stock_availabe'] ?? '0' }}</span>
                                     <span class="small text-muted">KG</span>
                                 </div>
                                 <div class="col-auto">
@@ -56,7 +56,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.2%</span>
+                                @if($data['stock_percent']>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data['stock_percent']}}%</span>
+                                 @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data['stock_percent']}}%</span>
+                                 @endif
                                 <span class="text-nowrap">Since last week</span>
                             </p>
                         </div>
@@ -70,7 +74,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Total Sales Value</h5>
-                                    <span class="h2 font-weight-bold mb-0 d-block">Ksh {{ $data['total_sales_value'] ?? '0' }}</span>
+                                    <span class="h2 font-weight-bold mb-0 d-block">Ksh {{ $data['totalsales'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-primary text-white rounded-circle shadow">
@@ -79,7 +83,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 8.3%</span>
+                                @if($data['sale_percent']>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data['sale_percent']}}%</span>
+                                @else
+                                <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{$data['sale_percent']}}%</span>
+                                 @endif
                                 <span class="text-nowrap">Since last month</span>
                             </p>
                         </div>
@@ -93,7 +101,7 @@
                             <div class="row">
                                 <div class="col">
                                     <h5 class="card-title text-uppercase text-muted mb-0" style="font-size: {{ $h5FontSize }};">Orders Processed</h5>
-                                    <span class="h2 font-weight-bold mb-0 d-block">{{ $data['orders_processed'] ?? '0' }}</span>
+                                    <span class="h2 font-weight-bold mb-0 d-block">{{ $data['totalOrdersCount'] ?? '0' }}</span>
                                 </div>
                                 <div class="col-auto">
                                     <div class="icon icon-shape bg-success text-white rounded-circle shadow">
@@ -102,7 +110,11 @@
                                 </div>
                             </div>
                             <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 2.1%</span>
+                                 @if($data['order_percent']>0)
+                                <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{$data['order_percent']}}%</span>
+                                 @else
+                                <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> {{$data['order_percent']}}%</span>
+                                 @endif
                                 <span class="text-nowrap">Since last week</span>
                             </p>
                         </div>
@@ -125,7 +137,7 @@
                 </div>
                 <div class="card-body">
                     <div class="chart">
-                        <canvas id="salesTrendChart" class="chart-canvas"></canvas>
+                        <canvas id="salesTrendChart1" class="chart-canvas"></canvas>
                     </div>
                 </div>
             </div>
@@ -167,8 +179,48 @@
 
 @push('custom-scripts')
 <script>
+    //sales Trend Chart 1
+    // Prepare data from the server
+    const salesData = @json($data['salesChart']);
+        // Extract labels (months) and data (sales amounts)
+        const labels = salesData.map(sale => sale.month);
+        const data = salesData.map(sale => sale.total_sales);
+        // Create Chart.js line chart
+        const ctx = document.getElementById('salesTrendChart1').getContext('2d');
+        const salesChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales Amount',
+                    data: data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 2,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Sales Amount'
+                        }
+                    }
+                }
+            }
+        });
+
     // Sales Trend Chart
-    const salesTrendData = {
+    /*const salesTrendData = {
         labels: ['January', 'February', 'March', 'April', 'May', 'June'],
         datasets: [{
             label: 'Sales (Ksh)',
@@ -205,7 +257,7 @@
         data: salesTrendData,
         options: salesTrendOptions
     });
-
+  */
     // Sales by Product Category Chart
     const categorySalesData = {
         labels: ['Beverages', 'Dairy', 'Snacks', 'Bakery'],
