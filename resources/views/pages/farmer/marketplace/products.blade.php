@@ -8,7 +8,7 @@
 <div class="container mt-4">
     <!-- Register Product Button -->
     <div class="d-flex justify-content-start mb-3">
-        <button class="btn btn-primary" id="register-product-btn">Register New Product</button>
+        <h3>Marketplace Products</h3>
     </div>
 
     <!-- Register Product Form -->
@@ -17,27 +17,6 @@
         <button type="button" class="close-btn btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;" id="close-register-form">
             &times;
         </button>
-
-        <form action="{{ route('miller-admin.marketplace-products.add_product') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="mb-3">
-                <label for="product-name" class="form-label">Product Name</label>
-                <input type="text" class="form-control" id="product-name" name="name" placeholder="Nescafe Coffee" required>
-            </div>
-            <div class="mb-3">
-                <label for="product-image" class="form-label">Product Image</label>
-                <input type="file" class="form-control" id="product-image" name="image" accept="image/*" required>
-            </div>
-            <div class="mb-3">
-                <label for="product-quantity" class="form-label">Quantity Available</label>
-                <input type="number" class="form-control" id="product-quantity" name="quantity" placeholder="32packets" required>
-            </div>
-            <div class="mb-3">
-                <label for="product-price" class="form-label">Selling Price (KES)</label>
-                <input type="number" class="form-control" id="product-price" name="price" placeholder="Kshs. 560" step="1" required>
-            </div>
-            <button type="submit" class="btn btn-success">Submit</button>
-        </form>
     </div>
 
     <!-- Product Cards -->
@@ -46,12 +25,13 @@
         <div class="col-md-4 col-lg-3 mb-4 d-flex">
             <div class="card product-card flex-fill" style="height: 100%;">
                 <!-- Lazy loading implemented here -->
-                <!--<img src="{{ $product['image'] }}" class="card-img-top" alt="{{ $product['name'] }}" loading="lazy" style="object-fit: cover; height: 200px;">-->
                 <img src="{{ asset('storage/' . ($product['image'] ?? 'default-image.jpg')) }}" class="card-img-top" alt="{{ $product->name ?? 'Product' }}" loading="lazy" style="object-fit: cover; height: 200px;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">{{ $product['name'] }}</h5>
                     <p class="card-text">KES {{ number_format($product['sale_price'], 2) }}</p>
-                     <!--<button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>-->
+                    <!-- <button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>-->
+                     <button class="btn btn-success" style="background-color: #28a745; border-color: #28a745;" 
+                            onclick="addToCart('{{ $product['miller_id'] }}', '{{ $product['id'] }}','{{  $product['quantity'] }}',this)">Add to Cart </button>
                 </div>
             </div>
         </div>
@@ -94,6 +74,32 @@ $(document).ready(function() {
         $(this).prop('disabled', true);
     });
 });
-        
+function addToCart(millerId, productId, available_qnty, button) {
+            // Prompt the user for the quantity
+            const quantity = prompt("Enter the quantity to add to cart:");
+            // Check if the user entered a valid quantity
+            if (quantity === null || quantity.trim() === "") {
+                alert("Quantity is required.");
+                return;
+            }
+            if (parseInt(quantity) > parseInt(available_qnty)) {
+                    alert("Quantity exceeds available stock.");
+                    return;
+            }
+            if (isNaN(quantity) || parseInt(quantity) <= 0) {
+                alert("Please enter a valid positive number.");
+                return;
+            }
+
+              // Update the button styles and disable it
+                button.textContent = "✔ Added";
+                button.style.backgroundColor = "#218838";
+                button.style.borderColor = "#218838";
+                button.disabled = true;
+
+            // Redirect to the add-to-cart route with the quantity as a query parameter
+            const url = `/farmer/marketplace/${millerId}/add_to_cart/${productId}?quantity=${encodeURIComponent(quantity)}`;
+            window.location.href = url;
+        } 
 </script>
 @endpush

@@ -588,8 +588,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::get("/dashboard", "MillerAdmin\DashboardController@index")
         ->name("miller-admin.dashboard");
     Route::get('/miller-admin/dashboard/export', [DashboardController::class, 'export'])->name('miller-admin.dashboard.export');
-
-
     // warehouses
     Route::get("/warehouses", "MillerAdmin\WarehousesController@index")
         ->name("miller-admin.warehouses.show");
@@ -602,10 +600,12 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::get("market-auction/dashboard", "MillerAdmin\MarketDashboardController@index")
         ->name("miller-admin.marketplace-dashboard");
 
-
     // market/products
-    Route::get("market-auction/products", "MillerAdmin\MarketProductsController@index")
+    Route::get("/market-auction/products", "MillerAdmin\MarketProductsController@index")
         ->name("miller-admin.marketplace-products");
+
+    Route::post("/marketplace-products/add-product", "MillerAdmin\MarketProductsController@add_product")
+        ->name("miller-admin.marketplace-products.add_product");
 
     // market/auction
     Route::get("/market-auction", "MillerAdmin\MarketAuctionController@index")
@@ -2379,14 +2379,17 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
 
 Route::middleware('role:farmer')->prefix('farmer')->group(function () {
     Route::get('/dashboard', 'Farmer\DashboardController@index')->name('farmer.dashboard');
-
     Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
-
       // Web routes for Farmer Marketplace
-      Route::prefix('farmer/marketplace')->name('farmer.marketplace.')->group(function () {
+      Route::prefix('marketplace')->name('farmer.marketplace.')->group(function () {
           Route::get('/dashboard', 'Farmer\MarketplaceController@dashboard')->name('dashboard');
           Route::get('/products', 'Farmer\MarketplaceController@products')->name('products');
+
+          Route::get("/{miller_id}/add_to_cart/{product_id}", "Farmer\MarketplaceController@add_product_to_cart")
+      ->name("add-to-cart"); 
       });
+
+      
 
     Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
     Route::get("/transactions/{id}", "Farmer\TransactionController@detail")
