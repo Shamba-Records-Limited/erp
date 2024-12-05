@@ -39,11 +39,20 @@
             <!-- root -->
             <div class="node">
                 <div class="d-flex">
-                    <div class="form-container border rounded p-3" style="width:24rem; margin-right: 20px; height:500px;"> <!-- Added flex and margin -->
+                    <div class="form-container border rounded p-3" style="width:24rem; margin-right: 20px; height:600px;"> <!-- Added flex and margin -->
                         <input type="hidden" name="level" class="level" value="0">
                         <form id="get_root_details">
                             <div class="form-group">
                                 <label for="cooperative">Cooperative Name</label>
+                                <select class="form-control form-select node_type" name="root_type" id="root_type">
+                                    <option value="">-- Choose Cooperative --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cooperative">Miller Name</label>
+                                <select class="form-control form-select node_type" name="root_type" id="root_type">
+                                    <option value="">-- Choose Miller --</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="root_type">Root Type</label>

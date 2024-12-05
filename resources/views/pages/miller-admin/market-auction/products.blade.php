@@ -36,7 +36,7 @@
                 <label for="product-price" class="form-label">Selling Price (KES)</label>
                 <input type="number" class="form-control" id="product-price" name="price" placeholder="Kshs. 560" step="1" required>
             </div>
-            <button type="submit" class="btn btn-success">Submit1</button>
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
 
@@ -51,7 +51,7 @@
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">{{ $product['name'] }}</h5>
                     <p class="card-text">KES {{ number_format($product['sale_price'], 2) }}</p>
-                    <button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>
+                     <!--<button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>-->
                 </div>
             </div>
         </div>
@@ -94,5 +94,6 @@ $(document).ready(function() {
         $(this).prop('disabled', true);
     });
 });
+        
 </script>
 @endpush

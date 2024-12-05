@@ -6,214 +6,161 @@
 
 @section('topItem')
 @if($isAddingInvoice == '1' || !empty($viewingInvoiceId))
-<div style="position: absolute; z-index: 1050; background-color: #2222; width: 100vw; height: 100vh;">
-    <div class="container-fluid h-100 w-100">
-        <div class="row h-100">
-            <div class="col"></div>
-            <div class="col-6 card h-100">
-                <div class="card-header">
-                    <div class="card-title position-relative">
-                        <a class="position-absolute top-5 left-5 btn btn-outline-dark" href="?">
-                            <i class="mdi mdi-close"></i>
-                        </a>
-                        @if($isAddingInvoice == '1')
-                        <h4 class="text-center">Add Invoice</h4>
-                        @else
-                        <h4 class="text-center">View Invoice</h4>
+<div class="overlay">
+    <div class="modal-container">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4 class="text-center">
+                    @if($isAddingInvoice == '1') Add Invoice @else View Invoice @endif
+                </h4>
+                <a class="close-btn" href="?">
+                    <i class="mdi mdi-close"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                @if(!empty($viewingInvoiceId))
+                <div class="d-flex justify-content-end mb-3">
+                    <button class="btn btn-primary" onclick="printInvoice('{{$draftInvoice->id}}')">
+                        <i class="fa fa-pdf"></i> Print Invoice
+                    </button>
+                </div>
+                @endif
+                <h5 class="mb-4">
+                    Invoice Number: <span class="font-weight-bold">{{$draftInvoice->invoice_number}}</span>
+                </h5>
+                <form action="{{route('miller-admin.inventory-auction.invoices.save-basic-details')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
+                    <div class="form-group">
+                        <label for="customer_id">Select Customer</label>
+                        <select name="customer_id" id="customer_id" class="form-control form-select {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
+                            <option value="">-- Select Customer --</option>
+                            @foreach($customers as $customer)
+                                <option value="{{$customer->id}}" @if(old('customer_id',$draftInvoice->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>
+                            @endforeach
+                        </select>
+                        @if($errors->has('customer_id'))
+                            <span class="text-danger">{{ $errors->first('customer_id') }}</span>
                         @endif
                     </div>
-                </div>
-                <div class="card-body">
-                    @if(!empty($viewingInvoiceId))
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-primary" onclick="printInvoice('{{$draftInvoice->id}}')">
-                            <i class="fa fa-pdf"></i> Print Invoice
-                        </button>
+                    <div class="form-group">
+                        <label for="expires_at">Valid To</label>
+                        <input type="datetime-local" name="expires_at" id="expires_at" class="form-control {{ $errors->has('expires_at') ? ' is-invalid' : '' }}" value="{{old('expires_at', $draftInvoice->expires_at) }}" @if(!empty($viewingInvoiceId)) disabled @endif>
+                        @if($errors->has('expires_at'))
+                            <span class="text-danger">{{ $errors->first('expires_at') }}</span>
+                        @endif
+                        @if($isAddingInvoice == '1')
+                        <div class="mt-2">
+                            <button class="btn btn-light" type="button" onclick="setNeverExpires()">Never</button>
+                            <button class="btn btn-light" type="button" onclick="setExpiresInAMonth()">In a month</button>
+                        </div>
+                        @endif
                     </div>
+                    @if($isAddingInvoice == '1')
+                    <button type="submit" class="btn btn-primary">Save Basic Details</button>
                     @endif
-                    <h5 class="">Invoice Number: <span class="font-weight-bold">{{$draftInvoice->invoice_number}}</span></h5>
-                    <form action="{{route('miller-admin.inventory-auction.invoices.save-basic-details')}}" method="post">
+                </form>
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>Invoice Items</h5>
+                    @if($isAddingInvoice == '1')
+                    <button class="btn btn-primary" data-toggle="collapse" href="#addInvoiceItem">Add Invoice Item</button>
+                    @endif
+                </div>
+                <div class="collapse border rounded p-3 mt-3" id="addInvoiceItem">
+                    <form action="{{route('miller-admin.inventory-auction.invoices.save-invoice-item')}}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
-                        <div class="form-group">
-                            <label for="">Select Customer</label>
-                            <select name="customer_id" id="customer_id" class="form-control form-select {{ $errors->has('customer_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingInvoiceId)) disabled @endif>
-                                <option value="">-- Select Customer --</option>
-                                @foreach($customers as $customer)
-                                <option value="{{$customer->id}}" @if(old('customer_id',$draftInvoice->customer_id) == $customer->id) selected @endif>{{$customer->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="expires_at">Valid To</label>
-                            <input class="form-control" type="datetime-local" name="expires_at" id="expires_at" value="{{old('expires_at', $draftInvoice->expires_at) }}" @if(!empty($viewingInvoiceId)) disabled @endif>
-                            <span class="help-block text-danger" id="expires_at_error">
-                                <strong>{{ $errors->first('expires_at') }}</strong>
-                            </span>
-                            @if($isAddingInvoice == '1')
-                            <div>
-                                <button class="btn btn-light" type="button" onclick="setNeverExpires()">Never</button>
-                                <button class="btn btn-light" type="button" onclick="setExpiresInAMonth()">In a month</button>
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label>Item Type</label>
+                                <select name="item_type" id="item_type" class="form-control {{ $errors->has('item_type') ? ' is-invalid' : '' }}">
+                                    <option>Final Product</option>
+                                    <option>Milled Inventory</option>
+                                </select>
                             </div>
-                            @endif
+                            <div class="form-group col-12">
+                                <label for="final_product_item_id">Final Product</label>
+                                <select name="final_product_item_id" id="final_product_item_id" class="form-control {{ $errors->has('final_product_item_id') ? ' is-invalid' : '' }}">
+                                    <option value="">-- Select Item --</option>
+                                    @foreach($finalProducts as $finalProduct)
+                                    <option value="{{$finalProduct->id}}">{{$finalProduct->product_number}} {{$finalProduct->name}} {{$finalProduct->quantity}} {{$finalProduct->unit}}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('final_product_item_id'))
+                                    <span class="text-danger">{{ $errors->first('final_product_item_id') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="price">Price</label>
+                                <input type="number" name="price" id="price" class="form-control {{ $errors->has('price') ? ' is-invalid' : '' }}" placeholder="Enter price" value="{{old('price', '')}}">
+                                @if($errors->has('price'))
+                                    <span class="text-danger">{{ $errors->first('price') }}</span>
+                                @endif
+                            </div>
+                            <div class="form-group col-12">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" name="quantity" id="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" placeholder="Enter quantity" value="{{old('quantity', '')}}">
+                                @if($errors->has('quantity'))
+                                    <span class="text-danger">{{ $errors->first('quantity') }}</span>
+                                @endif
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Invoice Item</button>
                         </div>
-                        @if($isAddingInvoice == '1')
-                        <button class="btn btn-primary">Save Basic Details</button>
-                        @endif
                     </form>
-                    <hr />
-                    <div class="d-flex justify-content-between">
-                        <h5>Invoice Items</h5>
-                        @if($isAddingInvoice == '1')
-                        <button class="btn btn-primary" data-toggle="collapse" href="#addInvoiceItem">Add Invoice Item</button>
-                        @endif
-                    </div>
-                    <div class="collapse border rounded p-2" id="addInvoiceItem">
-                        <form action="{{route('miller-admin.inventory-auction.invoices.save-invoice-item')}}" method="post">
-                            @csrf
-                            <input type="hidden" name="invoice_id" value="{{$draftInvoice->id}}">
-                            <div class="form-row">
-                                <div class="form-group col-12">
-                                    <label>Item Type</label>
-                                    <select name="item_type" id="item_type" class="form-control select2bs4 {{ $errors->has('item_type') ? ' is-invalid' : '' }}">
-                                        <option>Final Product</option>
-                                        <option>Milled Inventory</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-12">
-                                    <label>Final Product</label>
-                                    <select name="final_product_item_id" id="final_product_item_id" class="form-control select2bs4 {{ $errors->has('final_product_item_id') ? ' is-invalid' : '' }}">
-                                        <option value="">-- Select Item --</option>
-                                        @foreach($finalProducts as $finalProduct)
-                                        <option value="{{$finalProduct->id}}">{{$finalProduct->product_number}} {{$finalProduct->name}} {{$finalProduct->quantity}} {{$finalProduct->unit}}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @if ($errors->has('final_product_item_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('final_product_item_id')  }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group col-12 d-none">
-                                    <label>Milled Inventory</label>
-                                    <select name="milled_item_id" id="milled_item_id" class="form-control select2bs4 {{ $errors->has('milled_item_id') ? ' is-invalid' : '' }}">
-                                        <option value="">-- Select Item --</option>
-                                        @foreach($milledInventories as $milledInventory)
-                                        <option value="{{$milledInventory->id}}">{{$milledInventory->inventory_number}}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @if ($errors->has('milled_item_id'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('milled_item_id')  }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-
-                                <div class="form-group col-12">
-                                    <label for="price">Price</label>
-                                    <input type="number" name="price" class="form-control {{ $errors->has('price') ? ' is-invalid' : '' }}" id="price" placeholder="Enter price" value="{{old('price', '')}}">
-
-                                    @if ($errors->has('price'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('price')  }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                                <div class="form-group col-12">
-                                    <label for="quantity">Quantity</label>
-                                    <input type="number" name="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" id="quantity" placeholder="Enter quantity" value="{{old('quantity', '')}}">
-
-                                    @if ($errors->has('quantity'))
-                                    <span class="help-block text-danger">
-                                        <strong>{{ $errors->first('quantity')  }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
-                                <button class="btn btn-primary" type="submit">
-                                    Add Invoice Item
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- <tr>
-                                <td>
-                                    <div class="font-weight-bold">INV034430223</div>
-                                    <div>Nescafe 10 Kgs</div>
-                                </td>
-                                <td>KES 10</td>
-                                <td>10</td>
-                                <td>KES 100</td>
-                                <td>
-                                    <button class="btn btn-danger">Remove</button>
-                                </td>
-                            </tr> -->
-                            @php
-                            $total = 0;
-                            @endphp
-                            @foreach($draftInvoice->items as $item)
-                            <tr>
-                                <td>
-                                    <div class="font-weight-bold">{{$item->number}}</div>
-                                    <!-- <div>Nescafe 10 Kgs</div> -->
-                                </td>
-                                <td>KES {{$item->price}}</td>
-                                <td>{{$item->quantity}}</td>
-                                @php
-                                $subTotal = $item->price * $item->quantity;
-                                $total += $subTotal
-                                @endphp
-                                <td>KES {{$subTotal}}</td>
-                                <td>
-                                    @if($isAddingInvoice == '1')
-                                    <form action="{{route('miller-admin.inventory-auction.invoices.delete-invoice-item', $item->id)}}" method="post">
-                                        @csrf
-                                        @method("DELETE")
-                                        <button class="btn btn-danger" type="submit">Remove</button>
-                                    </form>
-                                    @endif
-
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    <div class="d-flex justify-content-end p-2">
-                        Total:&nbsp;<span class="font-weight-bold text-success">KES. {{$total}}</span>
-                    </div>
-
-                    @if($isAddingInvoice == '1')
-                    <div class="mt-2">
-                        <a href="{{route('miller-admin.inventory-auction.invoices.publish-invoice')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish invoice?')">Publish</a>
-                    </div>
-                    @endif
-
-                    @if(!empty($viewingInvoiceId))
-                    <div style="text-align: center;">
-                        {{ QrCode::size(70)->generate(route('common.view-invoice', $draftInvoice->id)) }}
-                    </div>
-                    @endif
                 </div>
+                <table class="table mt-4">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $total = 0; @endphp
+                        @foreach($draftInvoice->items as $item)
+                        @php $subTotal = $item->price * $item->quantity; $total += $subTotal; @endphp
+                        <tr>
+                            <td>{{$item->number}}</td>
+                            <td>KES {{$item->price}}</td>
+                            <td>{{$item->quantity}}</td>
+                            <td>KES {{$subTotal}}</td>
+                            <td>
+                                @if($isAddingInvoice == '1')
+                                <form action="{{route('miller-admin.inventory-auction.invoices.delete-invoice-item', $item->id)}}" method="POST">
+                                    @csrf
+                                    @method("DELETE")
+                                    <button class="btn btn-danger">Remove</button>
+                                </form>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-end p-3">
+                    Total: <span class="font-weight-bold text-success">KES {{$total}}</span>
+                </div>
+                @if($isAddingInvoice == '1')
+                <div class="mt-3">
+                    <a href="{{route('miller-admin.inventory-auction.invoices.publish-invoice')}}" class="btn btn-primary">Publish</a>
+                </div>
+                @endif
+                @if(!empty($viewingInvoiceId))
+                <div class="text-center mt-3">
+                    {{ QrCode::size(70)->generate(route('common.view-invoice', $draftInvoice->id)) }}
+                </div>
+                @endif
             </div>
         </div>
     </div>
 </div>
 @endif
 @endsection
+
 
 @section('content')
 <div class="card">
@@ -419,3 +366,132 @@
     })
 </script>
 @endpush
+<style>
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1050;
+    }
+
+    .modal-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+    }
+
+    .modal-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 600px;
+        padding: 20px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    .modal-body {
+        margin-top: 10px;
+    }
+
+    .alert {
+        margin-bottom: 15px;
+    }
+
+    .info-box, .aggregate-info {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn-toggle {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th, .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table-striped tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .container {
+        margin-top: 30px;
+    }
+
+    .card {
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .order-details {
+        background-color: #f8f9fa;
+    }
+
+    .delivery-status {
+        background-color: #ffffff;
+    }
+
+    .info-box {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .batch-number {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .aggregate-info {
+        margin-top: 20px;
+    }
+
+    .list-group-item {
+        background-color: #f8f9fa;
+        border: none;
+    }
+
+    .list-group-item:hover {
+        background-color: #e9ecef;
+    }
+
+    .chart-container {
+        position: relative;
+        width: 100%;
+        height: 300px;
+    }
+</style>

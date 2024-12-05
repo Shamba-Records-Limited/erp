@@ -151,20 +151,13 @@ $cooperative = null;
                 </a>
             </li>
 
-        <!-- Global Tracking Tree -->
-            <li class="nav-item {{ active_class(['admin/tracking-tree*']) }} mb-3">
-                <a class="nav-link" href="{{ route('admin.tracking-tree.show') }}">
-                    <i class="ni ni-map-big text-green"></i> {{ __('Tracking Tree') }}
-                </a>
-            </li>
-
          <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">
                 <!-- Added margin-bottom for spacing -->
                 <a class="nav-link" href="#moduleManagement" data-toggle="collapse" role="button"
                     aria-expanded="{!! is_active_route(['admin/modules*']) !!}" aria-controls="moduleManagement">
                     <i class="ni ni-archive-2 text-custom-green"></i> <!-- Using the same icon style -->
-                    <span class="nav-link-text" style="color: #f4645f;">{{__('Module Management')}}</span> <!-- Matching text color -->
+                    <span class="nav-link-text">{{__('Module Management')}}</span> <!-- Matching text color -->
                     <i class="menu-arrow"></i> <!-- Keeping the arrow icon -->
                 </a>
                 <div class="collapse {{ show_class(['admin/manage/*']) }}" id="moduleManagement">
@@ -189,7 +182,7 @@ $cooperative = null;
                 <a class="nav-link" href="#products-management" data-toggle="collapse" role="button"
                     aria-expanded="{!! is_active_route(['admin/products/*']) !!}" aria-controls="products-management">
                     <i class="ni ni-box-2 text-custom-green"></i>
-                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Product Management') }}</span>
+                    <span class="nav-link-text">{{ __('Product Management') }}</span>
                 </a>
                 <div class="collapse {{ show_class(['admin/products/*']) }}" id="products-management">
                     <ul class="nav nav-sm flex-column">
@@ -232,6 +225,13 @@ $cooperative = null;
             <li class="nav-item {{ active_class(['chat*']) }} mb-3">
                 <a class="nav-link" href="{{ route('chat.index') }}">
                     <i class="ni ni-chat-round text-custom-green"></i> {{ __('Chat') }}
+                </a>
+            </li>
+
+            <!-- Global Tracking Tree -->
+            <li class="nav-item {{ active_class(['admin/tracking-tree*']) }} mb-3">
+                <a class="nav-link" href="{{ route('admin.tracking-tree.show') }}">
+                    <i class="ni ni-map-big text-green"></i> {{ __('Tracking Tree') }}
                 </a>
             </li>
             @endif

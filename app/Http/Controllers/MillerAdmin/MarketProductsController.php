@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request; // Correct namespace for the Request class
 use App\Product;
+use Illuminate\Support\Facades\Auth;
 
 class MarketProductsController extends Controller
 {
@@ -29,6 +30,14 @@ class MarketProductsController extends Controller
     }
 
     public function add_product(Request $request) {
+
+        $user = Auth::user();
+        try {
+            $miller_id = $user->miller_admin->miller_id;
+        } catch (\Throwable $th) {
+            $miller_id = null;
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
@@ -41,10 +50,12 @@ class MarketProductsController extends Controller
         $product = Product::create([
             'name' => $request->name,
             'image' => $imagePath,
-           // 'quantity' => $request->quantity,
+            'quantity' => $request->quantity,
             'sale_price' => $request->price,
+            'miller_id'=> $miller_id,
         ]);
-        $product->save();
+
+        // dd($product);     /.oduct->save();
 
         //dd($request->all());
 
