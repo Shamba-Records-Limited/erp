@@ -319,6 +319,11 @@ class WalletManagementController extends Controller
             $account->credit_or_debit = "DEBIT";
             $account->save();
         }
+        else {
+            // Update the existing account
+            $account->credit_or_debit = "DEBIT";
+            $account->save();
+        }
 
         $acc_type = 'miller-admin';
 
@@ -824,7 +829,6 @@ class WalletManagementController extends Controller
         }
 
         $account = Account::where("owner_type", "MILLER")->where("owner_id", $miller_id)->where("credit_or_debit", "DEBIT")->first();
-
         $condition = "t.parent_id IS NULL AND
                         t.status='PENDING' AND 
                         t.sender_id = :miller_id";
