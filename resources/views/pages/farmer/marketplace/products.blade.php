@@ -7,10 +7,29 @@
 
 <div class="container mt-4">
     <!-- Register Product Button -->
-    <div class="d-flex justify-content-start mb-3">
-        <h3>Marketplace Products</h3>
+    <div class="row">
+            <div class="d-flex justify-content-start mb-3">
+                <h3>Marketplace Products</h3>
+            </div>
+            <div class="col-2 dropdown">
+            <a href="#" class="btn btn-outline btn-primary dropdown-toggle" aria-expanded="false" data-toggle="dropdown" id="cartDropdown">
+                    <i class="mdi mdi-cart"></i>
+                    <span class="badge badge-light">{{$items_in_cart_count > 9 ? '9+' : $items_in_cart_count }}</span>
+                </a>
+                @if ($items_in_cart_count == 0)
+                    <a class="dropdown-item" disabled>Please add items to cart first</a>
+                        @else
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cartDropdown">
+                        <form action="{{route('farmer.marketplace.clear-cart')}}" method="POST">
+                            @csrf
+                            {{ method_field('DELETE') }}
+                            <button onclick="return confirm('Sure to clear cart?')" class="dropdown-item"> Clear Cart</button>
+                        </form>  
+                        <a class="dropdown-item" href="#"> Checkout</a> 
+                </div>
+                @endif
+            </div>
     </div>
-
     <!-- Register Product Form -->
     <div id="register-product-form" class="card p-4 mb-4 position-relative" style="display: none;">
         <!-- X Button to Close the Form -->

@@ -2387,6 +2387,10 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
 
           Route::get("/{miller_id}/add_to_cart/{product_id}", "Farmer\MarketplaceController@add_product_to_cart")
       ->name("add-to-cart"); 
+
+      Route::delete("/clear_cart", "Farmer\MarketplaceController@clear_cart")
+        ->name("clear-cart");
+
       });
 
       
