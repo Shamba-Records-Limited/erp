@@ -2384,16 +2384,25 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
       Route::prefix('marketplace')->name('farmer.marketplace.')->group(function () {
           Route::get('/dashboard', 'Farmer\MarketplaceController@dashboard')->name('dashboard');
           Route::get('/products', 'Farmer\MarketplaceController@products')->name('products');
-
           Route::get("/{miller_id}/add_to_cart/{product_id}", "Farmer\MarketplaceController@add_product_to_cart")
-      ->name("add-to-cart"); 
-
-      Route::delete("/clear_cart", "Farmer\MarketplaceController@clear_cart")
-        ->name("clear-cart");
+                ->name("add-to-cart"); 
+          Route::delete("/clear_cart", "Farmer\MarketplaceController@clear_cart")
+               ->name("clear-cart");
+          Route::delete("/{cart_id}/remove_item_from_cart/{product_id}", "Farmer\MarketplaceController@remove_product_from_cart")
+               ->name("remove-item-from-cart");
+          Route::get("/{miller_id}/view-checkout-cart", "Farmer\MarketplaceController@view_checkout_cart")
+              ->name("view-checkout-cart");
+          Route::post("/{miller_id}/checkout-cart", "Farmer\MarketplaceController@checkout_cart")
+              ->name("checkout-cart");
+      });
+      //orders 
+      Route::prefix('orders')->name('farmer.orders.')->group(function () {
+                Route::get("/orders", "Farmer\OrdersController@index")
+                       ->name("show");
+                Route::get("/orders/{id}", "Farmer\OrdersController@detail")
+                        ->name("detail");
 
       });
-
-      
 
     Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
     Route::get("/transactions/{id}", "Farmer\TransactionController@detail")

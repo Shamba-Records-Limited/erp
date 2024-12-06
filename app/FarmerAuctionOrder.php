@@ -14,6 +14,8 @@ class FarmerAuctionOrder extends Model
         'batch_number',
         'miller_id',
         'user_id',
+        'farmer_id', 
+        'paid_amount',
         'published_at',
     ];
 

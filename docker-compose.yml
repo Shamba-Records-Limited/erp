@@ -16,9 +16,6 @@ services:
       - ./storage:/var/www/html/storage
       - ./public:/var/www/html/public
 #       - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
-    command: >
-      sh -c "ln -sf /var/www/storage/app/public /var/www/public/storage &&
-             php artisan serve --host=0.0.0.0 --port=8000" 
     depends_on:
       - db
       - nginx

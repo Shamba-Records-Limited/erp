@@ -17,7 +17,7 @@
                     <span class="badge badge-light">{{$items_in_cart_count > 9 ? '9+' : $items_in_cart_count }}</span>
                 </a>
                 @if ($items_in_cart_count == 0)
-                    <a class="dropdown-item" disabled>Please add items to cart first</a>
+                    <a class="dropdown-item" disabled>.</a>
                         @else
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="cartDropdown">
                         <form action="{{route('farmer.marketplace.clear-cart')}}" method="POST">
@@ -25,7 +25,7 @@
                             {{ method_field('DELETE') }}
                             <button onclick="return confirm('Sure to clear cart?')" class="dropdown-item"> Clear Cart</button>
                         </form>  
-                        <a class="dropdown-item" href="#"> Checkout</a> 
+                        <a class="dropdown-item" href="{{ route('farmer.marketplace.view-checkout-cart', $items_in_cart_count) }}"> Checkout</a> 
                 </div>
                 @endif
             </div>
