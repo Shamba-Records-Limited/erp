@@ -25,7 +25,7 @@
                 <input type="text" class="form-control" id="product-name" name="name" placeholder="Nescafe Coffee" required>
             </div>
             <div class="mb-3">
-                <label for="product-image" class="form-label">Product Image</label>
+                <label for="product-image" class="form-label">Product Image (JPEG,JPG,PNG only)</label>
                 <input type="file" class="form-control" id="product-image" name="image" accept="image/*" required>
             </div>
             <div class="mb-3">
