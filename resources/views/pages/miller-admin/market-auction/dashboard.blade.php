@@ -16,29 +16,7 @@
                     $h5FontSize = '0.9rem';
                 @endphp
 
-                <!-- Active Listings -->
-                <div class="col-xl-3 col-lg-6">
-                    <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col">
-                                    <h5 class="card-title text-uppercase text-muted mb-0 font-weight-bold" style="font-size: {{ $h5FontSize }}; text-decoration: none;">Active Listings</h5>
-                                    <span class="h2 font-weight-bold mb-0 d-block">{{ $data['active_listings'] ?? '0' }}</span>
-                                </div>
-                                <div class="col-auto">
-                                    <div class="icon icon-shape bg-info text-white rounded-circle shadow">
-                                        <i class="fas fa-store"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <p class="mt-3 mb-0 text-muted text-sm">
-                                <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 5.4%</span>
-                                <span class="text-nowrap">Since last month</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
+                
                 <!-- Available Stock for Sale -->
                 <div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
