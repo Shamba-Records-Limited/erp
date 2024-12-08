@@ -16,6 +16,7 @@
                     $h5FontSize = '0.9rem';
                 @endphp
 
+                
                 <!-- Active Listings -->
                 <!--<div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
