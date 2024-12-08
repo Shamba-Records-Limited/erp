@@ -156,7 +156,7 @@ foreach ($collections as $collection) {
     <div class="col-lg-12 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Collections per Cooperative</h4>
+                <h4 class="card-title" >Collections per Cooperative</h4>
                 <div class="table-responsive mb-10">
                     <table class="table table-hover dt clickable mb-3">
                         <thead>
@@ -177,8 +177,20 @@ foreach ($collections as $collection) {
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-190" style="margin-top:180px;">
-                <h4 class="card-title mt-10">Detailed Collections</h4>
+
+            <div class="mt-190" style="margin-top:70px;">
+
+            <div class="row">
+              <div class="col-md-8">
+              <h4 class="card-title mt-10" id="title_header">Detailed Collections</h4> 
+              </div>
+
+              <div class="col-md-4">
+              <a class="btn btn-primary btn-sm"  href="{{route('admin.collections.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Download Excel Sheet</a>
+              <a class="btn btn-primary btn-sm"  href="{{route('admin.collections.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span> Download PDF</a>
+              </div>
+
+            </div>
                 <div class="table-responsive">
                     <table class="table table-hover dt clickable mb-3">
                         <thead>

@@ -24,6 +24,22 @@
                 <label for="product-name" class="form-label">Product Name</label>
                 <input type="text" class="form-control" id="product-name" name="name" placeholder="Nescafe Coffee" required>
             </div>
+
+            <div class="mb-3">
+                <label for="category_id">Category</label>
+                <select name="category_id" id="category_id" class="form-control form-select {{ $errors->has('category_id') ? ' is-invalid' : '' }}" required>
+                    <option value="">-- Select Product Category --</option>
+                    @foreach($categories as $category)
+                    <option value="{{$category->id}}" @if($category->id == old('category_id')) selected @endif>{{$category->name}}</option>
+                    @endforeach
+                </select>
+                @if ($errors->has('category_id'))
+                <span class="help-block text-danger">
+                    <strong>{{ $errors->first('category_id')  }}</strong>
+                </span>
+                @endif
+            </div>
+
             <div class="mb-3">
                 <label for="product-image" class="form-label">Product Image (JPEG,JPG,PNG only)</label>
                 <input type="file" class="form-control" id="product-image" name="image" accept="image/*" required>

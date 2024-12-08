@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Collection;
 use App\Cooperative;
 use App\Lot;
+use App\Sale;
 use App\ProductMillerCart;
 use App\ProductAuctionCartItem;
 use App\FarmerAuctionOrder;
@@ -36,9 +37,12 @@ class MarketplaceController extends Controller
             $user_id = null;
         }
 
-        $product = Product::all();
+       // $product = Product::all();
+        
+        $product = Product::with(['miller' => function ($query) {
+            $query->select('id', 'name as miller_name');  // Alias the name column
+        }])->get(); 
         $products = $product->toArray();
-
       // Count items in cart
        $items_in_cart_count = DB::select(DB::raw("
          SELECT count(1) AS count
@@ -184,7 +188,13 @@ class MarketplaceController extends Controller
             // Handle case where no cart is found, e.g., return an error or redirect
             return redirect()->back()->with('error', 'Cart not found.');
         }
-       
+        $cartItems = DB::select(DB::raw("
+        SELECT item.*,prd.sale_price,prd.name
+        FROM product_auction_cart_items item
+        JOIN product_miller_carts cart ON cart.id = item.cart_id AND cart.id = :cart_id
+        JOIN products prd on item.product_id=prd.id;
+    "), ["cart_id" => $cart->id]);
+
         // total in cart
         $totalInCart = DB::select(DB::raw("
             SELECT sum(item.quantity) AS total
@@ -198,62 +208,16 @@ class MarketplaceController extends Controller
         JOIN products prd on item.product_id=prd.id
         WHERE item.cart_id = :cart_id
     "), ["cart_id" => $cart->id])[0]->total;
-      
-        /*
-        // aggregate grade distribution
-        $aggregateGradeDistribution = DB::select(DB::raw("
-            SELECT SUM(d.quantity) AS total,
-                pg.name AS grade
-            FROM lot_grade_distributions d
-            JOIN product_grades pg ON pg.id = d.product_grade_id
-            JOIN lots l ON l.lot_number = d.lot_number
-            JOIN miller_auction_cart_item item ON item.lot_number = l.lot_number
-            WHERE item.cart_id = :cart_id
-            GROUP BY d.product_grade_id
-            ORDER BY total DESC
-        "), ["cart_id" => $cart->id]);
-       */
-        // cart items
-        $cartItems = DB::select(DB::raw("
-            SELECT item.*,prd.sale_price,prd.name
-            FROM product_auction_cart_items item
-            JOIN product_miller_carts cart ON cart.id = item.cart_id AND cart.id = :cart_id
-            JOIN products prd on item.product_id=prd.id;
-        "), ["cart_id" => $cart->id]);
-       
-        //dd($cartItems);
-        /*
-        foreach ($cartItems as $item) {
-            $item->distributions = DB::select(DB::raw("
-                SELECT sum(distribution.quantity) AS total,
-                    (SELECT name FROM product_grades pd WHERE pd.id = distribution.product_grade_id ) AS grade
-                FROM lot_grade_distributions distribution
-                JOIN lots l ON l.lot_number=distribution.lot_number AND l.lot_number=:lot_number
-                GROUP BY distribution.product_grade_id
-                ORDER BY total DESC
-            "), ["lot_number" => $item->lot_number]);
+
+        if(count($cartItems)<1 ){
+            return redirect()->route('farmer.marketplace.products');
         }
-             */
-        // cooperative
-       /* $cooperative = null;
-        $cooperatives = DB::select(DB::raw("
-            SELECT * FROM cooperatives WHERE id = :coop_id;
-        "), ["coop_id" => $coop_id]);
-        if (count($cooperatives) > 0) {
-            $cooperative = $cooperatives[0];
-        }
-         */
         // default batch number
         $suffix_batch_number = FarmerAuctionOrder::count() + 1;
         $now = Carbon::now();
         $now_str = strtoupper($now->format('Ymd'));
         $default_batch_number = "B$now_str-$suffix_batch_number";
-    
-        // warehouses
-       /* $warehouses = DB::select(DB::raw("
-            SELECT * FROM miller_warehouse WHERE miller_id = :miller_id
-        "), ["miller_id" => $miller_id]); */
-    
+      
         return view('pages.farmer.marketplace.cart-checkout', compact('cartItems', 'totalInCart', 'totalAmntInCart', 'default_batch_number'));
     }
 
@@ -325,6 +289,16 @@ public function checkout_cart(Request $request, $coop_id)
         $order->user_id = $user->id;
         $order->paid_amount=$request->cart_amount;
         $order->save();
+        //save the data is sales table as well
+        $sale = new Sale();
+        $sale->user_id=$user->id;
+        $sale->farmer_id=$farmer_id;
+        $sale->sale_batch_number=$request->batch_number;
+        $sale->paid_amount=$request->cart_amount;
+       // $sale->miller_id=$farmer_id;
+        $sale->sale_count=$cartItemsCount;
+        $sale->save();
+
     } catch (\Throwable $th) {
         Log::error($th->getMessage());
         DB::rollBack();
@@ -341,6 +315,8 @@ public function checkout_cart(Request $request, $coop_id)
     "), ["cart_id" => $cart->id]);
     // Initialize an array to collect lot numbers 
     $lotNumbers = [];
+
+
 
     foreach ($lotsInCart as $item) {
         try {

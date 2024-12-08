@@ -755,12 +755,13 @@ if (!function_exists('download_pdf')) {
     {
         $pdf_view = $data['pdf_view'];
         $title = $data['title'];
+        $image = $data['image'] ?? 'default_value';
         $period = Carbon::now()->format('D, d M Y  H:i:s');
         $records = $data['records'];
         $summation = $data['summation'] ?? null;
         $pdf = app('dompdf.wrapper');
         $pdf->setPaper('letter', $data['orientation']);
-        $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns', 'summation'));
+        $pdf->loadView('pdfs.reports.general', compact('title', 'period', 'records', 'columns', 'summation','image'));
         $file_name = $data['filename'];
         return $pdf->download($file_name . '.pdf');
     }

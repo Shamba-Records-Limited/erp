@@ -16,6 +16,9 @@ use App\QuotationItem;
 use App\Receipt;
 use App\ReceiptItem;
 use App\Sale;
+use App\SaleItem;
+use App\Product;
+use App\ProductCategory;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -27,6 +30,8 @@ use Log;
 use Barryvdh\DomPDF\Facade as PDF;
 use Excel;
 use Invoice;
+use App\Exports\SaleExport;
+use App\Exports\CustomersExport;
 
 class InventoryAuctionController extends Controller
 {
@@ -877,47 +882,97 @@ class InventoryAuctionController extends Controller
 
     public function list_sales()
     {
-        $sales = [];
-        return view('pages.miller-admin.inventory-auction.sales.index', compact('sales'));
+        $now = Carbon::now();
+        $saleNumber = "SLE";
+        $saleNumber .= $now->format('Ymd');
+        $todaysInventories = Sale::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
+        $saleNumber .= str_pad($todaysInventories + 1, 3, '0', STR_PAD_LEFT);
+
+        $categories = ProductCategory::all();
+        $products = Product::all();
+        $sales = Sale::all();
+       
+        return view('pages.miller-admin.inventory-auction.sales.index', compact('sales','categories','products','saleNumber'));
     }
 
-    public function add_sale()
+    public function add_sale(Request $request)
     {
+      
+        $request->validate([
+            'product_id' => 'required|string|max:255',
+            'quantity' => 'required',
+            'amount' => 'required',
+            //'batch_number' =>'required|string|max:255',
+        ]);
+    
+       //dd($request->all());
+
         $user = Auth::user();
         try {
             $miller_id = $user->miller_admin->miller_id;
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
-
-        $exists = Sale::where("miller_id", $miller_id)->where("published_at", null)->exists();
+        
+        $exists = Sale::where("miller_id", $miller_id)->where("sale_batch_number",$request->sale_batch_number)
+                       ->where("published_at", null)->exists();
         if (!$exists) {
+            /*
             $now = Carbon::now();
             $saleNumber = "SLE";
-            $saleNumber .= $now->format('Ymd');
-
+            $saleNumber .= $now->format('Ymd'); 
             // count today's inventories
             $todaysInventories = Sale::where(DB::raw("DATE(created_at)"), $now->format('Y-m-d'))->count();
             $saleNumber .= str_pad($todaysInventories + 1, 3, '0', STR_PAD_LEFT);
-
+            */
+            DB::beginTransaction();
+            // create order
+        try {
             $draftSale = new Sale();
-            $draftSale->sale_batch_number = $saleNumber;
+            $draftSale->sale_batch_number = $request->sale_batch_number;
+            $draftSale->paid_amount = $request->amount;
             $draftSale->miller_id = $miller_id;
-
             $draftSale->save();
+              //sale item
+           /* $sale_item = new SaleItem();
+            $sale_item->quantity = $request->quantity;
+            $sale_item->manufactured_product_id = $request->quantity;
+            $sale_item->sales_id  = $request->batch_number;
+            $sale_item->amount = $request->amount;
+            $sale_item->save();*/
+            DB::commit();
+            toastr()->success('Sales Updated successfully');
+            return redirect()->back();
+            //return redirect()->route("miller-admin.inventory-auction.list-sales");
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            DB::rollBack();
+            toastr()->error('Unable to Save Sale:'.$th->getMessage());
+            return redirect()->back()->withInput();
+        }
+
+
         } else {
             $draftSale = Sale::where("miller_id", $miller_id)->where("published_at", null)->firstOrFail();
         }
-
-        return redirect()->route("miller-admin.inventory-auction.view-update-sale", $draftSale->id);
+        return redirect()->route("miller-admin.inventory-auction.list-sales");
+        //return redirect()->route("miller-admin.inventory-auction.view-update-sale", $draftSale->id);
     }
 
     public function view_update_sale($id)
     {
         $sale = Sale::find($id);
+        $categories = ProductCategory::all();
 
-        return view('pages.miller-admin.inventory-auction.sales.update-sale', compact('sale'));
+        return view('pages.miller-admin.inventory-auction.sales.update-sale', compact('sale','categories'));
+    }
+
+    public function view_add_sale()
+    {
+        $sale = Sale::all();
+        $categories = ProductCategory::all();
+
+        return view('pages.miller-admin.inventory-auction.sales.add-sale', compact('sale','categories'));
     }
 
     public function export_quotation($id)
@@ -949,4 +1004,80 @@ class InventoryAuctionController extends Controller
 
         return $pdf->download("invoice_$receipt->receipt_number.pdf");
     }
+  
+    public function export_sales($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+        $image=$user->profile_picture;
+        $sales = collect(Sale::where("miller_id", $miller_id)->get());
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('sales' . date('d_m_Y')) . '.' . $type;
+            $sales = collect(Sale::where("miller_id", $miller_id)->get());
+           // dd($sales);
+            return Excel::download(new SaleExport($sales), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Batch No', 'key' => "sale_batch_number"],
+                ['name' => 'Sale Amount', 'key' => "paid_amount"],
+            ];
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+            $data = [
+                'title' => 'Sales',
+                'pdf_view' => 'sales',
+                'records' => $sales,
+                'filename' => strtolower('sales_' . date('d_m_Y')),
+                'orientation' => 'letter',
+                'image'=>$imagePath,
+            ];
+            return download_pdf($columns, $data);
+        }
+    }
+
+    public function export_customers($type)
+    {
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+        $image=$user->profile_picture;
+        $customers = Customer::where("miller_id", $miller_id)->whereNotNull("published_at")->get();
+         //dd($customers);
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('customers' . date('d_m_Y')) . '.' . $type;
+            $$customers = collect(Customer::where("miller_id", $miller_id)->whereNotNull("published_at")->get());
+           // dd($sales);
+            return Excel::download(new CustomersExport($customers), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Title', 'key' => "title"],
+                ['name' => 'Name', 'key' => "name"],
+                ['name' => 'Gender', 'key' => "gender"],
+                ['name' => 'Email', 'key' => "email"],
+                ['name' => 'Phone No', 'key' => "phone_number"],
+                ['name' => 'Address', 'key' => "address"],
+                //['name' => 'Location', 'key' => "location"],
+            ];
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+            $data = [
+                'title' => 'Customers',
+                'pdf_view' => 'customer',
+                'records' => $customers,
+                'filename' => strtolower('customers_' . date('d_m_Y')),
+                'orientation' => 'letter',
+                'image'=>$imagePath,
+            ];
+            return download_pdf($columns, $data);
+        }
+    }
+
+
+
+
+
 }

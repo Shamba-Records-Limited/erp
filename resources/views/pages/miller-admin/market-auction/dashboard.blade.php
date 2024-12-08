@@ -17,7 +17,7 @@
                 @endphp
 
                 <!-- Active Listings -->
-                <div class="col-xl-3 col-lg-6">
+                <!--<div class="col-xl-3 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0" style="height: {{ $cardHeight }};">
                         <div class="card-body">
                             <div class="row">
@@ -37,7 +37,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
                 <!-- Available Stock for Sale -->
                 <div class="col-xl-3 col-lg-6">
@@ -219,47 +219,46 @@
             }
         });
 
-    // Sales Trend Chart
-    /*const salesTrendData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-        datasets: [{
-            label: 'Sales (Ksh)',
-            data: [30000, 50000, 40000, 70000, 80000, 90000],
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: true,
-        }]
-    };
-    const salesTrendOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-            y: {
-                ticks: {
-                    callback: function(value) {
-                        return 'Ksh ' + value.toLocaleString(); // Format y-axis with currency
+        document.addEventListener("DOMContentLoaded", function () {
+        // Sales by Product Category Chart
+        const categorySalesData = {
+            labels: @json($data['prodcatlabels']), // Dynamic product category labels
+            datasets: [{
+                data: @json($data['prodcatrevenues']), // Dynamic revenue data
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)',
+                    'rgba(153, 102, 255, 0.5)',
+                    'rgba(255, 159, 64, 0.5)'
+                ]
+            }]
+        };
+
+        const categorySalesOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.label + ': Ksh ' + context.raw.toLocaleString(); // Add currency to tooltip
+                        }
                     }
                 }
             }
-        },
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return 'Ksh ' + context.raw.toLocaleString(); // Format tooltip with commas
-                    }
-                }
-            }
-        }
-    };
-    new Chart(document.getElementById("salesTrendChart"), {
-        type: 'line',
-        data: salesTrendData,
-        options: salesTrendOptions
+        };
+
+        new Chart(document.getElementById("categorySalesPieChart"), {
+            type: 'pie',
+            data: categorySalesData,
+            options: categorySalesOptions
+        });
     });
-  */
+
     // Sales by Product Category Chart
-    const categorySalesData = {
+  /*  const categorySalesData = {
         labels: ['Beverages', 'Dairy', 'Snacks', 'Bakery'],
         datasets: [{
             data: [30000, 20000, 15000, 10000],
@@ -289,13 +288,16 @@
         data: categorySalesData,
         options: categorySalesOptions
     });
+*/
+
 
     // Revenue by Product Chart
+document.addEventListener("DOMContentLoaded", function () {
     const revenueByProductData = {
-        labels: ['Coffee', 'Cocoa', 'Tea', 'Dairy Products'],
+        labels: @json($data['prodlabels']), // Dynamically inject product names
         datasets: [{
             label: 'Revenue (Ksh)',
-            data: [120000, 80000, 60000, 50000],
+            data: @json($data['prodrevenues']), // Dynamically inject revenue data
             backgroundColor: 'rgba(153, 102, 255, 0.5)',
             borderColor: 'rgba(153, 102, 255, 1)',
             borderWidth: 1
@@ -309,7 +311,7 @@
                 beginAtZero: true,
                 ticks: {
                     callback: function(value) {
-                        return 'Ksh ' + value.toLocaleString();
+                        return 'Ksh ' + value.toLocaleString(); // Format axis labels
                     }
                 }
             }
@@ -318,16 +320,19 @@
             tooltip: {
                 callbacks: {
                     label: function(context) {
-                        return 'Ksh ' + context.raw.toLocaleString(); // Format tooltip with commas
+                        return 'Ksh ' + context.raw.toLocaleString(); // Format tooltip values
                     }
                 }
             }
         }
     };
+
     new Chart(document.getElementById("revenueByProductChart"), {
         type: 'horizontalBar',
         data: revenueByProductData,
         options: revenueByProductOptions
     });
+});
+ 
 </script>
 @endpush

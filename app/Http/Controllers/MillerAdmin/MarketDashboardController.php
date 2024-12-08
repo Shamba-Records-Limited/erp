@@ -346,6 +346,36 @@ class MarketDashboardController extends Controller
                 $order_percent  = (($thisWeekOrders - $lastWeekOrders) / $lastWeekOrders) * 100;
             }
 
+            //Product Revenue graph data
+            $prodrevdata = DB::table('farmer_auction_order_items as items')
+            ->join('products as prd', 'items.product_id', '=', 'prd.id')
+            ->select(
+                'prd.name as product_name',
+                DB::raw('SUM(items.quantity * items.selling_price) as revenue')
+            )
+            ->where('prd.miller_id', $miller_id) // Add the where clause for miller_id
+            ->groupBy('prd.name')
+            ->get();
+            // Prepare data for the chart
+            $prodlabels = $prodrevdata->pluck('product_name');
+            $prodrevenues = $prodrevdata->pluck('revenue');
+
+       // Fetch revenue grouped by product category for pie chart
+                $prodcatdata = DB::table('farmer_auction_order_items as items')
+                ->join('products as prd', 'items.product_id', '=', 'prd.id')
+                ->join('product_categories as cat', 'prd.category_id', '=', 'cat.id')
+                ->select(
+                    'cat.name as category_name',
+                    DB::raw('SUM(items.quantity * items.selling_price) as total_revenue')
+                )
+                ->where('prd.miller_id', $miller_id) // Add the where clause for miller_id
+                ->groupBy('cat.name') // Ensure grouping is by category name
+                ->get();
+            // Extract labels (categories) and data (revenue) for the chart
+            $prodcatlabels = $prodcatdata->pluck('category_name')->toArray();
+            $prodcatrevenues = $prodcatdata->pluck('total_revenue')->toArray();
+           // dd($prodcatdata,$prodcatlabels,$prodcatrevenues);
+
         $data = [
             "coffee_in_marketplace" => $coffee_in_marketplace,
             "milled_series" => $milled_series,
@@ -361,7 +391,12 @@ class MarketDashboardController extends Controller
             'sale_percent'=>$sale_percent,
             'totalOrdersCount'=> $totalOrdersCount,
             'order_percent'=>$order_percent,
-            'salesChart' => $salesChart 
+            'salesChart' => $salesChart,
+            'prodlabels'=> $prodlabels,
+            'prodrevenues'=>$prodrevenues,
+            'prodcatlabels'=>$prodcatlabels,
+            'prodcatrevenues'=>$prodcatrevenues,
+
 
         ];
 

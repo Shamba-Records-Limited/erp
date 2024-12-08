@@ -3,16 +3,18 @@
 @push('plugin-styles')
 @endpush
 
-
 @section('content')
-<div>
+<div class="container mt-4">
+    <!-- Register Product Button -->
     <div class="card">
         <div class="card-body">
-            <div class="card-title">
-                Sale Details
-            </div>
-
-            <!-- Register Product Form -->
+               <div class="card-title">Sales</div>
+                <div class="d-flex justify-content-end mb-3">
+                    <button class="btn btn-primary" id="register-product-btn">Add Sale</button>
+                </div>
+        </div>
+    </div>
+    <!-- Register Product Form -->
     <div id="register-product-form" class="card p-4 mb-4 position-relative" style="display: none;">
         <!-- X Button to Close the Form -->
         <button type="button" class="close-btn btn btn-danger btn-sm position-absolute" style="top: 10px; right: 10px;" id="close-register-form">
@@ -56,12 +58,33 @@
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
-        </div>
+
+    <!-- SALES LIST -->
+    <div class="row">
+       <div>List Sales</div>
     </div>
+
 </div>
+
 @endsection
+
 @push('plugin-scripts')
 @endpush
 
 @push('custom-scripts')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    // Toggle the visibility of the register product form
+    $('#register-product-btn').on('click', function() {
+        $('#register-product-form').toggle();
+    });
+
+    // Close the form when the "X" button is clicked
+    $('#close-register-form').on('click', function() {
+        $('#register-product-form').hide();
+    });
+});
+        
+</script>
 @endpush

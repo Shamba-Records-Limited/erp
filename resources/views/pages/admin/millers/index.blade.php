@@ -176,7 +176,6 @@ $countries = get_countries();
                             @error('user_email') <div class="invalid-feedback">{{ $message }}</div> @enderror
                         </div>
                     </div>
-
                     <!-- Submit Button -->
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary mt-3">

@@ -47,6 +47,7 @@
                 <img src="{{ asset('storage/' . ($product['image'] ?? 'default-image.jpg')) }}" class="card-img-top" alt="{{ $product->name ?? 'Product' }}" loading="lazy" style="object-fit: cover; height: 200px;">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">{{ $product['name'] }}</h5>
+                    <p class="miller-name">Miller: {{ $product['miller']['miller_name'] }}</p> 
                     <p class="card-text">KES {{ number_format($product['sale_price'], 2) }}</p>
                     <!-- <button class="btn btn-success add-to-cart-btn mt-auto" style="background-color: #28a745; border-color: #28a745;">Add to Cart</button>-->
                      <button class="btn btn-success" style="background-color: #28a745; border-color: #28a745;" 

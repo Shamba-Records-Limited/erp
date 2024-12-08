@@ -161,7 +161,10 @@
         <tbody>
             <tr style="vertical-align: center;">
                 <td style="width: 5.2em;">
-                    <img src="{{ public_path('assets/images/shamba_records_logo.jpeg') }}" alt="logo" style="height: 5em; width: 5em;" />
+                   <img 
+                        src="{{ $image }}" 
+                        alt="profile image" 
+                        style="height: 5em; width: 5em;" />
                 </td>
                 <td class="text-left">
                     <div style="font-size: 3em;">Shamba Records</div>

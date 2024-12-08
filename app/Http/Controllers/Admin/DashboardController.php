@@ -54,8 +54,16 @@ class DashboardController extends Controller
             COUNT(*) AS quantity
         FROM farmers f
         GROUP BY age_group
+        ORDER BY 
+            CASE 
+                WHEN age_group = '18-25' THEN 1
+                WHEN age_group = '26-35' THEN 2
+                WHEN age_group = '36-45' THEN 3
+                WHEN age_group = '46-55' THEN 4
+                WHEN age_group = '56-65' THEN 5
+                WHEN age_group = '66+' THEN 6
+            END
     "));
-
 
         // collection over time
         $date_range = $request->query("date_range", "week");
@@ -292,7 +300,10 @@ class DashboardController extends Controller
         ->select('gender', DB::raw('COUNT(*) as count'))
         ->groupBy('gender')
         ->get();
-
+      // dd($genderDistribution);
+        // Separate data into male and female
+        $male_collections_pie = $genderDistribution->where('gender', 'M')->pluck('count');
+        $female_collections_pie = $genderDistribution->where('gender', 'F')->pluck('count');
         //Raw material quantity
         $raw_material_count = DB::select(DB::raw("
             SELECT 
@@ -600,8 +611,12 @@ class DashboardController extends Controller
             "sales_percent" =>  $sales_percent,
              "sales_since_last_month"=>$sales_since_last_month,
              "premilled_percent" => $premilled_percent,
-             "total_Premilled_since_last_month" => $total_Premiiled_since_last_month 
+             "total_Premilled_since_last_month" => $total_Premiiled_since_last_month,
+             "male_collections_pie" => $male_collections_pie ,
+             "female_collections_pie" => $female_collections_pie,
         ];
+
+      
         return view('pages.admin.dashboard', compact("data", "date_range", "from_date", "to_date","age_distribution"));
     }
 

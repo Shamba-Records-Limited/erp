@@ -64,6 +64,7 @@ class MillersController extends Controller
             'o_names' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
             'u_name' => 'required|unique:users,username',
+            'miller_logo' => 'sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072',
         ]);
 
         try {
@@ -100,6 +101,13 @@ class MillersController extends Controller
             $user->other_names = $request->o_names;
             $user->email = $request->user_email;
             $user->password = $hashedPassword;
+            if ($request->hasFile('miller_logo')) {
+                // Save the new profile picture
+                $file = $request->file('miller_logo');
+                $filePath = $file->store('uploads/logos', 'public');
+                $user->profile_picture = $filePath;
+                Log::info('Logo stored at: ' . $filePath);
+            }
             $user->save();
 
             // Miller Admin
@@ -122,9 +130,8 @@ class MillersController extends Controller
             DB::commit();
             toastr()->success('Miller Created Successfully');
             return redirect()->route('admin.millers.show')->withInput();
-
+            //pages.admin.millers.index
         } catch (\Throwable $th) {
-            dd($th);
             Log::error($th->getMessage());
             DB::rollback();
             toastr()->error('Oops! Operation failed');

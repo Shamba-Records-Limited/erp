@@ -306,6 +306,12 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/collections', 'Admin\CollectionsController@index')
         ->name('admin.collections.show');
 
+    Route::get('/collections/download/{type}', 'Admin\CollectionsController@export_collections')
+        ->name("admin.collections.export");
+      // dashboard
+    Route::get('/collections-mini-dashboard', 'Admin\CollectionsController@collections_mini_dashboard')
+      ->name('admin.collections.mini-dashboard');
+
 
 
     // roles
@@ -725,6 +731,9 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.update-customer-details");
     Route::get("/inventory-auction/customers/details/{id}", "MillerAdmin\InventoryAuctionController@view_customer")
         ->name("miller-admin.inventory-auction.view-customer");
+
+    Route::get('/inventory-auction/customers/download/{type}', 'MillerAdmin\InventoryAuctionController@export_customers')
+        ->name("miller-admin.inventory-auction.customer.export");
     // inventory auction: quotations
     Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
         ->name("miller-admin.inventory-auction.list-quotations");
@@ -770,10 +779,18 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     // inventory auction: sales
     Route::get("/inventory-auction/sales", "MillerAdmin\InventoryAuctionController@list_sales")
         ->name("miller-admin.inventory-auction.list-sales");
-    Route::get("/inventory-auction/sales/add-sale/",  "MillerAdmin\InventoryAuctionController@add_sale")
+
+    Route::post("/inventory-auction/sales/add-sale/",  "MillerAdmin\InventoryAuctionController@add_sale")
         ->name("miller-admin.inventory-auction.add-sale");
+
+        Route::get("/inventory-auction/sales/view-add-sale/",  "MillerAdmin\InventoryAuctionController@view_add_sale")
+        ->name("miller-admin.inventory-auction.view-add-sale");
+
     Route::get("/inventory-auction/sales/save-details/{id}", "MillerAdmin\InventoryAuctionController@view_update_sale")
         ->name("miller-admin.inventory-auction.view-update-sale");
+
+    Route::get('/inventory-auction/sales/download/{type}', 'MillerAdmin\InventoryAuctionController@export_sales')
+        ->name("miller-admin.inventory-auction.export");
 
     Route::prefix('/wallet-management')->group(function () {
         // dashboard

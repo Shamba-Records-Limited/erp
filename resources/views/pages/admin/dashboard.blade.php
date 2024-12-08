@@ -531,20 +531,34 @@
     let collectionsGenderBarChart = new Chart(collectionsGenderBarChartCanvas, { type: 'bar', data: collectionsGenderBarData, options: collectionsGenderBarOptions });
 
     // Collections by gender pie chart
+    document.addEventListener("DOMContentLoaded", function () {
+    let maleCollectionsData = @json($data['male_collections_pie']);
+    let femaleCollectionsData = @json($data['female_collections_pie']);
+    let maleCollectionTotal = maleCollectionsData.reduce((a, b) => a + b, 0);
+    let femaleCollectionTotal = femaleCollectionsData.reduce((a, b) => a + b, 0);
+
     let collectionsGenderPieChartCanvas = document.getElementById("CollectionsGenderPieChart");
     let collectionsGenderPieData = {
         labels: ["Male", "Female"],
         datasets: [{
-            data: [
-                maleCollectionValues.reduce((a, b) => a + b, 0),
-                femaleCollectionValues.reduce((a, b) => a + b, 0)
-            ],
+            data: [maleCollectionTotal, femaleCollectionTotal],
             backgroundColor: ['rgba(54, 162, 235, 1)', '#f53794'],
             hoverBackgroundColor: ['rgba(54, 162, 235, 0.8)', '#f53794']
         }]
     };
-    let collectionsGenderPieOptions = { responsive: true, maintainAspectRatio: false, animation: { animateScale: true, animateRotate: true } };
-    let collectionsGenderPieChart = new Chart(collectionsGenderPieChartCanvas, { type: 'pie', data: collectionsGenderPieData, options: collectionsGenderPieOptions });
+    let collectionsGenderPieOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { animateScale: true, animateRotate: true }
+    };
+
+    new Chart(collectionsGenderPieChartCanvas, {
+        type: 'pie',
+        data: collectionsGenderPieData,
+        options: collectionsGenderPieOptions
+    });
+});
+
 
     // Age Distribution Bar Chart with Dummy Data
     let ageDistributionData = @json($age_distribution);

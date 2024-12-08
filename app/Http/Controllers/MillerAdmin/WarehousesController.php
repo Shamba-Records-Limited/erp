@@ -114,7 +114,7 @@ class WarehousesController extends Controller
             $miller_id = $user->miller_admin->miller_id;
         }
 
-
+        $image=$user->profile_picture;
         // if ($request->request_data == '[]') {
         //     $request = null;
         // } else {
@@ -131,13 +131,14 @@ class WarehousesController extends Controller
                 ['name' => 'Name', 'key' => "name"],
                 ['name' => 'Location', 'key' => "location"],
             ];
-
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
             $data = [
                 'title' => 'Warehouses',
                 'pdf_view' => 'warehouses',
                 'records' => $warehouses,
                 'filename' => strtolower('warehouses_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }

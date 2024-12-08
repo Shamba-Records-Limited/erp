@@ -145,11 +145,38 @@ $cooperative = null;
                     <i class="ni ni-user-run text-custom-green"></i> {{ __('Farmers') }}
                 </a>
             </li>
-            <li class="nav-item {{ active_class(['admin/collections*']) }} mb-3">
+
+          <!--  <li class="nav-item {{ active_class(['admin/collections*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.collections.show') }}">
                     <i class="ni ni-credit-card text-custom-green"></i> {{ __('Collections') }}
                 </a>
+            </li>-->
+
+            <!-- Collection CRM Dropdown -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#collections-crm" data-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="collections-crm">
+                    <i class="ni ni-archive-2 text-custom-green"></i>
+                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Collection CRM') }}</span>
+                </a>
+                <div class="collapse {{ request()->routeIs('admin.collections.mini-dashboard') ? 'show' : '' }}" id="collections-crm">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.collections.mini-dashboard') ? 'active' : '' }}" href="{{ route('admin.collections.mini-dashboard') }}">
+                                {{ __('Dashboard') }}
+                            </a>
+                        </li>
+						
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.collections.show') ? 'active' : '' }}" href="{{ route('admin.collections.show') }}">
+                                {{ __('Collections') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
+
 
          <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">

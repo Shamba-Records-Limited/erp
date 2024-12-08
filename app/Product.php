@@ -67,7 +67,10 @@ class Product extends Model
     {
         return $this->hasOne(Crop::class, 'product_id', 'id');
     }
-
+    public function miller()
+    {
+        return $this->belongsTo(Miller::class, 'miller_id');
+    }
     public static function  farmer_products($userId, $farmerId): array
     {
         return DB::select("
