@@ -62,7 +62,7 @@
                                         <i class="fa fa-pdf"></i> Print Quotation
                                     </a>
                                     @if($quotation->no_invoice)
-                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
+                                    <a class="text-info dropdown-item" href="{{ route('cooperative-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
                                         <i class="fa fa-edit"></i>Create Invoice From Quotation
                                     </a>
                                     @endif
@@ -101,7 +101,7 @@
                                         <i class="fa fa-pdf"></i> Print Receipt
                                     </a>
                                     @if($invoice->has_receipt == false)
-                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
+                                    <a class="text-info dropdown-item" href="{{ route('cooperative-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
                                         <i class="fa fa-edit"></i>Create Receipt From Invoice
                                     </a>
                                     @endif

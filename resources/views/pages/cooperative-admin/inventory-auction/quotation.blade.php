@@ -28,7 +28,7 @@
                 <h5 class="mb-4">
                     Quotation Number: <span class="font-weight-bold">{{$draftQuotation->quotation_number}}</span>
                 </h5>
-                <form action="{{route('miller-admin.inventory-auction.quotations.save-basic_details')}}" method="POST" id="save_basic_details_form">
+                <form action="{{route('cooperative-admin.inventory-auction.quotations.save-basic_details')}}" method="POST" id="save_basic_details_form">
                     @csrf
                     <input type="hidden" name="quotation_id" value="{{$draftQuotation->id}}">
                     <div class="form-group">
@@ -68,7 +68,7 @@
                     @endif
                 </div>
                 <div class="collapse border rounded p-3 mt-3" id="addQuotationItem">
-                    <form action="{{route('miller-admin.inventory-auction.quotations.save-quotation-item')}}" method="POST">
+                    <form action="{{route('cooperative-admin.inventory-auction.quotations.save-quotation-item')}}" method="POST">
                         @csrf
                         <input type="hidden" name="quotation_id" value="{{$draftQuotation->id}}">
                         <div class="form-row">
@@ -130,7 +130,7 @@
                             <td>KES {{$subTotal}}</td>
                             <td>
                                 @if($isAddingQuotation == '1')
-                                <form action="{{route('miller-admin.inventory-auction.quotations.delete-quotation-item', $item->id)}}" method="POST">
+                                <form action="{{route('cooperative-admin.inventory-auction.quotations.delete-quotation-item', $item->id)}}" method="POST">
                                     @csrf
                                     @method("DELETE")
                                     <button class="btn btn-danger">Remove</button>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="mt-3">
                     @if($isAddingQuotation == '1')
-                    <a href="{{route('miller-admin.inventory-auction.quotations.publish-quotation')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish quotation?')">Publish</a>
+                    <a href="{{route('cooperative-admin.inventory-auction.quotations.publish-quotation')}}" class="btn btn-primary" onclick="return confirm('Are you sure you want to publish quotation?')">Publish</a>
                     @endif
                 </div>
                 @if(!empty($viewingQuotationId))
@@ -225,7 +225,7 @@
                                         <!-- <a class="text-info dropdown-item" href="{{route('common.view-quotation', $quotation->id)}}">
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a> -->
-                                        <!-- <a class="text-info dropdown-item" href="{{route('miller-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}"> -->
+                                        <!-- <a class="text-info dropdown-item" href="{{route('cooperative-admin.inventory-auction.quotations.export-quotation', $quotation->id)}}"> -->
                                         <a class="text-dark dropdown-item" href="?viewing_quotation_id={{$quotation->id}}" onclick="">
                                             <i class="fa fa-pdf"></i> View Quotation
                                         </a>
@@ -241,7 +241,7 @@
                                             <i class="md md-edit"></i> Print Invoice
                                         </button>
                                         @elseif($quotation->no_invoice)
-                                        <a class="text-success dropdown-item" href="{{ route('miller-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
+                                        <a class="text-success dropdown-item" href="{{ route('cooperative-admin.inventory-auction.quotations.create-invoice', $quotation->id) }}">
                                             <i class="md md-edit"></i>Create Invoice From Quotation
                                         </a>
                                         @endif
@@ -331,7 +331,7 @@
         let item_id = $(this).val();
         $.ajax({
             method: "get",
-            url: `/miller-admin/inventory-auction/final-product/${item_id}`
+            url: `/cooperative-admin/inventory-auction/final-product/${item_id}`
         }).then((resp) => {
             // fill in current price
             $("#price").val(resp.selling_price)
@@ -455,7 +455,7 @@
         let exportType = $("[name='exportType']:checked").val();
         let startDate = $("#startDate").val();
         let endDate = $("#endDate").val();
-        window.location.href = `/miller-admin/inventory-auction/quotations/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
+        window.location.href = `/cooperative-admin/inventory-auction/quotations/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
 
         dismissExportDialog();
     })

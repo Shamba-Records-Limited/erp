@@ -336,6 +336,15 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
 
 });
 
+    // market palce
+    // market/dashboard
+    Route::get("market-auction/dashboard", "Admin\MarketDashboardController@index")
+        ->name("admin.marketplace-dashboard");
+
+    // market/products
+    Route::get("/market-auction/products", "Admin\MarketProductsController@index")
+        ->name("admin.marketplace-products");
+
 
 Route::middleware('role:county govt official')->prefix('county-govt')->group(function () {
     Route::get('/dashboard', 'GovtOfficial\DashboardController@index')->name('govt-official.dashboard');
@@ -499,6 +508,81 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
     Route::get("/transactions/{id}/complete", "CooperativeAdmin\TransactionController@complete")
         ->name("cooperative-admin.transactions.complete");
 
+
+    // inventory auction: customers
+    Route::get("/inventory-auction/customers", "CooperativeAdmin\InventoryAuctionController@list_customers")
+        ->name("cooperative-admin.inventory-auction.list-customers");
+    Route::get("/inventory-auction/customers/add-customer/",  "CooperativeAdmin\InventoryAuctionController@add_customer")
+        ->name("cooperative-admin.inventory-auction.add-customer");
+    Route::get("/inventory-auction/customers/save-details/{id}", "CooperativeAdmin\InventoryAuctionController@view_update_customer_details")
+        ->name("cooperative-admin.inventory-auction.view-update-customer-details");
+    Route::put("/inventory-auction/customers/update", "CooperativeAdmin\InventoryAuctionController@update_customer_details")
+        ->name("cooperative-admin.inventory-auction.update-customer-details");
+    Route::get("/inventory-auction/customers/details/{id}", "CooperativeAdmin\InventoryAuctionController@view_customer")
+        ->name("cooperative-admin.inventory-auction.view-customer");
+    Route::get('/inventory-auction/customers/download/{type}', 'CooperativeAdmin\InventoryAuctionController@export_customers')
+        ->name("cooperative-admin.inventory-auction.customer.export");
+
+    // inventory auction: quotations
+    Route::get("/inventory-auction/quotations", "CooperativeAdmin\InventoryAuctionController@list_quotations")
+        ->name("cooperative-admin.inventory-auction.list-quotations");
+    Route::get("/inventory-auction/quotations/export-many/{type}", "CooperativeAdmin\InventoryAuctionController@export_many_quotations")
+        ->name("cooperative-admin.inventory-auction.quotations.export-many");
+    Route::post("/inventory-auction/quotations/save-basic-details", "CooperativeAdmin\InventoryAuctionController@save_quotation_basic_details")
+        ->name("cooperative-admin.inventory-auction.quotations.save-basic_details");
+    Route::post("/inventory-auction/quotations/save-quotation-item", "CooperativeAdmin\InventoryAuctionController@save_quotation_item")
+        ->name("cooperative-admin.inventory-auction.quotations.save-quotation-item");
+    Route::delete("/inventory-auction/quotations/delete-quotation-item/{id}", "CooperativeAdmin\InventoryAuctionController@delete_quotation_item")
+        ->name("cooperative-admin.inventory-auction.quotations.delete-quotation-item");
+    Route::get("/inventory-auction/quotations/publish-quotation", "CooperativeAdmin\InventoryAuctionController@publish_quotation")
+        ->name("cooperative-admin.inventory-auction.quotations.publish-quotation");
+    Route::get("/inventory-auction/quotations/create-invoice/{id}", "CooperativeAdmin\InventoryAuctionController@create_invoice_from_quotation")
+        ->name("cooperative-admin.inventory-auction.quotations.create-invoice");
+    Route::get("/inventory-auction/quotations/export/{id}", "CooperativeAdmin\InventoryAuctionController@export_quotation")
+        ->name("cooperative-admin.inventory-auction.quotations.export-quotation");
+
+    // inventory auction: invoices
+    Route::get("/inventory-auction/invoices", "CooperativeAdmin\InventoryAuctionController@list_invoices")
+        ->name("cooperative-admin.inventory-auction.list-invoices");
+    Route::post("/inventory-auction/invoices/save-basic-details", "CooperativeAdmin\InventoryAuctionController@save_invoice_basic_details")
+        ->name("cooperative-admin.inventory-auction.invoices.save-basic-details");
+    Route::post("/inventory-auction/invoices/save-invoice-item", "CooperativeAdmin\InventoryAuctionController@save_invoice_item")
+        ->name("cooperative-admin.inventory-auction.invoices.save-invoice-item");
+    Route::delete("/inventory-auction/invoices/delete-invoice-item/{id}", "CooperativeAdmin\InventoryAuctionController@delete_invoice_item")
+        ->name("cooperative-admin.inventory-auction.invoices.delete-invoice-item");
+    Route::get("/inventory-auction/invoices/publish-invoice", "CooperativeAdmin\InventoryAuctionController@publish_invoice")
+        ->name("cooperative-admin.inventory-auction.invoices.publish-invoice");
+    Route::get("/inventory-auction/invoices/mark-as-paid/{id}", "CooperativeAdmin\InventoryAuctionController@mark_invoice_as_paid")
+        ->name("cooperative-admin.inventory-auction.invoices.mark-as-paid");
+    Route::get("/inventory-auction/invoices/export/{id}", "CooperativeAdmin\InventoryAuctionController@export_invoice")
+        ->name("cooperative-admin.inventory-auction.invoices.export-invoice");
+    Route::get("/inventory-auction/invoices/export-many/{type}", "CooperativeAdmin\InventoryAuctionController@export_many_invoices")
+        ->name("cooperative-admin.inventory-auction.invoices.export-many");
+
+    // inventory auction: receipts
+    Route::get("/inventory-auction/receipts", "CooperativeAdmin\InventoryAuctionController@list_receipts")
+        ->name("cooperative-admin.inventory-auction.list-receipts");
+    Route::get("/inventory-auction/receipts/export/{id}", "CooperativeAdmin\InventoryAuctionController@export_receipt")
+        ->name("cooperative-admin.inventory-auction.receipts.export-receipt");
+    Route::get("/inventory-auction/receipts/export-many/{type}", "CooperativeAdmin\InventoryAuctionController@export_many_receipts")
+        ->name("cooperative-admin.inventory-auction.receipts.export-many");    
+
+    // inventory auction: sales
+    Route::get("/inventory-auction/sales", "CooperativeAdmin\InventoryAuctionController@list_sales")
+        ->name("cooperative-admin.inventory-auction.list-sales");
+    Route::post("/inventory-auction/sales/add-sale/",  "CooperativeAdmin\InventoryAuctionController@add_sale")
+        ->name("cooperative-admin.inventory-auction.add-sale");
+        Route::get("/inventory-auction/sales/view-add-sale/",  "CooperativeAdmin\InventoryAuctionController@view_add_sale")
+        ->name("cooperative-admin.inventory-auction.view-add-sale");
+    Route::get("/inventory-auction/sales/save-details/{id}", "CooperativeAdmin\InventoryAuctionController@view_update_sale")
+        ->name("cooperative-admin.inventory-auction.view-update-sale");
+    Route::get('/inventory-auction/sales/download/{type}', 'CooperativeAdmin\InventoryAuctionController@export_sales')
+        ->name("cooperative-admin.inventory-auction.export");
+
+     // market/dashboard
+     Route::get("market-auction/dashboard", "CooperativeAdmin\MarketDashboardController@index")
+     ->name("cooperative-admin.marketplace-dashboard");
+
     Route::prefix('/wallet-management')->group(function () {
         // dashboard
         Route::get("/dashboard", "CooperativeAdmin\WalletManagementController@dashboard")
@@ -535,7 +619,6 @@ Route::middleware('role:cooperative admin')->prefix('cooperative-admin')->group(
             ->name("cooperative-admin.wallet-management.income.table");
         Route::get('/income/download/{type}', 'CooperativeAdmin\WalletManagementController@export_income')
             ->name("cooperative-admin.income.export");
-
 
         // transactions
         Route::get("/transactions", "CooperativeAdmin\WalletManagementController@list_transactions")
@@ -635,15 +718,6 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.market-auction.checkout-cart");
 
 
-
-    // Route::get("/market-auction/{coop_id}/increase_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@increase_quantity_in_cart")
-    //     ->name("miller-admin.market-auction.increase-quantity-in-cart");
-    // Route::put("/market-auction/{coop_id}/set_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@set_quantity_in_cart")
-    //     ->name("miller-admin.market-auction.set-quantity-in-cart");
-    // Route::get("/market-auction/{coop_id}/decrease_quantity_in_cart/{lot_number}", "MillerAdmin\MarketAuctionController@decrease_quantity_in_cart")
-    //     ->name("miller-admin.market-auction.decrease-quantity-in-cart");
-
-
     // orders
     Route::get("/orders", "MillerAdmin\OrdersController@index")
         ->name("miller-admin.orders.show");
@@ -734,11 +808,15 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
 
     Route::get('/inventory-auction/customers/download/{type}', 'MillerAdmin\InventoryAuctionController@export_customers')
         ->name("miller-admin.inventory-auction.customer.export");
+
+    
     // inventory auction: quotations
     Route::get("/inventory-auction/quotations", "MillerAdmin\InventoryAuctionController@list_quotations")
         ->name("miller-admin.inventory-auction.list-quotations");
+
     Route::get("/inventory-auction/quotations/export-many/{type}", "MillerAdmin\InventoryAuctionController@export_many_quotations")
         ->name("miller-admin.inventory-auction.quotations.export-many");
+
     Route::post("/inventory-auction/quotations/save-basic-details", "MillerAdmin\InventoryAuctionController@save_quotation_basic_details")
         ->name("miller-admin.inventory-auction.quotations.save-basic_details");
     Route::post("/inventory-auction/quotations/save-quotation-item", "MillerAdmin\InventoryAuctionController@save_quotation_item")
@@ -775,6 +853,9 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
         ->name("miller-admin.inventory-auction.list-receipts");
     Route::get("/inventory-auction/receipts/export/{id}", "MillerAdmin\InventoryAuctionController@export_receipt")
         ->name("miller-admin.inventory-auction.receipts.export-receipt");
+
+    Route::get("/inventory-auction/receipts/export-many/{type}", "MillerAdmin\InventoryAuctionController@export_many_receipts")
+        ->name("miller-admin.inventory-auction.receipts.export-many");    
 
     // inventory auction: sales
     Route::get("/inventory-auction/sales", "MillerAdmin\InventoryAuctionController@list_sales")

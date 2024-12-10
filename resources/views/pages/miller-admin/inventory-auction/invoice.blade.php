@@ -254,6 +254,56 @@
 
     </div>
 </div>
+
+<!--<h1>Export Dialogue Modal</h1>-->
+<div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">Export Quotations</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="exportForm">
+                    <div class="form-group">
+                        <label>Export Type</label>
+                        <div>
+                            <label><input type="radio" name="exportType" value="pdf" checked> PDF</label>
+                            <label><input type="radio" name="exportType" value="excel"> Excel</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startDate">Start Date</label>
+                        <input 
+                            type="date" 
+                            id="startDate" 
+                            class="form-control" 
+                            value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" 
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date</label>
+                        <input 
+                            type="date" 
+                            id="endDate" 
+                            class="form-control" 
+                            value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" 
+                        >
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="doExport">Export</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<h1>End Export Dialogue Modal</h1>-->
+
 @endsection
 @push('plugin-scripts')
 @endpush
@@ -338,6 +388,16 @@
                 alert(errResp);
             }
         })
+    }
+
+
+    function showExportDialog(title) {
+    $("#exportModalLabel").text(title); // Update the modal title
+    $("#exportModal").modal('show');   // Show the modal
+    }
+
+    function dismissExportDialog() {
+    $("#exportModal").modal('hide'); // Hide the modal
     }
 
     let exportStatus = 'all';

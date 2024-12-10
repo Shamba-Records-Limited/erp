@@ -158,7 +158,7 @@
         let exportType = $("[name='exportType']:checked").val();
         let startDate = $("#startDate").val();
         let endDate = $("#endDate").val();
-        window.location.href = `/miller-admin/inventory-auction/receipts/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
+        window.location.href = `/cooperative-admin/inventory-auction/receipts/export-many/${exportType}?start_date=${startDate}&end_date=${endDate}&export_status=${exportStatus}`;
 
         dismissExportDialog();
     })

@@ -242,6 +242,30 @@ $cooperative = null;
                 </div>
             </li>
 
+            <!-- Marketplace Dropdown -->
+            <li class="nav-item {{ request()->is('admin/market-auction/*') ? 'active' : '' }}">
+                    <a class="nav-link" href="#navbar-marketplace" data-toggle="collapse" role="button"
+                        aria-expanded="{{ request()->is('admin/market-auction/*') ? 'true' : 'false' }}"
+                        aria-controls="navbar-marketplace">
+                        <i class="ni ni-basket text-green"></i> {{ __('Marketplace') }}
+                    </a>
+                    <div class="collapse {{ request()->is('admin/market-auction/*') ? 'show' : '' }}" id="navbar-marketplace">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.marketplace-dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+                            <!-- Products Item -->
+                            <li class="nav-item {{ request()->is('market-auction/products') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('admin.marketplace-products') }}">
+                                    {{ __('Products') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
             <li class="nav-item {{ active_class(['admin/support*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.support.show') }}">
                     <i class="ni ni-support-16 text-custom-green"></i> {{ __('Support') }}
@@ -458,6 +482,51 @@ $cooperative = null;
                 </div>
              
             </li>
+           <!-- Inventory Auction Dropdown -->
+           <li class="nav-item {!! active_class(['cooperative-admin/inventory-auction*']) !!}">
+                    <a class="nav-link" href="#navbar-auction" data-toggle="collapse" role="button"
+                        aria-expanded="{!! is_active_route(['cooperative-admin/inventory-auction*']) !!}"
+                        aria-controls="navbar-auction">
+                        <i class="ni ni-cart text-green"></i>
+                        <span class="nav-link-text">{{ __('Sales Management') }}</span>
+                    </a>
+                    <div class="collapse {{ show_class(['cooperative-admin/inventory-auction*']) }}" id="navbar-auction">
+                        <ul class="nav nav-sm flex-column">
+
+                            <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('cooperative-admin.marketplace-dashboard') }}">
+                                        {{ __('Dashboard') }}
+                                    </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['cooperative-admin/inventory-auction/customers*']) }}">
+                                <a class="nav-link" href="{{ route('cooperative-admin.inventory-auction.list-customers') }}">
+                                    {{ __('Customers') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['cooperative-admin/inventory-auction/quotations*']) }}">
+                                <a class="nav-link"
+                                    href="{{ route('cooperative-admin.inventory-auction.list-quotations') }}">
+                                    {{ __('Quotations') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['cooperative-admin/inventory-auction/invoices*']) }}">
+                                <a class="nav-link" href="{{ route('cooperative-admin.inventory-auction.list-invoices') }}">
+                                    {{ __('Invoices') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['cooperative-admin/inventory-auction/receipts*']) }}">
+                                <a class="nav-link" href="{{ route('cooperative-admin.inventory-auction.list-receipts') }}">
+                                    {{ __('Payment Receipt') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['cooperative-admin/inventory-auction/sales*']) }}">
+                                <a class="nav-link" href="{{ route('cooperative-admin.inventory-auction.list-sales') }}">
+                                    {{ __('Sales') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
             <!-- Transactions Reports -->
             <li class="nav-item">
@@ -938,6 +1007,11 @@ $cooperative = null;
                                 <a class="nav-link" href="{{ route('miller-admin.inventory-auction.list-sales') }}">
                                     {{ __('Sales') }}
                                 </a>
+                            </li>
+                            <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('miller-admin.marketplace-dashboard') }}">
+                                        {{ __('Dashboard') }}
+                                    </a>
                             </li>
                         </ul>
                     </div>

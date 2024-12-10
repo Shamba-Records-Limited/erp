@@ -10,10 +10,10 @@
         <div class="card-title">Customers</div>
 
         <div class="d-flex justify-content-end">
-            <a class="btn btn-primary" href="{{route('miller-admin.inventory-auction.add-customer')}}">+Add Customer</a>
+            <a class="btn btn-primary" href="{{route('cooperative-admin.inventory-auction.add-customer')}}">+Add Customer</a>
             <div>   
-                <a class="btn btn-primary btn-sm" href="{{route('miller-admin.inventory-auction.customer.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Download Excel Sheet</a>
-                <a class="btn btn-primary btn-sm" href="{{route('miller-admin.inventory-auction.customer.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span> Download PDF</a>
+                <a class="btn btn-primary btn-sm" href="{{route('cooperative-admin.inventory-auction.customer.export', 'xlsx')}}"><span class="mdi mdi-file-excel"></span> Download Excel Sheet</a>
+                <a class="btn btn-primary btn-sm" href="{{route('cooperative-admin.inventory-auction.customer.export', 'pdf')}}"><span class="mdi mdi-file-pdf"></span> Download PDF</a>
             </div>
             <!-- button with dropdown actions: export all, export pending, export expired, export selected -->
             
@@ -37,7 +37,7 @@
                     @foreach($customers as $customer)
                     <tr>
                         <td>{{$customer->title}}</td>
-                        <td><a href="{{route('miller-admin.inventory-auction.view-customer', $customer->id )}}">{{$customer->name}}</a></td>
+                        <td><a href="{{route('cooperative-admin.inventory-auction.view-customer', $customer->id )}}">{{$customer->name}}</a></td>
                         <td>{{$customer->gender}}</td>
                         <td>{{$customer->email}}</td>
                         <td>{{$customer->phone_number}}</td>
@@ -47,7 +47,7 @@
                                     Actions
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="text-primary dropdown-item" href="{{route('miller-admin.inventory-auction.view-customer', $customer->id )}}">
+                                    <a class="text-primary dropdown-item" href="{{route('cooperative-admin.inventory-auction.view-customer', $customer->id )}}">
                                         <i class="fa fa-edit"></i>View Details
                                     </a>
                                 </div>
