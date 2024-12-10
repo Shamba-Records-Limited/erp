@@ -1129,11 +1129,6 @@ $cooperative = null;
                     </a>
                     <div class="collapse {{ show_class(['farmer/marketplace/*']) }}" id="navbar-marketplace">
                         <ul class="nav nav-sm flex-column">
-                            <li class="nav-item {{ active_class(['farmer/marketplace/dashboard']) }}">
-                                <a class="nav-link" href="{{ route('farmer.marketplace.dashboard') }}">
-                                    {{ __('Dashboard') }}
-                                </a>
-                            </li>
                             <li
                                 class="nav-item {{ active_class(['farmer/marketplace/products']) }}">
                                 <a class="nav-link"
