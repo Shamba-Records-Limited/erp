@@ -29,7 +29,7 @@ class CollectionController extends Controller
 
 
         $collections = DB::select(DB::raw("
-            SELECT p.name as product_name, quantity, c.*, pc.unit,
+            SELECT p.name as product_name, c.quantity, c.*, pc.unit,
                 f.id as farmer_id, f.member_no, coop.name as coop_name
             FROM collections c
             JOIN farmers f ON f.id = c.farmer_id
