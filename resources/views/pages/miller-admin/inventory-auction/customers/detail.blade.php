@@ -101,7 +101,7 @@
                                         <i class="fa fa-pdf"></i> Print Receipt
                                     </a>
                                     @if($invoice->has_receipt == false)
-                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.invoices.create-receipt', $invoice->id) }}">
+                                    <a class="text-info dropdown-item" href="{{ route('miller-admin.inventory-auction.list-invoices', $invoice->id) }}">
                                         <i class="fa fa-edit"></i>Create Receipt From Invoice
                                     </a>
                                     @endif
