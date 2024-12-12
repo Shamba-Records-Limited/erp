@@ -45,13 +45,19 @@
                             <div class="form-group">
                                 <label for="cooperative">Cooperative Name</label>
                                 <select class="form-control form-select node_type" name="root_type" id="root_type">
-                                    <option value="">-- Choose Cooperative --</option>
+                                    <option value="">-- Choose Cooperative  --</option>
+                                    @foreach($cooperatives as $coop)
+                                    <option value="{{$coop->id}}">{{$coop->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="cooperative">Miller Name</label>
                                 <select class="form-control form-select node_type" name="root_type" id="root_type">
-                                    <option value="">-- Choose Miller --</option>
+                                <option value="">-- Choose Miller  --</option>
+                                    @foreach($millers as $miller)
+                                    <option value="{{$miller->id}}">{{$miller->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group">

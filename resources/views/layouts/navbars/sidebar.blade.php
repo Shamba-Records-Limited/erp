@@ -216,6 +216,13 @@ $cooperative = null;
                     </div>
                 </li>
 
+                <!-- Orders -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('admin.orders.show') }}">
+                        <i class="ni ni-cart text-custom-green"></i> {{ __('Orders') }}
+                    </a>
+                </li>
+
          <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">
                 <!-- Added margin-bottom for spacing -->

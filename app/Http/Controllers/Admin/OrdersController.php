@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\MillerAdmin;
+namespace App\Http\Controllers\Admin;
 
 use App\AuctionOrderDelivery;
 use App\Cooperative;
@@ -26,26 +26,23 @@ class OrdersController extends Controller
     public function index()
     {
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
-        // $orders = DB::select(DB::raw("
-        //     SELECT ord.*,
-        //         coop.name as cooperative_name
-        //     FROM miller_auction_order ord
-        //     JOIN cooperatives coop ON coop.id = ord.cooperative_id
-        //     JOIN millers ON millers.id = ord.miller_id AND millers.id = :miller_id;
-        // "), ["miller_id" => $miller_id]);
 
-       // $orders = MillerAuctionOrder::where("miller_id", $miller_id)->with("cooperative")->get();
-        $orders = MillerAuctionOrder::where('miller_id', $miller_id)
-                ->join('auction_order_delivery', 'miller_auction_order.id', '=', 'auction_order_delivery.order_id')
-                ->with('cooperative') // Assuming cooperative is a relationship
-                ->select('miller_auction_order.*', 'auction_order_delivery.delivery_number') // Select specific columns
-                ->get();
-        return view('pages.miller-admin.orders.index', compact('orders'));
+        $orders = MillerAuctionOrder::query()
+        ->join('auction_order_delivery', 'miller_auction_order.id', '=', 'auction_order_delivery.order_id')
+        ->join('millers', 'miller_auction_order.miller_id', '=', 'millers.id') // Join millers table
+        ->join('miller_warehouse', 'miller_auction_order.miller_warehouse_id', '=', 'miller_warehouse.id') // Join miller_warehouse table
+        ->with('cooperative') // Assuming cooperative is a relationship
+        ->select(
+            'miller_auction_order.*', 
+            'auction_order_delivery.delivery_number', 'auction_order_delivery.created_at as delivery_date',
+            'auction_order_delivery.approved_at as delivery_approval_date',
+            'millers.name as miller_name', // Include columns from millers table
+            'miller_warehouse.name as warehouse_name' // Include columns from miller_warehouse table
+        )
+        ->get();
+    
+    
+        return view('pages.admin.orders.index', compact('orders'));
     }
 
     public function view_create_order($coop_id)
@@ -63,10 +60,10 @@ class OrdersController extends Controller
 
         // get draft order
         $draftOrder = MillerAuctionOrder::where('published_at', null)
-            ->where("user_id", $user_id)
-            ->where("miller_id", $miller_id)
-            ->where("cooperative_id", $coop_id)
-            ->first();
+           // ->where("user_id", $user_id)
+           // ->where("miller_id", $miller_id)
+            //->where("cooperative_id", $coop_id)
+            ->get();
 
         if (is_null($draftOrder)) {
             $now = Carbon::now();
@@ -91,7 +88,7 @@ class OrdersController extends Controller
         }
 
 
-        return view('pages.miller-admin.orders.create.index', compact('draftOrder', 'cooperative'));
+        return view('pages.admin.orders.create.index', compact('draftOrder', 'cooperative'));
     }
 
     public function detail($id, Request $request)
@@ -176,30 +173,25 @@ class OrdersController extends Controller
         }
         
 
-        return view('pages.miller-admin.orders.detail', compact('order', 'tab', 'orderItems', 'orderDeliveries', 'delivery_to_view', 'deliveryItems', 'totalInOrder', 'aggregateGradeDistribution'));
+        return view('pages.admin.orders.detail', compact('order', 'tab', 'orderItems', 'orderDeliveries', 'delivery_to_view', 'deliveryItems', 'totalInOrder', 'aggregateGradeDistribution'));
     }
 
     public function return_order_row(Request $request, $item_id)
     {
-        return view('pages.miller-admin.orders.create.order-row');
+        return view('pages.admin.orders.create.order-row');
     }
 
     public function create_order_row(Request $request, $coop_id)
     {
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
 
         $user_id = Auth::id();
         // get draft order
         $draftOrder = MillerAuctionOrder::where('published_at', null)
-            ->where("user_id", $user_id)
-            ->where("miller_id", $miller_id)
-            ->where("cooperative_id", $coop_id)
-            ->first();
+            //->where("user_id", $user_id)
+            //->where("miller_id", $miller_id)
+            //->where("cooperative_id", $coop_id)
+            ->get();
 
         $item = new MillerAuctionOrderItem();
         $item->order_id = $draftOrder->id;
@@ -213,11 +205,6 @@ class OrdersController extends Controller
     public function reject_delivery($delivery_id)
     {
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            throw $th;
-        }
 
         DB::beginTransaction();
         try {
@@ -313,7 +300,7 @@ class OrdersController extends Controller
             $miller_id = $user->miller_admin->miller_id;
         }
 
-        $rawOrders = MillerAuctionOrder::where("miller_id", $miller_id)->get();
+        $rawOrders = MillerAuctionOrder::all();
 
         $orders = [];
         // todo: format data

@@ -6,6 +6,8 @@ use App\Collection;
 use App\FinalProduct;
 use App\Http\Controllers\Controller;
 use App\Lot;
+use App\Miller;
+use App\Cooperative;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +22,10 @@ class TrackingTreeController extends Controller
     public function index()
     {
         $lots = Lot::all();
+        $millers=Miller::all();
+        $cooperatives=Cooperative::all();
 
-        return view("pages.admin.tracking-tree", compact('lots'));
+        return view("pages.admin.tracking-tree", compact('lots','millers','cooperatives'));
     }
 
     public function root_details(Request $request)

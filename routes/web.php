@@ -203,6 +203,25 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.miller-branches.delete');
 
 
+    // orders
+    Route::get("/orders", "Admin\OrdersController@index")
+        ->name("admin.orders.show");
+
+    Route::get("/orders/{id}", "Admin\OrdersController@detail")
+        ->name("admin.orders.detail");
+
+    Route::get('/orders/download/{type}', 'Admin\OrdersController@export_orders')
+        ->name("admin.orders.export");
+
+    // order-delivery
+    Route::get("/order/{order_id}/add-delivery-item", "Admin\OrdersController@add_delivery_item")
+        ->name("admin.order-delivery.add-item");
+    Route::delete("/order/delete-delivery-item/{id}", "Admin\OrdersController@delete_delivery_item")
+        ->name("admin.order-delivery.delete-item");
+    Route::get("/order/publish-delivery-draft/{id}", "Admin\OrdersController@publish_delivery_draft")
+        ->name("admin.order-delivery.publish-delivery-draft");
+    Route::delete("/order/discard-delivery-draft/{id}", "Admin\OrdersController@discard_delivery_draft")
+        ->name("admin.order-delivery.discard-delivery-draft");
 
     // users
     Route::get('/users', 'Admin\UsersController@index')
