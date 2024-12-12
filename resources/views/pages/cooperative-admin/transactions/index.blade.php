@@ -20,6 +20,7 @@
                         <th>From</th>
                         <th>To</th>
                         <th>Amount</th>
+                        <th>Subject</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -38,6 +39,7 @@
                         <td>{{$transaction->sender}}</td>
                         <td>{{$transaction->recipient}}</td>
                         <td>KES {{$transaction->amount}}</td>
+                        <td>{{$transaction->description}}</td>
                         @php
                         $statusCls = 'text-warning';
                         if($transaction->status == 'COMPLETE'){

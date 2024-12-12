@@ -1342,8 +1342,11 @@ if (!function_exists('perform_transaction')) {
         $recipient_acc = Account::find($transaction->recipient_acc_id);
         if($transaction->type=='OPERATIONAL_EXPENSE' || 
            $transaction->type == 'WITHDRAWAL'|| 
+           $transaction->type == 'COOPERATIVE_PAYMENT'|| 
            $transaction->type == 'FARMER_PAYMENT'){
-        
+            $sender_acc->balance -= $transaction->amount;
+            $sender_acc->save();
+           }else if(preg_match('/_PAYMENT$/', $transaction->type)){
             $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
         }else{

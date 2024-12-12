@@ -31,7 +31,7 @@ class WalletManagementController extends Controller
         $coop_id = $user->cooperative->id;
 
         $transactions = DB::select(DB::raw("
-            SELECT t.*, c.name AS dest,
+            SELECT DISTINCT t.*, c.name AS dest,
             (
                 CASE WHEN t.type = 'DEPOSIT' THEN 'DEPOSIT'
                 WHEN t.type = 'WITHDRAWAL' THEN 'WITHDRAWAL'
@@ -58,6 +58,7 @@ class WalletManagementController extends Controller
             LEFT JOIN cooperatives c ON c.id = t.sender_id OR c.id = t.recipient_id
             -- WHERE HAS NO PARENT
             WHERE t.parent_id IS NULL
+            ORDER BY t.created_at ASC
         "), ["coop_id" => $coop_id, "coop_id1" => $coop_id, "coop_id2" => $coop_id, "coop_id3" => $coop_id]);
 
         return view("pages.cooperative-admin.transactions.index", compact('transactions'));

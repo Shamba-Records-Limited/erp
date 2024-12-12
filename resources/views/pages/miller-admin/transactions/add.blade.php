@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-body">
         <div class="card-title">Add Transaction</div>
-        <form method="POST" action="{{route('cooperative-admin.transactions.add')}}">
+        <form method="POST" action="{{route('miller-admin.transactions.add')}}">
             @csrf
             <div id="for_single_payment" class="form-group">
                 <label for="">Cooperative</label>
@@ -58,7 +58,7 @@
     function retrieveLotSelector() {
         let cooperative_id = $("#cooperative_id").val();
         $.ajax({
-            url: `/cooperative-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
+            url: `/miller-admin/wallet-management/transactions/add/miller-selector/${cooperative_id}`,
             type: "GET",
             success: function(data) {
                 let my_elem = $('#lot_ids').first();
@@ -76,7 +76,7 @@
     function retrieveLotWeights() {
         var selectedLots = $("#lot_ids").val()
         $.ajax({
-            url: `/cooperative-admin/wallet-management/transactions/add/retrieve-lot-weights`,
+            url: `/miller-admin/wallet-management/transactions/add/retrieve-lot-weights`,
             type: "POST",
             data: {
                 _token: "{{csrf_token()}}",

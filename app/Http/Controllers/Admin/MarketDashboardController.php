@@ -376,6 +376,23 @@ class MarketDashboardController extends Controller
             $prodcatrevenues = $prodcatdata->pluck('total_revenue')->toArray();
            // dd($prodcatdata,$prodcatlabels,$prodcatrevenues);
 
+
+           //
+           $salesData = DB::table('sales')
+                        ->select(
+                            DB::raw("CASE 
+                                        WHEN sales.cooperative_id IS NULL THEN 'Miller'
+                                        WHEN sales.miller_id IS NULL THEN 'Cooperative'
+                                    END AS entity_type"),
+                            DB::raw('SUM(sales.paid_amount) as total_paid_amount'),
+                            DB::raw('SUM(sales.balance) as total_balance'),
+                            DB::raw('SUM(sales.discount) as total_discount'),
+                            DB::raw('COUNT(sales.id) as total_sales_count')
+                        )
+                        ->groupBy('entity_type')
+                        ->get();
+
+
         $data = [
             "coffee_in_marketplace" => $coffee_in_marketplace,
             "milled_series" => $milled_series,
@@ -396,10 +413,11 @@ class MarketDashboardController extends Controller
             'prodrevenues'=>$prodrevenues,
             'prodcatlabels'=>$prodcatlabels,
             'prodcatrevenues'=>$prodcatrevenues,
+            'salesData'=>$salesData,
 
 
         ];
 
-        return view('pages.cooperative-admin.market-auction.dashboard',compact('data'));
+        return view('pages.admin.market-auction.dashboard',compact('data'));
     }
 }

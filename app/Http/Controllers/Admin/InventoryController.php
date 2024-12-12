@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\MillerAdmin;
+namespace App\Http\Controllers\Admin;
 
 use App\AuctionOrderDeliveryItem;
 use App\Exports\FinalProductExport;
@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Log;
 
-class InventoryController extends Controller    
+class InventoryController extends Controller
 {
     public function __construct()
     {
@@ -38,20 +38,15 @@ class InventoryController extends Controller
         $user_id = Auth::id();
 
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
 
         $preMilledInventories = DB::select(DB::raw("
-            SELECT inv.*, delivery_item.quantity, a_order.batch_number, order_item.lot_number as l_num
+            SELECT inv.*, delivery_item.quantity, a_order.batch_number, order_item.lot_number as l_num,ml.name as miller_name
             FROM pre_milled_inventories inv
             JOIN auction_order_delivery_item delivery_item ON delivery_item.id = inv.delivery_item_id
             JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
             JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
-            WHERE a_order.miller_id = :miller_id
-        "), ["miller_id" => $miller_id]);
+            JOIN millers ml on inv.miller_id=ml.id
+        "));
 
         $millingQty = 0;
         if ($isMilling == "1") {
@@ -62,16 +57,13 @@ class InventoryController extends Controller
         }
 
 
-        return view('pages.miller-admin.inventory.pre_milled', compact('preMilledInventories', 'isMilling', 'preMilledInventoryId', 'millingQty'));
+        return view('pages.admin.inventory.pre_milled', compact('preMilledInventories', 'isMilling', 'preMilledInventoryId', 'millingQty'));
     }
 
     public function export_pre_milled_inventories($type)
     {
         $user = Auth::user();
-        $miller_id = null;
-        if ($user->miller_admin) {
-            $miller_id = $user->miller_admin->miller_id;
-        }
+        $image=$user->profile_picture;
 
         $preMilledInventories = DB::select(DB::raw("
             SELECT inv.*, delivery_item.quantity, a_order.batch_number, order_item.lot_number as l_num
@@ -79,8 +71,7 @@ class InventoryController extends Controller
             JOIN auction_order_delivery_item delivery_item ON delivery_item.id = inv.delivery_item_id
             JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
             JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
-            WHERE a_order.miller_id = :miller_id
-        "), ["miller_id" => $miller_id]);
+        "));
 
 
         // if ($request->request_data == '[]') {
@@ -112,13 +103,14 @@ class InventoryController extends Controller
                 ['name' => 'Lot No', 'key' => "lot_number"], // to generate
                 ['name' => 'Quantity', 'key' => "quantity"],
             ];
-
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
             $data = [
                 'title' => 'Pre Milled Inventories',
                 'pdf_view' => 'pre_milled_inventories',
                 'records' => $inventories,
                 'filename' => strtolower('pre_milled_inventories_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }
@@ -130,22 +122,16 @@ class InventoryController extends Controller
         $user_id = Auth::id();
 
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
-
 
         $milledInventories = DB::select(DB::raw("
-            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num
+            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num,ml.name as miller_name
             FROM milled_inventories inv
             JOIN pre_milled_inventories pre_inv ON pre_inv.id = inv.pre_milled_inventory_id
             JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
             JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
             JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
-            WHERE inv.miller_id = :miller_id
-        "), ["miller_id" => $miller_id]);
+            JOIN millers ml on inv.miller_id=ml.id
+        "));
 
         $isGrading = $request->query("is_grading", "0");
 
@@ -155,7 +141,7 @@ class InventoryController extends Controller
 
 
 
-        return view('pages.miller-admin.inventory.milled.index', compact('milledInventories', 'isGrading', 'gradings'));
+        return view('pages.admin.inventory.milled.index', compact('milledInventories', 'isGrading', 'gradings'));
     }
 
     public function milled_grade(Request $request)
@@ -163,15 +149,9 @@ class InventoryController extends Controller
         $user_id = Auth::id();
 
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
-
 
         $milledInventories = DB::select(DB::raw("
-            SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num,pgd.name as grade_name
+        SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num,pgd.name as grade_name,ml.name as miller_name
             FROM milled_inventories inv
             JOIN pre_milled_inventories pre_inv ON pre_inv.id = inv.pre_milled_inventory_id
             JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
@@ -179,18 +159,15 @@ class InventoryController extends Controller
             JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
             JOIN milled_inventory_grades min_g on inv.id = min_g.milled_inventory_id
             JOIN product_grades pgd ON min_g.product_grade_id = pgd.id
-            WHERE inv.miller_id = :miller_id
-        "), ["miller_id" => $miller_id]);
+            JOIN millers ml on inv.miller_id=ml.id
+        "));
 
         $isGrading = $request->query("is_grading", "0");
 
         $gradings = [];
         if ($isGrading == "1") {
         }
-
-
-
-        return view('pages.miller-admin.inventory.milled.milled_inventory_grade', compact('milledInventories', 'isGrading', 'gradings'));
+        return view('pages.admin.inventory.milled.milled_inventory_grade', compact('milledInventories', 'isGrading', 'gradings'));
     }
 
     
@@ -198,10 +175,6 @@ class InventoryController extends Controller
     public function export_milled_inventories($type)
     {
         $user = Auth::user();
-        $miller_id = null;
-        if ($user->miller_admin) {
-            $miller_id = $user->miller_admin->miller_id;
-        }
 
         $milledInventories = DB::select(DB::raw("
             SELECT inv.*, a_order.batch_number, order_item.lot_number as l_num
@@ -210,8 +183,7 @@ class InventoryController extends Controller
             JOIN auction_order_delivery_item delivery_item ON delivery_item.id = pre_inv.delivery_item_id
             JOIN miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
             JOIN miller_auction_order a_order ON a_order.id = order_item.order_id
-            WHERE inv.miller_id = :miller_id
-        "), ["miller_id" => $miller_id]);
+        "));
 
 
         // if ($request->request_data == '[]') {
@@ -248,12 +220,16 @@ class InventoryController extends Controller
                 ['name' => 'Waste Quantity', 'key' => "waste_quantity"],
             ];
 
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+
             $data = [
                 'title' => 'Milled Inventories',
                 'pdf_view' => 'milled_inventories',
                 'records' => $inventories,
                 'filename' => strtolower('milled_inventories_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }
@@ -262,9 +238,7 @@ class InventoryController extends Controller
     public function milled_details(Request $request, $id)
     {
         $milling = MilledInventory::find($id);
-
         $gradings = MilledInventoryGrade::with("product_grade")->get();
-
         # todo: fetch actual lot unit
         $lot_unit = "KG";
 
@@ -276,7 +250,7 @@ class InventoryController extends Controller
             "));
         }
 
-        return view('pages.miller-admin.inventory.milled.detail', compact('id', 'milling', 'gradings', 'lot_unit', "isAddingGrade", "grades"));
+        return view('pages.admin.inventory.milled.detail', compact('id', 'milling', 'gradings', 'lot_unit', "isAddingGrade", "grades"));
     }
 
     public function save_milling(Request $request)
@@ -394,14 +368,13 @@ class InventoryController extends Controller
         $user_id = Auth::id();
 
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
 
-        $finalProducts = FinalProduct::whereNotNull("published_at")->get();
-
+       // $finalProducts = FinalProduct::whereNotNull("published_at")->get();
+       $finalProducts = FinalProduct::whereNotNull('published_at')
+       ->join('millers as ml', 'final_products.miller_id', '=', 'ml.id')
+       ->select('final_products.*', 'ml.name as miller_name') // Select all from final_products and miller name
+       ->get();
+   
         $isCreatingFinalProduct = $request->query("is_creating_final_product", "0");
         $uniqueProductNames =  [];
 
@@ -411,7 +384,7 @@ class InventoryController extends Controller
         $rawMaterials = [];
         $milledInventories = [];
         if ($isCreatingFinalProduct == '1') {
-            $exists = FinalProduct::where('miller_id', $miller_id)->where('user_id', $user_id)->where('published_at', null)->exists();
+            $exists = FinalProduct::where('published_at', null)->exists();
 
             if ($exists == false) {
                 try {
@@ -450,7 +423,7 @@ class InventoryController extends Controller
                 AND published_at IS NULL
                 ORDER BY fp.created_at DESC
                 LIMIT 1
-            "), ["miller_id" => $miller_id, "user_id" => $user_id]);
+            "));
 
             if (count($draftProductsList) > 0) {
                 $draftProduct = $draftProductsList[0];
@@ -475,18 +448,14 @@ class InventoryController extends Controller
         }
 
 
-        return view("pages.miller-admin.inventory.final_products.index", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
+        return view("pages.admin.inventory.final_products.index", compact("finalProducts", "isCreatingFinalProduct", "uniqueProductNames", "draftProduct", "curStep", "rawMaterials", "milledInventories"));
     }
 
     public function export_final_products($type)
     {
         $user = Auth::user();
-        $miller_id = null;
-        if ($user->miller_admin) {
-            $miller_id = $user->miller_admin->miller_id;
-        }
-
-        $rawFinalProducts = FinalProduct::whereNotNull("published_at")->where("miller_id", $miller_id)->get();
+        
+        $rawFinalProducts = FinalProduct::all();
 
         $finalProducts = [];
         // todo: format data
@@ -512,12 +481,15 @@ class InventoryController extends Controller
                 ['name' => 'Pricing', 'key' => "selling_price"],
                 ['name' => 'Count', 'key' => "count"],
             ];
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
             $data = [
                 'title' => 'Final Products',
                 'pdf_view' => 'final_products',
                 'records' => $finalProducts,
                 'filename' => strtolower('final_products_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }
@@ -682,11 +654,6 @@ class InventoryController extends Controller
         $user_id = Auth::id();
 
         $user = Auth::user();
-        try {
-            $miller_id = $user->miller_admin->miller_id;
-        } catch (\Throwable $th) {
-            $miller_id = null;
-        }
 
         $is_adding_inventory = $request->query('is_adding_inventory', '0');
 
@@ -704,7 +671,7 @@ class InventoryController extends Controller
                 FROM inventories
                 WHERE user_id = :user_id
                 AND published_at IS NULL;
-            "), ["user_id" => $user_id]);
+            "));
 
             if (count($draftInventories) > 0) {
                 $draftInventory = $draftInventories[0];
@@ -744,7 +711,7 @@ class InventoryController extends Controller
         }
 
 
-        return view('pages.miller-admin.inventory.index', compact('inventories', 'is_adding_inventory', 'draftInventory', 'draftInventoryItems', 'selectableOrderItems', 'inventoryNumber', 'grades'));
+        return view('pages.admin.inventory.index', compact('inventories', 'is_adding_inventory', 'draftInventory', 'draftInventoryItems', 'selectableOrderItems', 'inventoryNumber', 'grades'));
     }
 
     public function save(Request $request)
@@ -868,4 +835,42 @@ class InventoryController extends Controller
             return redirect()->back();
         }
     }
+
+    public function dashboard()
+    {
+        $milledData = DB::table('milled_inventories as mi')
+            ->join('millers as ml', 'mi.miller_id', '=', 'ml.id')
+            ->select('ml.name as miller_name', DB::raw('SUM(mi.milled_quantity) as total_milled'))
+            ->groupBy('ml.name')
+            ->get();
+
+            $premilledData = DB::table('pre_milled_inventories')
+            ->join('millers', 'pre_milled_inventories.miller_id', '=', 'millers.id')
+            ->select('millers.name as miller_name', DB::raw('SUM(pre_milled_inventories.quantity) as total_quantity'))
+            ->groupBy('millers.name')
+            ->get();
+
+            $milledGradeInventories = DB::select(DB::raw("
+                SELECT 
+                    ml.name as miller_name, 
+                    pgd.name as grade_name, 
+                    SUM(min_g.quantity) as total_quantity
+                FROM milled_inventories inv
+                JOIN milled_inventory_grades min_g on inv.id = min_g.milled_inventory_id
+                JOIN product_grades pgd ON min_g.product_grade_id = pgd.id
+                JOIN millers ml on inv.miller_id = ml.id
+                GROUP BY ml.name, pgd.name
+            "));
+    
+            $data = [
+                'milledData' => $milledData,
+                'premilledData'=>$premilledData,
+                'milledGradeInventories'=>$milledGradeInventories
+            ];
+            ///dd($data);
+            return view('pages.admin.inventory.dashboard', compact('data',));
+    }
+
+
+
 }

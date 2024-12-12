@@ -175,8 +175,46 @@ $cooperative = null;
                     </ul>
                 </div>
             </li>
+            
+            <li class="nav-item {!! active_class(['admin/inventory-auction*']) !!}">
+                    <a class="nav-link" href="#navbar-auction" data-toggle="collapse" role="button"
+                        aria-expanded="{!! is_active_route(['admin/inventory-auction*']) !!}"
+                        aria-controls="navbar-auction">
+                        <i class="ni ni-cart text-green"></i>
+                        <span class="nav-link-text">{{ __('Sales Management') }}</span>
+                    </a>
+                    <div class="collapse {{ show_class(['admin/inventory-auction*']) }}" id="navbar-auction">
+                        <ul class="nav nav-sm flex-column">
 
-
+                            <li class="nav-item {{ request()->is('market-auction/dashboard') ? 'active' : '' }}">
+                                    <a class="nav-link" href="{{ route('admin.marketplace-dashboard') }}">
+                                        {{ __('Dashboard') }}
+                                    </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory-auction/quotations*']) }}">
+                                <a class="nav-link"
+                                    href="{{ route('admin.inventory-auction.list-quotations') }}">
+                                    {{ __('Quotations') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory-auction/invoices*']) }}">
+                                <a class="nav-link" href="{{ route('admin.inventory-auction.list-invoices') }}">
+                                    {{ __('Invoices') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory-auction/receipts*']) }}">
+                                <a class="nav-link" href="{{ route('admin.inventory-auction.list-receipts') }}">
+                                    {{ __('Payment Receipt') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory-auction/sales*']) }}">
+                                <a class="nav-link" href="{{ route('admin.inventory-auction.list-sales') }}">
+                                    {{ __('Sales') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
          <!-- Module Management Dropdown -->
             <li class="nav-item mb-3">
@@ -241,6 +279,48 @@ $cooperative = null;
                     </ul>
                 </div>
             </li>
+
+            <!-- Inventory Dropdown -->
+            <li class="nav-item {!!  active_class(['admin/inventory/*']) !!} ">
+                    <a class="nav-link" href="#navbar-inventory" data-toggle="collapse" role="button"
+                        aria-expanded="{!! is_active_route(['admin/inventory/*']) !!}"
+                        aria-controls="navbar-inventory">
+                        <i class="ni ni-box-2 text-green"></i>
+                        <span class="nav-link-text">{{ __('Inventory') }}</span>
+                    </a>
+                    <div class="collapse {{ show_class(['admin/inventory/*']) }}" id="navbar-inventory">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item {{ active_class(['admin/inventory/pre-milled']) }}">
+                                <a class="nav-link" href="{{ route('admin.pre-milled-inventory.show') }}">
+                                    {{ __('Pre-milled Inventory') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory/milled']) }}">
+                                <a class="nav-link" href="{{ route('admin.milled-inventory.show') }}">
+                                    {{ __('Milled Inventory') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory/milled']) }}">
+                                <a class="nav-link" href="{{ route('admin.milled-inventory-grades.show') }}">
+                                    {{ __('Inventory Grades') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['admin/inventory/final-products']) }}">
+                                <a class="nav-link" href="{{ route('admin.final-products.show') }}">
+                                    {{ __('Final Product') }}
+                                </a>
+                            </li>
+
+                            <li class="nav-item {{ active_class(['admin/inventory/dashboard']) }}">
+                                <a class="nav-link" href="{{ route('admin.inventory.dashboard.show') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </li>
+
 
             <!-- Marketplace Dropdown -->
             <li class="nav-item {{ request()->is('admin/market-auction/*') ? 'active' : '' }}">
@@ -959,7 +1039,7 @@ $cooperative = null;
                                 </a>
                             </li>
                             <li class="nav-item {{ active_class(['miller-admin/inventory/milled']) }}">
-                                <a class="nav-link" href="{{ route('miller-admin.milled-inventory.show') }}">
+                                <a class="nav-link" href="{{ route('miller-admin.milled-inventory-grades.show') }}">
                                     {{ __('Inventory Grades') }}
                                 </a>
                             </li>
@@ -968,6 +1048,8 @@ $cooperative = null;
                                     {{ __('Final Product') }}
                                 </a>
                             </li>
+
+
                         </ul>
                     </div>
                 </li>

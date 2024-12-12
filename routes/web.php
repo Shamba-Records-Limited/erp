@@ -136,6 +136,8 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     //warehouses
     Route::get("admin/warehouse", "Admin\WarehousesController@index")
           ->name("admin.warehouse");
+    Route::get('/warehouses/download/{type}', 'Admin\WarehousesController@export_warehouses')
+          ->name("admin.warehouses.export");
 
     // tracking-tree
     Route::get('/tracking', 'Admin\TrackingTreeController@index')
@@ -333,13 +335,60 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name("admin.support.resolve-ticket");
     Route::post('/support/update-ticket-status/{ticket_number}', 'Admin\SupportController@update_ticket_status')
         ->name('admin.support.update-ticket-status');
+        //Inventory 
+        Route::get("/inventory/pre-milled", "Admin\InventoryController@pre_milled")
+        ->name("admin.pre-milled-inventory.show");
+    Route::get('/inventory/pre-milled/export/{type}', 'Admin\InventoryController@export_pre_milled_inventories')
+        ->name("admin.pre-milled-inventory.export");
+    Route::post("/inventory/save-milling", "Admin\InventoryController@save_milling")
+        ->name("admin.milling.save");
+
+    Route::get("/inventory/milled", "Admin\InventoryController@milled")
+        ->name("admin.milled-inventory.show");
+
+    Route::get("/inventory/milled-grades", "Admin\InventoryController@milled_grade")
+        ->name("admin.milled-inventory-grades.show");
+
+    Route::get('/inventory/milled/export/{type}', 'Admin\InventoryController@export_milled_inventories')
+        ->name("admin.milled-inventory.export");
+    Route::get("/inventory/milled/{id}", "Admin\InventoryController@milled_details")
+        ->name("admin.milled-inventory.detail");
+		
+        Route::get("/inventory/final-products", "Admin\InventoryController@final_products")
+        ->name("admin.final-products.show");
+    Route::get('/inventory/final-products/export/{type}', 'Admin\InventoryController@export_final_products')
+        ->name("admin.final-products.export");
+
+        Route::get("/inventory/dashboard", "Admin\InventoryController@dashboard")
+        ->name("admin.inventory.dashboard.show");
 
 });
 
-    // market palce
-    // market/dashboard
+
+
+	    // inventory auction: quotations
+Route::get("/inventory-auction/quotations", "Admin\InventoryAuctionController@list_quotations")
+        ->name("admin.inventory-auction.list-quotations");	
+		// inventory auction: invoices
+Route::get("/inventory-auction/invoices", "Admin\InventoryAuctionController@list_invoices")
+        ->name("admin.inventory-auction.list-invoices");
+	 // inventory auction: receipts
+Route::get("/inventory-auction/receipts", "Admin\InventoryAuctionController@list_receipts")
+        ->name("admin.inventory-auction.list-receipts");	
+    // inventory auction: sales
+Route::get("/inventory-auction/sales", "Admin\InventoryAuctionController@list_sales")
+        ->name("admin.inventory-auction.list-sales");
+
+Route::get('/inventory-auction/sales/download/{type}', 'Admin\InventoryAuctionController@export_sales')
+        ->name("admin.inventory-auction.export");
+
+Route::get("/inventory-auction/quotations/export-many/{type}", "Admin\InventoryAuctionController@export_many_quotations")
+        ->name("cooperative-admin.inventory-auction.quotations.export-many");  
+
+            // market/dashboard
     Route::get("market-auction/dashboard", "Admin\MarketDashboardController@index")
         ->name("admin.marketplace-dashboard");
+
 
     // market/products
     Route::get("/market-auction/products", "Admin\MarketProductsController@index")
@@ -754,7 +803,7 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
     Route::get("/inventory/milled", "MillerAdmin\InventoryController@milled")
         ->name("miller-admin.milled-inventory.show");
 
-    Route::get("/inventory/milled-grades", "MillerAdmin\InventoryController@milled_grades")
+    Route::get("/inventory/milled-grades", "MillerAdmin\InventoryController@milled_grade")
         ->name("miller-admin.milled-inventory-grades.show");
 
     Route::get('/inventory/milled/export/{type}', 'MillerAdmin\InventoryController@export_milled_inventories')
@@ -885,6 +934,9 @@ Route::middleware('role:miller admin')->prefix('miller-admin')->group(function (
             ->name("miller-admin.wallet-management.account-receivables.table");
         Route::get('/account-receivables/download/{type}', 'MillerAdmin\WalletManagementController@export_account_receivables')
             ->name("miller-admin.account-receivables.export");
+
+        Route::get("/transactions/export-many/{type}", "MillerAdmin\WalletManagementController@export_many_transactions")
+            ->name("miller-admin.transactions.export-many");
 
         // module: account payables
         Route::get("/account-payables", "MillerAdmin\WalletManagementController@account_payables")

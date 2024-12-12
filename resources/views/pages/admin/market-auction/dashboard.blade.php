@@ -121,7 +121,7 @@
         </div>
 
         <!-- Product Category Sales Pie Chart -->
-        <div class="col-xl-6">
+        <!--<div class="col-xl-6">
             <div class="card shadow">
                 <div class="card-header bg-transparent">
                     <h2 class="mb-0">Sales by Product Category</h2>
@@ -132,7 +132,19 @@
                     </div>
                 </div>
             </div>
+        </div>-->
+        <div class="col-xl-6">
+            <div class="filters">
+                <label for="chartType">Chart Type:</label>
+                <select id="chartType" class="form-control">
+                    <option value="bar">Bar</option>
+                    <option value="pie">Pie</option>
+                    <option value="line">Line</option>
+                </select>
+            </div>
+            <canvas id="salesChartPie" width="800" height="400"></canvas>
         </div>
+
     </div>
 
     <div class="row mt-4">
@@ -155,6 +167,7 @@
 @endsection
 
 @push('custom-scripts')
+
 <script>
     //sales Trend Chart 1
     // Prepare data from the server
@@ -234,38 +247,51 @@
         });
     });
 
-    // Sales by Product Category Chart
-  /*  const categorySalesData = {
-        labels: ['Beverages', 'Dairy', 'Snacks', 'Bakery'],
-        datasets: [{
-            data: [30000, 20000, 15000, 10000],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',
-                'rgba(54, 162, 235, 0.5)',
-                'rgba(255, 206, 86, 0.5)',
-                'rgba(75, 192, 192, 0.5)'
-            ]
-        }]
-    };
-    const categorySalesOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        return context.label + ': Ksh ' + context.raw.toLocaleString(); // Add currency to tooltip
+// Sales by Product Category Chart
+document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('salesChartPie').getContext('2d');
+    
+    // Fetch sales data from backend (directly injected via Blade)
+    const salesData = @json($data['salesData']);
+    
+    const renderChart = () => {
+        const labels = salesData.map(item => item.entity_type);
+        const data = salesData.map(item => item.total_paid_amount);
+
+        const chartType = document.getElementById('chartType').value;
+
+        // Destroy existing chart instance if any
+        if (window.salesChartPie) {
+            window.salesChartPie.destroy();
+        }
+
+        window.salesChartPie = new Chart(ctx, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Paid Amount',
+                    data: data,
+                    backgroundColor: ['#36A2EB', '#FF6384'],
+                    borderColor: ['#36A2EB', '#FF6384'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true
                     }
                 }
             }
-        }
+        });
     };
-    new Chart(document.getElementById("categorySalesPieChart"), {
-        type: 'pie',
-        data: categorySalesData,
-        options: categorySalesOptions
-    });
-*/
+    // Update chart when filter changes
+    document.getElementById('chartType').addEventListener('change', renderChart);
+
+    renderChart(); // Initial Render
+});
 
 
     // Revenue by Product Chart

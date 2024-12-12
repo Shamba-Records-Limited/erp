@@ -80,6 +80,8 @@ class WalletManagementController extends Controller
         if ($user->miller_admin) {
             $miller_id = $user->miller_admin->miller_id;
         }
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
 
         $rawTransactions = DB::select(DB::raw("
             SELECT t.*, c.name AS dest,
@@ -116,6 +118,7 @@ class WalletManagementController extends Controller
             if ($transaction->status == 'COMPLETE') {
                 $status = 'Complete';
             }
+
             $transactions[] = [
                 'transaction_number' => $transaction->transaction_number,
                 'subject' => $transaction->subject,
@@ -144,6 +147,96 @@ class WalletManagementController extends Controller
                 'records' => $transactions,
                 'filename' => strtolower('transactions_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
+            ];
+            return download_pdf($columns, $data);
+        }
+    }
+
+    public function export_account_payables(Request $request, $type)
+    {
+
+        $export_status = $request->query("export_status", "all");
+        $start_date = $request->query("start_date");
+        $end_date = $request->query("end_date");
+
+        $user = Auth::user();
+        $miller_id = null;
+        if ($user->miller_admin) {
+            $miller_id = $user->miller_admin->miller_id;
+        }
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+
+        $rawTransactions = DB::select(DB::raw("
+            SELECT t.*, c.name AS dest,
+            (
+                CASE WHEN t.subject_type = 'LOT'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
+                WHEN t.subject_type = 'LOT_GROUP'
+                    THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                END
+            ) AS subject,
+            (
+                CASE WHEN t.sender_id = :miller_id
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS sender,
+            (
+                CASE WHEN t.recipient_id = :miller_id1
+                    THEN 'Me'
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                END
+            ) AS recipient
+            FROM transactions t
+            JOIN millers m ON t.sender_id = :miller_id2 
+            JOIN cooperatives c ON c.id = t.recipient_id
+            -- WHERE HAS NO PARENT
+            WHERE t.parent_id IS NULL AND t.status='PENDING'
+        "), ["miller_id" => $miller_id, "miller_id1" => $miller_id, "miller_id2" => $miller_id]);
+        
+        $condition = "t.parent_id IS NULL AND
+        t.status='PENDING' AND 
+        t.sender_id = :miller_id";
+        
+        $transactions = [];
+
+        foreach ($rawTransactions as $transaction) {
+            $status = 'Pending';
+            if ($transaction->status == 'COMPLETE') {
+                $status = 'Complete';
+            }
+
+            $transactions[] = [
+                'transaction_number' => $transaction->transaction_number,
+                'subject' => $transaction->subject,
+                'sender' => $transaction->sender,
+                'recipient' => $transaction->recipient,
+                'amount' => $transaction->amount,
+                'status' => $status,
+            ];
+        }
+
+        if ($type != env('PDF_FORMAT')) {
+            $file_name = strtolower('transactions_' . date('d_m_Y')) . '.' . $type;
+            return Excel::download(new TransactionExport($transactions), $file_name);
+        } else {
+            $columns = [
+                ['name' => 'Transaction Number', 'key' => "transaction_number"],
+                ['name' => 'Subject', 'key' => "subject"],
+                ['name' => 'Sender', 'key' => "sender"],
+                ['name' => 'Recipient', 'key' => "recipient"],
+                ['name' => 'Amount', 'key' => "amount"],
+                ['name' => 'Status', 'key' => "status"],
+            ];
+            $data = [
+                'title' => 'Transactions',
+                'pdf_view' => 'transactions',
+                'records' => $transactions,
+                'filename' => strtolower('transactions_' . date('d_m_Y')),
+                'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }
@@ -861,17 +954,20 @@ class WalletManagementController extends Controller
         $recipientColumn = getTransactionRecipientSubqueryColumn();
 
         $payables = DB::select(DB::raw("
-            SELECT * FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
-            $subjectColumn AS subject,
-            $senderColumn AS sender,
-            $recipientColumn AS recipient
-
+        SELECT DISTINCT subquery.* FROM (
+            SELECT t.*, 
+                   FORMAT(t.amount, 2) AS formatted_amount,
+                   $subjectColumn AS subject,
+                   $senderColumn AS sender,
+                   $recipientColumn AS recipient
             FROM transactions t
             -- WHERE HAS NO PARENT
-            WHERE $condition) AS subquery
-            WHERE TRUE $outerCondition
+            WHERE $condition
+        ) AS subquery
+           WHERE TRUE $outerCondition
             LIMIT :limit OFFSET :offset
-        "), ["miller_id" => $miller_id, "limit" => $limit, "offset" => $offset]);
+         "), ["miller_id" => $miller_id, "limit" => $limit, "offset" => $offset]);
+           
 
         $summationQuery = DB::select(DB::raw("
             SELECT SUM(amount) AS total, COUNT(id) AS total_count FROM (SELECT t.*, FORMAT(t.amount, 2) as formatted_amount,
