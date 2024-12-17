@@ -1229,6 +1229,60 @@ $cooperative = null;
                     </div>
                 </li>
 
+                 <!-- Wallet Management Dropdown -->
+                <li class="nav-item {!!  active_class(['farmer/wallet-management/*']) !!} ">
+                    <a class="nav-link" href="#navbar-wallet" data-toggle="collapse" role="button"
+                        aria-expanded="{!!  is_active_route(['farmer/wallet-management/*'])  !!}"
+                        aria-controls="navbar-wallet">
+                        <i class="ni ni-money-coins text-green"></i>
+                        <span class="nav-link-text">{{ __('Wallet Management') }}</span>
+                    </a>
+                    <div class="collapse {{ show_class(['farmer/wallet-management/*']) }}" id="navbar-wallet">
+                        <ul class="nav nav-sm flex-column">
+                           <!-- <li class="nav-item {{ active_class(['farmer/wallet-management/dashboard']) }}">
+                                <a class="nav-link" href="{{ route('farmer.wallet-management.dashboard') }}">
+                                    {{ __('Dashboard') }}
+                                </a>
+                            </li>-->
+                            <li
+                                class="nav-item {{ active_class(['farmer/wallet-management/account-receivables']) }}">
+                                <a class="nav-link"
+                                    href="{{ route('farmer.wallet-management.account-receivables') }}">
+                                    {{ __('Account Receivables') }}
+                                </a>
+                            </li>
+                            <li
+                                class="nav-item {{ active_class(['farmer/wallet-management/account-payables']) }}">
+                                <a class="nav-link"
+                                    href="{{ route('farmer.wallet-management.account-payables') }}">
+                                    {{ __('Account Payables') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['farmer/wallet-management/income']) }}">
+                                <a class="nav-link" href="{{ route('farmer.wallet-management.income') }}">
+                                    {{ __('Income') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['farmer/wallet-management/expenses']) }}">
+                                <a class="nav-link" href="{{ route('farmer.wallet-management.expenses') }}">
+                                    {{ __('Expenses') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['farmer/wallet-management/deposits*']) }}">
+                                <a class="nav-link" href="{{ route('farmer.wallet-management.deposits') }}">
+                                    {{ __('Deposits') }}
+                                </a>
+                            </li>
+                            <li class="nav-item {{ active_class(['farmer/wallet-management/withdrawals*']) }}">
+                                <a class="nav-link" href="{{ route('farmer.wallet-management.withdrawals') }}">
+                                    {{ __('Withdrawals') }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+
                 <li class="nav-item {{ active_class(['farmer/transactions*']) }}">
                     <a class="nav-link" href="{{ route('farmer.transactions.show') }}">
                         <i class="menu-icon mdi mdi-help-circle-outline text-green"></i>

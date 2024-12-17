@@ -1344,14 +1344,26 @@ if (!function_exists('perform_transaction')) {
            $transaction->type == 'WITHDRAWAL'|| 
            $transaction->type == 'COOPERATIVE_PAYMENT'|| 
            $transaction->type == 'FARMER_PAYMENT'){
+
             $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
+
+            $recipient_acc->balance += $transaction->amount;
+            $recipient_acc->save();
+
            }else if(preg_match('/_PAYMENT$/', $transaction->type)){
             $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
+
+            $recipient_acc->balance += $transaction->amount;
+           $recipient_acc->save();
+           
         }else{
            $recipient_acc->balance += $transaction->amount;
            $recipient_acc->save();
+
+           $sender_acc->balance -= $transaction->amount;
+            $sender_acc->save();
         }
         $transaction->status = 'COMPLETE';
         # todo: generate stored receipt
@@ -1586,4 +1598,46 @@ if (!function_exists('perform_transaction')) {
             return $pdf->download($file_name . '.pdf');
         }
     }
+
 }
+
+ // Helper function to calculate relative date ranges
+ if (!function_exists('getRelativeDateRange')) {
+    function getRelativeDateRange($period) {
+        switch ($period) {
+            case "week":
+                return [
+                    "from_date" => date("Y-m-d", strtotime("-7 days")),
+                    "to_date" => date("Y-m-d"),
+                    "from_date_prev" => date("Y-m-d", strtotime("-14 days")),
+                    "to_date_prev" => date("Y-m-d", strtotime("-7 days")),
+                    "prev_range" => "Last Week",
+                ];
+            case "month":
+                return [
+                    "from_date" => date("Y-m-d", strtotime("-30 days")),
+                    "to_date" => date("Y-m-d"),
+                    "from_date_prev" => date("Y-m-d", strtotime("-60 days")),
+                    "to_date_prev" => date("Y-m-d", strtotime("-30 days")),
+                    "prev_range" => "Last Month",
+                ];
+            case "year":
+                return [
+                    "from_date" => date("Y-m-d", strtotime("-365 days")),
+                    "to_date" => date("Y-m-d"),
+                    "from_date_prev" => date("Y-m-d", strtotime("-730 days")),
+                    "to_date_prev" => date("Y-m-d", strtotime("-365 days")),
+                    "prev_range" => "Last Year",
+                ];
+            default: // custom
+                return [
+                    "from_date" => request()->from_date,
+                    "to_date" => request()->to_date,
+                    "from_date_prev" => null,
+                    "to_date_prev" => null,
+                    "prev_range" => null,
+                ];
+        }
+    }
+} 
+

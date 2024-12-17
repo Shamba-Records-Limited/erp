@@ -2547,8 +2547,8 @@ Route::middleware('role:cooperative admin|employee')->prefix('cooperative')->gro
 
 
 Route::middleware('role:farmer')->prefix('farmer')->group(function () {
-    Route::get('/dashboard', 'Farmer\DashboardController@index')->name('farmer.dashboard');
-    Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
+       Route::get('/dashboard', 'Farmer\DashboardController@index')->name('farmer.dashboard');
+       Route::get('/collections', 'Farmer\CollectionController@index')->name('farmer.collections.show');
       // Web routes for Farmer Marketplace
       Route::prefix('marketplace')->name('farmer.marketplace.')->group(function () {
           Route::get('/dashboard', 'Farmer\MarketplaceController@dashboard')->name('dashboard');
@@ -2564,6 +2564,103 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
           Route::post("/{miller_id}/checkout-cart", "Farmer\MarketplaceController@checkout_cart")
               ->name("checkout-cart");
       });
+
+
+      //Wallet Management
+
+      Route::prefix('/wallet-management')->group(function () {
+        // dashboard
+        Route::get("/dashboard", "Farmer\WalletManagementController@dashboard")
+            ->name("farmer.wallet-management.dashboard");
+
+        // module: account receivables
+        Route::get("/account-receivables", "Farmer\WalletManagementController@account_receivables")
+            ->name("farmer.wallet-management.account-receivables");
+        Route::get("/account-receivables/table", "Farmer\WalletManagementController@account_receivables_table")
+            ->name("farmer.wallet-management.account-receivables.table");
+        Route::get('/account-receivables/download/{type}', 'Farmer\WalletManagementController@export_account_receivables')
+            ->name("farmer.account-receivables.export");
+
+        Route::get("/transactions/export-many/{type}", "Farmer\WalletManagementController@export_many_transactions")
+            ->name("farmer.transactions.export-many");
+
+        // module: account payables
+        Route::get("/account-payables", "Farmer\WalletManagementController@account_payables")
+            ->name("farmer.wallet-management.account-payables");
+        Route::get("/account-payables/table", "Farmer\WalletManagementController@account_payables_table")
+            ->name("farmer.wallet-management.account-payables.table");
+        Route::get('/account-payables/download/{type}', 'Farmer\WalletManagementController@export_account_payables')
+            ->name("farmer.account-payables.export");
+
+        // module:income
+        Route::get("/income", "Farmer\WalletManagementController@income")
+            ->name("farmer.wallet-management.income");
+        Route::get('/income/table', 'Farmer\WalletManagementController@income_table')
+            ->name("farmer.wallet-management.income.table");
+        Route::get('/income/download/{type}', 'Farmer\WalletManagementController@export_income')
+            ->name("farmer.income.export");
+
+        // module: expenses
+        Route::get("/expenses", "Farmer\WalletManagementController@expenses")
+            ->name("farmer.wallet-management.expenses");
+        Route::get("/expenses/table", "Farmer\WalletManagementController@expenses_table")
+            ->name("farmer.wallet-management.expenses.table");
+        Route::get('/expenses/download/{type}', 'Farmer\WalletManagementController@export_expenses')
+            ->name("farmer.expenses.export");
+
+
+        // transactions
+        Route::get("/transactions", "Farmer\WalletManagementController@list_transactions")
+            ->name("farmer.transactions.show");
+        Route::get("/make_payment", "Farmer\WalletManagementController@view_make_payment")
+            ->name("farmer.wallet-management.view-make-payment");
+        Route::get("/transactions/add/miller-selector/{id}", "Farmer\WalletManagementController@view_add_lot_selector")
+            ->name("farmer.transactions.view-add-lot-selector");
+        Route::post("/transactions/add/retrieve-lot-weights", "Farmer\WalletManagementController@retrieve_lot_weights")
+            ->name("farmer.transactions.retrieve-lot-weights");
+        Route::post("/transactions/add", "Farmer\WalletManagementController@add_transaction")
+            ->name("farmer.transactions.add");
+
+        // deposits
+        Route::get("/deposits", "Farmer\WalletManagementController@list_deposits")
+            ->name("farmer.wallet-management.deposits");
+        Route::get("/deposits/add", "Farmer\WalletManagementController@view_deposit")
+            ->name("farmer.wallet-management.view-deposit");
+        Route::get("/deposits/table", "Farmer\WalletManagementController@deposits_table")
+            ->name("farmer.wallet-management.deposits.table");
+        Route::post("/transactions/deposit", "Farmer\WalletManagementController@deposit")
+            ->name("farmer.wallet-management.deposit");
+        Route::get('/deposits/download/{type}', 'Farmer\WalletManagementController@export_deposits')
+            ->name("farmer.deposits.export");
+        
+        // withdrawals
+        Route::get("/withdrawals", "Farmer\WalletManagementController@list_withdrawals")
+            ->name("farmer.wallet-management.withdrawals");
+        Route::get("/withdrawals/add", "Farmer\WalletManagementController@view_withdraw")
+            ->name("farmer.wallet-management.view-withdraw");
+        Route::get("/withdrawals/table", "Farmer\WalletManagementController@withdrawals_table")
+            ->name("farmer.wallet-management.withdrawals.table");
+        Route::post("/transactions/withdraw", "Farmer\WalletManagementController@withdraw")
+            ->name("farmer.wallet-management.withdraw");
+        Route::get('/withdrawals/download/{type}', 'Farmer\WalletManagementController@export_withdrawals')
+            ->name("farmer.withdrawals.export");
+
+        // transactions detail
+        Route::get("/transactions/{id}", "Farmer\TransactionController@transaction_detail")
+            ->name("farmer.transactions.detail");
+
+
+        // complete transaction
+        Route::get("/transactions/{id}/complete", "Farmer\WalletManagementController@complete_transaction")
+            ->name("farmer.wallet-management.complete-transaction");
+        
+        // operational expenses
+        Route::get("/operational-expenses/add", "Farmer\WalletManagementController@view_add_operational_expense")
+            ->name("farmer.wallet-management.operational-expenses.add");
+        Route::post("/operational-expenses/add", "Farmer\WalletManagementController@add_operational_expense")
+            ->name("farmer.wallet-management.operational-expenses.add");
+    });
+
       //orders 
       Route::prefix('orders')->name('farmer.orders.')->group(function () {
                 Route::get("/orders", "Farmer\OrdersController@index")
@@ -2572,6 +2669,10 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
                         ->name("detail");
 
       });
+  
+
+     
+
 
     Route::get('/transactions', 'Farmer\TransactionController@index')->name('farmer.transactions.show');
     Route::get("/transactions/{id}", "Farmer\TransactionController@detail")
@@ -2669,7 +2770,9 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
             ->name('farmer.wallet.savings.withdraw');
         Route::post('/barchart-doughnutChart', 'Farmer\WalletController@bar_chart_data')->name('farmer.wallet.dashboard.barchart');
     });
+     
 
+    
 //     /*************
 //      * INSURANCE
 //      *************/

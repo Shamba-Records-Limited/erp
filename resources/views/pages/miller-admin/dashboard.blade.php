@@ -18,7 +18,7 @@ $total_gender_distribution = 0;
         <div class="header-body">
             <!-- Card stats -->
             <div class="row">
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-4 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
                             <div class="row">
@@ -45,7 +45,7 @@ $total_gender_distribution = 0;
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-4 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
                             <div class="row">
@@ -68,7 +68,7 @@ $total_gender_distribution = 0;
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-3 col-lg-6">
+                <div class="col-xl-4 col-lg-6">
                     <div class="card card-stats mb-4 mb-xl-0">
                         <div class="card-body">
                             <div class="row">
@@ -100,7 +100,7 @@ $total_gender_distribution = 0;
 
 <div class="d-flex justify-content-start w-100 mt-6 pb-6">
     <div class="d-flex align-items-start">
-        <form class="d-flex">
+        <form class="d-flex" >
             <div class="form-group">
                 <select name="date_range" placeholder="Select Date Range" class="form-control form-select"
                     onchange="this.form.submit()" id="dateRange">
@@ -173,7 +173,7 @@ $total_gender_distribution = 0;
                 <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Total orders</h6>
                             <h2 class="mb-0">Total orders</h2>
                         </div>
                     </div>
@@ -202,103 +202,35 @@ $total_gender_distribution = 0;
                 <div class="card-body">
                     <!-- Chart -->
                     <div class="chart">
-                        <canvas id="GradeDistributionBarChart" class="chart-canvas"></canvas>
+                        <canvas id="IncomeVsExpenseChart" class="chart-canvas"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     
-
-
         <!-- Milled Vs Premilled -->
         <div class="col-xl-4">
             <div class="card shadow">
-                <div class="card-header border-0">
+                <div class="card-header bg-transparent">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h3 class="mb-0">Milled/Processed</h3>
+                            <h6 class="text-uppercase text-muted ls-1 mb-1">Milled Vs Premilled</h6>
+                            <h2 class="mb-0">Milled Vs Premilled</h2>
                         </div>
-                        <!-- <div class="col text-right">
-                            <a href="#!" class="btn btn-sm btn-primary">See all</a>
-                        </div> -->
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <!-- Projects table -->
-                    <table class="table align-items-center table-flush">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Product</th>
-                                <th scope="col">Milled(kg)</th>
-                                <th scope="col">Percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">
-                                    Arabica
-                                </th>
-                                <td>
-                                    1,480
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="mr-2">60%</span>
-                                        <div>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-gradient-danger" role="progressbar"
-                                                    aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 60%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    Robusta
-                                </th>
-                                <td>
-                                    5,480
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="mr-2">70%</span>
-                                        <div>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-gradient-success" role="progressbar"
-                                                    aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 70%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row">
-                                    Ruiru2
-                                </th>
-                                <td>
-                                    4,807
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <span class="mr-2">80%</span>
-                                        <div>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-gradient-primary" role="progressbar"
-                                                    aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
-                                                    style="width: 80%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body">
+                    <!-- Chart -->
+                    <div class="chart">
+                        <canvas id="MilledVsPremilledChart" class="chart-canvas"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+
+        
     </div>
 
 </div>
@@ -309,26 +241,16 @@ $total_gender_distribution = 0;
 <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
 @endpush
 
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection
 
 @push('plugin-scripts')
 <script src="{{ asset('/assets/plugins/chartjs/chart.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 @endpush
 
 @push('custom-scripts')
 <script>
+
 let milledSeries = @json($data['milled_series']);
 let preMilledSeries = @json($data['pre_milled_series']);
 let milledVsPremilledLables = milledSeries.map(c => c.x)
@@ -381,72 +303,148 @@ let milledVsPremilledOptions = {
     }
 };
 let milledVsPremilledChart = new Chart(milledVsPremilledChartCanvas, {
-    type: "line",
+    type: "bar",
     data: milledVsPremilledData,
     options: milledVsPremilledOptions
 });
 
+
+
+//Income vs expenses
+document.addEventListener("DOMContentLoaded", function() {
+
 let incomeSeries = @json($data['income_series']);
 let expensesSeries = @json($data['expenses_series']);
-let incomeVsExpensesLables = incomeSeries.map(c => c.x)
-let incomeValues = incomeSeries.map(c => c.y)
-let expensesValues = expensesSeries.map(c => c.y)
 
-let incomeVsExpensesChartCanvas = document.getElementById("IncomeVsExpenseChart")
+if (!incomeSeries || !expensesSeries) {
+    console.error('Income or Expenses series data is empty or undefined.');
+    return; // Exit early if the data is invalid
+}
+
+console.log('incomeSeries:', incomeSeries);
+console.log('expensesSeries:', expensesSeries);
+
+// Map the labels and values for the chart
+let incomeVsExpensesLables = incomeSeries.map(c => c.x); // Use the "x" values for the labels
+let incomeValues = incomeSeries.map(c => c.y);
+let expensesValues = expensesSeries.map(c => c.y);
+
+// Set up the chart
+let incomeVsExpensesChartCanvas = document.getElementById("IncomeVsExpenseChart");
+
+// Data for the chart
 let incomeVsExpensesData = {
-    labels: incomeVsExpensesLables,
-    datasets: [{
-        label: 'Income',
-        data: incomeValues,
-        backgroundColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ],
-        borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-        ]
-    }, {
-        label: 'Expenses',
-        data: expensesValues,
-        backgroundColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-        ],
-        borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-        ]
-    }]
+    labels: incomeVsExpensesLables, // Use the x values as labels
+    datasets: [
+        {
+            label: 'Income',
+            data: incomeValues,
+            backgroundColor: 'rgba(54, 162, 235, 1)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            fill: false
+        },
+        {
+            label: 'Expenses',
+            data: expensesValues,
+            backgroundColor: 'rgba(255, 99, 132, 1)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            fill: false
+        }
+    ]
 };
-
+// Chart options
 let incomeVsExpensesOptions = {
     animationEasing: "easeOutBounce",
     responsive: true,
     maintainAspectRatio: true,
-    showScale: true,
     legend: {
         display: true
     },
-    layout: {
-        padding: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
+    scales: {
+        x: {
+            type: 'category', // Make sure x-axis uses category type for strings like "2024-10"
+            title: {
+                display: true,
+                text: 'Month'
+            }
+        },
+        y: {
+            beginAtZero: true,
+            title: {
+                display: true,
+                text: 'Amount'
+            }
         }
     }
 };
+// Create the chart
 let incomeVsExpensesChart = new Chart(incomeVsExpensesChartCanvas, {
-    type: "line",
+    type: "line", // Line chart type
     data: incomeVsExpensesData,
     options: incomeVsExpensesOptions
 });
 
 
+});
 
 
+//ordes chart
+document.addEventListener("DOMContentLoaded", function() {
+ // Inject order series data from the server
+ const orderSeries = @json($data['orders_series']);
 
+// Extract labels and values
+const labels = orderSeries.map(data => data.x);
+const values = orderSeries.map(data => data.y);
+
+// Create a Chart.js bar chart
+const ctx = document.getElementById('chart-orders').getContext('2d');
+const ordersChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels, // Month labels
+        datasets: [{
+            label: 'Orders',
+            data: values, // Order counts
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Order Count'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Months'
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top'
+            },
+            title: {
+                display: true,
+                text: 'Orders Per Month'
+            }
+        }
+    }
+});
+
+});
+
+/*
 // Grade distribution chart
 let gradeDistributionData = @json($data['grade_distribution']);
 let gradeDistributionLabels = gradeDistributionData.map(c => c.name);
@@ -578,7 +576,7 @@ function exportChart() {
             link.download = "chart.pdf";
             link.click();
         });
-}
+}*/
 </script>
 
 @endpush

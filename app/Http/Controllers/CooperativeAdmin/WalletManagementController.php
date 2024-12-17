@@ -39,6 +39,8 @@ class WalletManagementController extends Controller
                     THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
                 WHEN t.subject_type = 'LOT_GROUP'
                     THEN (SELECT g.group_number FROM lot_groups g WHERE g.id= t.subject_id)
+                WHEN t.subject_type = 'COLLECTION'
+                    THEN (SELECT l.lot_number FROM lots l WHERE l.lot_number = t.subject_id)
                 END
             ) AS subject,
             (
@@ -50,7 +52,11 @@ class WalletManagementController extends Controller
             (
                 CASE WHEN t.recipient_id = :coop_id1
                     THEN 'Me'
-                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)
+                WHEN t.recipient_type = 'MILLER' THEN
+                    CONCAT(t.recipient_type, ' - ',(SELECT m.name FROM millers m WHERE m.id = t.recipient_id))
+                WHEN t.recipient_type = 'FARMER' THEN
+                    CONCAT(t.recipient_type, ' - ',(SELECT u.username FROM farmers f JOIN users u ON u.id = f.user_id WHERE f.id = t.recipient_id))
+                ELSE (SELECT cf.name FROM cooperatives cf WHERE cf.id = c.id)     
                 END
             ) AS recipient
             FROM transactions t
@@ -138,11 +144,23 @@ class WalletManagementController extends Controller
     public function view_make_payment()
     {
         // add a filter for cooperatives with deliveries
-        $cooperatives = DB::select(DB::raw("
-            SELECT c.id, c.name FROM cooperatives c
-        "));
+        $user = Auth::user();
+        $coop_id = $user->cooperative->id;
 
-        return view("pages.miller-admin.transactions.add", compact("cooperatives"));
+        $farmers = DB::select(DB::raw("
+                   SELECT 
+                   farmers.id AS farmer_id, 
+                   CONCAT(users.first_name, ' ', users.other_names) AS full_name 
+                      FROM 
+                     farmers 
+                     JOIN 
+                     users 
+                      ON 
+                   farmers.user_id = users.id
+                 "));
+                // dd($farmers);
+
+        return view("pages.cooperative-admin.transactions.add", compact("farmers"));
     }
     
     public function view_add_lot_selector($id)
@@ -726,10 +744,11 @@ public function dashboard(Request $request)
         $coop_id = $user->cooperative->id;
 
         $account = Account::where("owner_type", "COOPERATIVE")->where("owner_id", $coop_id)->where("credit_or_debit", "CREDIT")->first();
+                       
+        $condition = "t.parent_id IS NULL AND 
+                        t.status = 'PENDING' AND
+                        t.recipient_id = :coop_id";
 
-        $condition = "t.parent_id IS NULL AND
-                        t.status='PENDING' AND  
-                        t.sender_id = :coop_id";
 
         // search
         $outerCondition = "";
@@ -834,7 +853,7 @@ public function dashboard(Request $request)
         ];
 
         if ($type != env('PDF_FORMAT')) {
-            $file_name = strtolower('account_payables_' . date('d_m_Y')) . '.' . $type;
+            $file_name = strtolower('account_receivables_' . date('d_m_Y')) . '.' . $type;
             return Excel::download(new GeneratableExport($columns, $payables), $file_name);
         } else {
             // convert to arrays of arrays from arrays of objects
@@ -842,12 +861,16 @@ public function dashboard(Request $request)
                 return (array) $payable;
             }, $payables);
 
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+
             $data = [
-                'title' => 'Account Payables',
-                'pdf_view' => 'account_payables',
+                'title' => 'Account Receivables',
+                'pdf_view' => 'account_receivables',
                 'records' => $payables,
                 'summation' => number_format($paymentsTotal),
-                'filename' => strtolower('account_payables_' . date('d_m_Y')),
+                'filename' => strtolower('account_receivables_' . date('d_m_Y')),
+                'image' => $imagePath,
                 'orientation' => 'letter',
             ];
             return download_pdf($columns, $data);
@@ -1104,6 +1127,9 @@ public function dashboard(Request $request)
                 return (array) $payable;
             }, $payables);
 
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+
             $data = [
                 'title' => 'Account Payables',
                 'pdf_view' => 'account_payables',
@@ -1111,6 +1137,7 @@ public function dashboard(Request $request)
                 'summation' => number_format($paymentsTotal),
                 'filename' => strtolower('account_payables_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image' => $imagePath,
             ];
             return download_pdf($columns, $data);
         }

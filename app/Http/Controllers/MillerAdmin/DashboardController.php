@@ -23,17 +23,17 @@ class DashboardController extends Controller
         } catch (\Throwable $th) {
             $miller_id = null;
         }
-
-
+       
         $date_range = $request->query("date_range", "week");
         $from_date = $request->query("from_date", "");
         $to_date = $request->query("to_date", "");
+        
 
         $from_date_prev = "";
         $to_date_prev = "";
 
         if ($date_range == "custom") {
-            $from_date = $request->from_date;
+              $from_date = $request->from_date;
             $to_date = $request->to_date;
         } else if ($date_range == "week") {
             $from_date = date("Y-m-d", strtotime("-7 days"));
@@ -55,19 +55,18 @@ class DashboardController extends Controller
             $to_date_prev = date("Y-m-d", strtotime("-365 days"));
         }
 
+        $duration_days=(strtotime($to_date) - strtotime($from_date)) / (24 * 60 * 60);
+       // dd($from_date, $to_date,$date_range);
+
         $suggested_chart_mode = "daily";
         // to 60 days
-        if (strtotime($to_date) - strtotime($from_date) < 60 * 24 * 60 * 60) {
+        if ($duration_days < 60) {
             $suggested_chart_mode = "daily";
-        }
-        // to 4 months
-        else if (strtotime($to_date) - strtotime($from_date) < 4 * 30 * 24 * 60 * 60) {
+        } elseif ($duration_days < 120) {
             $suggested_chart_mode = "weekly";
-        }
-        // to 3 years
-        else if (strtotime($to_date) - strtotime($from_date) < 3 * 12 * 30 * 24 * 60 * 60) {
+        } elseif ($duration_days < 365) { // 1 year or less
             $suggested_chart_mode = "monthly";
-        } else {
+        } else { // More than 1 year
             $suggested_chart_mode = "yearly";
         }
 
@@ -75,6 +74,7 @@ class DashboardController extends Controller
         $pre_milled_series = [];
         $income_series = [];
         $expenses_series = [];
+        $sales_series=[];
         if ($suggested_chart_mode == "daily") {
             $dailyQuery = "
                 WITH RECURSIVE date_series AS (
@@ -153,8 +153,222 @@ class DashboardController extends Controller
                 "to_date" => $to_date,
                 "miller_id" => $miller_id
             ]);
+
+
+            $ordersQuery = erpStrFormat($dailyQuery, [
+                "IFNULL(count(odr.id), 0)",
+                "miller_auction_order odr",
+                "odr.created_at = date_series.date AND odr.miller_id = :miller_id"
+            ]);
+            
+
+            $orders_series = DB::select(DB::raw($ordersQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+
         }
 
+        if ($suggested_chart_mode == "monthly") {
+            $monthlyQuery = "
+                         WITH RECURSIVE date_series AS (
+                    SELECT :from_date AS date
+                    UNION ALL
+                    SELECT DATE_ADD(date, INTERVAL 1 MONTH)
+                    FROM date_series
+                    WHERE DATE_ADD(date, INTERVAL 1 MONTH) <= :to_date
+                )
+                SELECT DATE_FORMAT(date_series.date, '%Y-%m') AS x, -- Month
+                    (
+                        SELECT IFNULL(SUM(inv.milled_quantity), 0) -- Aggregate function
+                        FROM milled_inventories inv -- Table name
+                        WHERE DATE_FORMAT(inv.created_at, '%Y-%m') = DATE_FORMAT(date_series.date, '%Y-%m') -- Date match
+                        AND inv.miller_id = :miller_id
+                    ) AS y
+                FROM date_series
+                GROUP BY date_series.date, x;
+             ";
+          
+        
+            $milledQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(SUM(inv.milled_quantity), 0)",
+                "milled_inventories inv",
+                "MONTH(inv.created_at) = MONTH(date_series.date) AND YEAR(inv.created_at) = YEAR(date_series.date) AND inv.miller_id = :miller_id"
+            ]);
+        
+            $milled_series = DB::select(DB::raw($milledQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+        
+            // Repeat for other queries: preMilledQuery, incomeQuery, expensesQuery, salesQuery
+            $preMilledQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(SUM(inv.quantity), 0)",
+                "pre_milled_inventories inv",
+                 "MONTH(inv.created_at) = MONTH(date_series.date) AND YEAR(inv.created_at) = YEAR(date_series.date) AND inv.miller_id = :miller_id"
+            ]);
+
+            $pre_milled_series = DB::select(DB::raw($preMilledQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $incomeQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(SUM(t.amount), 0)",
+                "transactions t",
+                "MONTH(inv.t.completed_at as DATE) = MONTH(date_series.date) AND YEAR(t.completed_at) = YEAR(date_series.date) AND t.recipient_id = :miller_id"
+            ]);
+
+            $income_series = DB::select(DB::raw($incomeQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $expensesQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(SUM(t.amount), 0)",
+                "transactions t",
+                "MONTH(t.completed_at as DATE) = MONTH(date_series.date) AND YEAR(t.completed_at) = YEAR(date_series.date) AND t.sender_id = :miller_id"
+
+            ]);
+
+            $expenses_series = DB::select(DB::raw($expensesQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $salesQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(SUM(inv_item.quantity), 0)",
+                "new_invoice_items inv_item",
+                "MONTH(inv_item.created_at) = MONTH(date_series.date) AND YEAR(date_series.date) = YEAR(inv_item.created_at)  AND (SELECT inv.miller_id FROM new_invoices inv WHERE inv_item.new_invoice_id = inv.id) = :miller_id"
+            ]);
+
+            $sales_series = DB::select(DB::raw($salesQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+
+            $ordersQuery = erpStrFormat($monthlyQuery, [
+                "IFNULL(count(odr.id), 0)",
+                "miller_auction_order odr",
+                "MONTH(odr.created_at) = MONTH(date_series.date) AND YEAR(date_series.date) = YEAR(odr.created_at) AND odr.miller_id = :miller_id"
+            ]);
+            
+
+            $orders_series = DB::select(DB::raw($ordersQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+        }
+
+        if ($suggested_chart_mode == "yearly") {
+            $yearlyQuery = "
+                            WITH RECURSIVE date_series AS (
+                                SELECT :from_date AS date
+                                UNION ALL
+                                SELECT DATE_ADD(date, INTERVAL 1 YEAR)
+                                FROM date_series
+                                WHERE DATE_ADD(date, INTERVAL 1 YEAR) <= :to_date
+                            )
+                            SELECT 
+                                YEAR(date_series.date) AS x, -- Year
+                                (
+                                    SELECT IFNULL(SUM(inv.milled_quantity), 0) -- Aggregate function
+                                    FROM milled_inventories inv
+                                    WHERE YEAR(inv.created_at) = x -- Use the grouped year directly
+                                    AND inv.miller_id = :miller_id
+                                ) AS y
+                            FROM date_series
+                            GROUP BY x; -- Group by year
+                ";
+        
+            $milledQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(SUM(inv.milled_quantity), 0)",
+                "milled_inventories inv",
+                "YEAR(inv.created_at) = YEAR(date_series.date) AND inv.miller_id = :miller_id"
+            ]);
+        
+            $milled_series = DB::select(DB::raw($milledQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+        
+            // Repeat for other queries: preMilledQuery, incomeQuery, expensesQuery, salesQuery
+            $preMilledQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(SUM(inv.quantity), 0)",
+                "pre_milled_inventories inv",
+                "YEAR(inv.created_at) = YEAR(date_series.date) AND inv.miller_id = :miller_id"
+            ]);
+
+            $pre_milled_series = DB::select(DB::raw($preMilledQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $incomeQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(SUM(t.amount), 0)",
+                "transactions t",
+                "YEAR(t.completed_at) = YEAR(date_series.date) AND t.recipient_id = :miller_id"
+            ]);
+
+            $income_series = DB::select(DB::raw($incomeQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $expensesQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(SUM(t.amount), 0)",
+                "transactions t",
+                "YEAR(t.completed_at) = YEAR(date_series.date) AND t.sender_id = :miller_id"
+
+            ]);
+
+            $expenses_series = DB::select(DB::raw($expensesQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $salesQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(SUM(inv_item.quantity), 0)",
+                "new_invoice_items inv_item",
+                "YEAR(inv_item.created_at) = YEAR(date_series.date)  AND (SELECT inv.miller_id FROM new_invoices inv WHERE inv_item.new_invoice_id = inv.id) = :miller_id"
+            ]);
+
+            $sales_series = DB::select(DB::raw($salesQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+
+            $ordersQuery = erpStrFormat($yearlyQuery, [
+                "IFNULL(count(odr.id), 0)",
+                "miller_auction_order odr",
+                "YEAR(odr.created_at) = (date_series.date) AND YEAR(date_series.date) = YEAR(odr.created_at) AND odr.miller_id = :miller_id"
+            ]);
+            
+
+            $orders_series = DB::select(DB::raw($ordersQuery), [
+                "from_date" => $from_date,
+                "to_date" => $to_date,
+                "miller_id" => $miller_id
+            ]);
+        }
+        
+        //dd($suggested_chart_mode);
+      
 
         $coffee_in_marketplace = DB::select(DB::raw("
             SELECT sum(l.available_quantity) AS total FROM lots l
@@ -286,8 +500,11 @@ class DashboardController extends Controller
             "total_remaining_quantity"=>$totalRemainingQuantity,
             "count_order"=>$total_count,
             "order_percent" => $order_percent,
+            "orders_series"=> $orders_series ,
             "percentageRemaining"=>round($percentageChangeLot,2),
         ];
+        
+      
 
         return view('pages.miller-admin.dashboard', compact("data", "date_range", "from_date", "to_date"));
     }

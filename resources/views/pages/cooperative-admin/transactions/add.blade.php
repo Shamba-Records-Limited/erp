@@ -14,7 +14,7 @@
                 <select class="form-control form-select" id="farmer_id" name="farmer_id" onchange="retrieveCollectionsSelector()">
                     <option value="" disabled selected>-- SELECT FARMER --</option>
                     @foreach($farmers as $farmer)
-                    <option value="{{$farmer->id}}">{{$farmer->username}}</option>
+                    <option value="{{$farmer->farmer_id}}">{{$farmer->full_name}}</option>
                     @endforeach
                 </select>
             </div>

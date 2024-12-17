@@ -72,6 +72,8 @@ class TransactionController extends Controller
             ORDER BY t.created_at DESC;
         "), ["coop_id" => $coop_id, "coop_id1" => $coop_id, "coop_id2" => $coop_id, "coop_id3" => $coop_id]);
 
+      
+
         return view("pages.cooperative-admin.transactions.index", compact('transactions'));
     }
     /**
@@ -131,9 +133,9 @@ class TransactionController extends Controller
                 $accCount = Account::count();
                 $cooperative_acc = new Account();
                 $cooperative_acc->acc_number = "A".str_pad($accCount + 1, 5, '0', STR_PAD_LEFT);
-                $cooperative_acc->owner_type = "MILLER";
+                $cooperative_acc->owner_type = "COOPERATIVE";
                 $cooperative_acc->owner_id = $coop_id;
-                $cooperative_acc->credit_or_debit = "CREDIT";
+                $cooperative_acc->credit_or_debit = "DEBIT";
                 $cooperative_acc->save();
             }
 
@@ -154,7 +156,7 @@ class TransactionController extends Controller
             $transaction->recipient_type = 'FARMER';
             $transaction->recipient_id = $request->farmer_id;
             $transaction->recipient_acc_id = $farmer_acc->id;
-
+             //  dd($transaction);
             // get transaction number
             $now = Carbon::now();
             $transactionNumber = "T";
