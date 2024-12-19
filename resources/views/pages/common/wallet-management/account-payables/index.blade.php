@@ -22,6 +22,7 @@ $acc_type = 'miller-admin';
                     <span class="mdi mdi-filter"></span>
                     <span class="mdi mdi-plus">Add Filter</span>
                 </button>
+                @if($acc_type!=='farmer') 
                 <div class="dropdown ml-2">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -32,6 +33,7 @@ $acc_type = 'miller-admin';
                             href="{{route($acc_type.'.wallet-management.view-make-payment')}}">Make Payment</a>
                     </div>
                 </div>
+                @endif
                 <a class="btn btn-primary ml-2" id="addOperationalExpense"
                     href="{{route($acc_type.'.wallet-management.operational-expenses.add')}}">Add Operational
                     Expense</a>

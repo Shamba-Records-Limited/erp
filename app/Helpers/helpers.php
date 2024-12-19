@@ -1347,23 +1347,30 @@ if (!function_exists('perform_transaction')) {
 
             $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
-
+            //If to self no need of adding and subtracting from same account
+             if($transaction->sender_acc_id !==$transaction->recipient_acc_id){
             $recipient_acc->balance += $transaction->amount;
             $recipient_acc->save();
+             }
 
            }else if(preg_match('/_PAYMENT$/', $transaction->type)){
-            $sender_acc->balance -= $transaction->amount;
-            $sender_acc->save();
-
-            $recipient_acc->balance += $transaction->amount;
-           $recipient_acc->save();
+                
+                $sender_acc->balance -= $transaction->amount;
+                $sender_acc->save();
+                //If to self no need of adding and subtracting from same account
+                if($transaction->sender_acc_id !==$transaction->recipient_acc_id){
+                   $recipient_acc->balance += $transaction->amount;
+                   $recipient_acc->save();
+                }
            
         }else{
            $recipient_acc->balance += $transaction->amount;
            $recipient_acc->save();
-
+           //If to self no need of adding and subtracting from same account
+           if($transaction->sender_acc_id !==$transaction->recipient_acc_id){
            $sender_acc->balance -= $transaction->amount;
             $sender_acc->save();
+           }
         }
         $transaction->status = 'COMPLETE';
         # todo: generate stored receipt

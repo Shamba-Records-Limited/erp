@@ -1273,11 +1273,11 @@ $cooperative = null;
                                     {{ __('Deposits') }}
                                 </a>
                             </li>
-                            <li class="nav-item {{ active_class(['farmer/wallet-management/withdrawals*']) }}">
+                            <!--<li class="nav-item {{ active_class(['farmer/wallet-management/withdrawals*']) }}">
                                 <a class="nav-link" href="{{ route('farmer.wallet-management.withdrawals') }}">
                                     {{ __('Withdrawals') }}
                                 </a>
-                            </li>
+                            </li>-->
                         </ul>
                     </div>
                 </li>

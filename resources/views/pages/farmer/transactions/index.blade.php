@@ -55,7 +55,7 @@
                                     <a class="text-primary dropdown-item" href="{{route('farmer.transactions.detail', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> View Details
                                     </a>
-                                    @if($transaction->recipient == 'Me' && $transaction->status == 'PENDING')
+                                    @if($transaction->sender == 'Me' && $transaction->status == 'PENDING')
                                     <a class="text-success dropdown-item" href="{{route('farmer.transactions.complete', $transaction->id )}}">
                                         <i class="fa fa-edit"></i> Complete
                                     </a>

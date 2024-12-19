@@ -1413,6 +1413,9 @@ public function dashboard(Request $request)
                 return (array) $expense;
             }, $income);
 
+            $image=$user->profile_picture;
+            $imagePath = public_path('storage/' . $image); // Absolute path to image
+
             $data = [
                 'title' => 'Income',
                 'pdf_view' => 'income',
@@ -1420,6 +1423,7 @@ public function dashboard(Request $request)
                 'summation' => number_format($incomeTotal),
                 'filename' => strtolower('income_' . date('d_m_Y')),
                 'orientation' => 'letter',
+                'image'=>$imagePath,
             ];
             return download_pdf($columns, $data);
         }

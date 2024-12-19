@@ -143,9 +143,18 @@ class CommonController extends Controller
 
     public function print_transaction_receipt($id){
         $transaction = Transaction::find($id);
+        //$lots = $transaction->lots;
 
-        $lots = $transaction->lots;
-
+        $lots = DB::select(DB::raw("
+            SELECT l.*,l.available_quantity as quantity
+            FROM collections c
+            JOIN lots l ON c.lot_number = l.lot_number
+            WHERE c.id = :subject_id
+        "), [
+            'subject_id' => $transaction->subject_id,
+        ]);
+       
+       //dd($transaction,$lots);
         return view('pages.common.transaction_receipt', compact('transaction', 'lots'));
     }
 

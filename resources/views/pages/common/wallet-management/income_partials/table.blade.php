@@ -9,6 +9,7 @@
                 <th>Amount</th>
                 <th>Status</th>
                 <th>Timestamp</th>
+                <th>Source</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,6 +23,7 @@
                 <td>{{$transaction->formatted_amount}}</td>
                 <td>{{$transaction->status}}</td>
                 <td>{{$transaction->created_at}}</td>
+                <td>{{$transaction->amount_source}}</td>
                 <td>
                     <div class="btn-group dropdown">
                         <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
