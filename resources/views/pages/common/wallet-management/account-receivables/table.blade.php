@@ -47,7 +47,7 @@
                                 href="{{route($acc_type.'.transactions.detail', $transaction->id )}}">
                                 <i class="fa fa-edit"></i> View Details
                             </a>
-                            @if($transaction->status == 'PENDING' and $acc_type!=='farmer')
+                            @if($transaction->status == 'PENDING' and ($acc_type!=='farmer' or $acc_type!=='admin' ))
                             <a class="text-success dropdown-item"
                                 href="/{{$acc_type}}/wallet-management/transactions/{{$transaction->id}}/complete?to='{{$acc_type}}.wallet-management.account-payables'">
                                 <i class="fa fa-edit"></i> Complete

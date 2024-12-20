@@ -273,6 +273,95 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         ->name('admin.farmers.add');
     Route::get('/farmers/detail/{id}', 'Admin\FarmersController@detail')
         ->name('admin.farmers.detail');
+     
+    Route::prefix('/wallet-management')->group(function () {
+            // dashboard
+            Route::get("/dashboard", "Admin\WalletManagementController@dashboard")
+                ->name("admin.wallet-management.dashboard");
+    
+            // module: account receivables
+            Route::get("/account-receivables", "Admin\WalletManagementController@account_receivables")
+                ->name("admin.wallet-management.account-receivables");
+            Route::get("/account-receivables/table", "Admin\WalletManagementController@account_receivables_table")
+                ->name("admin.wallet-management.account-receivables.table");
+            Route::get('/account-receivables/download/{type}', 'Admin\WalletManagementController@export_account_receivables')
+                ->name("admin.account-receivables.export");
+    
+            // module: account payables
+            Route::get("/account-payables", "Admin\WalletManagementController@account_payables")
+                ->name("admin.wallet-management.account-payables");
+            Route::get("/account-payables/table", "Admin\WalletManagementController@account_payables_table")
+                ->name("admin.wallet-management.account-payables.table");
+            Route::get('/account-payables/download/{type}', 'Admin\WalletManagementController@export_account_payables')
+                ->name("admin.account-payables.export");
+    
+            // module: expenses
+            Route::get("/expenses", "Admin\WalletManagementController@expenses")
+                ->name("admin.wallet-management.expenses");
+            Route::get("/expenses/table", "Admin\WalletManagementController@expenses_table")
+                ->name("admin.wallet-management.expenses.table");
+            Route::get('/expenses/download/{type}', 'Admin\WalletManagementController@export_expenses')
+                ->name("admin.expenses.export");
+    
+            // module:income
+            Route::get("/income", "Admin\WalletManagementController@income")
+                ->name("admin.wallet-management.income");
+            Route::get('/income/table', 'Admin\WalletManagementController@income_table')
+                ->name("admin.wallet-management.income.table");
+            Route::get('/income/download/{type}', 'Admin\WalletManagementController@export_income')
+                ->name("admin.income.export");
+    
+            // transactions
+            Route::get("/transactions", "Admin\WalletManagementController@list_transactions")
+                ->name("admin.transactions.show");
+            Route::get("/make_payment", "Admin\WalletManagementController@view_make_payment")
+                ->name("admin.wallet-management.view-make-payment");
+            Route::get("/transactions/add/miller-selector/{id}", "Admin\WalletManagementController@view_add_lot_selector")
+                ->name("admin.transactions.view-add-lot-selector");
+            Route::post("/transactions/add/retrieve-lot-weights", "Admin\WalletManagementController@retrieve_lot_weights")
+                ->name("admin.transactions.retrieve-lot-weights");
+            Route::post("/transactions/add", "Admin\WalletManagementController@add_transaction")
+                ->name("admin.transactions.add");
+    
+            // complete transaction
+            Route::get("/transactions/{id}/complete", "Admin\WalletManagementController@complete_transaction")
+                ->name("admin.wallet-management.complete-transaction");
+    
+            // operational expense
+            Route::get("/operational-expenses/add", "Admin\WalletManagementController@view_add_operational_expense")
+                ->name("admin.wallet-management.operational-expenses.add");
+            Route::post("/operational-expenses/add", "Admin\WalletManagementController@add_operational_expense")
+                ->name("admin.wallet-management.operational-expenses.add");
+    
+            // deposits
+            Route::get("/deposits", "Admin\WalletManagementController@list_deposits")
+                ->name("admin.wallet-management.deposits");
+            Route::get("/deposits/add", "Admin\WalletManagementController@view_deposit")
+                ->name("admin.wallet-management.view-deposit");
+            Route::post("/transactions/deposit", "Admin\WalletManagementController@deposit")
+                ->name("admin.wallet-management.deposit");
+            Route::get("/deposits/table", "Admin\WalletManagementController@deposits_table")
+                ->name("admin.wallet-management.deposits.table");
+            Route::get('/deposits/download/{type}', 'Admin\WalletManagementController@export_deposits')
+                ->name("admin.deposits.export");
+    
+            // withdrawals
+            Route::get("/withdrawals", "Admin\WalletManagementController@list_withdrawals")
+                ->name("admin.wallet-management.withdrawals");
+            Route::get("/withdrawals/add", "Admin\WalletManagementController@view_withdraw")
+                ->name("admin.wallet-management.view-withdraw");
+            Route::post("/transactions/withdraw", "Admin\WalletManagementController@withdraw")
+                ->name("admin.wallet-management.withdraw");
+            Route::get("/withdrawals/table", "Admin\WalletManagementController@withdrawals_table")
+                ->name("admin.wallet-management.withdrawals.table");
+            Route::get('/withdrawals/download/{type}', 'Admin\WalletManagementController@export_withdrawals')
+                ->name("admin.withdrawals.export");
+    
+            // transactions detail
+            Route::get("/transactions/{id}", "Admin\TransactionController@transaction_detail")
+                ->name("admin.transactions.detail");
+    });
+
 
     // products
     Route::get('/products/dash', 'Admin\ProductsController@dash')
@@ -333,7 +422,7 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/collections-mini-dashboard', 'Admin\CollectionsController@collections_mini_dashboard')
       ->name('admin.collections.mini-dashboard');
 
-
+     
 
     // roles
     route::get('/roles', 'Admin\RolesController@index')

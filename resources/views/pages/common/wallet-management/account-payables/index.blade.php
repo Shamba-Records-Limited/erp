@@ -22,6 +22,7 @@ $acc_type = 'miller-admin';
                     <span class="mdi mdi-filter"></span>
                     <span class="mdi mdi-plus">Add Filter</span>
                 </button>
+                @if($acc_type!=='admin') 
                 @if($acc_type!=='farmer') 
                 <div class="dropdown ml-2">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -34,9 +35,12 @@ $acc_type = 'miller-admin';
                     </div>
                 </div>
                 @endif
+                @endif
+                @if($acc_type!=='admin') 
                 <a class="btn btn-primary ml-2" id="addOperationalExpense"
                     href="{{route($acc_type.'.wallet-management.operational-expenses.add')}}">Add Operational
                     Expense</a>
+                    @endif
                 <button class="btn btn-primary btn-fw btn-sm ml-1"
                     onclick="exportReport('{{route($exportRoute, 'xlsx')}}')"><span
                         class="mdi mdi-file-excel"></span>Export Excel

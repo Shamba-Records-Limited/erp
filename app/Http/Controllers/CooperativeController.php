@@ -459,7 +459,7 @@ class CooperativeController extends Controller
 
      // Fetch the cooperative admin details
      $admin = DB::table('users')->where('cooperative_id', $id)->first(['first_name', 'other_names', 'email', 'username']);
-
+    
      // Check if the cooperative exists
      if (!$cooperative) {
          abort(404, 'Cooperative not found');

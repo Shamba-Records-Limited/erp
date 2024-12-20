@@ -326,9 +326,57 @@ $cooperative = null;
 
                         </ul>
                     </div>
-                </li>
+             </li>
+             
+             <!-- Wallet Management Dropdown -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#wallet-management" data-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="wallet-management">
+                    <i class="ni ni-money-coins text-custom-green"></i>
+                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Wallet Management') }}</span>
+                </a>
+                <div class="collapse {{ request()->routeIs('admin.wallet-management.*') ? 'show' : '' }}" id="wallet-management">
+                    <ul class="nav nav-sm flex-column">
+                        <!--<li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.dashboard') ? 'active' : '' }}" href="{{ route('admin.wallet-management.dashboard') }}">
+                                {{ __('Dashboard') }}
+                            </a>
+                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.account-receivables') ? 'active' : '' }}" href="{{ route('admin.wallet-management.account-receivables') }}">
+                                {{ __('Account Receivables') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.account-payables') ? 'active' : '' }}" href="{{ route('admin.wallet-management.account-payables') }}">
+                                {{ __('Account Payables') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.income') ? 'active' : '' }}" href="{{ route('admin.wallet-management.income') }}">
+                                {{ __('Income') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.expenses') ? 'active' : '' }}" href="{{ route('admin.wallet-management.expenses') }}">
+                                {{ __('Expenses') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.deposits') ? 'active' : '' }}" href="{{ route('admin.wallet-management.deposits') }}">
+                                {{ __('Deposits') }}
+                            </a>
+                        </li>
+                        <!--<li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.wallet-management.withdrawals') ? 'active' : '' }}" href="{{ route('admin.wallet-management.withdrawals') }}">
+                                {{ __('Withdrawals') }}
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+            </li>
 
-
+            
             <!-- Marketplace Dropdown -->
             <li class="nav-item {{ request()->is('admin/market-auction/*') ? 'active' : '' }}">
                     <a class="nav-link" href="#navbar-marketplace" data-toggle="collapse" role="button"

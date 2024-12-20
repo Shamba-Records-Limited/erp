@@ -15,7 +15,9 @@
             }
             $tableRoute = route($acc_type.".wallet-management.deposits.table");
             @endphp
+            @if ($acc_type !== "admin") 
             <a href="{{ route($acc_type.'.wallet-management.view-deposit')}}" class="btn btn-primary">Deposit Funds</a>
+            @endif
         </div>
 
 

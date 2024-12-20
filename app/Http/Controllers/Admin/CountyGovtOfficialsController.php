@@ -181,8 +181,10 @@ class CountyGovtOfficialsController extends Controller
             'gender' => 'required',
             'ministry' => 'required',
             'designation' => 'required',
-            'profile_picture' => "required|image|mimes:jpeg,jpg,png,gif|max:3072",
+            //'profile_picture' => "required|image|mimes:jpeg,jpg,png,gif|max:3072",
         ]);
+
+        
        // dd($request->all());
         try {
             
