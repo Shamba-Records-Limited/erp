@@ -66,6 +66,16 @@
                         </div>
 
                         <div class="form-group col-lg-4 col-md-6 col-12">
+                            <label for="role" class="font-weight-bold">Role</label>
+                            <select name="role_id" id="role_id" class="form-control form-select {{ $errors->has('role_id') ? ' is-invalid' : '' }}" value="{{old('customer_id', '')}}" @if(!empty($viewingQuotationId)) disabled @endif>
+                            <option value="">-- Select Role --</option>
+                            @foreach($roles as $role)
+                                <option value="{{$role->name}}" @if($role ->name == $userSpecRole[0]) selected @endif>{{$role->name}}</option>
+                            @endforeach
+                        </select>
+                        </div>
+
+                        <div class="form-group col-lg-4 col-md-6 col-12">
                             <label for="profile_picture" class="font-weight-bold">Profile Picture</label>
                             <div class="text-center mb-2">
                                 <img 

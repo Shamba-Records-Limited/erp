@@ -24,7 +24,8 @@ class CountyGovtOfficial extends Model
         'user_id',
         'status',
         'ministry',
-        'designation'
+        'designation',
+        'cooperative_id'
     ];
 
     public static function boot()
@@ -43,6 +44,11 @@ class CountyGovtOfficial extends Model
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_id', 'id');
+    }
+
+    public function cooperative()
+    {
+        return $this->belongsTo(Cooperative::class, 'cooperative_id', 'id');
     }
 
 }

@@ -76,7 +76,7 @@ class CountyGovtOfficialsController extends Controller
             $user = new User();
             $user->first_name = ucwords(strtolower($request->first_name));
             $user->other_names = ucwords(strtolower($request->other_names));
-            $user->cooperative_id = $request->cooperative_id;
+            //$user->cooperative_id =substr_replace($request->cooperative_id, 'CG', -2);//to avoid dupication actua coop user
             $user->email = $request->email;
             $user->username = $request->username;
             $password = generate_password();
@@ -94,10 +94,10 @@ class CountyGovtOfficialsController extends Controller
             $official->phone_no = $request->phone_no;
             $official->employee_no = $request->employee_no;
             $official->user_id = $user->id;
+            $official->cooperative_id = $request->cooperative_id;
             $official->ministry = $request->ministry;
             $official->designation = $request->designation;
             $official->save();
-
 
             Log::debug("Saved official: $official");
             //assign role to user
@@ -106,7 +106,7 @@ class CountyGovtOfficialsController extends Controller
 
             //audit trail log
             $role_created_audit = ['user_id' => $user->id, 'activity' => 'Assigned ' . $role->name .
-                ' to  ' . $user->username, 'cooperative_id' => $user->cooperative->id];
+                ' to  ' . $user->username, 'cooperative_id' => $official->cooperative_id];
             event(new AuditTrailEvent($role_created_audit));
 
             //send email and new audit trail
@@ -117,7 +117,7 @@ class CountyGovtOfficialsController extends Controller
             $audit_trail_data = [
                 'user_id' => $user->id,
                 'activity' => 'Created ' . $user->username . 'account',
-                'cooperative_id' => $user->cooperative->id
+                'cooperative_id' => $official->cooperative_id
             ];
             event(new AuditTrailEvent($audit_trail_data));
             event(new NewUserRegisteredEvent($data));
@@ -131,7 +131,7 @@ class CountyGovtOfficialsController extends Controller
             Log::error($th->getMessage());
             Log::error($th->getTraceAsString());
             DB::rollback();
-            toastr()->error('County Govt Official could not be created');
+            toastr()->error('County Govt Official could not be created:');
             return redirect()->back()->withInput();
         }
 

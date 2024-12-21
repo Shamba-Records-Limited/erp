@@ -12,8 +12,9 @@
                 <div class="col-md-4 profile-info">
                     <div class="profile-picture mb-3 position-relative">
                         @if($user->profile_picture)
-                        <img src="{{ url('storage/' . $user->profile_picture) }}" alt="Profile Picture"
-                            class="img-fluid rounded-circle">
+                        <img src="{{ asset('storage/' . $user->profile_picture) }}" 
+                         alt="Profile Picture" class="img-fluid rounded-circle">
+
                         @else
                         <img src="{{ url('assets/images/avatar.png') }}" alt="Default Avatar"
                             class="img-fluid rounded-circle">
@@ -36,6 +37,7 @@
                 </div>
 
                 <div class="col-md-8">
+
                     <div class="bio-data detail-card mb-4">
                         <h4 class="card-heading"><i class="fas fa-user-circle"></i> Bio Data</h4>
                         <div class="detail-item">
@@ -141,6 +143,26 @@
                         </div>
                     </div>
                     @endif
+
+                    <div class="bio-data detail-card mb-4">
+                        <h4 class="card-heading"><i class="fas fa-user-circle"></i> Roles and Permissions</h4>
+                        <div class="detail-item">
+                            <span class="user-icon"><i class="fas fa-user"></i></span>
+                            <span class="label">Roles:</span>
+                            @foreach ($roles as $role) 
+                            <span class="value">{{$role}}</span>
+                            @endforeach
+                        </div>
+                        <div class="detail-item">
+                            <span class="user-icon"><i class="fas fa-user"></i></span>
+                            <span class="label">Permissions:</span>
+                            @foreach ($permissions as $permission) 
+                            <span class="value">{{$permission}}</span>
+                            @endforeach
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>

@@ -19,6 +19,7 @@ use App\User;
 use DB;
 use Hash;
 use Log;
+use Auth;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -137,8 +138,12 @@ class UsersController extends Controller
         if (count($results) > 0) {
             $user = $results[0];
         }
+           //Find roles and Permissions
+           $userRole= User::findOrFail($id);
+           $roles = $userRole->getRoleNames();
+           $permissions = $userRole->getAllPermissions();
 
-        return view('pages.admin.users.detail', compact('user'));
+        return view('pages.admin.users.detail', compact('user','roles','permissions'));
     }
 
     public function update(Request $request, $id)
@@ -148,9 +153,11 @@ class UsersController extends Controller
             'first_name' => 'required',
             'other_names' => 'required',
             'email' => 'required|email',
-            'profile_picture' => 'sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072',
+            //'role_id'=>'required'
+           // 'profile_picture' => 'sometimes|nullable|image|mimes:jpeg,jpg,png,gif|max:3072',
         ]);
-        
+
+        //$user_auth = Auth::user();
         try {
             $user = User::findOrFail($id);
 
@@ -178,8 +185,14 @@ class UsersController extends Controller
 
                 Log::info('New profile picture stored at: ' . $filePath);
             }
-
             $user->save();
+            /*
+             //assign role to user
+             $user->assignRole($request->role_id);
+             //audit trail log
+             $role_created_audit = ['user_id' => $user_auth->first_name .'_'.$user_auth->other_names, 'activity' => 'Updated Role:' . $request->role_id ];
+             event(new AuditTrailEvent($role_created_audit));
+            */
 
             Log::info('User updated successfully: ' . $user->id);
             toastr()->success('User updated successfully');
@@ -400,7 +413,13 @@ class UsersController extends Controller
         if (count($users) > 0) {
             $user = $users[0];
         }
+         //Find roles and Permissions
+         $roles=Role::all();
+         $userRole= User::findOrFail($id);
+         $userSpecRole = $userRole->getRoleNames();
+         $permissions = $userRole->getAllPermissions();
+        // dd($roles,$userSpecRole);
 
-        return view('pages.admin.users.edit', compact('user', 'id'));
+        return view('pages.admin.users.edit', compact('user', 'id','roles','userSpecRole'));
     }
 }
