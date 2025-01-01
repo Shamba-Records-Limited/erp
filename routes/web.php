@@ -213,6 +213,32 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
     Route::get('/orders/download/{type}', 'Admin\OrdersController@export_orders')
         ->name("admin.orders.export");
 
+       //hr
+       Route::prefix('/hr')->group(function () {
+        Route::get('/dashboard', 'EmployeeController@hrReports')
+            ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['dashboard'] . ',' . config('enums.system_permissions')['view'])
+            ->name('hr.dashboard');
+        //branches
+        Route::get('/branches', 'Admin\CoopBranchController@hr_index')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['view'])
+            ->name('hrad.branches.show');
+        Route::get('/branch/{id}', 'Admin\CoopBranchController@hr_edit')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['view'])
+            ->name('hrad.branches.detail');
+        Route::post('/branches/add', 'Admin\CoopBranchController@hr_store')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['create'])
+            ->name('hr.branches.add');
+        Route::post('/branches/edit', 'Admin\CoopBranchController@hr_update')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['edit'])
+            ->name('hrad.branches.edit');
+        Route::get('/branches/delete/{id}', 'Admin\CoopBranchController@hr_delete')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['delete'])
+            ->name('hrad.branches.delete');
+        Route::get('/branches/collections/{id}', 'Admin\CoopBranchController@hr_collections')
+           // ->middleware('module_permission:' . config('enums.system_modules')['HR Management']['branches'] . ',' . config('enums.system_permissions')['view'])
+            ->name('hrad.branches.collections');
+       });
+
     // order-delivery
     Route::get("/order/{order_id}/add-delivery-item", "Admin\OrdersController@add_delivery_item")
         ->name("admin.order-delivery.add-item");
@@ -470,7 +496,19 @@ Route::middleware('role:admin')->prefix("admin")->group(function () {
         Route::get("/inventory/dashboard", "Admin\InventoryController@dashboard")
         ->name("admin.inventory.dashboard.show");
 
+    // products
+     Route::get('/products', 'Admin\ProductsController@index')
+     ->name('admin.products.show-raw');
+     Route::get('/products/{id}', 'Admin\ProductsController@detail')
+     ->name('admin.products.detail');
+     // Stock Levels Routes
+     Route::get('/stock-levels', 'Admin\StockLevelsController@index')->name('admin.stock-levels.index');
+     Route::get('/stock-levels/{productId}', 'Admin\StockLevelsController@show')->name('admin.stock-levels.show');
+
 });
+// More products routes
+Route::post('/products/product-pricing', 'Admin\ProductsController@store_product_pricing')
+     ->name('admin.products.store_product_pricing');
 
 
 
@@ -2769,6 +2807,24 @@ Route::middleware('role:farmer')->prefix('farmer')->group(function () {
     Route::get("/transactions/{id}/complete", "Farmer\TransactionController@complete")
         ->name("farmer.transactions.complete");
     Route::get('/profile/{user_id}', 'Farmer\ProfileController@show')->name('farmer.profile.show');
+
+     // support
+     Route::get("/support", "Farmer\SupportController@index")
+     ->name("farmer.support.show");
+    Route::get("/support/add-ticket", "Farmer\SupportController@view_add_ticket")
+        ->name("farmer.support.view_add_ticket");
+    Route::post("/support/add-ticket", "Farmer\SupportController@add_ticket")
+        ->name("farmer.support.add_ticket");
+    Route::post("/support/publish-ticket", "Farmer\SupportController@publish_ticket")
+        ->name("farmer.support.publish_ticket");
+    Route::delete("support/delete-ticket/{id}", "Farmer\SupportController@delete_ticket")
+        ->name("farmer.support.delete_ticket");
+    Route::post("/support/add_comment", "Farmer\SupportController@add_comment")
+        ->name("farmer.support.add-ticket-comment");
+    Route::get("/support/confirm_ticket_resolved/{ticket_number}", "Farmer\SupportController@confirm_ticket_resolved")
+        ->name("farmer.support.confirm-ticket-resolved");
+    Route::get("/support/{ticket_number}", "Farmer\SupportController@view_ticket")
+        ->name("farmer.support.view-ticket");
 
 });
 

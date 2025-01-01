@@ -132,22 +132,27 @@ class CollectionsController extends Controller
             $lot_ind = $lot_count + 1;
 
             $lot_number =  'LOT' . $now_str . $lot_ind;
+            $lot_exist="NO";
             try {
                 $lot = Lot::where('cooperative_id', $coop->id)
                     ->where('created_at', '<', $dateAfter_str)
                     ->where('created_at', '>=', $date_str)
                     ->firstOrFail();
+                    $lot_exist="YES";
             } catch (\Throwable $th) {
                 $lot = new Lot();
                 $lot->cooperative_id = $coop->id;
                 $lot->lot_number = $lot_number;
                 $lot->available_quantity = $request->quantity;
                 $lot->save();
+                $lot_exist="NO";
             }
 
+            //If the lot is there just update quantity
+            if($lot_exist=="YES"){
             $lot->available_quantity += floatval($request->quantity);
             $lot->save();
-
+            }
             // creating collection
             $collection_count = Collection::where('cooperative_id', $coop->id)
                 ->where('lot_number', $lot->lot_number)

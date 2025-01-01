@@ -67,7 +67,7 @@ class InventoryAuctionController extends Controller
         $exists = Customer::where("cooperative_id", $coop_id)->where("published_at", null)->exists();
         if (!$exists) {
             $draftCustomer = new Customer();
-            $draftCustomer->miller_id = $coop_id;
+            $draftCustomer->cooperative_id = $coop_id;
             $draftCustomer->save();
         }
 

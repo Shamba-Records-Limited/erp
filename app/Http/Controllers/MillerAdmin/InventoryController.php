@@ -53,11 +53,50 @@ class InventoryController extends Controller
             WHERE a_order.miller_id = :miller_id
         "), ["miller_id" => $miller_id]);
 
+        $preMilledInventories = DB::select(DB::raw("
+                SELECT 
+                    inv.*, 
+                    delivery_item.quantity, 
+                    a_order.batch_number, 
+                    order_item.lot_number as l_num,
+                    SUM(minv.milled_quantity + minv.waste_quantity) as total_milled
+                FROM 
+                    pre_milled_inventories inv
+                JOIN 
+                    auction_order_delivery_item delivery_item ON delivery_item.id = inv.delivery_item_id
+                JOIN 
+                    miller_auction_order_item order_item ON order_item.id = delivery_item.order_item_id
+                JOIN 
+                    miller_auction_order a_order ON a_order.id = order_item.order_id
+                LEFT JOIN 
+                    milled_inventories minv ON inv.id = minv.pre_milled_inventory_id
+                WHERE 
+                    a_order.miller_id = :miller_id
+                GROUP BY 
+                    inv.id, 
+                    delivery_item.quantity, 
+                    a_order.batch_number, 
+                    order_item.lot_number
+            "), ["miller_id" => $miller_id]);
+
+        //dd($preMilledInventories);
+
         $millingQty = 0;
         if ($isMilling == "1") {
             if ($preMilledInventoryId) {
-                $preMilledInventory = PreMilledInventory::find($preMilledInventoryId);
-                $millingQty = $preMilledInventory->quantity;
+
+                //$preMilledInventory = PreMilledInventory::find($preMilledInventoryId);
+                $preMilledInventory = PreMilledInventory::select(
+                    'pre_milled_inventories.id',
+                    'pre_milled_inventories.quantity',
+                    DB::raw('SUM(milled_inventories.milled_quantity + milled_inventories.waste_quantity) as total_milled')
+                )
+                ->leftJoin('milled_inventories', 'pre_milled_inventories.id', '=', 'milled_inventories.pre_milled_inventory_id') // Join milled_inventories
+                ->where('pre_milled_inventories.id', $preMilledInventoryId) // Filter by pre_milled_inventory_id
+                ->groupBy('pre_milled_inventories.id', 'pre_milled_inventories.quantity') // Group by required fields
+                ->first(); // Retrieve a single record
+
+                $millingQty = $preMilledInventory->quantity - $preMilledInventory->total_milled;
             }
         }
 
@@ -264,7 +303,28 @@ class InventoryController extends Controller
         $milling = MilledInventory::find($id);
 
         $gradings = MilledInventoryGrade::with("product_grade")->get();
-
+        $gradings = MilledInventoryGrade::select(
+            'milled_inventory_grades.id',
+            'milled_inventory_grades.milled_inventory_id',
+            'product_grades.name as grade',
+            'milled_inventory_grades.product_grade_id',
+            DB::raw('SUM(milled_inventory_grades.quantity) as total_quantity'),
+            'milled_inventory_grades.unit',
+            'milled_inventory_grades.created_at',
+            'milled_inventory_grades.updated_at'
+        )
+        ->join('product_grades', 'product_grades.id', '=', 'milled_inventory_grades.product_grade_id') // Join with product_grades
+        ->groupBy(
+            'milled_inventory_grades.id',
+            'milled_inventory_grades.milled_inventory_id',
+            'milled_inventory_grades.product_grade_id',
+            'product_grades.name',
+            'milled_inventory_grades.unit',
+            'milled_inventory_grades.created_at',
+            'milled_inventory_grades.updated_at'
+        ) // Group by required fields
+        ->get();    
+    
         # todo: fetch actual lot unit
         $lot_unit = "KG";
 
@@ -302,13 +362,23 @@ class InventoryController extends Controller
         DB::beginTransaction();
 
         try {
-
-            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
+            $preMilledCheck = PreMilledInventory::select(
+                'pre_milled_inventories.id',
+                'pre_milled_inventories.quantity',
+                DB::raw('SUM(milled_inventories.milled_quantity + milled_inventories.waste_quantity) as total_milled')
+            )
+            ->leftJoin('milled_inventories', 'pre_milled_inventories.id', '=', 'milled_inventories.pre_milled_inventory_id') // Join milled_inventories
+            ->where('pre_milled_inventories.id', $request->pre_milled_inventory_id) // Filter by pre_milled_inventory_id
+            ->groupBy('pre_milled_inventories.id', 'pre_milled_inventories.quantity') // Group by required fields
+            ->first(); // Retrieve a single record
+                
             //check to make sure yoyu don't mill more than stock
-            if($milled_quantity > $preMilledInventory->quantity){
+            if($milled_quantity > ($preMilledCheck->quantity-$preMilledCheck->total_milled) ){
                 toastr()->error('Cant Mill More than Available quantity!');
                 return redirect()->back();
             }
+            $preMilledInventory = PreMilledInventory::find($request->pre_milled_inventory_id);
+        
             $now = Carbon::now();
             $inventoryNumber = "INV";
             $inventoryNumber .= $now->format('Ymd');

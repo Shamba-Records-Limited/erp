@@ -42,9 +42,9 @@
                         <td><a
                                 href="{{ route('cooperative-admin.lots.detail', $lot->lot_number) }}">{{ $lot->lot_number }}</a>
                         </td>
-                        <td>{{ number_format($quantity) }} KG</td>
+                        <td>{{ number_format($quantity) }} {{$lot->unit_name}}</td>
                         <td>{{ $lot->collections_count }}</td>
-                        <td>{{ number_format($ungraded) }} KG</td>
+                        <td>{{ number_format($ungraded) }} {{$lot->unit_name}}</td>
                         <td></td>
                     </tr>
                     @endforeach

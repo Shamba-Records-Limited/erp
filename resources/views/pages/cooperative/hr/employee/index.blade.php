@@ -24,9 +24,11 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                     <form action="{{ route('hr.employees.add') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
+                            
                             <div class="form-group col-12">
                                 <h6 class="mb-3">Employee Details</h6>
                             </div>
+
                             <div class="form-group col-lg-3 col-md-6 col-12">
                                 <label for="first_name">First Name</label>
                                 <input type="text" name="first_name" class="form-control {{ $errors->has('first_name') ? ' is-invalid' : '' }}" id="first_name" placeholder="John" value="{{ old('first_name')}}" required>
@@ -258,8 +260,6 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
                                     @foreach($positions as $position)
                                     <option value="{{$position->id}}"> {{ $position->position }}</option>
                                     @endforeach
-
-
                                 </select>
                                 @if ($errors->has('position'))
                                 <span class="help-block text-danger">
@@ -518,5 +518,13 @@ $marital_status_options = config('enums.employee_configs')['marital_status'];
     $('#profile_picture').change(function() {
         previewImage(this, 'picturePreview', 'imagePreviewContainer');
     });
+
+    $(document).ready(function () {
+    if ($("#addEmployeeAccordion").hasClass("show")) {
+        $("#addEmployeeAccordion").css("max-height", "none");
+    }
+    });
+
+
 </script>
 @endpush

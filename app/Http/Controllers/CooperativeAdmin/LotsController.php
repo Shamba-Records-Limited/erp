@@ -22,14 +22,22 @@ class LotsController extends Controller
         $user = Auth::user();
         $coop_id = $user->cooperative->id;
         $lots = DB::select(DB::raw("
-            SELECT l.*,
-                (SELECT SUM(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as quantity,
-                (SELECT COUNT(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) as collections_count,
-                (SELECT SUM(d.quantity) FROM lot_grade_distributions d WHERE d.lot_number = l.lot_number) as graded
-            FROM lots l
-            WHERE l.cooperative_id = :coop_id
-            ORDER BY l.created_at DESC
-        "), ["coop_id" => $coop_id]);
+                SELECT 
+                    l.*,
+                    u.name AS unit_name,
+                    (SELECT SUM(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) AS quantity,
+                    (SELECT COUNT(c.quantity) FROM collections c WHERE c.lot_number = l.lot_number) AS collections_count,
+                    (SELECT SUM(d.quantity) FROM lot_grade_distributions d WHERE d.lot_number = l.lot_number) AS graded
+                FROM lots l
+                LEFT JOIN collections c ON l.lot_number = c.lot_number
+                LEFT JOIN products p ON c.product_id = p.id
+                LEFT JOIN units u ON p.unit_id = u.id
+                WHERE l.cooperative_id = :coop_id
+                GROUP BY l.lot_number, u.name
+                ORDER BY l.created_at DESC
+            "), ["coop_id" => $coop_id]);
+
+
 
         return view('pages.cooperative-admin.lots.index', compact("lots"));
     }
@@ -70,10 +78,17 @@ class LotsController extends Controller
     $gradeDistributions = [];
     if ($tab == 'grade_distributions') {
         $gradeDistributions = DB::select(DB::raw("
-            SELECT d.*, g.name as grade FROM lot_grade_distributions d
-            JOIN product_grades g ON g.id = d.product_grade_id
-            WHERE lot_number = :lot_number;
-        "), ["lot_number" => $lot_number]);
+                SELECT 
+                    d.lot_number,
+                    d.product_grade_id,
+                    g.name AS grade,
+                    d.unit As unit,
+                    SUM(d.quantity) AS quantity
+                FROM lot_grade_distributions d
+                JOIN product_grades g ON g.id = d.product_grade_id
+                WHERE d.lot_number = :lot_number
+                GROUP BY d.lot_number, d.product_grade_id,d.unit,g.name
+            "), ["lot_number" => $lot_number]);
     }
 
     $grades = [];

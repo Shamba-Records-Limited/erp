@@ -185,6 +185,7 @@ class MarketAuctionController extends Controller
                         )
                     )
             "), ["coop_id" => $coop_id]);
+           
         // Count all cooperative lots except those in an order
         $lots_count = DB::select(DB::raw("
             SELECT count(1) AS count

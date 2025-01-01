@@ -72,24 +72,28 @@
                         <th>Inventory Number</th>
                         <th>Batch Number</th>
                         <th>Lot Number</th>
-                        <th>Quantity</th>
+                        <th>Premilled Quantity</th>
+                        <th>Milled </th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php $totalQuantity = 0; @endphp
                     @foreach($preMilledInventories as $key => $inventory)
+                    @if($inventory->quantity >  $inventory->total_milled)
                     <tr>
                         <td>{{ $key + 1 }}</td>
                         <td>{{ $inventory->inventory_number }}</td>
                         <td>{{ $inventory->batch_number }}</td>
                         <td>{{ $inventory->l_num }}</td>
-                        <td>{{ $inventory->quantity }} KG</td>
+                        <td>{{ $inventory->quantity - $inventory->total_milled }} {{$inventory->unit}}</td>
+                        <td>{{ $inventory->total_milled }} {{$inventory->unit}}</td>
                         <td>
                             <a class="btn btn-primary" href="?pre_milled_inventory_id={{ $inventory->id }}&is_milling=1">Mill</a>
                         </td>
                     </tr>
-                    @php $totalQuantity += $inventory->quantity; @endphp
+                    @endif
+                    @php $totalQuantity += ($inventory->quantity - $inventory->total_milled) ; @endphp
                     @endforeach
                 </tbody>
                 <tfoot>

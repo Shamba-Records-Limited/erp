@@ -175,6 +175,24 @@ $cooperative = null;
                     </ul>
                 </div>
             </li>
+
+
+        
+             <!-- Wet Mills CRM Dropdown -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#wetmills-crm" data-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="wetmills-crm">
+                    <i class="ni ni-building text-custom-green"></i>
+                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Wet Mills CRM') }}</span>
+                </a>
+                <div class="collapse {{ request()->routeIs('hrad.branches.show') ? 'show' : '' }}" id="wetmills-crm">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('hrad.branches.show') ? 'active' : '' }}" href="{{ route('hrad.branches.show') }}"> {{ __('Wet Mills') }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
             
             <li class="nav-item {!! active_class(['admin/inventory-auction*']) !!}">
                     <a class="nav-link" href="#navbar-auction" data-toggle="collapse" role="button"
@@ -401,6 +419,29 @@ $cooperative = null;
                     </div>
                 </li>
 
+            <!-- Products / Raw Materials -->
+            <li class="nav-item">
+                <a class="nav-link active" href="#product-management" data-toggle="collapse" role="button"
+                    aria-expanded="false" aria-controls="product-management">
+                    <i class="ni ni-money-coins text-custom-green"></i>
+                    <span class="nav-link-text" style="color: #f4645f;">{{ __('Products / Raw Materials') }}</span>
+                </a>
+                <div class="collapse {{ request()->routeIs('admin.products.show-raw') ? 'show' : '' }}" id="product-management">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.products.show-raw') ? 'active' : '' }}" href="{{ route('admin.products.show-raw') }}">
+                                <i class="ni ni-tag text-custom-green"></i> {{ __('Price-setup ') }}
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.stock-levels.index') ? 'active' : '' }}" href="{{ route('admin.stock-levels.index') }}">
+                                <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
             <li class="nav-item {{ active_class(['admin/support*']) }} mb-3">
                 <a class="nav-link" href="{{ route('admin.support.show') }}">
                     <i class="ni ni-support-16 text-custom-green"></i> {{ __('Support') }}
@@ -609,14 +650,14 @@ $cooperative = null;
                             </a>
                         </li>
                         <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('cooperative-admin.stock-levels.index') ? 'active' : '' }}" href="{{ route('cooperative-admin.stock-levels.index') }}">
-                    <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
-                </a>
-            </li>
+                            <a class="nav-link {{ request()->routeIs('cooperative-admin.stock-levels.index') ? 'active' : '' }}" href="{{ route('cooperative-admin.stock-levels.index') }}">
+                                <i class="ni ni-box-2 text-custom-green"></i> {{ __('Stock Levels') }}
+                            </a>
+                        </li>
                     </ul>
                 </div>
-             
             </li>
+
            <!-- Inventory Auction Dropdown -->
            <li class="nav-item {!! active_class(['cooperative-admin/inventory-auction*']) !!}">
                     <a class="nav-link" href="#navbar-auction" data-toggle="collapse" role="button"
@@ -1337,6 +1378,18 @@ $cooperative = null;
                         {{__('Transactions')}}</span>
                     </a>
                 </li>
+                <li class="nav-item {{ active_class(['farmer/support*']) }}">
+                    <a class="nav-link" href="{{ route('farmer.support.show') }}">
+                        <i class="ni ni-support-16 text-green"></i> {{ __('Support') }}
+                    </a>
+                </li>
+
+                <li class="nav-item {{ active_class(['chat*']) }}">
+                    <a class="nav-link" href="{{ route('chat.index') }}">
+                        <i class="ni ni-chat-round text-green"></i> {{ __('Chat') }}
+                    </a>
+                </li>
+                
                 </ul>
                 @endif
 

@@ -23,6 +23,156 @@ class CoopBranchController extends Controller
     {
         return $this->middleware('auth');
     }
+      
+    //HR Section
+       //return branch view
+       public function hr_index()
+       {
+           $branches = CoopBranch::all();
+           return view('pages.admin.hr.branch.index', compact('branches'));
+       }
+
+       public function hr_edit($id)
+       {
+        $branch = CoopBranch::find($id);
+           return view('pages.admin.hr.branch.edit', compact('branch','id'));
+       }
+       public function hr_store(Request $request)
+       {
+           $this->validate($request,[
+               'name' => 'required|string',
+               'location' => 'required|string',
+           ]);
+           try {
+               DB::beginTransaction();
+               //new branch
+               $coop = Auth::user()->cooperative->id;
+               $coop_name = Auth::user()->cooperative->name;
+               $branch = new CoopBranch();
+               $branch->name = $request->name;
+               $branch->location = $request->location;
+               $branch->code = $request->code;
+               $branch->cooperative_id = $coop;
+               $branch->save();
+               
+               //audit trail log
+               $activity_log = ['user_id' => Auth::user()->id, 'activity' => 'Created branch '. $request->name.
+                   ' to  '.$coop_name, 'cooperative_id'=> $coop];
+               event(new AuditTrailEvent($activity_log));
+               DB::commit();
+               toastr()->success('Branch Created Successfully');
+               return redirect()->route('hrad.branches.show');
+           } catch (\Throwable $th) {
+               Log::error($th->getMessage());
+               DB::rollback();
+               toastr()->error('Branch failed to create');
+               return redirect()->route('hrad.branches.show');
+           }
+       }
+       public function hr_update(Request $request)
+       {
+           $this->validate($request,[
+               'name' => 'required|string',
+               'location' => 'required|string',
+           ]);
+           try {
+               DB::beginTransaction();
+               //new branch
+               $coop = Auth::user()->id;
+               $coop_name = Auth::user()->username;
+
+               $branch = CoopBranch::findOrFail($request->id);
+               $branch->name = $request->name;
+               $branch->location = $request->location;
+               $branch->code = $request->code;
+                // Ensure cooperative_id is unchanged
+             $originalCooperativeId = $branch->getOriginal('cooperative_id');
+             $branch->cooperative_id = $originalCooperativeId;
+
+              
+               if($branch->isDirty()){
+                   $branch->save();
+               
+                   //audit trail log
+                   $activity_log = ['user_id' => Auth::user()->id, 'activity' => 'Updated branch '. $request->name.
+                   ' to  '.$coop_name, 'cooperative_id'=> $originalCooperativeId];
+                   event(new AuditTrailEvent($activity_log));
+                   
+                   DB::commit();
+                   toastr()->success('Branch updated Successfully');
+                   return redirect()->route('hrad.branches.show');
+               }
+               else{
+                   toastr()->success('Branch details are unchanged');
+                   return redirect()->route('hrad.branches.show');
+               }
+               
+           } catch (\Throwable $th) {
+               Log::error($th->getMessage());
+               DB::rollback();
+               toastr()->error('Branch failed to update:'.$th->getMessage());
+               return redirect()->route('hrad.branches.show');
+           }
+       }
+       public function hr_delete($id)
+       {
+           try {
+               DB::beginTransaction();
+               $coop = Auth::user()->cooperative->id;
+               $coop_name = Auth::user()->cooperative->name;
+               $branch = CoopBranch::findOrFail($id);
+               $branch->delete();
+               //audit trail log
+               $activity_log = ['user_id' => Auth::user()->id, 'activity' => 'Deleted branch '. $branch['name'].
+               ' belonging to '.$coop_name, 'cooperative_id'=> $coop];
+               event(new AuditTrailEvent($activity_log));
+               DB::commit();
+               toastr()->success('Branch deleted Successfully');
+               return redirect()->route('hrad.branches.show');
+           } catch (\Throwable $th) {
+               Log::error($th->getMessage());
+               DB::rollback();
+               toastr()->error('Branch failed to delete');
+               return redirect()->route('hrad.branches.show');
+           }
+       }
+         // CoopBranchController.php
+   public function hr_collections(Request $request, $id)
+   {
+       //$coop = Auth::user()->cooperative->id;
+   
+       // Fetch collections excluding unit_price, but still including quantity for total calculation
+       $collections = DB::select(DB::raw("
+           SELECT 
+               c.id,
+               c.collection_number,
+               c.lot_number,
+               c.quantity,
+               c.collection_time,
+               c.date_collected,
+               c.status,
+               branch.name AS branch_name,
+               coop.name AS cooperative_name,
+               prod.name AS product_name,
+               c.created_at
+           FROM collections c
+           JOIN coop_branches branch ON branch.id = c.coop_branch_id
+           JOIN cooperatives coop ON coop.id = c.cooperative_id
+           JOIN products prod ON prod.id = c.product_id
+           WHERE c.coop_branch_id = :branch_id
+           ORDER BY c.created_at DESC
+       "), ['branch_id' => $id]);
+   
+       // Convert the array to a collection
+       $collections = collect($collections);
+   
+       return view('pages.cooperative-admin.branches.collections', compact('collections'));
+   }
+   
+
+    //End HR Section
+
+
     //return branch view
      public function index()
 {

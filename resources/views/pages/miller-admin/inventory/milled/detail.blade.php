@@ -37,7 +37,11 @@
                         <div class="form-group col-12">
                             <label for="quantity">Quantity</label>
                             <div class="input-group">
-                                <input type="number" name="quantity" id="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" placeholder="Enter quantity" value="{{ old('quantity') }}" required>
+                                <input type="number" name="quantity" id="quantity" class="form-control {{ $errors->has('quantity') ? ' is-invalid' : '' }}" 
+                                placeholder="Enter quantity" value="{{ old('quantity') }}" required
+                                onchange="validateQuantity(this)"
+                                data-max="{{ $milling->milled_quantity }}"
+                                >
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">{{ $lot_unit }}</span>
                                 </div>
@@ -115,6 +119,16 @@
 
 
 @push('custom-scripts')
+<script>
+    function validateQuantity(input) {
+        const maxQuantity = parseFloat(input.getAttribute('data-max')); // Get the max allowed quantity from the attribute
+        const enteredQuantity = parseFloat(input.value); // Get the entered quantity
+        if (enteredQuantity > maxQuantity) {
+            alert('You cannot grade more than the milled quantity:'+maxQuantity);
+            input.value = ''; // Clear the invalid input
+        }
+    }
+</script>
 @endpush
 
 <style>
